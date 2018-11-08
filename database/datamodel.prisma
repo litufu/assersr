@@ -1,0 +1,93 @@
+type Post {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isPublished: Boolean! @default(value: "false")
+  title: String!
+  content: String!
+  author: User!
+}
+
+type Subject {
+  id: ID! @unique
+  name:String!
+}
+
+type CollegeEntranceExam {
+  id: ID! @unique
+  province:Province!
+  subject:Subject!
+  culscore:Float!
+  proscore:Float
+  candidatenum:String!
+  student:User!
+}
+
+
+type User {
+  id: ID! @unique
+  name: String!
+  email: String! @unique
+  password: String!
+  posts: [Post!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  regStatus:RegStatus
+}
+
+
+
+type Education {
+  id:ID! @unique
+  name:String! @unique
+}
+
+type Province {
+  id:ID! @unique
+  name:String! @unique
+  cities:[City!]!
+}
+
+type City {
+  id:ID! @unique
+  name:String!
+  province:Province!
+  counties:[County!]!
+}
+
+type County {
+  id:ID! @unique
+  name:String!
+  city:City!
+  towns:[Town!]!
+}
+
+type Town {
+  id:ID! @unique
+  name:String!
+  county:County!
+}
+
+
+type Major {
+  id: ID! @unique
+  name: String!
+  category:String!
+  education:Education!
+  code:String
+}
+
+type University {
+  id: ID! @unique
+  name: String! @unique
+  education:Education!
+  identifier:String! @unique
+  city:City!
+}
+
+type RegStatus {
+  id: ID! @unique
+  university:University
+  major:Major!
+  applicants:[User!]!
+}
