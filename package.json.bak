@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "myproject00123",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -9,9 +9,9 @@
     "test": "jest"
   },
   "dependencies": {
+    "apollo-server": "^2.1.0",
     "apollo-server-express": "^2.2.0",
     "bcrypt": "^3.0.2",
-    "cors": "^2.8.5",
     "express": "^4.16.4",
     "graphql": "^14.0.2",
     "graphql-middleware": "^2.0.2",

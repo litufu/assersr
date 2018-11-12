@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\28521\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js run dev
+  C:\Program Files\nodejs\node.exe C:\Users\28521\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
 
 PATH: 
   C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\Oracle\Java\javapath;C:\java\jdk1.8.0_92\bin;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Common Files\lenovo\easyplussdk\bin;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\IDM Computer Solutions\UltraCompare;C:\Program Files (x86)\MySQL\MySQL Server 5.5\bin;C:\Program Files\MySQL\MySQL Server 5.5\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Tesseract-OCR;C:\Program Files\Git\cmd;C:\Program Files\OpenSSH\bin;C:\WINDOWS\System32\OpenSSH\;C:\ProgramData\chocolatey\bin;C:\Users\28521\AppData\Local\Android\Sdk\tools;C:\Users\28521\AppData\Local\Android\Sdk\platform-tools;C:\Program Files\nodejs\;C:\Users\28521\AppData\Local\Programs\Python\Python36\Scripts\;C:\Users\28521\AppData\Local\Programs\Python\Python36\;C:\Users\28521\AppData\Local\Microsoft\WindowsApps;C:\Users\28521\AppData\Local\atom\bin;C:\ProgramData\phantomjs-2.1.1-windows\bin;C:\Users\28521\AppData\Local\Microsoft\WindowsApps;C:\Program Files\PostgreSQL\10\bin;H:\Docker Toolbox;C:\Users\28521\AppData\Local\Android\Sdk\platform-tools;C:\Users\28521\AppData\Local\Android\Sdk\tools;C:\Users\28521\AppData\Roaming\npm;C:\Program Files\ArangoDB3 3.3.15\usr\bin;C:\Users\28521\AppData\Local\ArangoDB3-client 3.3.15\usr\bin;H:\project\stock_xuxiang\aria2-1.34.0-win-64bit-build1\aria2-1.34.0-win-64bit-build1;F:\system_path\watchman;
@@ -14,26 +14,35 @@ Platform:
   win32 x64
 
 Trace: 
-  SyntaxError: H:\myproject00123\package.json: Unexpected token } in JSON at position 187
-      at JSON.parse (<anonymous>)
-      at C:\Users\28521\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:1130:59
+  TypeError: Reduce of empty array with no initial value
+      at Array.reduce (<anonymous>)
+      at PackageLinker.<anonymous> (C:\Users\28521\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:50461:43)
       at Generator.next (<anonymous>)
       at step (C:\Users\28521\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:98:30)
       at C:\Users\28521\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:109:13
       at <anonymous>
+      at process._tickCallback (internal/process/next_tick.js:188:7)
 
 npm manifest: 
   {
-    "name": "myproject00123",
+    "name": "server",
     "version": "1.0.0",
     "main": "index.js",
     "license": "MIT",
     "scripts": {
       "dev": "cross-env NODE_ENV=dev nodemon --exec babel-node src/index.js",
+      "prettier": "prettier --single-quote --print-width 80 --trailing-comma all --write \"src/**/*.js\"",
+      "test": "jest"
     },
     "dependencies": {
-      "apollo-server": "^2.1.0",
-      "graphql": "^14.0.2"
+      "apollo-server-express": "^2.2.0",
+      "bcrypt": "^3.0.2",
+      "express": "^4.16.4",
+      "graphql": "^14.0.2",
+      "graphql-middleware": "^2.0.2",
+      "graphql-shield": "^4.1.0",
+      "jsonwebtoken": "^8.3.0",
+      "prisma-client-lib": "^1.20.0"
     },
     "devDependencies": {
       "@babel/cli": "^7.1.5",
@@ -42,7 +51,12 @@ npm manifest:
       "@babel/preset-env": "^7.1.5",
       "@babel/preset-react": "^7.0.0",
       "cross-env": "^5.2.0",
-      "nodemon": "^1.18.6"
+      "eslint": "^5.8.0",
+      "eslint-config-equimper": "^2.2.2",
+      "eslint-config-prettier": "^3.1.0",
+      "jest": "^23.6.0",
+      "nodemon": "^1.18.6",
+      "prettier": "1.15.1"
     }
   }
 

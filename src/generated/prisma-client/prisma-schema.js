@@ -1837,9 +1837,9 @@ input UniversityWhereUniqueInput {
 
 type User {
   id: ID!
-  name: String!
-  email: String!
+  username: String!
   password: String!
+  name: String
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -1853,9 +1853,9 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  name: String!
-  email: String!
+  username: String!
   password: String!
+  name: String
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
 }
@@ -1876,16 +1876,16 @@ input UserCreateOneWithoutPostsInput {
 }
 
 input UserCreateWithoutPostsInput {
-  name: String!
-  email: String!
+  username: String!
   password: String!
+  name: String
   regStatus: RegStatusCreateOneWithoutApplicantsInput
 }
 
 input UserCreateWithoutRegStatusInput {
-  name: String!
-  email: String!
+  username: String!
   password: String!
+  name: String
   posts: PostCreateManyWithoutAuthorInput
 }
 
@@ -1897,12 +1897,12 @@ type UserEdge {
 enum UserOrderByInput {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
-  email_ASC
-  email_DESC
+  username_ASC
+  username_DESC
   password_ASC
   password_DESC
+  name_ASC
+  name_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1911,9 +1911,9 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   id: ID!
-  name: String!
-  email: String!
+  username: String!
   password: String!
+  name: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1937,17 +1937,17 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateDataInput {
-  name: String
-  email: String
+  username: String
   password: String
+  name: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
 }
 
 input UserUpdateInput {
-  name: String
-  email: String
+  username: String
   password: String
+  name: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
 }
@@ -1976,16 +1976,16 @@ input UserUpdateOneRequiredWithoutPostsInput {
 }
 
 input UserUpdateWithoutPostsDataInput {
-  name: String
-  email: String
+  username: String
   password: String
+  name: String
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
 }
 
 input UserUpdateWithoutRegStatusDataInput {
-  name: String
-  email: String
+  username: String
   password: String
+  name: String
   posts: PostUpdateManyWithoutAuthorInput
 }
 
@@ -2025,34 +2025,20 @@ input UserWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  email: String
-  email_not: String
-  email_in: [String!]
-  email_not_in: [String!]
-  email_lt: String
-  email_lte: String
-  email_gt: String
-  email_gte: String
-  email_contains: String
-  email_not_contains: String
-  email_starts_with: String
-  email_not_starts_with: String
-  email_ends_with: String
-  email_not_ends_with: String
+  username: String
+  username_not: String
+  username_in: [String!]
+  username_not_in: [String!]
+  username_lt: String
+  username_lte: String
+  username_gt: String
+  username_gte: String
+  username_contains: String
+  username_not_contains: String
+  username_starts_with: String
+  username_not_starts_with: String
+  username_ends_with: String
+  username_not_ends_with: String
   password: String
   password_not: String
   password_in: [String!]
@@ -2067,6 +2053,20 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
   posts_every: PostWhereInput
   posts_some: PostWhereInput
   posts_none: PostWhereInput
@@ -2094,7 +2094,7 @@ input UserWhereInput {
 
 input UserWhereUniqueInput {
   id: ID
-  email: String
+  username: String
 }
 `
       }

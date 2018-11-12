@@ -26,16 +26,14 @@ type CollegeEntranceExam {
 
 type User {
   id: ID! @unique
-  name: String!
-  email: String! @unique
+  username: String! @unique
   password: String!
+  name: String
   posts: [Post!]!
   createdAt: DateTime!
   updatedAt: DateTime!
   regStatus:RegStatus
 }
-
-
 
 type Education {
   id:ID! @unique

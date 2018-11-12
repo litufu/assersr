@@ -9,10 +9,7 @@ class AuthError extends Error {
 }
 
 function getUserId(context) {
-  if(!context.req.headers.hasOwnProperty('authorization')){
-    return ''
-  }
-  const Authorization = context.req.headers.authorization
+  const Authorization = (context.req.headers && context.req.headers.authorization) || '';
   if (Authorization) {
     const token = Authorization.replace('Bearer ', '')
     const verifiedToken = verify(token, APP_SECRET)

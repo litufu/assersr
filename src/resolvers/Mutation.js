@@ -3,17 +3,28 @@ import { sign } from 'jsonwebtoken'
 import { APP_SECRET, getUserId } from '../services/utils'
 
 export const Mutation = {
-  signup: async (parent, { name, email, password }, ctx) => {
-    const hasuser = await ctx.db.user({ email })
+  signup: async (parent, { username, password }, ctx) => {
+    if(username){
+      const uPattern = /^[a-zA-Z0-9_-]{4,16}$/
+      const usernameTest = uPattern.test(username)
+      if (!usernameTest) throw new Error(`${username}格式不符合要求`)
+    }
+
+    if(password){
+      const pPattern = /^.*(?=.{6,20})(?=.*\d)(?=.*[a-zA-Z]).*$/;
+      const passwordTest = pPattern.test(password)
+      if (!passwordTest) throw new Error(`${password}格式不符合要求`)
+    }
+
+    const hasuser = await ctx.db.user({ username })
 
     if (hasuser) {
-      throw new Error(`${email}已经被占用`)
+      throw new Error(`${username}已经被占用`)
     }
 
     const hashedPassword = await hash(password, 10)
     const user = await ctx.db.createUser({
-      name,
-      email,
+      username,
       password: hashedPassword,
     })
 
@@ -22,17 +33,29 @@ export const Mutation = {
       user,
     }
   },
-  login: async (parent, { email, password }, ctx) => {
-    const user = await ctx.db.user({ email })
+  login: async (parent, { username, password }, ctx) => {
+    if(username){
+      const uPattern = /^[a-zA-Z0-9_-]{4,16}$/
+      const usernameTest = uPattern.test(username)
+      if (!usernameTest) throw new Error(`${username}格式不符合要求`)
+    }
+
+    if(password){
+      const pPattern = /^.*(?=.{6,20})(?=.*\d)(?=.*[a-zA-Z]).*$/;
+      const passwordTest = pPattern.test(password)
+      if (!passwordTest) throw new Error(`${password}格式不符合要求`)
+    }
+
+    const user = await ctx.db.user({ username })
 
     if (!user) {
-      throw new Error(`No user found for email: ${email}`)
+      throw new Error(`用户名错误: ${username}`)
     }
 
     const valid = await compare(password, user.password)
 
     if (!valid) {
-      throw new Error('Invalid password')
+      throw new Error('密码错误')
     }
 
     return {
@@ -56,7 +79,6 @@ export const Mutation = {
       .$fragment('{ id }')
     const authorId = author.id
     console.log(authorId)
-    console.log(author.id)
     console.log(userId)
     if (userId !== authorId) {
       throw new Error('Author Invalid')

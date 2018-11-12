@@ -647,12 +647,12 @@ export type TownOrderByInput =
 export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "email_ASC"
-  | "email_DESC"
+  | "username_ASC"
+  | "username_DESC"
   | "password_ASC"
   | "password_DESC"
+  | "name_ASC"
+  | "name_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -736,7 +736,7 @@ export type CityWhereUniqueInput = AtLeastOne<{
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
-  email?: String;
+  username?: String;
 }>;
 
 export interface CityUpdateOneRequiredInput {
@@ -934,9 +934,9 @@ export interface TownCreateManyWithoutCountyInput {
 }
 
 export interface UserUpdateInput {
-  name?: String;
-  email?: String;
+  username?: String;
   password?: String;
+  name?: String;
   posts?: PostUpdateManyWithoutAuthorInput;
   regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
 }
@@ -1086,9 +1086,9 @@ export interface CountyUpdateWithoutCityDataInput {
 }
 
 export interface UserUpdateWithoutRegStatusDataInput {
-  name?: String;
-  email?: String;
+  username?: String;
   password?: String;
+  name?: String;
   posts?: PostUpdateManyWithoutAuthorInput;
 }
 
@@ -1132,9 +1132,9 @@ export interface TownUpdateWithoutCountyDataInput {
 }
 
 export interface UserCreateWithoutRegStatusInput {
-  name: String;
-  email: String;
+  username: String;
   password: String;
+  name?: String;
   posts?: PostCreateManyWithoutAuthorInput;
 }
 
@@ -1210,9 +1210,9 @@ export interface UniversityUpsertNestedInput {
 }
 
 export interface UserUpdateWithoutPostsDataInput {
-  name?: String;
-  email?: String;
+  username?: String;
   password?: String;
+  name?: String;
   regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
 }
 
@@ -1305,9 +1305,9 @@ export type UniversityWhereUniqueInput = AtLeastOne<{
 }>;
 
 export interface UserCreateInput {
-  name: String;
-  email: String;
+  username: String;
   password: String;
+  name?: String;
   posts?: PostCreateManyWithoutAuthorInput;
   regStatus?: RegStatusCreateOneWithoutApplicantsInput;
 }
@@ -1380,34 +1380,20 @@ export interface UserWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  email?: String;
-  email_not?: String;
-  email_in?: String[] | String;
-  email_not_in?: String[] | String;
-  email_lt?: String;
-  email_lte?: String;
-  email_gt?: String;
-  email_gte?: String;
-  email_contains?: String;
-  email_not_contains?: String;
-  email_starts_with?: String;
-  email_not_starts_with?: String;
-  email_ends_with?: String;
-  email_not_ends_with?: String;
+  username?: String;
+  username_not?: String;
+  username_in?: String[] | String;
+  username_not_in?: String[] | String;
+  username_lt?: String;
+  username_lte?: String;
+  username_gt?: String;
+  username_gte?: String;
+  username_contains?: String;
+  username_not_contains?: String;
+  username_starts_with?: String;
+  username_not_starts_with?: String;
+  username_ends_with?: String;
+  username_not_ends_with?: String;
   password?: String;
   password_not?: String;
   password_in?: String[] | String;
@@ -1422,6 +1408,20 @@ export interface UserWhereInput {
   password_not_starts_with?: String;
   password_ends_with?: String;
   password_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
   posts_every?: PostWhereInput;
   posts_some?: PostWhereInput;
   posts_none?: PostWhereInput;
@@ -1718,9 +1718,9 @@ export interface CityUpdateManyWithoutProvinceInput {
 }
 
 export interface UserCreateWithoutPostsInput {
-  name: String;
-  email: String;
+  username: String;
   password: String;
+  name?: String;
   regStatus?: RegStatusCreateOneWithoutApplicantsInput;
 }
 
@@ -1885,9 +1885,9 @@ export type EducationWhereUniqueInput = AtLeastOne<{
 }>;
 
 export interface UserUpdateDataInput {
-  name?: String;
-  email?: String;
+  username?: String;
   password?: String;
+  name?: String;
   posts?: PostUpdateManyWithoutAuthorInput;
   regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
 }
@@ -2127,9 +2127,9 @@ export interface NodeNode {
 
 export interface UserPreviousValuesNode {
   id: ID_Output;
-  name: String;
-  email: String;
+  username: String;
   password: String;
+  name?: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -2138,9 +2138,9 @@ export interface UserPreviousValues
   extends Promise<UserPreviousValuesNode>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  email: () => Promise<String>;
+  username: () => Promise<String>;
   password: () => Promise<String>;
+  name: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -2149,9 +2149,9 @@ export interface UserPreviousValuesSubscription
   extends Promise<AsyncIterator<UserPreviousValuesNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  email: () => Promise<AsyncIterator<String>>;
+  username: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -3101,18 +3101,18 @@ export interface BatchPayloadSubscription
 
 export interface UserNode {
   id: ID_Output;
-  name: String;
-  email: String;
+  username: String;
   password: String;
+  name?: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
 
 export interface User extends Promise<UserNode>, Fragmentable {
   id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  email: () => Promise<String>;
+  username: () => Promise<String>;
   password: () => Promise<String>;
+  name: () => Promise<String>;
   posts: <T = Promise<Array<PostNode>>>(
     args?: {
       where?: PostWhereInput;
@@ -3133,9 +3133,9 @@ export interface UserSubscription
   extends Promise<AsyncIterator<UserNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  email: () => Promise<AsyncIterator<String>>;
+  username: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
   posts: <T = Promise<AsyncIterator<Array<PostSubscription>>>>(
     args?: {
       where?: PostWhereInput;

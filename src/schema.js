@@ -4,6 +4,7 @@ export const typeDefs = gql`
   scalar DateTime
   type Query {
     me: User
+    users:[User]
     feed: [Post!]!
     drafts: [Post!]!
     post(id: ID!): Post
@@ -13,8 +14,8 @@ export const typeDefs = gql`
     createDraft(title: String!, content: String!, authorEmail: String!): Post!
     deletePost(id: ID!): Post
     publish(id: ID!): Post
-    signup(name: String!, email: String!, password: String!): AuthPayload!
-    login(email: String!, password: String!): AuthPayload!
+    signup(username: String!, password: String!): AuthPayload!
+    login(username: String!, password: String!): AuthPayload!
   }
 
   type AuthPayload {
@@ -34,8 +35,8 @@ export const typeDefs = gql`
 
   type User {
     id: ID!
-    email: String!
-    name: String!
+    username: String!
+    name:String
     posts: [Post!]!
     createdAt: DateTime!
   }
