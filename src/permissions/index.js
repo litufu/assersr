@@ -3,15 +3,16 @@ import { rule, and, shield } from 'graphql-shield'
 import { getUserId } from '../services/utils'
 
 const rules = {
-  isUser: rule()((parent, args, ctx) => {
+  isUser: rule()(async (parent, args, ctx) => {
     const userId = getUserId(ctx)
+    const user = await ctx.db.user({uid:userId})
 
-    return !!userId
+    return !!user
   }),
   validateAuthor: rule()(async (parent, { authorEmail }, ctx) => {
     const userId = getUserId(ctx)
     const author = await ctx.db.user({
-      id: userId,
+      uid: userId,
     })
 
     return authorEmail === author.email
@@ -24,7 +25,7 @@ const rules = {
       })
       .author()
 
-    return userId === author.id
+    return userId === author.uid
   }),
 }
 
@@ -33,6 +34,7 @@ const permissions = shield({
     me: rules.isUser,
   },
   Mutation: {
+    changePassword:rules.isUser,
     createDraft: and(rules.isUser, rules.validateAuthor),
     deletePost: rules.isPostOwner,
     publish: rules.isPostOwner,

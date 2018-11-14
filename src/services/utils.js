@@ -9,10 +9,13 @@ class AuthError extends Error {
 }
 
 function getUserId(context) {
+  console.log(context.req.headers.authorization)
   const Authorization = (context.req.headers && context.req.headers.authorization) || '';
   if (Authorization) {
     const token = Authorization.replace('Bearer ', '')
+    console.log(token);
     const verifiedToken = verify(token, APP_SECRET)
+    console.log(verifiedToken);
     return verifiedToken && verifiedToken.userId
   }
 }

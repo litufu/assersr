@@ -14,8 +14,9 @@ export const typeDefs = gql`
     createDraft(title: String!, content: String!, authorEmail: String!): Post!
     deletePost(id: ID!): Post
     publish(id: ID!): Post
-    signup(username: String!, password: String!): AuthPayload!
-    login(username: String!, password: String!): AuthPayload!
+    signup(username: String!, password: String!): User!
+    login(username: String!, password: String!): User!
+    changePassword(currentPassword:String!,newPassword: String!):User!
   }
 
   type AuthPayload {
@@ -37,6 +38,8 @@ export const typeDefs = gql`
     id: ID!
     username: String!
     name:String
+    uid:String!
+    token:String!
     posts: [Post!]!
     createdAt: DateTime!
   }

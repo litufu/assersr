@@ -15,6 +15,7 @@ app.use(cors());
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  middlewares: [permissions],
   context: request => {
     return {
       ...request,

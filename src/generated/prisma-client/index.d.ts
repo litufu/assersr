@@ -653,6 +653,10 @@ export type UserOrderByInput =
   | "password_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "uid_ASC"
+  | "uid_DESC"
+  | "token_ASC"
+  | "token_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -737,6 +741,8 @@ export type CityWhereUniqueInput = AtLeastOne<{
 export type UserWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
   username?: String;
+  uid?: String;
+  token?: String;
 }>;
 
 export interface CityUpdateOneRequiredInput {
@@ -937,6 +943,8 @@ export interface UserUpdateInput {
   username?: String;
   password?: String;
   name?: String;
+  uid?: String;
+  token?: String;
   posts?: PostUpdateManyWithoutAuthorInput;
   regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
 }
@@ -1089,6 +1097,8 @@ export interface UserUpdateWithoutRegStatusDataInput {
   username?: String;
   password?: String;
   name?: String;
+  uid?: String;
+  token?: String;
   posts?: PostUpdateManyWithoutAuthorInput;
 }
 
@@ -1135,6 +1145,8 @@ export interface UserCreateWithoutRegStatusInput {
   username: String;
   password: String;
   name?: String;
+  uid: String;
+  token: String;
   posts?: PostCreateManyWithoutAuthorInput;
 }
 
@@ -1213,6 +1225,8 @@ export interface UserUpdateWithoutPostsDataInput {
   username?: String;
   password?: String;
   name?: String;
+  uid?: String;
+  token?: String;
   regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
 }
 
@@ -1308,6 +1322,8 @@ export interface UserCreateInput {
   username: String;
   password: String;
   name?: String;
+  uid: String;
+  token: String;
   posts?: PostCreateManyWithoutAuthorInput;
   regStatus?: RegStatusCreateOneWithoutApplicantsInput;
 }
@@ -1422,6 +1438,34 @@ export interface UserWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
+  uid?: String;
+  uid_not?: String;
+  uid_in?: String[] | String;
+  uid_not_in?: String[] | String;
+  uid_lt?: String;
+  uid_lte?: String;
+  uid_gt?: String;
+  uid_gte?: String;
+  uid_contains?: String;
+  uid_not_contains?: String;
+  uid_starts_with?: String;
+  uid_not_starts_with?: String;
+  uid_ends_with?: String;
+  uid_not_ends_with?: String;
+  token?: String;
+  token_not?: String;
+  token_in?: String[] | String;
+  token_not_in?: String[] | String;
+  token_lt?: String;
+  token_lte?: String;
+  token_gt?: String;
+  token_gte?: String;
+  token_contains?: String;
+  token_not_contains?: String;
+  token_starts_with?: String;
+  token_not_starts_with?: String;
+  token_ends_with?: String;
+  token_not_ends_with?: String;
   posts_every?: PostWhereInput;
   posts_some?: PostWhereInput;
   posts_none?: PostWhereInput;
@@ -1721,6 +1765,8 @@ export interface UserCreateWithoutPostsInput {
   username: String;
   password: String;
   name?: String;
+  uid: String;
+  token: String;
   regStatus?: RegStatusCreateOneWithoutApplicantsInput;
 }
 
@@ -1888,6 +1934,8 @@ export interface UserUpdateDataInput {
   username?: String;
   password?: String;
   name?: String;
+  uid?: String;
+  token?: String;
   posts?: PostUpdateManyWithoutAuthorInput;
   regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
 }
@@ -2130,6 +2178,8 @@ export interface UserPreviousValuesNode {
   username: String;
   password: String;
   name?: String;
+  uid: String;
+  token: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -2141,6 +2191,8 @@ export interface UserPreviousValues
   username: () => Promise<String>;
   password: () => Promise<String>;
   name: () => Promise<String>;
+  uid: () => Promise<String>;
+  token: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -2152,6 +2204,8 @@ export interface UserPreviousValuesSubscription
   username: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
+  uid: () => Promise<AsyncIterator<String>>;
+  token: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -3104,6 +3158,8 @@ export interface UserNode {
   username: String;
   password: String;
   name?: String;
+  uid: String;
+  token: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -3113,6 +3169,8 @@ export interface User extends Promise<UserNode>, Fragmentable {
   username: () => Promise<String>;
   password: () => Promise<String>;
   name: () => Promise<String>;
+  uid: () => Promise<String>;
+  token: () => Promise<String>;
   posts: <T = Promise<Array<PostNode>>>(
     args?: {
       where?: PostWhereInput;
@@ -3136,6 +3194,8 @@ export interface UserSubscription
   username: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
+  uid: () => Promise<AsyncIterator<String>>;
+  token: () => Promise<AsyncIterator<String>>;
   posts: <T = Promise<AsyncIterator<Array<PostSubscription>>>>(
     args?: {
       where?: PostWhereInput;

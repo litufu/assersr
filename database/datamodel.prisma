@@ -29,6 +29,8 @@ type User {
   username: String! @unique
   password: String!
   name: String
+  uid:String! @unique
+  token:String! @unique
   posts: [Post!]!
   createdAt: DateTime!
   updatedAt: DateTime!

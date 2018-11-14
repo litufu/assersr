@@ -1840,6 +1840,8 @@ type User {
   username: String!
   password: String!
   name: String
+  uid: String!
+  token: String!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -1856,6 +1858,8 @@ input UserCreateInput {
   username: String!
   password: String!
   name: String
+  uid: String!
+  token: String!
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
 }
@@ -1879,6 +1883,8 @@ input UserCreateWithoutPostsInput {
   username: String!
   password: String!
   name: String
+  uid: String!
+  token: String!
   regStatus: RegStatusCreateOneWithoutApplicantsInput
 }
 
@@ -1886,6 +1892,8 @@ input UserCreateWithoutRegStatusInput {
   username: String!
   password: String!
   name: String
+  uid: String!
+  token: String!
   posts: PostCreateManyWithoutAuthorInput
 }
 
@@ -1903,6 +1911,10 @@ enum UserOrderByInput {
   password_DESC
   name_ASC
   name_DESC
+  uid_ASC
+  uid_DESC
+  token_ASC
+  token_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1914,6 +1926,8 @@ type UserPreviousValues {
   username: String!
   password: String!
   name: String
+  uid: String!
+  token: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1940,6 +1954,8 @@ input UserUpdateDataInput {
   username: String
   password: String
   name: String
+  uid: String
+  token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
 }
@@ -1948,6 +1964,8 @@ input UserUpdateInput {
   username: String
   password: String
   name: String
+  uid: String
+  token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
 }
@@ -1979,6 +1997,8 @@ input UserUpdateWithoutPostsDataInput {
   username: String
   password: String
   name: String
+  uid: String
+  token: String
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
 }
 
@@ -1986,6 +2006,8 @@ input UserUpdateWithoutRegStatusDataInput {
   username: String
   password: String
   name: String
+  uid: String
+  token: String
   posts: PostUpdateManyWithoutAuthorInput
 }
 
@@ -2067,6 +2089,34 @@ input UserWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  uid: String
+  uid_not: String
+  uid_in: [String!]
+  uid_not_in: [String!]
+  uid_lt: String
+  uid_lte: String
+  uid_gt: String
+  uid_gte: String
+  uid_contains: String
+  uid_not_contains: String
+  uid_starts_with: String
+  uid_not_starts_with: String
+  uid_ends_with: String
+  uid_not_ends_with: String
+  token: String
+  token_not: String
+  token_in: [String!]
+  token_not_in: [String!]
+  token_lt: String
+  token_lte: String
+  token_gt: String
+  token_gte: String
+  token_contains: String
+  token_not_contains: String
+  token_starts_with: String
+  token_not_starts_with: String
+  token_ends_with: String
+  token_not_ends_with: String
   posts_every: PostWhereInput
   posts_some: PostWhereInput
   posts_none: PostWhereInput
@@ -2095,6 +2145,8 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   username: String
+  uid: String
+  token: String
 }
 `
       }
