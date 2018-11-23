@@ -2,6 +2,11 @@ export const User = {
   id:(parent, args, ctx) => ctx.db.user({ id: parent.id }).id(),
   uid:(parent, args, ctx) => ctx.db.user({ id: parent.id }).uid(),
   name:(parent, args, ctx) => ctx.db.user({ id: parent.id }).name(),
-  token:(parent, args, ctx) => ctx.db.user({ id: parent.id }).token(),
   posts: (parent, args, ctx) => ctx.db.user({ id: parent.id }).posts(),
+  birthday: (parent, args, ctx) => ctx.db.user({ id: parent.id }).birthday(),
+  birthProvince: (parent, args, ctx) => ctx.db.user({ id: parent.id }).birthProvince(),
+  birthCity: (parent, args, ctx) => ctx.db.user({ id: parent.id }).birthCity(),
+  birthArea: (parent, args, ctx) => ctx.db.user({ id: parent.id }).birthArea(),
+  birthStreet: (parent, args, ctx) => ctx.db.user({ id: parent.id }).birthStreet(),
+  birthVillage: (parent, args, ctx) => ctx.db.user({ id: parent.id }).birthVillage(),
 }

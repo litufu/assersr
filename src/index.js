@@ -4,7 +4,6 @@ import { prisma } from './generated/prisma-client'
 import http from 'http'
 import cors from 'cors'
 import { resolvers } from './resolvers'
-import { permissions } from './permissions'
 import { typeDefs } from './schema'
 
 const PORT = 4000;
@@ -15,10 +14,9 @@ app.use(cors());
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  middlewares: [permissions],
-  context: request => {
+  context: req => {
     return {
-      ...request,
+      ...req,
       db: prisma,
     }
   },

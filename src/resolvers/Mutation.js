@@ -1,7 +1,10 @@
 import { hash, compare } from 'bcrypt'
 import { sign } from 'jsonwebtoken'
-import { APP_SECRET, getUserId } from '../services/utils'
 import uuidv4 from 'uuid/v4'
+
+import { APP_SECRET, getUserId } from '../services/utils'
+import getBasicInfoData from '../services/displayBasicInfoData'
+import validateBasicInfo from '../validate/basickInfo'
 
 export const Mutation = {
   signup: async (parent, { username, password }, ctx) => {
@@ -107,6 +110,82 @@ export const Mutation = {
 
 
   },
+
+  addBasicInfo:async (parent, { name,gender,birthday,birthplace }, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    // 对用户输入的数据进行验证。
+    validateBasicInfo(name,gender,birthday,birthplace)
+    // 获取要输入的数据。
+    const data = getBasicInfoData(name,gender,birthday,birthplace)
+
+    return ctx.db.updateUser({
+      where: { uid: userId },
+      data:data
+    })
+  },
+
+  createPerson:async (parent, { name }, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const person = await ctx.db.createPerson({name,})
+    return person
+  },
+
+  updatePerson:async (parent, { id,username }, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const updatePerson = await ctx.db.updatePerson({
+      where: { id },
+      data:{user:{connect:{username}}},
+    })
+    return updatePerson
+  },
+
+  deletePerson:async (parent, { id }, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const deletePerson = await ctx.db.deletePerson({ id })
+    return deletePerson
+  },
+
+  createFamily:async (parent, { username,personId,relationship,status }, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const family = await ctx.db.createFamily({
+        relationship:relationship,
+        status:status,
+        from:{connect:{username}},
+        to:{connect:{id:personId}},
+    })
+    return family
+  },
+
+  updateFamily:async (parent, { id, personId,status }, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const updateFamily = ctx.db.updateFamily({
+      where:{ id },
+      data:{
+        to:{connect:{id:personId}},
+        status
+      },
+    })
+    return updateFamily
+  },
+
   createDraft: async (parent, { title, content, authorEmail }, ctx) => {
     return ctx.db.createPost({
       title,

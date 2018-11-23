@@ -35,6 +35,7 @@ const permissions = shield({
   },
   Mutation: {
     changePassword:rules.isUser,
+    createPerson:rules.isUser,
     createDraft: and(rules.isUser, rules.validateAuthor),
     deletePost: rules.isPostOwner,
     publish: rules.isPostOwner,

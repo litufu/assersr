@@ -11,20 +11,23 @@ type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
   U[keyof U];
 
 export interface Exists {
+  area: (where?: AreaWhereInput) => Promise<boolean>;
   city: (where?: CityWhereInput) => Promise<boolean>;
   collegeEntranceExam: (
     where?: CollegeEntranceExamWhereInput
   ) => Promise<boolean>;
-  county: (where?: CountyWhereInput) => Promise<boolean>;
   education: (where?: EducationWhereInput) => Promise<boolean>;
+  family: (where?: FamilyWhereInput) => Promise<boolean>;
   major: (where?: MajorWhereInput) => Promise<boolean>;
+  person: (where?: PersonWhereInput) => Promise<boolean>;
   post: (where?: PostWhereInput) => Promise<boolean>;
   province: (where?: ProvinceWhereInput) => Promise<boolean>;
   regStatus: (where?: RegStatusWhereInput) => Promise<boolean>;
+  street: (where?: StreetWhereInput) => Promise<boolean>;
   subject: (where?: SubjectWhereInput) => Promise<boolean>;
-  town: (where?: TownWhereInput) => Promise<boolean>;
   university: (where?: UniversityWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
+  village: (where?: VillageWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -45,6 +48,29 @@ export interface Prisma {
    * Queries
    */
 
+  area: (where: AreaWhereUniqueInput) => Area;
+  areas: (
+    args?: {
+      where?: AreaWhereInput;
+      orderBy?: AreaOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => Promise<Array<AreaNode>>;
+  areasConnection: (
+    args?: {
+      where?: AreaWhereInput;
+      orderBy?: AreaOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => AreaConnection;
   city: (where: CityWhereUniqueInput) => City;
   cities: (
     args?: {
@@ -93,29 +119,6 @@ export interface Prisma {
       last?: Int;
     }
   ) => CollegeEntranceExamConnection;
-  county: (where: CountyWhereUniqueInput) => County;
-  counties: (
-    args?: {
-      where?: CountyWhereInput;
-      orderBy?: CountyOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => Promise<Array<CountyNode>>;
-  countiesConnection: (
-    args?: {
-      where?: CountyWhereInput;
-      orderBy?: CountyOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => CountyConnection;
   education: (where: EducationWhereUniqueInput) => Education;
   educations: (
     args?: {
@@ -139,6 +142,29 @@ export interface Prisma {
       last?: Int;
     }
   ) => EducationConnection;
+  family: (where: FamilyWhereUniqueInput) => Family;
+  families: (
+    args?: {
+      where?: FamilyWhereInput;
+      orderBy?: FamilyOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => Promise<Array<FamilyNode>>;
+  familiesConnection: (
+    args?: {
+      where?: FamilyWhereInput;
+      orderBy?: FamilyOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FamilyConnection;
   major: (where: MajorWhereUniqueInput) => Major;
   majors: (
     args?: {
@@ -162,6 +188,29 @@ export interface Prisma {
       last?: Int;
     }
   ) => MajorConnection;
+  person: (where: PersonWhereUniqueInput) => Person;
+  persons: (
+    args?: {
+      where?: PersonWhereInput;
+      orderBy?: PersonOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => Promise<Array<PersonNode>>;
+  personsConnection: (
+    args?: {
+      where?: PersonWhereInput;
+      orderBy?: PersonOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => PersonConnection;
   post: (where: PostWhereUniqueInput) => Post;
   posts: (
     args?: {
@@ -231,6 +280,29 @@ export interface Prisma {
       last?: Int;
     }
   ) => RegStatusConnection;
+  street: (where: StreetWhereUniqueInput) => Street;
+  streets: (
+    args?: {
+      where?: StreetWhereInput;
+      orderBy?: StreetOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => Promise<Array<StreetNode>>;
+  streetsConnection: (
+    args?: {
+      where?: StreetWhereInput;
+      orderBy?: StreetOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => StreetConnection;
   subject: (where: SubjectWhereUniqueInput) => Subject;
   subjects: (
     args?: {
@@ -254,29 +326,6 @@ export interface Prisma {
       last?: Int;
     }
   ) => SubjectConnection;
-  town: (where: TownWhereUniqueInput) => Town;
-  towns: (
-    args?: {
-      where?: TownWhereInput;
-      orderBy?: TownOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => Promise<Array<TownNode>>;
-  townsConnection: (
-    args?: {
-      where?: TownWhereInput;
-      orderBy?: TownOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => TownConnection;
   university: (where: UniversityWhereUniqueInput) => University;
   universities: (
     args?: {
@@ -323,12 +372,51 @@ export interface Prisma {
       last?: Int;
     }
   ) => UserConnection;
+  village: (where: VillageWhereUniqueInput) => Village;
+  villages: (
+    args?: {
+      where?: VillageWhereInput;
+      orderBy?: VillageOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => Promise<Array<VillageNode>>;
+  villagesConnection: (
+    args?: {
+      where?: VillageWhereInput;
+      orderBy?: VillageOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => VillageConnection;
   node: (args: { id: ID_Output }) => Node;
 
   /**
    * Mutations
    */
 
+  createArea: (data: AreaCreateInput) => Area;
+  updateArea: (
+    args: { data: AreaUpdateInput; where: AreaWhereUniqueInput }
+  ) => Area;
+  updateManyAreas: (
+    args: { data: AreaUpdateInput; where?: AreaWhereInput }
+  ) => BatchPayload;
+  upsertArea: (
+    args: {
+      where: AreaWhereUniqueInput;
+      create: AreaCreateInput;
+      update: AreaUpdateInput;
+    }
+  ) => Area;
+  deleteArea: (where: AreaWhereUniqueInput) => Area;
+  deleteManyAreas: (where?: AreaWhereInput) => BatchPayload;
   createCity: (data: CityCreateInput) => City;
   updateCity: (
     args: { data: CityUpdateInput; where: CityWhereUniqueInput }
@@ -373,22 +461,6 @@ export interface Prisma {
   deleteManyCollegeEntranceExams: (
     where?: CollegeEntranceExamWhereInput
   ) => BatchPayload;
-  createCounty: (data: CountyCreateInput) => County;
-  updateCounty: (
-    args: { data: CountyUpdateInput; where: CountyWhereUniqueInput }
-  ) => County;
-  updateManyCounties: (
-    args: { data: CountyUpdateInput; where?: CountyWhereInput }
-  ) => BatchPayload;
-  upsertCounty: (
-    args: {
-      where: CountyWhereUniqueInput;
-      create: CountyCreateInput;
-      update: CountyUpdateInput;
-    }
-  ) => County;
-  deleteCounty: (where: CountyWhereUniqueInput) => County;
-  deleteManyCounties: (where?: CountyWhereInput) => BatchPayload;
   createEducation: (data: EducationCreateInput) => Education;
   updateEducation: (
     args: { data: EducationUpdateInput; where: EducationWhereUniqueInput }
@@ -405,6 +477,22 @@ export interface Prisma {
   ) => Education;
   deleteEducation: (where: EducationWhereUniqueInput) => Education;
   deleteManyEducations: (where?: EducationWhereInput) => BatchPayload;
+  createFamily: (data: FamilyCreateInput) => Family;
+  updateFamily: (
+    args: { data: FamilyUpdateInput; where: FamilyWhereUniqueInput }
+  ) => Family;
+  updateManyFamilies: (
+    args: { data: FamilyUpdateInput; where?: FamilyWhereInput }
+  ) => BatchPayload;
+  upsertFamily: (
+    args: {
+      where: FamilyWhereUniqueInput;
+      create: FamilyCreateInput;
+      update: FamilyUpdateInput;
+    }
+  ) => Family;
+  deleteFamily: (where: FamilyWhereUniqueInput) => Family;
+  deleteManyFamilies: (where?: FamilyWhereInput) => BatchPayload;
   createMajor: (data: MajorCreateInput) => Major;
   updateMajor: (
     args: { data: MajorUpdateInput; where: MajorWhereUniqueInput }
@@ -421,6 +509,22 @@ export interface Prisma {
   ) => Major;
   deleteMajor: (where: MajorWhereUniqueInput) => Major;
   deleteManyMajors: (where?: MajorWhereInput) => BatchPayload;
+  createPerson: (data: PersonCreateInput) => Person;
+  updatePerson: (
+    args: { data: PersonUpdateInput; where: PersonWhereUniqueInput }
+  ) => Person;
+  updateManyPersons: (
+    args: { data: PersonUpdateInput; where?: PersonWhereInput }
+  ) => BatchPayload;
+  upsertPerson: (
+    args: {
+      where: PersonWhereUniqueInput;
+      create: PersonCreateInput;
+      update: PersonUpdateInput;
+    }
+  ) => Person;
+  deletePerson: (where: PersonWhereUniqueInput) => Person;
+  deleteManyPersons: (where?: PersonWhereInput) => BatchPayload;
   createPost: (data: PostCreateInput) => Post;
   updatePost: (
     args: { data: PostUpdateInput; where: PostWhereUniqueInput }
@@ -469,6 +573,22 @@ export interface Prisma {
   ) => RegStatus;
   deleteRegStatus: (where: RegStatusWhereUniqueInput) => RegStatus;
   deleteManyRegStatuses: (where?: RegStatusWhereInput) => BatchPayload;
+  createStreet: (data: StreetCreateInput) => Street;
+  updateStreet: (
+    args: { data: StreetUpdateInput; where: StreetWhereUniqueInput }
+  ) => Street;
+  updateManyStreets: (
+    args: { data: StreetUpdateInput; where?: StreetWhereInput }
+  ) => BatchPayload;
+  upsertStreet: (
+    args: {
+      where: StreetWhereUniqueInput;
+      create: StreetCreateInput;
+      update: StreetUpdateInput;
+    }
+  ) => Street;
+  deleteStreet: (where: StreetWhereUniqueInput) => Street;
+  deleteManyStreets: (where?: StreetWhereInput) => BatchPayload;
   createSubject: (data: SubjectCreateInput) => Subject;
   updateSubject: (
     args: { data: SubjectUpdateInput; where: SubjectWhereUniqueInput }
@@ -485,22 +605,6 @@ export interface Prisma {
   ) => Subject;
   deleteSubject: (where: SubjectWhereUniqueInput) => Subject;
   deleteManySubjects: (where?: SubjectWhereInput) => BatchPayload;
-  createTown: (data: TownCreateInput) => Town;
-  updateTown: (
-    args: { data: TownUpdateInput; where: TownWhereUniqueInput }
-  ) => Town;
-  updateManyTowns: (
-    args: { data: TownUpdateInput; where?: TownWhereInput }
-  ) => BatchPayload;
-  upsertTown: (
-    args: {
-      where: TownWhereUniqueInput;
-      create: TownCreateInput;
-      update: TownUpdateInput;
-    }
-  ) => Town;
-  deleteTown: (where: TownWhereUniqueInput) => Town;
-  deleteManyTowns: (where?: TownWhereInput) => BatchPayload;
   createUniversity: (data: UniversityCreateInput) => University;
   updateUniversity: (
     args: { data: UniversityUpdateInput; where: UniversityWhereUniqueInput }
@@ -533,6 +637,22 @@ export interface Prisma {
   ) => User;
   deleteUser: (where: UserWhereUniqueInput) => User;
   deleteManyUsers: (where?: UserWhereInput) => BatchPayload;
+  createVillage: (data: VillageCreateInput) => Village;
+  updateVillage: (
+    args: { data: VillageUpdateInput; where: VillageWhereUniqueInput }
+  ) => Village;
+  updateManyVillages: (
+    args: { data: VillageUpdateInput; where?: VillageWhereInput }
+  ) => BatchPayload;
+  upsertVillage: (
+    args: {
+      where: VillageWhereUniqueInput;
+      create: VillageCreateInput;
+      update: VillageUpdateInput;
+    }
+  ) => Village;
+  deleteVillage: (where: VillageWhereUniqueInput) => Village;
+  deleteManyVillages: (where?: VillageWhereInput) => BatchPayload;
 
   /**
    * Subscriptions
@@ -542,21 +662,27 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  area: (
+    where?: AreaSubscriptionWhereInput
+  ) => AreaSubscriptionPayloadSubscription;
   city: (
     where?: CitySubscriptionWhereInput
   ) => CitySubscriptionPayloadSubscription;
   collegeEntranceExam: (
     where?: CollegeEntranceExamSubscriptionWhereInput
   ) => CollegeEntranceExamSubscriptionPayloadSubscription;
-  county: (
-    where?: CountySubscriptionWhereInput
-  ) => CountySubscriptionPayloadSubscription;
   education: (
     where?: EducationSubscriptionWhereInput
   ) => EducationSubscriptionPayloadSubscription;
+  family: (
+    where?: FamilySubscriptionWhereInput
+  ) => FamilySubscriptionPayloadSubscription;
   major: (
     where?: MajorSubscriptionWhereInput
   ) => MajorSubscriptionPayloadSubscription;
+  person: (
+    where?: PersonSubscriptionWhereInput
+  ) => PersonSubscriptionPayloadSubscription;
   post: (
     where?: PostSubscriptionWhereInput
   ) => PostSubscriptionPayloadSubscription;
@@ -566,18 +692,21 @@ export interface Subscription {
   regStatus: (
     where?: RegStatusSubscriptionWhereInput
   ) => RegStatusSubscriptionPayloadSubscription;
+  street: (
+    where?: StreetSubscriptionWhereInput
+  ) => StreetSubscriptionPayloadSubscription;
   subject: (
     where?: SubjectSubscriptionWhereInput
   ) => SubjectSubscriptionPayloadSubscription;
-  town: (
-    where?: TownSubscriptionWhereInput
-  ) => TownSubscriptionPayloadSubscription;
   university: (
     where?: UniversitySubscriptionWhereInput
   ) => UniversitySubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
+  village: (
+    where?: VillageSubscriptionWhereInput
+  ) => VillageSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -588,9 +717,23 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type EducationOrderByInput =
+export type FamilyOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "relationship_ASC"
+  | "relationship_DESC"
+  | "status_ASC"
+  | "status_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type CityOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "code_ASC"
+  | "code_DESC"
   | "name_ASC"
   | "name_DESC"
   | "createdAt_ASC"
@@ -598,21 +741,7 @@ export type EducationOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type PostOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "isPublished_ASC"
-  | "isPublished_DESC"
-  | "title_ASC"
-  | "title_DESC"
-  | "content_ASC"
-  | "content_DESC";
-
-export type CityOrderByInput =
+export type EducationOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "name_ASC"
@@ -634,7 +763,41 @@ export type UniversityOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type TownOrderByInput =
+export type CollegeEntranceExamOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "culscore_ASC"
+  | "culscore_DESC"
+  | "proscore_ASC"
+  | "proscore_DESC"
+  | "candidatenum_ASC"
+  | "candidatenum_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type RegStatusOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type StreetOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "code_ASC"
+  | "code_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type PersonOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "name_ASC"
@@ -653,6 +816,12 @@ export type UserOrderByInput =
   | "password_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "gender_ASC"
+  | "gender_DESC"
+  | "birthdaycalendar_ASC"
+  | "birthdaycalendar_DESC"
+  | "birthday_ASC"
+  | "birthday_DESC"
   | "uid_ASC"
   | "uid_DESC"
   | "token_ASC"
@@ -662,9 +831,11 @@ export type UserOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type CountyOrderByInput =
+export type VillageOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "code_ASC"
+  | "code_DESC"
   | "name_ASC"
   | "name_DESC"
   | "createdAt_ASC"
@@ -672,31 +843,31 @@ export type CountyOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type CollegeEntranceExamOrderByInput =
+export type PostOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "culscore_ASC"
-  | "culscore_DESC"
-  | "proscore_ASC"
-  | "proscore_DESC"
-  | "candidatenum_ASC"
-  | "candidatenum_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
-  | "updatedAt_DESC";
+  | "updatedAt_DESC"
+  | "isPublished_ASC"
+  | "isPublished_DESC"
+  | "title_ASC"
+  | "title_DESC"
+  | "content_ASC"
+  | "content_DESC";
 
-export type SubjectOrderByInput =
+export type AreaOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "code_ASC"
+  | "code_DESC"
   | "name_ASC"
   | "name_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
-
-export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
 export type MajorOrderByInput =
   | "id_ASC"
@@ -715,6 +886,8 @@ export type MajorOrderByInput =
 export type ProvinceOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "code_ASC"
+  | "code_DESC"
   | "name_ASC"
   | "name_DESC"
   | "createdAt_ASC"
@@ -722,779 +895,49 @@ export type ProvinceOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type RegStatusOrderByInput =
+export type SubjectOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export interface SubjectCreateInput {
-  name: String;
+export type MutationType = "CREATED" | "UPDATED" | "DELETED";
+
+export interface AreaUpdateManyWithoutCityInput {
+  create?: AreaCreateWithoutCityInput[] | AreaCreateWithoutCityInput;
+  delete?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
+  connect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
+  disconnect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
+  update?:
+    | AreaUpdateWithWhereUniqueWithoutCityInput[]
+    | AreaUpdateWithWhereUniqueWithoutCityInput;
+  upsert?:
+    | AreaUpsertWithWhereUniqueWithoutCityInput[]
+    | AreaUpsertWithWhereUniqueWithoutCityInput;
 }
 
-export type CityWhereUniqueInput = AtLeastOne<{
+export type AreaWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
-}>;
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  username?: String;
-  uid?: String;
-  token?: String;
-}>;
-
-export interface CityUpdateOneRequiredInput {
-  create?: CityCreateInput;
-  update?: CityUpdateDataInput;
-  upsert?: CityUpsertNestedInput;
-  connect?: CityWhereUniqueInput;
-}
-
-export interface RegStatusUpsertWithoutApplicantsInput {
-  update: RegStatusUpdateWithoutApplicantsDataInput;
-  create: RegStatusCreateWithoutApplicantsInput;
-}
-
-export interface UniversityCreateOneInput {
-  create?: UniversityCreateInput;
-  connect?: UniversityWhereUniqueInput;
-}
-
-export interface MajorUpsertNestedInput {
-  update: MajorUpdateDataInput;
-  create: MajorCreateInput;
-}
-
-export interface UniversitySubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UniversityWhereInput;
-  AND?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
-  OR?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
-  NOT?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
-}
-
-export interface MajorUpdateDataInput {
-  name?: String;
-  category?: String;
-  education?: EducationUpdateOneRequiredInput;
   code?: String;
-}
-
-export type CollegeEntranceExamWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
 }>;
 
-export interface RegStatusSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: RegStatusWhereInput;
-  AND?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
-  OR?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
-  NOT?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
-}
-
-export interface PostSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: PostWhereInput;
-  AND?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
-  OR?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
-  NOT?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
-}
-
-export interface CityCreateInput {
-  name: String;
-  province: ProvinceCreateOneWithoutCitiesInput;
-  counties?: CountyCreateManyWithoutCityInput;
-}
-
-export interface MajorSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: MajorWhereInput;
-  AND?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
-  OR?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
-  NOT?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
-}
-
-export interface ProvinceCreateOneWithoutCitiesInput {
-  create?: ProvinceCreateWithoutCitiesInput;
-  connect?: ProvinceWhereUniqueInput;
-}
-
-export interface RegStatusWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  university?: UniversityWhereInput;
-  major?: MajorWhereInput;
-  applicants_every?: UserWhereInput;
-  applicants_some?: UserWhereInput;
-  applicants_none?: UserWhereInput;
-  AND?: RegStatusWhereInput[] | RegStatusWhereInput;
-  OR?: RegStatusWhereInput[] | RegStatusWhereInput;
-  NOT?: RegStatusWhereInput[] | RegStatusWhereInput;
-}
-
-export interface ProvinceCreateWithoutCitiesInput {
-  name: String;
-}
-
-export interface EducationWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  AND?: EducationWhereInput[] | EducationWhereInput;
-  OR?: EducationWhereInput[] | EducationWhereInput;
-  NOT?: EducationWhereInput[] | EducationWhereInput;
-}
-
-export interface CountyCreateManyWithoutCityInput {
-  create?: CountyCreateWithoutCityInput[] | CountyCreateWithoutCityInput;
-  connect?: CountyWhereUniqueInput[] | CountyWhereUniqueInput;
-}
-
-export interface EducationSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: EducationWhereInput;
-  AND?: EducationSubscriptionWhereInput[] | EducationSubscriptionWhereInput;
-  OR?: EducationSubscriptionWhereInput[] | EducationSubscriptionWhereInput;
-  NOT?: EducationSubscriptionWhereInput[] | EducationSubscriptionWhereInput;
-}
-
-export interface CountyCreateWithoutCityInput {
-  name: String;
-  towns?: TownCreateManyWithoutCountyInput;
-}
-
-export interface CollegeEntranceExamSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: CollegeEntranceExamWhereInput;
-  AND?:
-    | CollegeEntranceExamSubscriptionWhereInput[]
-    | CollegeEntranceExamSubscriptionWhereInput;
-  OR?:
-    | CollegeEntranceExamSubscriptionWhereInput[]
-    | CollegeEntranceExamSubscriptionWhereInput;
-  NOT?:
-    | CollegeEntranceExamSubscriptionWhereInput[]
-    | CollegeEntranceExamSubscriptionWhereInput;
-}
-
-export interface TownCreateManyWithoutCountyInput {
-  create?: TownCreateWithoutCountyInput[] | TownCreateWithoutCountyInput;
-  connect?: TownWhereUniqueInput[] | TownWhereUniqueInput;
-}
-
-export interface UserUpdateInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-}
-
-export interface TownCreateWithoutCountyInput {
-  name: String;
-}
-
-export interface CountyUpsertWithoutTownsInput {
-  update: CountyUpdateWithoutTownsDataInput;
-  create: CountyCreateWithoutTownsInput;
-}
-
-export interface CityUpdateInput {
-  name?: String;
-  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
-  counties?: CountyUpdateManyWithoutCityInput;
-}
-
-export interface SubjectWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  AND?: SubjectWhereInput[] | SubjectWhereInput;
-  OR?: SubjectWhereInput[] | SubjectWhereInput;
-  NOT?: SubjectWhereInput[] | SubjectWhereInput;
-}
-
-export interface ProvinceUpdateOneRequiredWithoutCitiesInput {
-  create?: ProvinceCreateWithoutCitiesInput;
-  update?: ProvinceUpdateWithoutCitiesDataInput;
-  upsert?: ProvinceUpsertWithoutCitiesInput;
-  connect?: ProvinceWhereUniqueInput;
-}
-
-export interface CountyUpdateOneRequiredWithoutTownsInput {
-  create?: CountyCreateWithoutTownsInput;
-  update?: CountyUpdateWithoutTownsDataInput;
-  upsert?: CountyUpsertWithoutTownsInput;
-  connect?: CountyWhereUniqueInput;
-}
-
-export interface ProvinceUpdateWithoutCitiesDataInput {
-  name?: String;
-}
-
-export interface CountyCreateWithoutTownsInput {
-  name: String;
-  city: CityCreateOneWithoutCountiesInput;
-}
-
-export interface ProvinceUpsertWithoutCitiesInput {
-  update: ProvinceUpdateWithoutCitiesDataInput;
-  create: ProvinceCreateWithoutCitiesInput;
-}
-
-export interface CountyCreateOneWithoutTownsInput {
-  create?: CountyCreateWithoutTownsInput;
-  connect?: CountyWhereUniqueInput;
-}
-
-export interface CountyUpdateManyWithoutCityInput {
-  create?: CountyCreateWithoutCityInput[] | CountyCreateWithoutCityInput;
-  delete?: CountyWhereUniqueInput[] | CountyWhereUniqueInput;
-  connect?: CountyWhereUniqueInput[] | CountyWhereUniqueInput;
-  disconnect?: CountyWhereUniqueInput[] | CountyWhereUniqueInput;
-  update?:
-    | CountyUpdateWithWhereUniqueWithoutCityInput[]
-    | CountyUpdateWithWhereUniqueWithoutCityInput;
-  upsert?:
-    | CountyUpsertWithWhereUniqueWithoutCityInput[]
-    | CountyUpsertWithWhereUniqueWithoutCityInput;
-}
-
-export interface SubjectUpdateInput {
-  name?: String;
-}
-
-export interface CountyUpdateWithWhereUniqueWithoutCityInput {
-  where: CountyWhereUniqueInput;
-  data: CountyUpdateWithoutCityDataInput;
-}
-
-export interface TownWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  county?: CountyWhereInput;
-  AND?: TownWhereInput[] | TownWhereInput;
-  OR?: TownWhereInput[] | TownWhereInput;
-  NOT?: TownWhereInput[] | TownWhereInput;
-}
-
-export interface CountyUpdateWithoutCityDataInput {
-  name?: String;
-  towns?: TownUpdateManyWithoutCountyInput;
-}
-
-export interface UserUpdateWithoutRegStatusDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-}
-
-export interface TownUpdateManyWithoutCountyInput {
-  create?: TownCreateWithoutCountyInput[] | TownCreateWithoutCountyInput;
-  delete?: TownWhereUniqueInput[] | TownWhereUniqueInput;
-  connect?: TownWhereUniqueInput[] | TownWhereUniqueInput;
-  disconnect?: TownWhereUniqueInput[] | TownWhereUniqueInput;
-  update?:
-    | TownUpdateWithWhereUniqueWithoutCountyInput[]
-    | TownUpdateWithWhereUniqueWithoutCountyInput;
-  upsert?:
-    | TownUpsertWithWhereUniqueWithoutCountyInput[]
-    | TownUpsertWithWhereUniqueWithoutCountyInput;
-}
-
-export type MajorWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface TownUpdateWithWhereUniqueWithoutCountyInput {
-  where: TownWhereUniqueInput;
-  data: TownUpdateWithoutCountyDataInput;
-}
-
-export interface UserUpdateManyWithoutRegStatusInput {
-  create?: UserCreateWithoutRegStatusInput[] | UserCreateWithoutRegStatusInput;
+export interface UserUpdateManyWithoutBirthVillageInput {
+  create?:
+    | UserCreateWithoutBirthVillageInput[]
+    | UserCreateWithoutBirthVillageInput;
   delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
   connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
   disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
   update?:
-    | UserUpdateWithWhereUniqueWithoutRegStatusInput[]
-    | UserUpdateWithWhereUniqueWithoutRegStatusInput;
+    | UserUpdateWithWhereUniqueWithoutBirthVillageInput[]
+    | UserUpdateWithWhereUniqueWithoutBirthVillageInput;
   upsert?:
-    | UserUpsertWithWhereUniqueWithoutRegStatusInput[]
-    | UserUpsertWithWhereUniqueWithoutRegStatusInput;
-}
-
-export interface TownUpdateWithoutCountyDataInput {
-  name?: String;
-}
-
-export interface UserCreateWithoutRegStatusInput {
-  username: String;
-  password: String;
-  name?: String;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-}
-
-export interface TownUpsertWithWhereUniqueWithoutCountyInput {
-  where: TownWhereUniqueInput;
-  update: TownUpdateWithoutCountyDataInput;
-  create: TownCreateWithoutCountyInput;
-}
-
-export interface UserCreateManyWithoutRegStatusInput {
-  create?: UserCreateWithoutRegStatusInput[] | UserCreateWithoutRegStatusInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface CountyUpsertWithWhereUniqueWithoutCityInput {
-  where: CountyWhereUniqueInput;
-  update: CountyUpdateWithoutCityDataInput;
-  create: CountyCreateWithoutCityInput;
-}
-
-export interface ProvinceUpdateInput {
-  name?: String;
-  cities?: CityUpdateManyWithoutProvinceInput;
-}
-
-export interface MajorUpdateOneRequiredInput {
-  create?: MajorCreateInput;
-  update?: MajorUpdateDataInput;
-  upsert?: MajorUpsertNestedInput;
-  connect?: MajorWhereUniqueInput;
-}
-
-export interface ProvinceWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  cities_every?: CityWhereInput;
-  cities_some?: CityWhereInput;
-  cities_none?: CityWhereInput;
-  AND?: ProvinceWhereInput[] | ProvinceWhereInput;
-  OR?: ProvinceWhereInput[] | ProvinceWhereInput;
-  NOT?: ProvinceWhereInput[] | ProvinceWhereInput;
-}
-
-export interface UniversityUpsertNestedInput {
-  update: UniversityUpdateDataInput;
-  create: UniversityCreateInput;
-}
-
-export interface UserUpdateWithoutPostsDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  uid?: String;
-  token?: String;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-}
-
-export interface CollegeEntranceExamCreateInput {
-  province: ProvinceCreateOneInput;
-  subject: SubjectCreateOneInput;
-  culscore: Float;
-  proscore?: Float;
-  candidatenum: String;
-  student: UserCreateOneInput;
-}
-
-export type RegStatusWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface ProvinceCreateOneInput {
-  create?: ProvinceCreateInput;
-  connect?: ProvinceWhereUniqueInput;
-}
-
-export interface PostUpdateInput {
-  isPublished?: Boolean;
-  title?: String;
-  content?: String;
-  author?: UserUpdateOneRequiredWithoutPostsInput;
-}
-
-export interface ProvinceCreateInput {
-  name: String;
-  cities?: CityCreateManyWithoutProvinceInput;
-}
-
-export interface UserCreateOneWithoutPostsInput {
-  create?: UserCreateWithoutPostsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface CityCreateManyWithoutProvinceInput {
-  create?: CityCreateWithoutProvinceInput[] | CityCreateWithoutProvinceInput;
-  connect?: CityWhereUniqueInput[] | CityWhereUniqueInput;
-}
-
-export interface PostCreateInput {
-  isPublished?: Boolean;
-  title: String;
-  content: String;
-  author: UserCreateOneWithoutPostsInput;
-}
-
-export interface CityCreateWithoutProvinceInput {
-  name: String;
-  counties?: CountyCreateManyWithoutCityInput;
-}
-
-export interface EducationUpdateInput {
-  name?: String;
-}
-
-export interface SubjectCreateOneInput {
-  create?: SubjectCreateInput;
-  connect?: SubjectWhereUniqueInput;
-}
-
-export type TownWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface CityUpsertNestedInput {
-  update: CityUpdateDataInput;
-  create: CityCreateInput;
-}
-
-export interface CityUpdateOneRequiredWithoutCountiesInput {
-  create?: CityCreateWithoutCountiesInput;
-  update?: CityUpdateWithoutCountiesDataInput;
-  upsert?: CityUpsertWithoutCountiesInput;
-  connect?: CityWhereUniqueInput;
-}
-
-export interface UserCreateOneInput {
-  create?: UserCreateInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export type UniversityWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  name?: String;
-  identifier?: String;
-}>;
-
-export interface UserCreateInput {
-  username: String;
-  password: String;
-  name?: String;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-}
-
-export interface CityCreateOneWithoutCountiesInput {
-  create?: CityCreateWithoutCountiesInput;
-  connect?: CityWhereUniqueInput;
-}
-
-export interface PostCreateManyWithoutAuthorInput {
-  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput;
-  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput;
-}
-
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
-}
-
-export interface PostCreateWithoutAuthorInput {
-  isPublished?: Boolean;
-  title: String;
-  content: String;
-}
-
-export interface TownSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: TownWhereInput;
-  AND?: TownSubscriptionWhereInput[] | TownSubscriptionWhereInput;
-  OR?: TownSubscriptionWhereInput[] | TownSubscriptionWhereInput;
-  NOT?: TownSubscriptionWhereInput[] | TownSubscriptionWhereInput;
-}
-
-export interface RegStatusCreateOneWithoutApplicantsInput {
-  create?: RegStatusCreateWithoutApplicantsInput;
-  connect?: RegStatusWhereUniqueInput;
-}
-
-export interface ProvinceSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: ProvinceWhereInput;
-  AND?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
-  OR?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
-  NOT?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
-}
-
-export interface RegStatusCreateWithoutApplicantsInput {
-  university?: UniversityCreateOneInput;
-  major: MajorCreateOneInput;
-}
-
-export interface UserWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  username?: String;
-  username_not?: String;
-  username_in?: String[] | String;
-  username_not_in?: String[] | String;
-  username_lt?: String;
-  username_lte?: String;
-  username_gt?: String;
-  username_gte?: String;
-  username_contains?: String;
-  username_not_contains?: String;
-  username_starts_with?: String;
-  username_not_starts_with?: String;
-  username_ends_with?: String;
-  username_not_ends_with?: String;
-  password?: String;
-  password_not?: String;
-  password_in?: String[] | String;
-  password_not_in?: String[] | String;
-  password_lt?: String;
-  password_lte?: String;
-  password_gt?: String;
-  password_gte?: String;
-  password_contains?: String;
-  password_not_contains?: String;
-  password_starts_with?: String;
-  password_not_starts_with?: String;
-  password_ends_with?: String;
-  password_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  uid?: String;
-  uid_not?: String;
-  uid_in?: String[] | String;
-  uid_not_in?: String[] | String;
-  uid_lt?: String;
-  uid_lte?: String;
-  uid_gt?: String;
-  uid_gte?: String;
-  uid_contains?: String;
-  uid_not_contains?: String;
-  uid_starts_with?: String;
-  uid_not_starts_with?: String;
-  uid_ends_with?: String;
-  uid_not_ends_with?: String;
-  token?: String;
-  token_not?: String;
-  token_in?: String[] | String;
-  token_not_in?: String[] | String;
-  token_lt?: String;
-  token_lte?: String;
-  token_gt?: String;
-  token_gte?: String;
-  token_contains?: String;
-  token_not_contains?: String;
-  token_starts_with?: String;
-  token_not_starts_with?: String;
-  token_ends_with?: String;
-  token_not_ends_with?: String;
-  posts_every?: PostWhereInput;
-  posts_some?: PostWhereInput;
-  posts_none?: PostWhereInput;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  regStatus?: RegStatusWhereInput;
-  AND?: UserWhereInput[] | UserWhereInput;
-  OR?: UserWhereInput[] | UserWhereInput;
-  NOT?: UserWhereInput[] | UserWhereInput;
-}
-
-export interface CityUpdateDataInput {
-  name?: String;
-  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
-  counties?: CountyUpdateManyWithoutCityInput;
+    | UserUpsertWithWhereUniqueWithoutBirthVillageInput[]
+    | UserUpsertWithWhereUniqueWithoutBirthVillageInput;
 }
 
 export interface MajorWhereInput {
@@ -1560,30 +1003,133 @@ export interface MajorWhereInput {
   NOT?: MajorWhereInput[] | MajorWhereInput;
 }
 
-export interface UniversityCreateInput {
-  name: String;
-  education: EducationCreateOneInput;
-  identifier: String;
-  city: CityCreateOneInput;
+export interface UserCreateManyWithoutBirthCityInput {
+  create?: UserCreateWithoutBirthCityInput[] | UserCreateWithoutBirthCityInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
-export interface CitySubscriptionWhereInput {
+export interface CityUpdateInput {
+  code?: String;
+  name?: String;
+  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
+  areas?: AreaUpdateManyWithoutCityInput;
+  people?: UserUpdateManyWithoutBirthCityInput;
+}
+
+export interface UserCreateWithoutBirthCityInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthProvince?: ProvinceCreateOneWithoutPeopleInput;
+  birthArea?: AreaCreateOneWithoutPeopleInput;
+  birthStreet?: StreetCreateOneWithoutPeopleInput;
+  birthVillage?: VillageCreateOneWithoutPeopleInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutBirthVillageInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutBirthVillageDataInput;
+}
+
+export interface AreaCreateOneWithoutPeopleInput {
+  create?: AreaCreateWithoutPeopleInput;
+  connect?: AreaWhereUniqueInput;
+}
+
+export interface UserSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: CityWhereInput;
-  AND?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
-  OR?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
-  NOT?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
 }
 
-export interface EducationCreateOneInput {
-  create?: EducationCreateInput;
-  connect?: EducationWhereUniqueInput;
+export interface AreaCreateWithoutPeopleInput {
+  code: String;
+  name: String;
+  city: CityCreateOneWithoutAreasInput;
+  towns?: StreetCreateManyWithoutAreaInput;
 }
 
-export interface CollegeEntranceExamWhereInput {
+export interface UniversitySubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UniversityWhereInput;
+  AND?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
+  OR?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
+  NOT?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
+}
+
+export interface StreetCreateOneWithoutPeopleInput {
+  create?: StreetCreateWithoutPeopleInput;
+  connect?: StreetWhereUniqueInput;
+}
+
+export interface StreetSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: StreetWhereInput;
+  AND?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
+  OR?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
+  NOT?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
+}
+
+export interface StreetCreateWithoutPeopleInput {
+  code: String;
+  name: String;
+  Area: AreaCreateOneWithoutTownsInput;
+  villages?: VillageCreateManyWithoutStreetInput;
+}
+
+export interface ProvinceSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ProvinceWhereInput;
+  AND?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
+  OR?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
+  NOT?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
+}
+
+export interface AreaCreateOneWithoutTownsInput {
+  create?: AreaCreateWithoutTownsInput;
+  connect?: AreaWhereUniqueInput;
+}
+
+export interface PersonSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: PersonWhereInput;
+  AND?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
+  OR?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
+  NOT?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
+}
+
+export interface AreaCreateWithoutTownsInput {
+  code: String;
+  name: String;
+  city: CityCreateOneWithoutAreasInput;
+  people?: UserCreateManyWithoutBirthAreaInput;
+}
+
+export interface VillageWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -1598,82 +1144,156 @@ export interface CollegeEntranceExamWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  province?: ProvinceWhereInput;
-  subject?: SubjectWhereInput;
-  culscore?: Float;
-  culscore_not?: Float;
-  culscore_in?: Float[] | Float;
-  culscore_not_in?: Float[] | Float;
-  culscore_lt?: Float;
-  culscore_lte?: Float;
-  culscore_gt?: Float;
-  culscore_gte?: Float;
-  proscore?: Float;
-  proscore_not?: Float;
-  proscore_in?: Float[] | Float;
-  proscore_not_in?: Float[] | Float;
-  proscore_lt?: Float;
-  proscore_lte?: Float;
-  proscore_gt?: Float;
-  proscore_gte?: Float;
-  candidatenum?: String;
-  candidatenum_not?: String;
-  candidatenum_in?: String[] | String;
-  candidatenum_not_in?: String[] | String;
-  candidatenum_lt?: String;
-  candidatenum_lte?: String;
-  candidatenum_gt?: String;
-  candidatenum_gte?: String;
-  candidatenum_contains?: String;
-  candidatenum_not_contains?: String;
-  candidatenum_starts_with?: String;
-  candidatenum_not_starts_with?: String;
-  candidatenum_ends_with?: String;
-  candidatenum_not_ends_with?: String;
-  student?: UserWhereInput;
-  AND?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
-  OR?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
-  NOT?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
-}
-
-export interface EducationCreateInput {
-  name: String;
-}
-
-export interface TownUpdateInput {
-  name?: String;
-  county?: CountyUpdateOneRequiredWithoutTownsInput;
-}
-
-export interface CityCreateOneInput {
-  create?: CityCreateInput;
-  connect?: CityWhereUniqueInput;
-}
-
-export interface TownCreateInput {
-  name: String;
-  county: CountyCreateOneWithoutTownsInput;
-}
-
-export interface MajorCreateOneInput {
-  create?: MajorCreateInput;
-  connect?: MajorWhereUniqueInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutRegStatusInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutRegStatusDataInput;
-  create: UserCreateWithoutRegStatusInput;
-}
-
-export interface MajorCreateInput {
-  name: String;
-  category: String;
-  education: EducationCreateOneInput;
   code?: String;
+  code_not?: String;
+  code_in?: String[] | String;
+  code_not_in?: String[] | String;
+  code_lt?: String;
+  code_lte?: String;
+  code_gt?: String;
+  code_gte?: String;
+  code_contains?: String;
+  code_not_contains?: String;
+  code_starts_with?: String;
+  code_not_starts_with?: String;
+  code_ends_with?: String;
+  code_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  street?: StreetWhereInput;
+  people_every?: UserWhereInput;
+  people_some?: UserWhereInput;
+  people_none?: UserWhereInput;
+  AND?: VillageWhereInput[] | VillageWhereInput;
+  OR?: VillageWhereInput[] | VillageWhereInput;
+  NOT?: VillageWhereInput[] | VillageWhereInput;
 }
 
-export interface CountyWhereInput {
+export interface UserCreateManyWithoutBirthAreaInput {
+  create?: UserCreateWithoutBirthAreaInput[] | UserCreateWithoutBirthAreaInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface FamilySubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: FamilyWhereInput;
+  AND?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
+  OR?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
+  NOT?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
+}
+
+export interface UserCreateWithoutBirthAreaInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthProvince?: ProvinceCreateOneWithoutPeopleInput;
+  birthCity?: CityCreateOneWithoutPeopleInput;
+  birthStreet?: StreetCreateOneWithoutPeopleInput;
+  birthVillage?: VillageCreateOneWithoutPeopleInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+}
+
+export interface CollegeEntranceExamSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: CollegeEntranceExamWhereInput;
+  AND?:
+    | CollegeEntranceExamSubscriptionWhereInput[]
+    | CollegeEntranceExamSubscriptionWhereInput;
+  OR?:
+    | CollegeEntranceExamSubscriptionWhereInput[]
+    | CollegeEntranceExamSubscriptionWhereInput;
+  NOT?:
+    | CollegeEntranceExamSubscriptionWhereInput[]
+    | CollegeEntranceExamSubscriptionWhereInput;
+}
+
+export interface VillageCreateOneWithoutPeopleInput {
+  create?: VillageCreateWithoutPeopleInput;
+  connect?: VillageWhereUniqueInput;
+}
+
+export interface CitySubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: CityWhereInput;
+  AND?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
+  OR?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
+  NOT?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
+}
+
+export interface VillageCreateWithoutPeopleInput {
+  code: String;
+  name: String;
+  street: StreetCreateOneWithoutVillagesInput;
+}
+
+export interface VillageUpdateInput {
+  code?: String;
+  name?: String;
+  street?: StreetUpdateOneRequiredWithoutVillagesInput;
+  people?: UserUpdateManyWithoutBirthVillageInput;
+}
+
+export interface StreetCreateOneWithoutVillagesInput {
+  create?: StreetCreateWithoutVillagesInput;
+  connect?: StreetWhereUniqueInput;
+}
+
+export interface VillageCreateInput {
+  code: String;
+  name: String;
+  street: StreetCreateOneWithoutVillagesInput;
+  people?: UserCreateManyWithoutBirthVillageInput;
+}
+
+export interface StreetCreateWithoutVillagesInput {
+  code: String;
+  name: String;
+  Area: AreaCreateOneWithoutTownsInput;
+  people?: UserCreateManyWithoutBirthStreetInput;
+}
+
+export interface UniversityUpdateInput {
+  name?: String;
+  education?: EducationUpdateOneRequiredInput;
+  identifier?: String;
+  city?: CityUpdateOneRequiredInput;
+}
+
+export interface UserCreateManyWithoutBirthStreetInput {
+  create?:
+    | UserCreateWithoutBirthStreetInput[]
+    | UserCreateWithoutBirthStreetInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface SubjectWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -1702,13 +1322,695 @@ export interface CountyWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
+  AND?: SubjectWhereInput[] | SubjectWhereInput;
+  OR?: SubjectWhereInput[] | SubjectWhereInput;
+  NOT?: SubjectWhereInput[] | SubjectWhereInput;
+}
+
+export interface UserCreateWithoutBirthStreetInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthProvince?: ProvinceCreateOneWithoutPeopleInput;
+  birthCity?: CityCreateOneWithoutPeopleInput;
+  birthArea?: AreaCreateOneWithoutPeopleInput;
+  birthVillage?: VillageCreateOneWithoutPeopleInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+}
+
+export interface SubjectUpdateInput {
+  name?: String;
+}
+
+export interface PostCreateManyWithoutAuthorInput {
+  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput;
+  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput;
+}
+
+export interface StreetCreateInput {
+  code: String;
+  name: String;
+  Area: AreaCreateOneWithoutTownsInput;
+  villages?: VillageCreateManyWithoutStreetInput;
+  people?: UserCreateManyWithoutBirthStreetInput;
+}
+
+export interface PostCreateWithoutAuthorInput {
+  isPublished?: Boolean;
+  title: String;
+  content: String;
+}
+
+export interface AreaWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  code?: String;
+  code_not?: String;
+  code_in?: String[] | String;
+  code_not_in?: String[] | String;
+  code_lt?: String;
+  code_lte?: String;
+  code_gt?: String;
+  code_gte?: String;
+  code_contains?: String;
+  code_not_contains?: String;
+  code_starts_with?: String;
+  code_not_starts_with?: String;
+  code_ends_with?: String;
+  code_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
   city?: CityWhereInput;
-  towns_every?: TownWhereInput;
-  towns_some?: TownWhereInput;
-  towns_none?: TownWhereInput;
-  AND?: CountyWhereInput[] | CountyWhereInput;
-  OR?: CountyWhereInput[] | CountyWhereInput;
-  NOT?: CountyWhereInput[] | CountyWhereInput;
+  towns_every?: StreetWhereInput;
+  towns_some?: StreetWhereInput;
+  towns_none?: StreetWhereInput;
+  people_every?: UserWhereInput;
+  people_some?: UserWhereInput;
+  people_none?: UserWhereInput;
+  AND?: AreaWhereInput[] | AreaWhereInput;
+  OR?: AreaWhereInput[] | AreaWhereInput;
+  NOT?: AreaWhereInput[] | AreaWhereInput;
+}
+
+export interface RegStatusCreateOneWithoutApplicantsInput {
+  create?: RegStatusCreateWithoutApplicantsInput;
+  connect?: RegStatusWhereUniqueInput;
+}
+
+export interface UserUpdateWithoutRegStatusDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
+  birthCity?: CityUpdateOneWithoutPeopleInput;
+  birthArea?: AreaUpdateOneWithoutPeopleInput;
+  birthStreet?: StreetUpdateOneWithoutPeopleInput;
+  birthVillage?: VillageUpdateOneWithoutPeopleInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+}
+
+export interface RegStatusCreateWithoutApplicantsInput {
+  university?: UniversityCreateOneInput;
+  major: MajorCreateOneInput;
+}
+
+export type FamilyWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UniversityCreateOneInput {
+  create?: UniversityCreateInput;
+  connect?: UniversityWhereUniqueInput;
+}
+
+export interface RegStatusUpdateInput {
+  university?: UniversityUpdateOneInput;
+  major?: MajorUpdateOneRequiredInput;
+  applicants?: UserUpdateManyWithoutRegStatusInput;
+}
+
+export interface UniversityCreateInput {
+  name: String;
+  education: EducationCreateOneInput;
+  identifier: String;
+  city: CityCreateOneInput;
+}
+
+export interface PersonWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  user?: UserWhereInput;
+  AND?: PersonWhereInput[] | PersonWhereInput;
+  OR?: PersonWhereInput[] | PersonWhereInput;
+  NOT?: PersonWhereInput[] | PersonWhereInput;
+}
+
+export interface EducationCreateOneInput {
+  create?: EducationCreateInput;
+  connect?: EducationWhereUniqueInput;
+}
+
+export interface UserCreateManyWithoutRegStatusInput {
+  create?: UserCreateWithoutRegStatusInput[] | UserCreateWithoutRegStatusInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface EducationCreateInput {
+  name: String;
+}
+
+export interface ProvinceUpdateInput {
+  code?: String;
+  name?: String;
+  cities?: CityUpdateManyWithoutProvinceInput;
+  people?: UserUpdateManyWithoutBirthProvinceInput;
+}
+
+export interface CityCreateOneInput {
+  create?: CityCreateInput;
+  connect?: CityWhereUniqueInput;
+}
+
+export interface UserWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  username?: String;
+  username_not?: String;
+  username_in?: String[] | String;
+  username_not_in?: String[] | String;
+  username_lt?: String;
+  username_lte?: String;
+  username_gt?: String;
+  username_gte?: String;
+  username_contains?: String;
+  username_not_contains?: String;
+  username_starts_with?: String;
+  username_not_starts_with?: String;
+  username_ends_with?: String;
+  username_not_ends_with?: String;
+  password?: String;
+  password_not?: String;
+  password_in?: String[] | String;
+  password_not_in?: String[] | String;
+  password_lt?: String;
+  password_lte?: String;
+  password_gt?: String;
+  password_gte?: String;
+  password_contains?: String;
+  password_not_contains?: String;
+  password_starts_with?: String;
+  password_not_starts_with?: String;
+  password_ends_with?: String;
+  password_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  gender?: String;
+  gender_not?: String;
+  gender_in?: String[] | String;
+  gender_not_in?: String[] | String;
+  gender_lt?: String;
+  gender_lte?: String;
+  gender_gt?: String;
+  gender_gte?: String;
+  gender_contains?: String;
+  gender_not_contains?: String;
+  gender_starts_with?: String;
+  gender_not_starts_with?: String;
+  gender_ends_with?: String;
+  gender_not_ends_with?: String;
+  birthdaycalendar?: String;
+  birthdaycalendar_not?: String;
+  birthdaycalendar_in?: String[] | String;
+  birthdaycalendar_not_in?: String[] | String;
+  birthdaycalendar_lt?: String;
+  birthdaycalendar_lte?: String;
+  birthdaycalendar_gt?: String;
+  birthdaycalendar_gte?: String;
+  birthdaycalendar_contains?: String;
+  birthdaycalendar_not_contains?: String;
+  birthdaycalendar_starts_with?: String;
+  birthdaycalendar_not_starts_with?: String;
+  birthdaycalendar_ends_with?: String;
+  birthdaycalendar_not_ends_with?: String;
+  birthday?: DateTimeInput;
+  birthday_not?: DateTimeInput;
+  birthday_in?: DateTimeInput[] | DateTimeInput;
+  birthday_not_in?: DateTimeInput[] | DateTimeInput;
+  birthday_lt?: DateTimeInput;
+  birthday_lte?: DateTimeInput;
+  birthday_gt?: DateTimeInput;
+  birthday_gte?: DateTimeInput;
+  birthProvince?: ProvinceWhereInput;
+  birthCity?: CityWhereInput;
+  birthArea?: AreaWhereInput;
+  birthStreet?: StreetWhereInput;
+  birthVillage?: VillageWhereInput;
+  uid?: String;
+  uid_not?: String;
+  uid_in?: String[] | String;
+  uid_not_in?: String[] | String;
+  uid_lt?: String;
+  uid_lte?: String;
+  uid_gt?: String;
+  uid_gte?: String;
+  uid_contains?: String;
+  uid_not_contains?: String;
+  uid_starts_with?: String;
+  uid_not_starts_with?: String;
+  uid_ends_with?: String;
+  uid_not_ends_with?: String;
+  token?: String;
+  token_not?: String;
+  token_in?: String[] | String;
+  token_not_in?: String[] | String;
+  token_lt?: String;
+  token_lte?: String;
+  token_gt?: String;
+  token_gte?: String;
+  token_contains?: String;
+  token_not_contains?: String;
+  token_starts_with?: String;
+  token_not_starts_with?: String;
+  token_ends_with?: String;
+  token_not_ends_with?: String;
+  posts_every?: PostWhereInput;
+  posts_some?: PostWhereInput;
+  posts_none?: PostWhereInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  regStatus?: RegStatusWhereInput;
+  AND?: UserWhereInput[] | UserWhereInput;
+  OR?: UserWhereInput[] | UserWhereInput;
+  NOT?: UserWhereInput[] | UserWhereInput;
+}
+
+export interface CityCreateInput {
+  code: String;
+  name: String;
+  province: ProvinceCreateOneWithoutCitiesInput;
+  areas?: AreaCreateManyWithoutCityInput;
+  people?: UserCreateManyWithoutBirthCityInput;
+}
+
+export interface UserUpdateWithoutPostsDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
+  birthCity?: CityUpdateOneWithoutPeopleInput;
+  birthArea?: AreaUpdateOneWithoutPeopleInput;
+  birthStreet?: StreetUpdateOneWithoutPeopleInput;
+  birthVillage?: VillageUpdateOneWithoutPeopleInput;
+  uid?: String;
+  token?: String;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+}
+
+export interface MajorCreateOneInput {
+  create?: MajorCreateInput;
+  connect?: MajorWhereUniqueInput;
+}
+
+export type PersonWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface MajorCreateInput {
+  name: String;
+  category: String;
+  education: EducationCreateOneInput;
+  code?: String;
+}
+
+export interface PostUpdateInput {
+  isPublished?: Boolean;
+  title?: String;
+  content?: String;
+  author?: UserUpdateOneRequiredWithoutPostsInput;
+}
+
+export interface AreaUpdateInput {
+  code?: String;
+  name?: String;
+  city?: CityUpdateOneRequiredWithoutAreasInput;
+  towns?: StreetUpdateManyWithoutAreaInput;
+  people?: UserUpdateManyWithoutBirthAreaInput;
+}
+
+export interface UserCreateOneWithoutPostsInput {
+  create?: UserCreateWithoutPostsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface CityUpdateOneRequiredWithoutAreasInput {
+  create?: CityCreateWithoutAreasInput;
+  update?: CityUpdateWithoutAreasDataInput;
+  upsert?: CityUpsertWithoutAreasInput;
+  connect?: CityWhereUniqueInput;
+}
+
+export interface PostCreateInput {
+  isPublished?: Boolean;
+  title: String;
+  content: String;
+  author: UserCreateOneWithoutPostsInput;
+}
+
+export interface CityUpdateWithoutAreasDataInput {
+  code?: String;
+  name?: String;
+  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
+  people?: UserUpdateManyWithoutBirthCityInput;
+}
+
+export interface MajorUpdateInput {
+  name?: String;
+  category?: String;
+  education?: EducationUpdateOneRequiredInput;
+  code?: String;
+}
+
+export interface ProvinceUpdateOneRequiredWithoutCitiesInput {
+  create?: ProvinceCreateWithoutCitiesInput;
+  update?: ProvinceUpdateWithoutCitiesDataInput;
+  upsert?: ProvinceUpsertWithoutCitiesInput;
+  connect?: ProvinceWhereUniqueInput;
+}
+
+export interface CityWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  code?: String;
+  code_not?: String;
+  code_in?: String[] | String;
+  code_not_in?: String[] | String;
+  code_lt?: String;
+  code_lte?: String;
+  code_gt?: String;
+  code_gte?: String;
+  code_contains?: String;
+  code_not_contains?: String;
+  code_starts_with?: String;
+  code_not_starts_with?: String;
+  code_ends_with?: String;
+  code_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  province?: ProvinceWhereInput;
+  areas_every?: AreaWhereInput;
+  areas_some?: AreaWhereInput;
+  areas_none?: AreaWhereInput;
+  people_every?: UserWhereInput;
+  people_some?: UserWhereInput;
+  people_none?: UserWhereInput;
+  AND?: CityWhereInput[] | CityWhereInput;
+  OR?: CityWhereInput[] | CityWhereInput;
+  NOT?: CityWhereInput[] | CityWhereInput;
+}
+
+export interface ProvinceUpdateWithoutCitiesDataInput {
+  code?: String;
+  name?: String;
+  people?: UserUpdateManyWithoutBirthProvinceInput;
+}
+
+export interface UserUpdateOneInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpdateManyWithoutBirthProvinceInput {
+  create?:
+    | UserCreateWithoutBirthProvinceInput[]
+    | UserCreateWithoutBirthProvinceInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutBirthProvinceInput[]
+    | UserUpdateWithWhereUniqueWithoutBirthProvinceInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutBirthProvinceInput[]
+    | UserUpsertWithWhereUniqueWithoutBirthProvinceInput;
+}
+
+export type RegStatusWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpdateWithWhereUniqueWithoutBirthProvinceInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutBirthProvinceDataInput;
+}
+
+export interface FamilyUpdateInput {
+  from?: UserUpdateOneRequiredInput;
+  to?: PersonUpdateOneRequiredInput;
+  relationship?: String;
+  status?: String;
+}
+
+export interface UserUpdateWithoutBirthProvinceDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthCity?: CityUpdateOneWithoutPeopleInput;
+  birthArea?: AreaUpdateOneWithoutPeopleInput;
+  birthStreet?: StreetUpdateOneWithoutPeopleInput;
+  birthVillage?: VillageUpdateOneWithoutPeopleInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+}
+
+export interface PersonCreateOneInput {
+  create?: PersonCreateInput;
+  connect?: PersonWhereUniqueInput;
+}
+
+export interface CityUpdateOneWithoutPeopleInput {
+  create?: CityCreateWithoutPeopleInput;
+  update?: CityUpdateWithoutPeopleDataInput;
+  upsert?: CityUpsertWithoutPeopleInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: CityWhereUniqueInput;
+}
+
+export interface FamilyCreateInput {
+  from: UserCreateOneInput;
+  to: PersonCreateOneInput;
+  relationship: String;
+  status: String;
+}
+
+export interface CityUpdateWithoutPeopleDataInput {
+  code?: String;
+  name?: String;
+  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
+  areas?: AreaUpdateManyWithoutCityInput;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface ProvinceCreateOneInput {
+  create?: ProvinceCreateInput;
+  connect?: ProvinceWhereUniqueInput;
+}
+
+export interface UserUpdateDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
+  birthCity?: CityUpdateOneWithoutPeopleInput;
+  birthArea?: AreaUpdateOneWithoutPeopleInput;
+  birthStreet?: StreetUpdateOneWithoutPeopleInput;
+  birthVillage?: VillageUpdateOneWithoutPeopleInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+}
+
+export interface AreaUpdateWithWhereUniqueWithoutCityInput {
+  where: AreaWhereUniqueInput;
+  data: AreaUpdateWithoutCityDataInput;
+}
+
+export interface SubjectUpsertNestedInput {
+  update: SubjectUpdateDataInput;
+  create: SubjectCreateInput;
+}
+
+export interface AreaUpdateWithoutCityDataInput {
+  code?: String;
+  name?: String;
+  towns?: StreetUpdateManyWithoutAreaInput;
+  people?: UserUpdateManyWithoutBirthAreaInput;
+}
+
+export type UniversityWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+  identifier?: String;
+}>;
+
+export interface StreetUpdateManyWithoutAreaInput {
+  create?: StreetCreateWithoutAreaInput[] | StreetCreateWithoutAreaInput;
+  delete?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
+  connect?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
+  disconnect?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
+  update?:
+    | StreetUpdateWithWhereUniqueWithoutAreaInput[]
+    | StreetUpdateWithWhereUniqueWithoutAreaInput;
+  upsert?:
+    | StreetUpsertWithWhereUniqueWithoutAreaInput[]
+    | StreetUpsertWithWhereUniqueWithoutAreaInput;
+}
+
+export interface ProvinceUpsertNestedInput {
+  update: ProvinceUpdateDataInput;
+  create: ProvinceCreateInput;
+}
+
+export interface StreetUpdateWithWhereUniqueWithoutAreaInput {
+  where: StreetWhereUniqueInput;
+  data: StreetUpdateWithoutAreaDataInput;
+}
+
+export interface ProvinceUpdateOneRequiredInput {
+  create?: ProvinceCreateInput;
+  update?: ProvinceUpdateDataInput;
+  upsert?: ProvinceUpsertNestedInput;
+  connect?: ProvinceWhereUniqueInput;
+}
+
+export interface StreetUpdateWithoutAreaDataInput {
+  code?: String;
+  name?: String;
+  villages?: VillageUpdateManyWithoutStreetInput;
+  people?: UserUpdateManyWithoutBirthStreetInput;
 }
 
 export interface CollegeEntranceExamUpdateInput {
@@ -1720,32 +2022,205 @@ export interface CollegeEntranceExamUpdateInput {
   student?: UserUpdateOneRequiredInput;
 }
 
-export type PostWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface VillageUpdateManyWithoutStreetInput {
+  create?: VillageCreateWithoutStreetInput[] | VillageCreateWithoutStreetInput;
+  delete?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
+  connect?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
+  disconnect?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
+  update?:
+    | VillageUpdateWithWhereUniqueWithoutStreetInput[]
+    | VillageUpdateWithWhereUniqueWithoutStreetInput;
+  upsert?:
+    | VillageUpsertWithWhereUniqueWithoutStreetInput[]
+    | VillageUpsertWithWhereUniqueWithoutStreetInput;
+}
 
-export interface ProvinceUpdateOneRequiredInput {
-  create?: ProvinceCreateInput;
-  update?: ProvinceUpdateDataInput;
-  upsert?: ProvinceUpsertNestedInput;
+export interface UserCreateOneInput {
+  create?: UserCreateInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface VillageUpdateWithWhereUniqueWithoutStreetInput {
+  where: VillageWhereUniqueInput;
+  data: VillageUpdateWithoutStreetDataInput;
+}
+
+export interface SubjectCreateInput {
+  name: String;
+}
+
+export interface VillageUpdateWithoutStreetDataInput {
+  code?: String;
+  name?: String;
+  people?: UserUpdateManyWithoutBirthVillageInput;
+}
+
+export interface ProvinceCreateInput {
+  code: String;
+  name: String;
+  cities?: CityCreateManyWithoutProvinceInput;
+  people?: UserCreateManyWithoutBirthProvinceInput;
+}
+
+export interface EducationWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  AND?: EducationWhereInput[] | EducationWhereInput;
+  OR?: EducationWhereInput[] | EducationWhereInput;
+  NOT?: EducationWhereInput[] | EducationWhereInput;
+}
+
+export interface AreaCreateInput {
+  code: String;
+  name: String;
+  city: CityCreateOneWithoutAreasInput;
+  towns?: StreetCreateManyWithoutAreaInput;
+  people?: UserCreateManyWithoutBirthAreaInput;
+}
+
+export interface UniversityWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  education?: EducationWhereInput;
+  identifier?: String;
+  identifier_not?: String;
+  identifier_in?: String[] | String;
+  identifier_not_in?: String[] | String;
+  identifier_lt?: String;
+  identifier_lte?: String;
+  identifier_gt?: String;
+  identifier_gte?: String;
+  identifier_contains?: String;
+  identifier_not_contains?: String;
+  identifier_starts_with?: String;
+  identifier_not_starts_with?: String;
+  identifier_ends_with?: String;
+  identifier_not_ends_with?: String;
+  city?: CityWhereInput;
+  AND?: UniversityWhereInput[] | UniversityWhereInput;
+  OR?: UniversityWhereInput[] | UniversityWhereInput;
+  NOT?: UniversityWhereInput[] | UniversityWhereInput;
+}
+
+export interface CityCreateWithoutAreasInput {
+  code: String;
+  name: String;
+  province: ProvinceCreateOneWithoutCitiesInput;
+  people?: UserCreateManyWithoutBirthCityInput;
+}
+
+export interface UserUpdateWithoutBirthVillageDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
+  birthCity?: CityUpdateOneWithoutPeopleInput;
+  birthArea?: AreaUpdateOneWithoutPeopleInput;
+  birthStreet?: StreetUpdateOneWithoutPeopleInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+}
+
+export interface ProvinceCreateWithoutCitiesInput {
+  code: String;
+  name: String;
+  people?: UserCreateManyWithoutBirthProvinceInput;
+}
+
+export interface ProvinceUpdateOneWithoutPeopleInput {
+  create?: ProvinceCreateWithoutPeopleInput;
+  update?: ProvinceUpdateWithoutPeopleDataInput;
+  upsert?: ProvinceUpsertWithoutPeopleInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
   connect?: ProvinceWhereUniqueInput;
 }
 
-export type ProvinceWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
+export interface UserCreateWithoutBirthProvinceInput {
+  username: String;
+  password: String;
   name?: String;
-}>;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthCity?: CityCreateOneWithoutPeopleInput;
+  birthArea?: AreaCreateOneWithoutPeopleInput;
+  birthStreet?: StreetCreateOneWithoutPeopleInput;
+  birthVillage?: VillageCreateOneWithoutPeopleInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+}
 
-export interface ProvinceUpdateDataInput {
+export interface ProvinceUpdateWithoutPeopleDataInput {
+  code?: String;
   name?: String;
   cities?: CityUpdateManyWithoutProvinceInput;
 }
 
-export interface UserUpdateOneRequiredWithoutPostsInput {
-  create?: UserCreateWithoutPostsInput;
-  update?: UserUpdateWithoutPostsDataInput;
-  upsert?: UserUpsertWithoutPostsInput;
-  connect?: UserWhereUniqueInput;
+export interface CityCreateWithoutPeopleInput {
+  code: String;
+  name: String;
+  province: ProvinceCreateOneWithoutCitiesInput;
+  areas?: AreaCreateManyWithoutCityInput;
 }
 
 export interface CityUpdateManyWithoutProvinceInput {
@@ -1761,13 +2236,11 @@ export interface CityUpdateManyWithoutProvinceInput {
     | CityUpsertWithWhereUniqueWithoutProvinceInput;
 }
 
-export interface UserCreateWithoutPostsInput {
-  username: String;
-  password: String;
-  name?: String;
-  uid: String;
-  token: String;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+export interface AreaCreateWithoutCityInput {
+  code: String;
+  name: String;
+  towns?: StreetCreateManyWithoutAreaInput;
+  people?: UserCreateManyWithoutBirthAreaInput;
 }
 
 export interface CityUpdateWithWhereUniqueWithoutProvinceInput {
@@ -1775,55 +2248,146 @@ export interface CityUpdateWithWhereUniqueWithoutProvinceInput {
   data: CityUpdateWithoutProvinceDataInput;
 }
 
-export interface MajorUpdateInput {
-  name?: String;
-  category?: String;
-  education?: EducationUpdateOneRequiredInput;
-  code?: String;
+export interface StreetCreateWithoutAreaInput {
+  code: String;
+  name: String;
+  villages?: VillageCreateManyWithoutStreetInput;
+  people?: UserCreateManyWithoutBirthStreetInput;
 }
 
 export interface CityUpdateWithoutProvinceDataInput {
+  code?: String;
   name?: String;
-  counties?: CountyUpdateManyWithoutCityInput;
+  areas?: AreaUpdateManyWithoutCityInput;
+  people?: UserUpdateManyWithoutBirthCityInput;
 }
 
-export interface CityUpdateWithoutCountiesDataInput {
-  name?: String;
-  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
-}
-
-export interface CityUpsertWithWhereUniqueWithoutProvinceInput {
-  where: CityWhereUniqueInput;
-  update: CityUpdateWithoutProvinceDataInput;
-  create: CityCreateWithoutProvinceInput;
-}
-
-export interface CityCreateWithoutCountiesInput {
+export interface VillageCreateWithoutStreetInput {
+  code: String;
   name: String;
-  province: ProvinceCreateOneWithoutCitiesInput;
+  people?: UserCreateManyWithoutBirthVillageInput;
 }
 
-export interface ProvinceUpsertNestedInput {
-  update: ProvinceUpdateDataInput;
-  create: ProvinceCreateInput;
+export interface UserUpdateManyWithoutBirthCityInput {
+  create?: UserCreateWithoutBirthCityInput[] | UserCreateWithoutBirthCityInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutBirthCityInput[]
+    | UserUpdateWithWhereUniqueWithoutBirthCityInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutBirthCityInput[]
+    | UserUpsertWithWhereUniqueWithoutBirthCityInput;
 }
 
-export interface UserSubscriptionWhereInput {
+export interface UserCreateWithoutBirthVillageInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthProvince?: ProvinceCreateOneWithoutPeopleInput;
+  birthCity?: CityCreateOneWithoutPeopleInput;
+  birthArea?: AreaCreateOneWithoutPeopleInput;
+  birthStreet?: StreetCreateOneWithoutPeopleInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutBirthCityInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutBirthCityDataInput;
+}
+
+export interface ProvinceCreateWithoutPeopleInput {
+  code: String;
+  name: String;
+  cities?: CityCreateManyWithoutProvinceInput;
+}
+
+export interface UserUpdateWithoutBirthCityDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
+  birthArea?: AreaUpdateOneWithoutPeopleInput;
+  birthStreet?: StreetUpdateOneWithoutPeopleInput;
+  birthVillage?: VillageUpdateOneWithoutPeopleInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+}
+
+export interface CityCreateWithoutProvinceInput {
+  code: String;
+  name: String;
+  areas?: AreaCreateManyWithoutCityInput;
+  people?: UserCreateManyWithoutBirthCityInput;
+}
+
+export interface AreaUpdateOneWithoutPeopleInput {
+  create?: AreaCreateWithoutPeopleInput;
+  update?: AreaUpdateWithoutPeopleDataInput;
+  upsert?: AreaUpsertWithoutPeopleInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: AreaWhereUniqueInput;
+}
+
+export interface RegStatusWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  university?: UniversityWhereInput;
+  major?: MajorWhereInput;
+  applicants_every?: UserWhereInput;
+  applicants_some?: UserWhereInput;
+  applicants_none?: UserWhereInput;
+  AND?: RegStatusWhereInput[] | RegStatusWhereInput;
+  OR?: RegStatusWhereInput[] | RegStatusWhereInput;
+  NOT?: RegStatusWhereInput[] | RegStatusWhereInput;
+}
+
+export interface AreaUpdateWithoutPeopleDataInput {
+  code?: String;
+  name?: String;
+  city?: CityUpdateOneRequiredWithoutAreasInput;
+  towns?: StreetUpdateManyWithoutAreaInput;
+}
+
+export interface RegStatusSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  node?: RegStatusWhereInput;
+  AND?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
+  OR?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
+  NOT?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
 }
 
-export interface SubjectUpdateOneRequiredInput {
-  create?: SubjectCreateInput;
-  update?: SubjectUpdateDataInput;
-  upsert?: SubjectUpsertNestedInput;
-  connect?: SubjectWhereUniqueInput;
+export interface AreaUpsertWithoutPeopleInput {
+  update: AreaUpdateWithoutPeopleDataInput;
+  create: AreaCreateWithoutPeopleInput;
 }
 
 export interface PostWhereInput {
@@ -1893,36 +2457,142 @@ export interface PostWhereInput {
   NOT?: PostWhereInput[] | PostWhereInput;
 }
 
-export interface SubjectUpdateDataInput {
-  name?: String;
+export interface StreetUpdateOneWithoutPeopleInput {
+  create?: StreetCreateWithoutPeopleInput;
+  update?: StreetUpdateWithoutPeopleDataInput;
+  upsert?: StreetUpsertWithoutPeopleInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: StreetWhereUniqueInput;
 }
 
-export interface CountySubscriptionWhereInput {
+export interface EducationSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: CountyWhereInput;
-  AND?: CountySubscriptionWhereInput[] | CountySubscriptionWhereInput;
-  OR?: CountySubscriptionWhereInput[] | CountySubscriptionWhereInput;
-  NOT?: CountySubscriptionWhereInput[] | CountySubscriptionWhereInput;
+  node?: EducationWhereInput;
+  AND?: EducationSubscriptionWhereInput[] | EducationSubscriptionWhereInput;
+  OR?: EducationSubscriptionWhereInput[] | EducationSubscriptionWhereInput;
+  NOT?: EducationSubscriptionWhereInput[] | EducationSubscriptionWhereInput;
 }
 
-export interface SubjectUpsertNestedInput {
-  update: SubjectUpdateDataInput;
-  create: SubjectCreateInput;
-}
-
-export interface CountyUpdateWithoutTownsDataInput {
+export interface StreetUpdateWithoutPeopleDataInput {
+  code?: String;
   name?: String;
-  city?: CityUpdateOneRequiredWithoutCountiesInput;
+  Area?: AreaUpdateOneRequiredWithoutTownsInput;
+  villages?: VillageUpdateManyWithoutStreetInput;
 }
 
-export interface UserUpdateOneRequiredInput {
-  create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
-  connect?: UserWhereUniqueInput;
+export interface AreaSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: AreaWhereInput;
+  AND?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
+  OR?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
+  NOT?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
+}
+
+export interface AreaUpdateOneRequiredWithoutTownsInput {
+  create?: AreaCreateWithoutTownsInput;
+  update?: AreaUpdateWithoutTownsDataInput;
+  upsert?: AreaUpsertWithoutTownsInput;
+  connect?: AreaWhereUniqueInput;
+}
+
+export interface UserUpdateInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
+  birthCity?: CityUpdateOneWithoutPeopleInput;
+  birthArea?: AreaUpdateOneWithoutPeopleInput;
+  birthStreet?: StreetUpdateOneWithoutPeopleInput;
+  birthVillage?: VillageUpdateOneWithoutPeopleInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+}
+
+export interface AreaUpdateWithoutTownsDataInput {
+  code?: String;
+  name?: String;
+  city?: CityUpdateOneRequiredWithoutAreasInput;
+  people?: UserUpdateManyWithoutBirthAreaInput;
+}
+
+export interface StreetWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  code?: String;
+  code_not?: String;
+  code_in?: String[] | String;
+  code_not_in?: String[] | String;
+  code_lt?: String;
+  code_lte?: String;
+  code_gt?: String;
+  code_gte?: String;
+  code_contains?: String;
+  code_not_contains?: String;
+  code_starts_with?: String;
+  code_not_starts_with?: String;
+  code_ends_with?: String;
+  code_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  Area?: AreaWhereInput;
+  villages_every?: VillageWhereInput;
+  villages_some?: VillageWhereInput;
+  villages_none?: VillageWhereInput;
+  people_every?: UserWhereInput;
+  people_some?: UserWhereInput;
+  people_none?: UserWhereInput;
+  AND?: StreetWhereInput[] | StreetWhereInput;
+  OR?: StreetWhereInput[] | StreetWhereInput;
+  NOT?: StreetWhereInput[] | StreetWhereInput;
+}
+
+export interface UserUpdateManyWithoutBirthAreaInput {
+  create?: UserCreateWithoutBirthAreaInput[] | UserCreateWithoutBirthAreaInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutBirthAreaInput[]
+    | UserUpdateWithWhereUniqueWithoutBirthAreaInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutBirthAreaInput[]
+    | UserUpsertWithWhereUniqueWithoutBirthAreaInput;
 }
 
 export type EducationWhereUniqueInput = AtLeastOne<{
@@ -1930,20 +2600,232 @@ export type EducationWhereUniqueInput = AtLeastOne<{
   name?: String;
 }>;
 
-export interface UserUpdateDataInput {
+export interface UserUpdateWithWhereUniqueWithoutBirthAreaInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutBirthAreaDataInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutRegStatusInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutRegStatusDataInput;
+}
+
+export interface UserUpdateWithoutBirthAreaDataInput {
   username?: String;
   password?: String;
   name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
+  birthCity?: CityUpdateOneWithoutPeopleInput;
+  birthStreet?: StreetUpdateOneWithoutPeopleInput;
+  birthVillage?: VillageUpdateOneWithoutPeopleInput;
   uid?: String;
   token?: String;
   posts?: PostUpdateManyWithoutAuthorInput;
   regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
 }
 
-export interface RegStatusUpdateInput {
-  university?: UniversityUpdateOneInput;
-  major?: MajorUpdateOneRequiredInput;
-  applicants?: UserUpdateManyWithoutRegStatusInput;
+export interface FamilyWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  from?: UserWhereInput;
+  to?: PersonWhereInput;
+  relationship?: String;
+  relationship_not?: String;
+  relationship_in?: String[] | String;
+  relationship_not_in?: String[] | String;
+  relationship_lt?: String;
+  relationship_lte?: String;
+  relationship_gt?: String;
+  relationship_gte?: String;
+  relationship_contains?: String;
+  relationship_not_contains?: String;
+  relationship_starts_with?: String;
+  relationship_not_starts_with?: String;
+  relationship_ends_with?: String;
+  relationship_not_ends_with?: String;
+  status?: String;
+  status_not?: String;
+  status_in?: String[] | String;
+  status_not_in?: String[] | String;
+  status_lt?: String;
+  status_lte?: String;
+  status_gt?: String;
+  status_gte?: String;
+  status_contains?: String;
+  status_not_contains?: String;
+  status_starts_with?: String;
+  status_not_starts_with?: String;
+  status_ends_with?: String;
+  status_not_ends_with?: String;
+  AND?: FamilyWhereInput[] | FamilyWhereInput;
+  OR?: FamilyWhereInput[] | FamilyWhereInput;
+  NOT?: FamilyWhereInput[] | FamilyWhereInput;
+}
+
+export interface VillageUpdateOneWithoutPeopleInput {
+  create?: VillageCreateWithoutPeopleInput;
+  update?: VillageUpdateWithoutPeopleDataInput;
+  upsert?: VillageUpsertWithoutPeopleInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: VillageWhereUniqueInput;
+}
+
+export interface RegStatusCreateInput {
+  university?: UniversityCreateOneInput;
+  major: MajorCreateOneInput;
+  applicants?: UserCreateManyWithoutRegStatusInput;
+}
+
+export interface VillageUpdateWithoutPeopleDataInput {
+  code?: String;
+  name?: String;
+  street?: StreetUpdateOneRequiredWithoutVillagesInput;
+}
+
+export interface UserUpsertWithoutPostsInput {
+  update: UserUpdateWithoutPostsDataInput;
+  create: UserCreateWithoutPostsInput;
+}
+
+export interface StreetUpdateOneRequiredWithoutVillagesInput {
+  create?: StreetCreateWithoutVillagesInput;
+  update?: StreetUpdateWithoutVillagesDataInput;
+  upsert?: StreetUpsertWithoutVillagesInput;
+  connect?: StreetWhereUniqueInput;
+}
+
+export interface ProvinceWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  code?: String;
+  code_not?: String;
+  code_in?: String[] | String;
+  code_not_in?: String[] | String;
+  code_lt?: String;
+  code_lte?: String;
+  code_gt?: String;
+  code_gte?: String;
+  code_contains?: String;
+  code_not_contains?: String;
+  code_starts_with?: String;
+  code_not_starts_with?: String;
+  code_ends_with?: String;
+  code_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  cities_every?: CityWhereInput;
+  cities_some?: CityWhereInput;
+  cities_none?: CityWhereInput;
+  people_every?: UserWhereInput;
+  people_some?: UserWhereInput;
+  people_none?: UserWhereInput;
+  AND?: ProvinceWhereInput[] | ProvinceWhereInput;
+  OR?: ProvinceWhereInput[] | ProvinceWhereInput;
+  NOT?: ProvinceWhereInput[] | ProvinceWhereInput;
+}
+
+export interface StreetUpdateWithoutVillagesDataInput {
+  code?: String;
+  name?: String;
+  Area?: AreaUpdateOneRequiredWithoutTownsInput;
+  people?: UserUpdateManyWithoutBirthStreetInput;
+}
+
+export type PostWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpdateManyWithoutBirthStreetInput {
+  create?:
+    | UserCreateWithoutBirthStreetInput[]
+    | UserCreateWithoutBirthStreetInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutBirthStreetInput[]
+    | UserUpdateWithWhereUniqueWithoutBirthStreetInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutBirthStreetInput[]
+    | UserUpsertWithWhereUniqueWithoutBirthStreetInput;
+}
+
+export type ProvinceWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+  name?: String;
+}>;
+
+export interface UserUpdateWithWhereUniqueWithoutBirthStreetInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutBirthStreetDataInput;
+}
+
+export interface PersonUpdateDataInput {
+  name?: String;
+  user?: UserUpdateOneInput;
+}
+
+export interface UserUpdateWithoutBirthStreetDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
+  birthCity?: CityUpdateOneWithoutPeopleInput;
+  birthArea?: AreaUpdateOneWithoutPeopleInput;
+  birthVillage?: VillageUpdateOneWithoutPeopleInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+}
+
+export interface PersonCreateInput {
+  name: String;
+  user?: UserCreateOneInput;
 }
 
 export interface PostUpdateManyWithoutAuthorInput {
@@ -1959,9 +2841,8 @@ export interface PostUpdateManyWithoutAuthorInput {
     | PostUpsertWithWhereUniqueWithoutAuthorInput;
 }
 
-export interface UserUpsertWithoutPostsInput {
-  update: UserUpdateWithoutPostsDataInput;
-  create: UserCreateWithoutPostsInput;
+export interface EducationUpdateInput {
+  name?: String;
 }
 
 export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
@@ -1969,9 +2850,12 @@ export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
   data: PostUpdateWithoutAuthorDataInput;
 }
 
-export type SubjectWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface UserUpdateOneRequiredInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  connect?: UserWhereUniqueInput;
+}
 
 export interface PostUpdateWithoutAuthorDataInput {
   isPublished?: Boolean;
@@ -1979,16 +2863,102 @@ export interface PostUpdateWithoutAuthorDataInput {
   content?: String;
 }
 
-export interface CountyUpdateInput {
-  name?: String;
-  city?: CityUpdateOneRequiredWithoutCountiesInput;
-  towns?: TownUpdateManyWithoutCountyInput;
+export interface SubjectUpdateOneRequiredInput {
+  create?: SubjectCreateInput;
+  update?: SubjectUpdateDataInput;
+  upsert?: SubjectUpsertNestedInput;
+  connect?: SubjectWhereUniqueInput;
 }
 
 export interface PostUpsertWithWhereUniqueWithoutAuthorInput {
   where: PostWhereUniqueInput;
   update: PostUpdateWithoutAuthorDataInput;
   create: PostCreateWithoutAuthorInput;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  username?: String;
+  uid?: String;
+  token?: String;
+}>;
+
+export interface RegStatusUpdateOneWithoutApplicantsInput {
+  create?: RegStatusCreateWithoutApplicantsInput;
+  update?: RegStatusUpdateWithoutApplicantsDataInput;
+  upsert?: RegStatusUpsertWithoutApplicantsInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: RegStatusWhereUniqueInput;
+}
+
+export type VillageWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+}>;
+
+export interface RegStatusUpdateWithoutApplicantsDataInput {
+  university?: UniversityUpdateOneInput;
+  major?: MajorUpdateOneRequiredInput;
+}
+
+export interface ProvinceCreateOneWithoutCitiesInput {
+  create?: ProvinceCreateWithoutCitiesInput;
+  connect?: ProvinceWhereUniqueInput;
+}
+
+export interface UniversityUpdateOneInput {
+  create?: UniversityCreateInput;
+  update?: UniversityUpdateDataInput;
+  upsert?: UniversityUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UniversityWhereUniqueInput;
+}
+
+export interface CityCreateOneWithoutPeopleInput {
+  create?: CityCreateWithoutPeopleInput;
+  connect?: CityWhereUniqueInput;
+}
+
+export interface UniversityUpdateDataInput {
+  name?: String;
+  education?: EducationUpdateOneRequiredInput;
+  identifier?: String;
+  city?: CityUpdateOneRequiredInput;
+}
+
+export interface StreetCreateManyWithoutAreaInput {
+  create?: StreetCreateWithoutAreaInput[] | StreetCreateWithoutAreaInput;
+  connect?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
+}
+
+export interface EducationUpdateOneRequiredInput {
+  create?: EducationCreateInput;
+  update?: EducationUpdateDataInput;
+  upsert?: EducationUpsertNestedInput;
+  connect?: EducationWhereUniqueInput;
+}
+
+export interface UserCreateManyWithoutBirthVillageInput {
+  create?:
+    | UserCreateWithoutBirthVillageInput[]
+    | UserCreateWithoutBirthVillageInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface EducationUpdateDataInput {
+  name?: String;
+}
+
+export interface CityCreateManyWithoutProvinceInput {
+  create?: CityCreateWithoutProvinceInput[] | CityCreateWithoutProvinceInput;
+  connect?: CityWhereUniqueInput[] | CityWhereUniqueInput;
+}
+
+export interface EducationUpsertNestedInput {
+  update: EducationUpdateDataInput;
+  create: EducationCreateInput;
 }
 
 export interface SubjectSubscriptionWhereInput {
@@ -2002,118 +2972,209 @@ export interface SubjectSubscriptionWhereInput {
   NOT?: SubjectSubscriptionWhereInput[] | SubjectSubscriptionWhereInput;
 }
 
-export interface RegStatusUpdateOneWithoutApplicantsInput {
-  create?: RegStatusCreateWithoutApplicantsInput;
-  update?: RegStatusUpdateWithoutApplicantsDataInput;
-  upsert?: RegStatusUpsertWithoutApplicantsInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: RegStatusWhereUniqueInput;
+export interface CityUpdateOneRequiredInput {
+  create?: CityCreateInput;
+  update?: CityUpdateDataInput;
+  upsert?: CityUpsertNestedInput;
+  connect?: CityWhereUniqueInput;
 }
 
-export interface UniversityUpdateInput {
+export interface MajorSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: MajorWhereInput;
+  AND?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
+  OR?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
+  NOT?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
+}
+
+export interface CityUpdateDataInput {
+  code?: String;
   name?: String;
-  education?: EducationUpdateOneRequiredInput;
-  identifier?: String;
-  city?: CityUpdateOneRequiredInput;
+  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
+  areas?: AreaUpdateManyWithoutCityInput;
+  people?: UserUpdateManyWithoutBirthCityInput;
 }
 
-export interface RegStatusUpdateWithoutApplicantsDataInput {
-  university?: UniversityUpdateOneInput;
-  major?: MajorUpdateOneRequiredInput;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutRegStatusInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutRegStatusDataInput;
-}
-
-export interface UniversityUpdateOneInput {
-  create?: UniversityCreateInput;
-  update?: UniversityUpdateDataInput;
-  upsert?: UniversityUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UniversityWhereUniqueInput;
-}
-
-export interface CityWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  province?: ProvinceWhereInput;
-  counties_every?: CountyWhereInput;
-  counties_some?: CountyWhereInput;
-  counties_none?: CountyWhereInput;
-  AND?: CityWhereInput[] | CityWhereInput;
-  OR?: CityWhereInput[] | CityWhereInput;
-  NOT?: CityWhereInput[] | CityWhereInput;
-}
-
-export interface EducationUpsertNestedInput {
-  update: EducationUpdateDataInput;
-  create: EducationCreateInput;
-}
-
-export interface EducationUpdateDataInput {
-  name?: String;
-}
-
-export interface EducationUpdateOneRequiredInput {
-  create?: EducationCreateInput;
-  update?: EducationUpdateDataInput;
-  upsert?: EducationUpsertNestedInput;
-  connect?: EducationWhereUniqueInput;
-}
-
-export interface UniversityUpdateDataInput {
-  name?: String;
-  education?: EducationUpdateOneRequiredInput;
-  identifier?: String;
-  city?: CityUpdateOneRequiredInput;
-}
-
-export interface CityUpsertWithoutCountiesInput {
-  update: CityUpdateWithoutCountiesDataInput;
-  create: CityCreateWithoutCountiesInput;
-}
-
-export interface RegStatusCreateInput {
-  university?: UniversityCreateOneInput;
-  major: MajorCreateOneInput;
-  applicants?: UserCreateManyWithoutRegStatusInput;
-}
-
-export type CountyWhereUniqueInput = AtLeastOne<{
+export type CollegeEntranceExamWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface UniversityWhereInput {
+export interface CityUpsertNestedInput {
+  update: CityUpdateDataInput;
+  create: CityCreateInput;
+}
+
+export interface StreetUpdateInput {
+  code?: String;
+  name?: String;
+  Area?: AreaUpdateOneRequiredWithoutTownsInput;
+  villages?: VillageUpdateManyWithoutStreetInput;
+  people?: UserUpdateManyWithoutBirthStreetInput;
+}
+
+export interface UniversityUpsertNestedInput {
+  update: UniversityUpdateDataInput;
+  create: UniversityCreateInput;
+}
+
+export interface UserUpdateManyWithoutRegStatusInput {
+  create?: UserCreateWithoutRegStatusInput[] | UserCreateWithoutRegStatusInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutRegStatusInput[]
+    | UserUpdateWithWhereUniqueWithoutRegStatusInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutRegStatusInput[]
+    | UserUpsertWithWhereUniqueWithoutRegStatusInput;
+}
+
+export interface MajorUpdateOneRequiredInput {
+  create?: MajorCreateInput;
+  update?: MajorUpdateDataInput;
+  upsert?: MajorUpsertNestedInput;
+  connect?: MajorWhereUniqueInput;
+}
+
+export type MajorWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface MajorUpdateDataInput {
+  name?: String;
+  category?: String;
+  education?: EducationUpdateOneRequiredInput;
+  code?: String;
+}
+
+export interface UserCreateWithoutPostsInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthProvince?: ProvinceCreateOneWithoutPeopleInput;
+  birthCity?: CityCreateOneWithoutPeopleInput;
+  birthArea?: AreaCreateOneWithoutPeopleInput;
+  birthStreet?: StreetCreateOneWithoutPeopleInput;
+  birthVillage?: VillageCreateOneWithoutPeopleInput;
+  uid: String;
+  token: String;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+}
+
+export interface MajorUpsertNestedInput {
+  update: MajorUpdateDataInput;
+  create: MajorCreateInput;
+}
+
+export interface PersonUpsertNestedInput {
+  update: PersonUpdateDataInput;
+  create: PersonCreateInput;
+}
+
+export interface RegStatusUpsertWithoutApplicantsInput {
+  update: RegStatusUpdateWithoutApplicantsDataInput;
+  create: RegStatusCreateWithoutApplicantsInput;
+}
+
+export type StreetWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+}>;
+
+export interface UserUpsertWithWhereUniqueWithoutBirthStreetInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutBirthStreetDataInput;
+  create: UserCreateWithoutBirthStreetInput;
+}
+
+export interface SubjectUpdateDataInput {
+  name?: String;
+}
+
+export interface StreetUpsertWithoutVillagesInput {
+  update: StreetUpdateWithoutVillagesDataInput;
+  create: StreetCreateWithoutVillagesInput;
+}
+
+export interface UserCreateInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthProvince?: ProvinceCreateOneWithoutPeopleInput;
+  birthCity?: CityCreateOneWithoutPeopleInput;
+  birthArea?: AreaCreateOneWithoutPeopleInput;
+  birthStreet?: StreetCreateOneWithoutPeopleInput;
+  birthVillage?: VillageCreateOneWithoutPeopleInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+}
+
+export interface VillageUpsertWithoutPeopleInput {
+  update: VillageUpdateWithoutPeopleDataInput;
+  create: VillageCreateWithoutPeopleInput;
+}
+
+export interface CityCreateOneWithoutAreasInput {
+  create?: CityCreateWithoutAreasInput;
+  connect?: CityWhereUniqueInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutBirthAreaInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutBirthAreaDataInput;
+  create: UserCreateWithoutBirthAreaInput;
+}
+
+export interface AreaCreateManyWithoutCityInput {
+  create?: AreaCreateWithoutCityInput[] | AreaCreateWithoutCityInput;
+  connect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
+}
+
+export interface AreaUpsertWithoutTownsInput {
+  update: AreaUpdateWithoutTownsDataInput;
+  create: AreaCreateWithoutTownsInput;
+}
+
+export interface ProvinceCreateOneWithoutPeopleInput {
+  create?: ProvinceCreateWithoutPeopleInput;
+  connect?: ProvinceWhereUniqueInput;
+}
+
+export interface StreetUpsertWithoutPeopleInput {
+  update: StreetUpdateWithoutPeopleDataInput;
+  create: StreetCreateWithoutPeopleInput;
+}
+
+export interface PostSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: PostWhereInput;
+  AND?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
+  OR?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
+  NOT?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutBirthCityInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutBirthCityDataInput;
+  create: UserCreateWithoutBirthCityInput;
+}
+
+export interface CollegeEntranceExamWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -2128,49 +3189,296 @@ export interface UniversityWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  education?: EducationWhereInput;
-  identifier?: String;
-  identifier_not?: String;
-  identifier_in?: String[] | String;
-  identifier_not_in?: String[] | String;
-  identifier_lt?: String;
-  identifier_lte?: String;
-  identifier_gt?: String;
-  identifier_gte?: String;
-  identifier_contains?: String;
-  identifier_not_contains?: String;
-  identifier_starts_with?: String;
-  identifier_not_starts_with?: String;
-  identifier_ends_with?: String;
-  identifier_not_ends_with?: String;
-  city?: CityWhereInput;
-  AND?: UniversityWhereInput[] | UniversityWhereInput;
-  OR?: UniversityWhereInput[] | UniversityWhereInput;
-  NOT?: UniversityWhereInput[] | UniversityWhereInput;
+  province?: ProvinceWhereInput;
+  subject?: SubjectWhereInput;
+  culscore?: Float;
+  culscore_not?: Float;
+  culscore_in?: Float[] | Float;
+  culscore_not_in?: Float[] | Float;
+  culscore_lt?: Float;
+  culscore_lte?: Float;
+  culscore_gt?: Float;
+  culscore_gte?: Float;
+  proscore?: Float;
+  proscore_not?: Float;
+  proscore_in?: Float[] | Float;
+  proscore_not_in?: Float[] | Float;
+  proscore_lt?: Float;
+  proscore_lte?: Float;
+  proscore_gt?: Float;
+  proscore_gte?: Float;
+  candidatenum?: String;
+  candidatenum_not?: String;
+  candidatenum_in?: String[] | String;
+  candidatenum_not_in?: String[] | String;
+  candidatenum_lt?: String;
+  candidatenum_lte?: String;
+  candidatenum_gt?: String;
+  candidatenum_gte?: String;
+  candidatenum_contains?: String;
+  candidatenum_not_contains?: String;
+  candidatenum_starts_with?: String;
+  candidatenum_not_starts_with?: String;
+  candidatenum_ends_with?: String;
+  candidatenum_not_ends_with?: String;
+  student?: UserWhereInput;
+  AND?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
+  OR?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
+  NOT?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
 }
 
-export interface CountyCreateInput {
-  name: String;
-  city: CityCreateOneWithoutCountiesInput;
-  towns?: TownCreateManyWithoutCountyInput;
+export interface CityUpsertWithWhereUniqueWithoutProvinceInput {
+  where: CityWhereUniqueInput;
+  update: CityUpdateWithoutProvinceDataInput;
+  create: CityCreateWithoutProvinceInput;
+}
+
+export interface UserCreateWithoutRegStatusInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthProvince?: ProvinceCreateOneWithoutPeopleInput;
+  birthCity?: CityCreateOneWithoutPeopleInput;
+  birthArea?: AreaCreateOneWithoutPeopleInput;
+  birthStreet?: StreetCreateOneWithoutPeopleInput;
+  birthVillage?: VillageCreateOneWithoutPeopleInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+}
+
+export interface ProvinceUpsertWithoutPeopleInput {
+  update: ProvinceUpdateWithoutPeopleDataInput;
+  create: ProvinceCreateWithoutPeopleInput;
+}
+
+export interface PersonUpdateInput {
+  name?: String;
+  user?: UserUpdateOneInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutBirthVillageInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutBirthVillageDataInput;
+  create: UserCreateWithoutBirthVillageInput;
+}
+
+export type SubjectWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface VillageUpsertWithWhereUniqueWithoutStreetInput {
+  where: VillageWhereUniqueInput;
+  update: VillageUpdateWithoutStreetDataInput;
+  create: VillageCreateWithoutStreetInput;
+}
+
+export interface SubjectCreateOneInput {
+  create?: SubjectCreateInput;
+  connect?: SubjectWhereUniqueInput;
+}
+
+export interface StreetUpsertWithWhereUniqueWithoutAreaInput {
+  where: StreetWhereUniqueInput;
+  update: StreetUpdateWithoutAreaDataInput;
+  create: StreetCreateWithoutAreaInput;
+}
+
+export interface VillageCreateManyWithoutStreetInput {
+  create?: VillageCreateWithoutStreetInput[] | VillageCreateWithoutStreetInput;
+  connect?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
+}
+
+export interface AreaUpsertWithWhereUniqueWithoutCityInput {
+  where: AreaWhereUniqueInput;
+  update: AreaUpdateWithoutCityDataInput;
+  create: AreaCreateWithoutCityInput;
+}
+
+export type CityWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+}>;
+
+export interface CityUpsertWithoutPeopleInput {
+  update: CityUpdateWithoutPeopleDataInput;
+  create: CityCreateWithoutPeopleInput;
+}
+
+export interface UserUpdateOneRequiredWithoutPostsInput {
+  create?: UserCreateWithoutPostsInput;
+  update?: UserUpdateWithoutPostsDataInput;
+  upsert?: UserUpsertWithoutPostsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface CollegeEntranceExamCreateInput {
+  province: ProvinceCreateOneInput;
+  subject: SubjectCreateOneInput;
+  culscore: Float;
+  proscore?: Float;
+  candidatenum: String;
+  student: UserCreateOneInput;
+}
+
+export interface CityUpsertWithoutAreasInput {
+  update: CityUpdateWithoutAreasDataInput;
+  create: CityCreateWithoutAreasInput;
+}
+
+export interface ProvinceUpsertWithoutCitiesInput {
+  update: ProvinceUpdateWithoutCitiesDataInput;
+  create: ProvinceCreateWithoutCitiesInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutBirthProvinceInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutBirthProvinceDataInput;
+  create: UserCreateWithoutBirthProvinceInput;
+}
+
+export interface PersonUpdateOneRequiredInput {
+  create?: PersonCreateInput;
+  update?: PersonUpdateDataInput;
+  upsert?: PersonUpsertNestedInput;
+  connect?: PersonWhereUniqueInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutRegStatusInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutRegStatusDataInput;
+  create: UserCreateWithoutRegStatusInput;
+}
+
+export interface VillageSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: VillageWhereInput;
+  AND?: VillageSubscriptionWhereInput[] | VillageSubscriptionWhereInput;
+  OR?: VillageSubscriptionWhereInput[] | VillageSubscriptionWhereInput;
+  NOT?: VillageSubscriptionWhereInput[] | VillageSubscriptionWhereInput;
+}
+
+export interface UserCreateManyWithoutBirthProvinceInput {
+  create?:
+    | UserCreateWithoutBirthProvinceInput[]
+    | UserCreateWithoutBirthProvinceInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface ProvinceUpdateDataInput {
+  code?: String;
+  name?: String;
+  cities?: CityUpdateManyWithoutProvinceInput;
+  people?: UserUpdateManyWithoutBirthProvinceInput;
 }
 
 export interface NodeNode {
   id: ID_Output;
+}
+
+export interface VillagePreviousValuesNode {
+  id: ID_Output;
+  code: String;
+  name: String;
+}
+
+export interface VillagePreviousValues
+  extends Promise<VillagePreviousValuesNode>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  code: () => Promise<String>;
+  name: () => Promise<String>;
+}
+
+export interface VillagePreviousValuesSubscription
+  extends Promise<AsyncIterator<VillagePreviousValuesNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  code: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CollegeEntranceExamEdgeNode {
+  cursor: String;
+}
+
+export interface CollegeEntranceExamEdge
+  extends Promise<CollegeEntranceExamEdgeNode>,
+    Fragmentable {
+  node: <T = CollegeEntranceExam>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface CollegeEntranceExamEdgeSubscription
+  extends Promise<AsyncIterator<CollegeEntranceExamEdgeNode>>,
+    Fragmentable {
+  node: <T = CollegeEntranceExamSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UniversityPreviousValuesNode {
+  id: ID_Output;
+  name: String;
+  identifier: String;
+}
+
+export interface UniversityPreviousValues
+  extends Promise<UniversityPreviousValuesNode>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  identifier: () => Promise<String>;
+}
+
+export interface UniversityPreviousValuesSubscription
+  extends Promise<AsyncIterator<UniversityPreviousValuesNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  identifier: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CollegeEntranceExamConnectionNode {}
+
+export interface CollegeEntranceExamConnection
+  extends Promise<CollegeEntranceExamConnectionNode>,
+    Fragmentable {
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = Promise<Array<CollegeEntranceExamEdgeNode>>>() => T;
+  aggregate: <T = AggregateCollegeEntranceExam>() => T;
+}
+
+export interface CollegeEntranceExamConnectionSubscription
+  extends Promise<AsyncIterator<CollegeEntranceExamConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <
+    T = Promise<AsyncIterator<Array<CollegeEntranceExamEdgeSubscription>>>
+  >() => T;
+  aggregate: <T = AggregateCollegeEntranceExamSubscription>() => T;
+}
+
+export interface SubjectNode {
+  id: ID_Output;
+  name: String;
+}
+
+export interface Subject extends Promise<SubjectNode>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface SubjectSubscription
+  extends Promise<AsyncIterator<SubjectNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UserPreviousValuesNode {
@@ -2178,6 +3486,9 @@ export interface UserPreviousValuesNode {
   username: String;
   password: String;
   name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeOutput;
   uid: String;
   token: String;
   createdAt: DateTimeOutput;
@@ -2191,6 +3502,9 @@ export interface UserPreviousValues
   username: () => Promise<String>;
   password: () => Promise<String>;
   name: () => Promise<String>;
+  gender: () => Promise<String>;
+  birthdaycalendar: () => Promise<String>;
+  birthday: () => Promise<DateTimeOutput>;
   uid: () => Promise<String>;
   token: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
@@ -2204,51 +3518,292 @@ export interface UserPreviousValuesSubscription
   username: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
+  gender: () => Promise<AsyncIterator<String>>;
+  birthdaycalendar: () => Promise<AsyncIterator<String>>;
+  birthday: () => Promise<AsyncIterator<DateTimeOutput>>;
   uid: () => Promise<AsyncIterator<String>>;
   token: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface CountyNode {
+export interface AggregateVillageNode {
+  count: Int;
+}
+
+export interface AggregateVillage
+  extends Promise<AggregateVillageNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateVillageSubscription
+  extends Promise<AsyncIterator<AggregateVillageNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface BatchPayloadNode {
+  count: Long;
+}
+
+export interface BatchPayload extends Promise<BatchPayloadNode>, Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayloadNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface VillageConnectionNode {}
+
+export interface VillageConnection
+  extends Promise<VillageConnectionNode>,
+    Fragmentable {
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = Promise<Array<VillageEdgeNode>>>() => T;
+  aggregate: <T = AggregateVillage>() => T;
+}
+
+export interface VillageConnectionSubscription
+  extends Promise<AsyncIterator<VillageConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<Array<VillageEdgeSubscription>>>>() => T;
+  aggregate: <T = AggregateVillageSubscription>() => T;
+}
+
+export interface CollegeEntranceExamNode {
   id: ID_Output;
+  culscore: Float;
+  proscore?: Float;
+  candidatenum: String;
+}
+
+export interface CollegeEntranceExam
+  extends Promise<CollegeEntranceExamNode>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  province: <T = Province>() => T;
+  subject: <T = Subject>() => T;
+  culscore: () => Promise<Float>;
+  proscore: () => Promise<Float>;
+  candidatenum: () => Promise<String>;
+  student: <T = User>() => T;
+}
+
+export interface CollegeEntranceExamSubscription
+  extends Promise<AsyncIterator<CollegeEntranceExamNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  province: <T = ProvinceSubscription>() => T;
+  subject: <T = SubjectSubscription>() => T;
+  culscore: () => Promise<AsyncIterator<Float>>;
+  proscore: () => Promise<AsyncIterator<Float>>;
+  candidatenum: () => Promise<AsyncIterator<String>>;
+  student: <T = UserSubscription>() => T;
+}
+
+export interface UserEdgeNode {
+  cursor: String;
+}
+
+export interface UserEdge extends Promise<UserEdgeNode>, Fragmentable {
+  node: <T = User>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdgeNode>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateCityNode {
+  count: Int;
+}
+
+export interface AggregateCity
+  extends Promise<AggregateCityNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCitySubscription
+  extends Promise<AsyncIterator<AggregateCityNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface AggregateUniversityNode {
+  count: Int;
+}
+
+export interface AggregateUniversity
+  extends Promise<AggregateUniversityNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUniversitySubscription
+  extends Promise<AsyncIterator<AggregateUniversityNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface CityEdgeNode {
+  cursor: String;
+}
+
+export interface CityEdge extends Promise<CityEdgeNode>, Fragmentable {
+  node: <T = City>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface CityEdgeSubscription
+  extends Promise<AsyncIterator<CityEdgeNode>>,
+    Fragmentable {
+  node: <T = CitySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UniversityConnectionNode {}
+
+export interface UniversityConnection
+  extends Promise<UniversityConnectionNode>,
+    Fragmentable {
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = Promise<Array<UniversityEdgeNode>>>() => T;
+  aggregate: <T = AggregateUniversity>() => T;
+}
+
+export interface UniversityConnectionSubscription
+  extends Promise<AsyncIterator<UniversityConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<Array<UniversityEdgeSubscription>>>>() => T;
+  aggregate: <T = AggregateUniversitySubscription>() => T;
+}
+
+export interface UserSubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface UserSubscriptionPayload
+  extends Promise<UserSubscriptionPayloadNode>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = User>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValues>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayloadNode>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateSubjectNode {
+  count: Int;
+}
+
+export interface AggregateSubject
+  extends Promise<AggregateSubjectNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateSubjectSubscription
+  extends Promise<AsyncIterator<AggregateSubjectNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface AreaSubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface AreaSubscriptionPayload
+  extends Promise<AreaSubscriptionPayloadNode>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = Area>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = AreaPreviousValues>() => T;
+}
+
+export interface AreaSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<AreaSubscriptionPayloadNode>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = AreaSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = AreaPreviousValuesSubscription>() => T;
+}
+
+export interface SubjectConnectionNode {}
+
+export interface SubjectConnection
+  extends Promise<SubjectConnectionNode>,
+    Fragmentable {
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = Promise<Array<SubjectEdgeNode>>>() => T;
+  aggregate: <T = AggregateSubject>() => T;
+}
+
+export interface SubjectConnectionSubscription
+  extends Promise<AsyncIterator<SubjectConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<Array<SubjectEdgeSubscription>>>>() => T;
+  aggregate: <T = AggregateSubjectSubscription>() => T;
+}
+
+export interface AreaPreviousValuesNode {
+  id: ID_Output;
+  code: String;
   name: String;
 }
 
-export interface County extends Promise<CountyNode>, Fragmentable {
+export interface AreaPreviousValues
+  extends Promise<AreaPreviousValuesNode>,
+    Fragmentable {
   id: () => Promise<ID_Output>;
+  code: () => Promise<String>;
   name: () => Promise<String>;
-  city: <T = City>() => T;
-  towns: <T = Promise<Array<TownNode>>>(
-    args?: {
-      where?: TownWhereInput;
-      orderBy?: TownOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
 }
 
-export interface CountySubscription
-  extends Promise<AsyncIterator<CountyNode>>,
+export interface AreaPreviousValuesSubscription
+  extends Promise<AsyncIterator<AreaPreviousValuesNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  code: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
-  city: <T = CitySubscription>() => T;
-  towns: <T = Promise<AsyncIterator<Array<TownSubscription>>>>(
-    args?: {
-      where?: TownWhereInput;
-      orderBy?: TownOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+}
+
+export interface AggregateStreetNode {
+  count: Int;
+}
+
+export interface AggregateStreet
+  extends Promise<AggregateStreetNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateStreetSubscription
+  extends Promise<AsyncIterator<AggregateStreetNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface CityConnectionNode {}
@@ -2267,6 +3822,675 @@ export interface CityConnectionSubscription
   pageInfo: <T = PageInfoSubscription>() => T;
   edges: <T = Promise<AsyncIterator<Array<CityEdgeSubscription>>>>() => T;
   aggregate: <T = AggregateCitySubscription>() => T;
+}
+
+export interface StreetConnectionNode {}
+
+export interface StreetConnection
+  extends Promise<StreetConnectionNode>,
+    Fragmentable {
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = Promise<Array<StreetEdgeNode>>>() => T;
+  aggregate: <T = AggregateStreet>() => T;
+}
+
+export interface StreetConnectionSubscription
+  extends Promise<AsyncIterator<StreetConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<Array<StreetEdgeSubscription>>>>() => T;
+  aggregate: <T = AggregateStreetSubscription>() => T;
+}
+
+export interface CitySubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface CitySubscriptionPayload
+  extends Promise<CitySubscriptionPayloadNode>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = City>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = CityPreviousValues>() => T;
+}
+
+export interface CitySubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<CitySubscriptionPayloadNode>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = CitySubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = CityPreviousValuesSubscription>() => T;
+}
+
+export interface RegStatusEdgeNode {
+  cursor: String;
+}
+
+export interface RegStatusEdge
+  extends Promise<RegStatusEdgeNode>,
+    Fragmentable {
+  node: <T = RegStatus>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface RegStatusEdgeSubscription
+  extends Promise<AsyncIterator<RegStatusEdgeNode>>,
+    Fragmentable {
+  node: <T = RegStatusSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CityPreviousValuesNode {
+  id: ID_Output;
+  code: String;
+  name: String;
+}
+
+export interface CityPreviousValues
+  extends Promise<CityPreviousValuesNode>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  code: () => Promise<String>;
+  name: () => Promise<String>;
+}
+
+export interface CityPreviousValuesSubscription
+  extends Promise<AsyncIterator<CityPreviousValuesNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  code: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface ProvinceNode {
+  id: ID_Output;
+  code: String;
+  name: String;
+}
+
+export interface Province extends Promise<ProvinceNode>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  code: () => Promise<String>;
+  name: () => Promise<String>;
+  cities: <T = Promise<Array<CityNode>>>(
+    args?: {
+      where?: CityWhereInput;
+      orderBy?: CityOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  people: <T = Promise<Array<UserNode>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface ProvinceSubscription
+  extends Promise<AsyncIterator<ProvinceNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  code: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  cities: <T = Promise<AsyncIterator<Array<CitySubscription>>>>(
+    args?: {
+      where?: CityWhereInput;
+      orderBy?: CityOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  people: <T = Promise<AsyncIterator<Array<UserSubscription>>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface AggregateAreaNode {
+  count: Int;
+}
+
+export interface AggregateArea
+  extends Promise<AggregateAreaNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateAreaSubscription
+  extends Promise<AsyncIterator<AggregateAreaNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface ProvinceEdgeNode {
+  cursor: String;
+}
+
+export interface ProvinceEdge extends Promise<ProvinceEdgeNode>, Fragmentable {
+  node: <T = Province>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ProvinceEdgeSubscription
+  extends Promise<AsyncIterator<ProvinceEdgeNode>>,
+    Fragmentable {
+  node: <T = ProvinceSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CollegeEntranceExamSubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface CollegeEntranceExamSubscriptionPayload
+  extends Promise<CollegeEntranceExamSubscriptionPayloadNode>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = CollegeEntranceExam>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = CollegeEntranceExamPreviousValues>() => T;
+}
+
+export interface CollegeEntranceExamSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<CollegeEntranceExamSubscriptionPayloadNode>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = CollegeEntranceExamSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = CollegeEntranceExamPreviousValuesSubscription>() => T;
+}
+
+export interface AggregatePostNode {
+  count: Int;
+}
+
+export interface AggregatePost
+  extends Promise<AggregatePostNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregatePostSubscription
+  extends Promise<AsyncIterator<AggregatePostNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface CollegeEntranceExamPreviousValuesNode {
+  id: ID_Output;
+  culscore: Float;
+  proscore?: Float;
+  candidatenum: String;
+}
+
+export interface CollegeEntranceExamPreviousValues
+  extends Promise<CollegeEntranceExamPreviousValuesNode>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  culscore: () => Promise<Float>;
+  proscore: () => Promise<Float>;
+  candidatenum: () => Promise<String>;
+}
+
+export interface CollegeEntranceExamPreviousValuesSubscription
+  extends Promise<AsyncIterator<CollegeEntranceExamPreviousValuesNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  culscore: () => Promise<AsyncIterator<Float>>;
+  proscore: () => Promise<AsyncIterator<Float>>;
+  candidatenum: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PostConnectionNode {}
+
+export interface PostConnection
+  extends Promise<PostConnectionNode>,
+    Fragmentable {
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = Promise<Array<PostEdgeNode>>>() => T;
+  aggregate: <T = AggregatePost>() => T;
+}
+
+export interface PostConnectionSubscription
+  extends Promise<AsyncIterator<PostConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<Array<PostEdgeSubscription>>>>() => T;
+  aggregate: <T = AggregatePostSubscription>() => T;
+}
+
+export interface AreaEdgeNode {
+  cursor: String;
+}
+
+export interface AreaEdge extends Promise<AreaEdgeNode>, Fragmentable {
+  node: <T = Area>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface AreaEdgeSubscription
+  extends Promise<AsyncIterator<AreaEdgeNode>>,
+    Fragmentable {
+  node: <T = AreaSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PersonEdgeNode {
+  cursor: String;
+}
+
+export interface PersonEdge extends Promise<PersonEdgeNode>, Fragmentable {
+  node: <T = Person>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface PersonEdgeSubscription
+  extends Promise<AsyncIterator<PersonEdgeNode>>,
+    Fragmentable {
+  node: <T = PersonSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface EducationSubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface EducationSubscriptionPayload
+  extends Promise<EducationSubscriptionPayloadNode>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = Education>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = EducationPreviousValues>() => T;
+}
+
+export interface EducationSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<EducationSubscriptionPayloadNode>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = EducationSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = EducationPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateMajorNode {
+  count: Int;
+}
+
+export interface AggregateMajor
+  extends Promise<AggregateMajorNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateMajorSubscription
+  extends Promise<AsyncIterator<AggregateMajorNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface EducationPreviousValuesNode {
+  id: ID_Output;
+  name: String;
+}
+
+export interface EducationPreviousValues
+  extends Promise<EducationPreviousValuesNode>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface EducationPreviousValuesSubscription
+  extends Promise<AsyncIterator<EducationPreviousValuesNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface MajorConnectionNode {}
+
+export interface MajorConnection
+  extends Promise<MajorConnectionNode>,
+    Fragmentable {
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = Promise<Array<MajorEdgeNode>>>() => T;
+  aggregate: <T = AggregateMajor>() => T;
+}
+
+export interface MajorConnectionSubscription
+  extends Promise<AsyncIterator<MajorConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<Array<MajorEdgeSubscription>>>>() => T;
+  aggregate: <T = AggregateMajorSubscription>() => T;
+}
+
+export interface PageInfoNode {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfo extends Promise<PageInfoNode>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfoNode>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface FamilyEdgeNode {
+  cursor: String;
+}
+
+export interface FamilyEdge extends Promise<FamilyEdgeNode>, Fragmentable {
+  node: <T = Family>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface FamilyEdgeSubscription
+  extends Promise<AsyncIterator<FamilyEdgeNode>>,
+    Fragmentable {
+  node: <T = FamilySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface FamilySubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface FamilySubscriptionPayload
+  extends Promise<FamilySubscriptionPayloadNode>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = Family>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = FamilyPreviousValues>() => T;
+}
+
+export interface FamilySubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<FamilySubscriptionPayloadNode>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = FamilySubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = FamilyPreviousValuesSubscription>() => T;
+}
+
+export interface UserNode {
+  id: ID_Output;
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeOutput;
+  uid: String;
+  token: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface User extends Promise<UserNode>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  username: () => Promise<String>;
+  password: () => Promise<String>;
+  name: () => Promise<String>;
+  gender: () => Promise<String>;
+  birthdaycalendar: () => Promise<String>;
+  birthday: () => Promise<DateTimeOutput>;
+  birthProvince: <T = Province>() => T;
+  birthCity: <T = City>() => T;
+  birthArea: <T = Area>() => T;
+  birthStreet: <T = Street>() => T;
+  birthVillage: <T = Village>() => T;
+  uid: () => Promise<String>;
+  token: () => Promise<String>;
+  posts: <T = Promise<Array<PostNode>>>(
+    args?: {
+      where?: PostWhereInput;
+      orderBy?: PostOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  regStatus: <T = RegStatus>() => T;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<UserNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  username: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  gender: () => Promise<AsyncIterator<String>>;
+  birthdaycalendar: () => Promise<AsyncIterator<String>>;
+  birthday: () => Promise<AsyncIterator<DateTimeOutput>>;
+  birthProvince: <T = ProvinceSubscription>() => T;
+  birthCity: <T = CitySubscription>() => T;
+  birthArea: <T = AreaSubscription>() => T;
+  birthStreet: <T = StreetSubscription>() => T;
+  birthVillage: <T = VillageSubscription>() => T;
+  uid: () => Promise<AsyncIterator<String>>;
+  token: () => Promise<AsyncIterator<String>>;
+  posts: <T = Promise<AsyncIterator<Array<PostSubscription>>>>(
+    args?: {
+      where?: PostWhereInput;
+      orderBy?: PostOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  regStatus: <T = RegStatusSubscription>() => T;
+}
+
+export interface FamilyPreviousValuesNode {
+  id: ID_Output;
+  relationship: String;
+  status: String;
+}
+
+export interface FamilyPreviousValues
+  extends Promise<FamilyPreviousValuesNode>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  relationship: () => Promise<String>;
+  status: () => Promise<String>;
+}
+
+export interface FamilyPreviousValuesSubscription
+  extends Promise<AsyncIterator<FamilyPreviousValuesNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  relationship: () => Promise<AsyncIterator<String>>;
+  status: () => Promise<AsyncIterator<String>>;
+}
+
+export interface FamilyNode {
+  id: ID_Output;
+  relationship: String;
+  status: String;
+}
+
+export interface Family extends Promise<FamilyNode>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  from: <T = User>() => T;
+  to: <T = Person>() => T;
+  relationship: () => Promise<String>;
+  status: () => Promise<String>;
+}
+
+export interface FamilySubscription
+  extends Promise<AsyncIterator<FamilyNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  from: <T = UserSubscription>() => T;
+  to: <T = PersonSubscription>() => T;
+  relationship: () => Promise<AsyncIterator<String>>;
+  status: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AreaConnectionNode {}
+
+export interface AreaConnection
+  extends Promise<AreaConnectionNode>,
+    Fragmentable {
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = Promise<Array<AreaEdgeNode>>>() => T;
+  aggregate: <T = AggregateArea>() => T;
+}
+
+export interface AreaConnectionSubscription
+  extends Promise<AsyncIterator<AreaConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<Array<AreaEdgeSubscription>>>>() => T;
+  aggregate: <T = AggregateAreaSubscription>() => T;
+}
+
+export interface EducationEdgeNode {
+  cursor: String;
+}
+
+export interface EducationEdge
+  extends Promise<EducationEdgeNode>,
+    Fragmentable {
+  node: <T = Education>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface EducationEdgeSubscription
+  extends Promise<AsyncIterator<EducationEdgeNode>>,
+    Fragmentable {
+  node: <T = EducationSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface MajorSubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface MajorSubscriptionPayload
+  extends Promise<MajorSubscriptionPayloadNode>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = Major>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = MajorPreviousValues>() => T;
+}
+
+export interface MajorSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<MajorSubscriptionPayloadNode>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = MajorSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = MajorPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateCollegeEntranceExamNode {
+  count: Int;
+}
+
+export interface AggregateCollegeEntranceExam
+  extends Promise<AggregateCollegeEntranceExamNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCollegeEntranceExamSubscription
+  extends Promise<AsyncIterator<AggregateCollegeEntranceExamNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface MajorPreviousValuesNode {
+  id: ID_Output;
+  name: String;
+  category: String;
+  code?: String;
+}
+
+export interface MajorPreviousValues
+  extends Promise<MajorPreviousValuesNode>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  category: () => Promise<String>;
+  code: () => Promise<String>;
+}
+
+export interface MajorPreviousValuesSubscription
+  extends Promise<AsyncIterator<MajorPreviousValuesNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  category: () => Promise<AsyncIterator<String>>;
+  code: () => Promise<AsyncIterator<String>>;
+}
+
+export interface VillageEdgeNode {
+  cursor: String;
+}
+
+export interface VillageEdge extends Promise<VillageEdgeNode>, Fragmentable {
+  node: <T = Village>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface VillageEdgeSubscription
+  extends Promise<AsyncIterator<VillageEdgeNode>>,
+    Fragmentable {
+  node: <T = VillageSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface MajorNode {
@@ -2294,27 +4518,196 @@ export interface MajorSubscription
   code: () => Promise<AsyncIterator<String>>;
 }
 
-export interface PageInfoNode {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
+export interface UserConnectionNode {}
 
-export interface PageInfo extends Promise<PageInfoNode>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfoNode>>,
+export interface UserConnection
+  extends Promise<UserConnectionNode>,
     Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = Promise<Array<UserEdgeNode>>>() => T;
+  aggregate: <T = AggregateUser>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<Array<UserEdgeSubscription>>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface PersonSubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface PersonSubscriptionPayload
+  extends Promise<PersonSubscriptionPayloadNode>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = Person>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = PersonPreviousValues>() => T;
+}
+
+export interface PersonSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<PersonSubscriptionPayloadNode>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = PersonSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = PersonPreviousValuesSubscription>() => T;
+}
+
+export interface AreaNode {
+  id: ID_Output;
+  code: String;
+  name: String;
+}
+
+export interface Area extends Promise<AreaNode>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  code: () => Promise<String>;
+  name: () => Promise<String>;
+  city: <T = City>() => T;
+  towns: <T = Promise<Array<StreetNode>>>(
+    args?: {
+      where?: StreetWhereInput;
+      orderBy?: StreetOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  people: <T = Promise<Array<UserNode>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface AreaSubscription
+  extends Promise<AsyncIterator<AreaNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  code: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  city: <T = CitySubscription>() => T;
+  towns: <T = Promise<AsyncIterator<Array<StreetSubscription>>>>(
+    args?: {
+      where?: StreetWhereInput;
+      orderBy?: StreetOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  people: <T = Promise<AsyncIterator<Array<UserSubscription>>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface PersonPreviousValuesNode {
+  id: ID_Output;
+  name: String;
+}
+
+export interface PersonPreviousValues
+  extends Promise<PersonPreviousValuesNode>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface PersonPreviousValuesSubscription
+  extends Promise<AsyncIterator<PersonPreviousValuesNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CityNode {
+  id: ID_Output;
+  code: String;
+  name: String;
+}
+
+export interface City extends Promise<CityNode>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  code: () => Promise<String>;
+  name: () => Promise<String>;
+  province: <T = Province>() => T;
+  areas: <T = Promise<Array<AreaNode>>>(
+    args?: {
+      where?: AreaWhereInput;
+      orderBy?: AreaOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  people: <T = Promise<Array<UserNode>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface CitySubscription
+  extends Promise<AsyncIterator<CityNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  code: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  province: <T = ProvinceSubscription>() => T;
+  areas: <T = Promise<AsyncIterator<Array<AreaSubscription>>>>(
+    args?: {
+      where?: AreaWhereInput;
+      orderBy?: AreaOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  people: <T = Promise<AsyncIterator<Array<UserSubscription>>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
 export interface EducationNode {
@@ -2334,20 +4727,106 @@ export interface EducationSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateUserNode {
+export interface AggregateRegStatusNode {
   count: Int;
 }
 
-export interface AggregateUser
-  extends Promise<AggregateUserNode>,
+export interface AggregateRegStatus
+  extends Promise<AggregateRegStatusNode>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUserNode>>,
+export interface AggregateRegStatusSubscription
+  extends Promise<AsyncIterator<AggregateRegStatusNode>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface PostSubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface PostSubscriptionPayload
+  extends Promise<PostSubscriptionPayloadNode>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = Post>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = PostPreviousValues>() => T;
+}
+
+export interface PostSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<PostSubscriptionPayloadNode>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = PostSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = PostPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateProvinceNode {
+  count: Int;
+}
+
+export interface AggregateProvince
+  extends Promise<AggregateProvinceNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateProvinceSubscription
+  extends Promise<AsyncIterator<AggregateProvinceNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface PostPreviousValuesNode {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  isPublished: Boolean;
+  title: String;
+  content: String;
+}
+
+export interface PostPreviousValues
+  extends Promise<PostPreviousValuesNode>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  isPublished: () => Promise<Boolean>;
+  title: () => Promise<String>;
+  content: () => Promise<String>;
+}
+
+export interface PostPreviousValuesSubscription
+  extends Promise<AsyncIterator<PostPreviousValuesNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  isPublished: () => Promise<AsyncIterator<Boolean>>;
+  title: () => Promise<AsyncIterator<String>>;
+  content: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PostEdgeNode {
+  cursor: String;
+}
+
+export interface PostEdge extends Promise<PostEdgeNode>, Fragmentable {
+  node: <T = Post>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface PostEdgeSubscription
+  extends Promise<AsyncIterator<PostEdgeNode>>,
+    Fragmentable {
+  node: <T = PostSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UniversityNode {
@@ -2374,281 +4853,102 @@ export interface UniversitySubscription
   city: <T = CitySubscription>() => T;
 }
 
-export interface UserConnectionNode {}
+export interface PersonConnectionNode {}
 
-export interface UserConnection
-  extends Promise<UserConnectionNode>,
+export interface PersonConnection
+  extends Promise<PersonConnectionNode>,
     Fragmentable {
   pageInfo: <T = PageInfo>() => T;
-  edges: <T = Promise<Array<UserEdgeNode>>>() => T;
-  aggregate: <T = AggregateUser>() => T;
+  edges: <T = Promise<Array<PersonEdgeNode>>>() => T;
+  aggregate: <T = AggregatePerson>() => T;
 }
 
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnectionNode>>,
+export interface PersonConnectionSubscription
+  extends Promise<AsyncIterator<PersonConnectionNode>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<Array<UserEdgeSubscription>>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<Array<PersonEdgeSubscription>>>>() => T;
+  aggregate: <T = AggregatePersonSubscription>() => T;
 }
 
-export interface CityNode {
-  id: ID_Output;
-  name: String;
-}
-
-export interface City extends Promise<CityNode>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  province: <T = Province>() => T;
-  counties: <T = Promise<Array<CountyNode>>>(
-    args?: {
-      where?: CountyWhereInput;
-      orderBy?: CountyOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-}
-
-export interface CitySubscription
-  extends Promise<AsyncIterator<CityNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  province: <T = ProvinceSubscription>() => T;
-  counties: <T = Promise<AsyncIterator<Array<CountySubscription>>>>(
-    args?: {
-      where?: CountyWhereInput;
-      orderBy?: CountyOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-}
-
-export interface UniversityEdgeNode {
-  cursor: String;
-}
-
-export interface UniversityEdge
-  extends Promise<UniversityEdgeNode>,
-    Fragmentable {
-  node: <T = University>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UniversityEdgeSubscription
-  extends Promise<AsyncIterator<UniversityEdgeNode>>,
-    Fragmentable {
-  node: <T = UniversitySubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface UserEdgeNode {
-  cursor: String;
-}
-
-export interface UserEdge extends Promise<UserEdgeNode>, Fragmentable {
-  node: <T = User>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdgeNode>>,
-    Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface TownPreviousValuesNode {
-  id: ID_Output;
-  name: String;
-}
-
-export interface TownPreviousValues
-  extends Promise<TownPreviousValuesNode>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface TownPreviousValuesSubscription
-  extends Promise<AsyncIterator<TownPreviousValuesNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateUniversityNode {
-  count: Int;
-}
-
-export interface AggregateUniversity
-  extends Promise<AggregateUniversityNode>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUniversitySubscription
-  extends Promise<AsyncIterator<AggregateUniversityNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface CitySubscriptionPayloadNode {
+export interface ProvinceSubscriptionPayloadNode {
   mutation: MutationType;
   updatedFields?: String[];
 }
 
-export interface CitySubscriptionPayload
-  extends Promise<CitySubscriptionPayloadNode>,
+export interface ProvinceSubscriptionPayload
+  extends Promise<ProvinceSubscriptionPayloadNode>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = City>() => T;
+  node: <T = Province>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = CityPreviousValues>() => T;
+  previousValues: <T = ProvincePreviousValues>() => T;
 }
 
-export interface CitySubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<CitySubscriptionPayloadNode>>,
+export interface ProvinceSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ProvinceSubscriptionPayloadNode>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = CitySubscription>() => T;
+  node: <T = ProvinceSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = CityPreviousValuesSubscription>() => T;
+  previousValues: <T = ProvincePreviousValuesSubscription>() => T;
 }
 
-export interface UniversityConnectionNode {}
-
-export interface UniversityConnection
-  extends Promise<UniversityConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = Promise<Array<UniversityEdgeNode>>>() => T;
-  aggregate: <T = AggregateUniversity>() => T;
-}
-
-export interface UniversityConnectionSubscription
-  extends Promise<AsyncIterator<UniversityConnectionNode>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<Array<UniversityEdgeSubscription>>>>() => T;
-  aggregate: <T = AggregateUniversitySubscription>() => T;
-}
-
-export interface TownConnectionNode {}
-
-export interface TownConnection
-  extends Promise<TownConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = Promise<Array<TownEdgeNode>>>() => T;
-  aggregate: <T = AggregateTown>() => T;
-}
-
-export interface TownConnectionSubscription
-  extends Promise<AsyncIterator<TownConnectionNode>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<Array<TownEdgeSubscription>>>>() => T;
-  aggregate: <T = AggregateTownSubscription>() => T;
-}
-
-export interface AggregateTownNode {
+export interface AggregateFamilyNode {
   count: Int;
 }
 
-export interface AggregateTown
-  extends Promise<AggregateTownNode>,
+export interface AggregateFamily
+  extends Promise<AggregateFamilyNode>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateTownSubscription
-  extends Promise<AsyncIterator<AggregateTownNode>>,
+export interface AggregateFamilySubscription
+  extends Promise<AsyncIterator<AggregateFamilyNode>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface SubjectEdgeNode {
-  cursor: String;
+export interface ProvincePreviousValuesNode {
+  id: ID_Output;
+  code: String;
+  name: String;
 }
 
-export interface SubjectEdge extends Promise<SubjectEdgeNode>, Fragmentable {
-  node: <T = Subject>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface SubjectEdgeSubscription
-  extends Promise<AsyncIterator<SubjectEdgeNode>>,
+export interface ProvincePreviousValues
+  extends Promise<ProvincePreviousValuesNode>,
     Fragmentable {
-  node: <T = SubjectSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  id: () => Promise<ID_Output>;
+  code: () => Promise<String>;
+  name: () => Promise<String>;
 }
 
-export interface CityPreviousValuesNode {
+export interface ProvincePreviousValuesSubscription
+  extends Promise<AsyncIterator<ProvincePreviousValuesNode>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  code: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PersonNode {
   id: ID_Output;
   name: String;
 }
 
-export interface CityPreviousValues
-  extends Promise<CityPreviousValuesNode>,
-    Fragmentable {
+export interface Person extends Promise<PersonNode>, Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  user: <T = User>() => T;
 }
 
-export interface CityPreviousValuesSubscription
-  extends Promise<AsyncIterator<CityPreviousValuesNode>>,
+export interface PersonSubscription
+  extends Promise<AsyncIterator<PersonNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ProvinceNode {
-  id: ID_Output;
-  name: String;
-}
-
-export interface Province extends Promise<ProvinceNode>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  cities: <T = Promise<Array<CityNode>>>(
-    args?: {
-      where?: CityWhereInput;
-      orderBy?: CityOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-}
-
-export interface ProvinceSubscription
-  extends Promise<AsyncIterator<ProvinceNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  cities: <T = Promise<AsyncIterator<Array<CitySubscription>>>>(
-    args?: {
-      where?: CityWhereInput;
-      orderBy?: CityOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  user: <T = UserSubscription>() => T;
 }
 
 export interface RegStatusNode {
@@ -2691,104 +4991,93 @@ export interface RegStatusSubscription
   ) => T;
 }
 
-export interface RegStatusEdgeNode {
-  cursor: String;
-}
+export interface EducationConnectionNode {}
 
-export interface RegStatusEdge
-  extends Promise<RegStatusEdgeNode>,
+export interface EducationConnection
+  extends Promise<EducationConnectionNode>,
     Fragmentable {
-  node: <T = RegStatus>() => T;
-  cursor: () => Promise<String>;
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = Promise<Array<EducationEdgeNode>>>() => T;
+  aggregate: <T = AggregateEducation>() => T;
 }
 
-export interface RegStatusEdgeSubscription
-  extends Promise<AsyncIterator<RegStatusEdgeNode>>,
+export interface EducationConnectionSubscription
+  extends Promise<AsyncIterator<EducationConnectionNode>>,
     Fragmentable {
-  node: <T = RegStatusSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<Array<EducationEdgeSubscription>>>>() => T;
+  aggregate: <T = AggregateEducationSubscription>() => T;
 }
 
-export interface CollegeEntranceExamSubscriptionPayloadNode {
+export interface RegStatusSubscriptionPayloadNode {
   mutation: MutationType;
   updatedFields?: String[];
 }
 
-export interface CollegeEntranceExamSubscriptionPayload
-  extends Promise<CollegeEntranceExamSubscriptionPayloadNode>,
+export interface RegStatusSubscriptionPayload
+  extends Promise<RegStatusSubscriptionPayloadNode>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = CollegeEntranceExam>() => T;
+  node: <T = RegStatus>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = CollegeEntranceExamPreviousValues>() => T;
+  previousValues: <T = RegStatusPreviousValues>() => T;
 }
 
-export interface CollegeEntranceExamSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<CollegeEntranceExamSubscriptionPayloadNode>>,
+export interface RegStatusSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<RegStatusSubscriptionPayloadNode>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = CollegeEntranceExamSubscription>() => T;
+  node: <T = RegStatusSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = CollegeEntranceExamPreviousValuesSubscription>() => T;
+  previousValues: <T = RegStatusPreviousValuesSubscription>() => T;
 }
 
-export interface AggregateProvinceNode {
+export interface AggregateUserNode {
   count: Int;
 }
 
-export interface AggregateProvince
-  extends Promise<AggregateProvinceNode>,
+export interface AggregateUser
+  extends Promise<AggregateUserNode>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateProvinceSubscription
-  extends Promise<AsyncIterator<AggregateProvinceNode>>,
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUserNode>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface CollegeEntranceExamPreviousValuesNode {
+export interface RegStatusPreviousValuesNode {
   id: ID_Output;
-  culscore: Float;
-  proscore?: Float;
-  candidatenum: String;
 }
 
-export interface CollegeEntranceExamPreviousValues
-  extends Promise<CollegeEntranceExamPreviousValuesNode>,
+export interface RegStatusPreviousValues
+  extends Promise<RegStatusPreviousValuesNode>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  culscore: () => Promise<Float>;
-  proscore: () => Promise<Float>;
-  candidatenum: () => Promise<String>;
 }
 
-export interface CollegeEntranceExamPreviousValuesSubscription
-  extends Promise<AsyncIterator<CollegeEntranceExamPreviousValuesNode>>,
+export interface RegStatusPreviousValuesSubscription
+  extends Promise<AsyncIterator<RegStatusPreviousValuesNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  culscore: () => Promise<AsyncIterator<Float>>;
-  proscore: () => Promise<AsyncIterator<Float>>;
-  candidatenum: () => Promise<AsyncIterator<String>>;
 }
 
-export interface ProvinceConnectionNode {}
-
-export interface ProvinceConnection
-  extends Promise<ProvinceConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = Promise<Array<ProvinceEdgeNode>>>() => T;
-  aggregate: <T = AggregateProvince>() => T;
+export interface SubjectEdgeNode {
+  cursor: String;
 }
 
-export interface ProvinceConnectionSubscription
-  extends Promise<AsyncIterator<ProvinceConnectionNode>>,
+export interface SubjectEdge extends Promise<SubjectEdgeNode>, Fragmentable {
+  node: <T = Subject>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface SubjectEdgeSubscription
+  extends Promise<AsyncIterator<SubjectEdgeNode>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<Array<ProvinceEdgeSubscription>>>>() => T;
-  aggregate: <T = AggregateProvinceSubscription>() => T;
+  node: <T = SubjectSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface PostNode {
@@ -2822,209 +5111,206 @@ export interface PostSubscription
   author: <T = UserSubscription>() => T;
 }
 
-export interface PostEdgeNode {
-  cursor: String;
-}
+export interface RegStatusConnectionNode {}
 
-export interface PostEdge extends Promise<PostEdgeNode>, Fragmentable {
-  node: <T = Post>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface PostEdgeSubscription
-  extends Promise<AsyncIterator<PostEdgeNode>>,
+export interface RegStatusConnection
+  extends Promise<RegStatusConnectionNode>,
     Fragmentable {
-  node: <T = PostSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = Promise<Array<RegStatusEdgeNode>>>() => T;
+  aggregate: <T = AggregateRegStatus>() => T;
 }
 
-export interface CountySubscriptionPayloadNode {
+export interface RegStatusConnectionSubscription
+  extends Promise<AsyncIterator<RegStatusConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<Array<RegStatusEdgeSubscription>>>>() => T;
+  aggregate: <T = AggregateRegStatusSubscription>() => T;
+}
+
+export interface StreetSubscriptionPayloadNode {
   mutation: MutationType;
   updatedFields?: String[];
 }
 
-export interface CountySubscriptionPayload
-  extends Promise<CountySubscriptionPayloadNode>,
+export interface StreetSubscriptionPayload
+  extends Promise<StreetSubscriptionPayloadNode>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = County>() => T;
+  node: <T = Street>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = CountyPreviousValues>() => T;
+  previousValues: <T = StreetPreviousValues>() => T;
 }
 
-export interface CountySubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<CountySubscriptionPayloadNode>>,
+export interface StreetSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<StreetSubscriptionPayloadNode>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = CountySubscription>() => T;
+  node: <T = StreetSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = CountyPreviousValuesSubscription>() => T;
+  previousValues: <T = StreetPreviousValuesSubscription>() => T;
 }
 
-export interface AggregateMajorNode {
+export interface AggregatePersonNode {
   count: Int;
 }
 
-export interface AggregateMajor
-  extends Promise<AggregateMajorNode>,
+export interface AggregatePerson
+  extends Promise<AggregatePersonNode>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateMajorSubscription
-  extends Promise<AsyncIterator<AggregateMajorNode>>,
+export interface AggregatePersonSubscription
+  extends Promise<AsyncIterator<AggregatePersonNode>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface CountyPreviousValuesNode {
+export interface StreetPreviousValuesNode {
   id: ID_Output;
+  code: String;
   name: String;
 }
 
-export interface CountyPreviousValues
-  extends Promise<CountyPreviousValuesNode>,
+export interface StreetPreviousValues
+  extends Promise<StreetPreviousValuesNode>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  code: () => Promise<String>;
   name: () => Promise<String>;
 }
 
-export interface CountyPreviousValuesSubscription
-  extends Promise<AsyncIterator<CountyPreviousValuesNode>>,
+export interface StreetPreviousValuesSubscription
+  extends Promise<AsyncIterator<StreetPreviousValuesNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  code: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface MajorConnectionNode {}
+export interface FamilyConnectionNode {}
 
-export interface MajorConnection
-  extends Promise<MajorConnectionNode>,
+export interface FamilyConnection
+  extends Promise<FamilyConnectionNode>,
     Fragmentable {
   pageInfo: <T = PageInfo>() => T;
-  edges: <T = Promise<Array<MajorEdgeNode>>>() => T;
-  aggregate: <T = AggregateMajor>() => T;
+  edges: <T = Promise<Array<FamilyEdgeNode>>>() => T;
+  aggregate: <T = AggregateFamily>() => T;
 }
 
-export interface MajorConnectionSubscription
-  extends Promise<AsyncIterator<MajorConnectionNode>>,
+export interface FamilyConnectionSubscription
+  extends Promise<AsyncIterator<FamilyConnectionNode>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<Array<MajorEdgeSubscription>>>>() => T;
-  aggregate: <T = AggregateMajorSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<Array<FamilyEdgeSubscription>>>>() => T;
+  aggregate: <T = AggregateFamilySubscription>() => T;
 }
 
-export interface TownNode {
+export interface StreetNode {
   id: ID_Output;
+  code: String;
   name: String;
 }
 
-export interface Town extends Promise<TownNode>, Fragmentable {
+export interface Street extends Promise<StreetNode>, Fragmentable {
   id: () => Promise<ID_Output>;
+  code: () => Promise<String>;
   name: () => Promise<String>;
-  county: <T = County>() => T;
+  Area: <T = Area>() => T;
+  villages: <T = Promise<Array<VillageNode>>>(
+    args?: {
+      where?: VillageWhereInput;
+      orderBy?: VillageOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  people: <T = Promise<Array<UserNode>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
-export interface TownSubscription
-  extends Promise<AsyncIterator<TownNode>>,
+export interface StreetSubscription
+  extends Promise<AsyncIterator<StreetNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  code: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
-  county: <T = CountySubscription>() => T;
+  Area: <T = AreaSubscription>() => T;
+  villages: <T = Promise<AsyncIterator<Array<VillageSubscription>>>>(
+    args?: {
+      where?: VillageWhereInput;
+      orderBy?: VillageOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  people: <T = Promise<AsyncIterator<Array<UserSubscription>>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
-export interface EducationEdgeNode {
-  cursor: String;
-}
-
-export interface EducationEdge
-  extends Promise<EducationEdgeNode>,
-    Fragmentable {
-  node: <T = Education>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface EducationEdgeSubscription
-  extends Promise<AsyncIterator<EducationEdgeNode>>,
-    Fragmentable {
-  node: <T = EducationSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface EducationSubscriptionPayloadNode {
+export interface VillageSubscriptionPayloadNode {
   mutation: MutationType;
   updatedFields?: String[];
 }
 
-export interface EducationSubscriptionPayload
-  extends Promise<EducationSubscriptionPayloadNode>,
+export interface VillageSubscriptionPayload
+  extends Promise<VillageSubscriptionPayloadNode>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = Education>() => T;
+  node: <T = Village>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = EducationPreviousValues>() => T;
+  previousValues: <T = VillagePreviousValues>() => T;
 }
 
-export interface EducationSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<EducationSubscriptionPayloadNode>>,
+export interface VillageSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<VillageSubscriptionPayloadNode>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = EducationSubscription>() => T;
+  node: <T = VillageSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = EducationPreviousValuesSubscription>() => T;
+  previousValues: <T = VillagePreviousValuesSubscription>() => T;
 }
 
-export interface AggregateCountyNode {
-  count: Int;
+export interface StreetEdgeNode {
+  cursor: String;
 }
 
-export interface AggregateCounty
-  extends Promise<AggregateCountyNode>,
+export interface StreetEdge extends Promise<StreetEdgeNode>, Fragmentable {
+  node: <T = Street>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface StreetEdgeSubscription
+  extends Promise<AsyncIterator<StreetEdgeNode>>,
     Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateCountySubscription
-  extends Promise<AsyncIterator<AggregateCountyNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface EducationPreviousValuesNode {
-  id: ID_Output;
-  name: String;
-}
-
-export interface EducationPreviousValues
-  extends Promise<EducationPreviousValuesNode>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface EducationPreviousValuesSubscription
-  extends Promise<AsyncIterator<EducationPreviousValuesNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface CountyConnectionNode {}
-
-export interface CountyConnection
-  extends Promise<CountyConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = Promise<Array<CountyEdgeNode>>>() => T;
-  aggregate: <T = AggregateCounty>() => T;
-}
-
-export interface CountyConnectionSubscription
-  extends Promise<AsyncIterator<CountyConnectionNode>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<Array<CountyEdgeSubscription>>>>() => T;
-  aggregate: <T = AggregateCountySubscription>() => T;
+  node: <T = StreetSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UniversitySubscriptionPayloadNode {
@@ -3050,131 +5336,41 @@ export interface UniversitySubscriptionPayloadSubscription
   previousValues: <T = UniversityPreviousValuesSubscription>() => T;
 }
 
-export interface CollegeEntranceExamEdgeNode {
-  cursor: String;
-}
-
-export interface CollegeEntranceExamEdge
-  extends Promise<CollegeEntranceExamEdgeNode>,
-    Fragmentable {
-  node: <T = CollegeEntranceExam>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface CollegeEntranceExamEdgeSubscription
-  extends Promise<AsyncIterator<CollegeEntranceExamEdgeNode>>,
-    Fragmentable {
-  node: <T = CollegeEntranceExamSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface MajorSubscriptionPayloadNode {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface MajorSubscriptionPayload
-  extends Promise<MajorSubscriptionPayloadNode>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = Major>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = MajorPreviousValues>() => T;
-}
-
-export interface MajorSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<MajorSubscriptionPayloadNode>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = MajorSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = MajorPreviousValuesSubscription>() => T;
-}
-
-export interface UserSubscriptionPayloadNode {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface UserSubscriptionPayload
-  extends Promise<UserSubscriptionPayloadNode>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = User>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValues>() => T;
-}
-
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayloadNode>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
-}
-
-export interface MajorPreviousValuesNode {
+export interface VillageNode {
   id: ID_Output;
+  code: String;
   name: String;
-  category: String;
-  code?: String;
 }
 
-export interface MajorPreviousValues
-  extends Promise<MajorPreviousValuesNode>,
-    Fragmentable {
+export interface Village extends Promise<VillageNode>, Fragmentable {
   id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  category: () => Promise<String>;
   code: () => Promise<String>;
+  name: () => Promise<String>;
+  street: <T = Street>() => T;
+  people: <T = Promise<Array<UserNode>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
-export interface MajorPreviousValuesSubscription
-  extends Promise<AsyncIterator<MajorPreviousValuesNode>>,
+export interface VillageSubscription
+  extends Promise<AsyncIterator<VillageNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  category: () => Promise<AsyncIterator<String>>;
   code: () => Promise<AsyncIterator<String>>;
-}
-
-export interface BatchPayloadNode {
-  count: Long;
-}
-
-export interface BatchPayload extends Promise<BatchPayloadNode>, Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayloadNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface UserNode {
-  id: ID_Output;
-  username: String;
-  password: String;
-  name?: String;
-  uid: String;
-  token: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface User extends Promise<UserNode>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  username: () => Promise<String>;
-  password: () => Promise<String>;
-  name: () => Promise<String>;
-  uid: () => Promise<String>;
-  token: () => Promise<String>;
-  posts: <T = Promise<Array<PostNode>>>(
+  name: () => Promise<AsyncIterator<String>>;
+  street: <T = StreetSubscription>() => T;
+  people: <T = Promise<AsyncIterator<Array<UserSubscription>>>>(
     args?: {
-      where?: PostWhereInput;
-      orderBy?: PostOrderByInput;
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
@@ -3182,456 +5378,6 @@ export interface User extends Promise<UserNode>, Fragmentable {
       last?: Int;
     }
   ) => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  regStatus: <T = RegStatus>() => T;
-}
-
-export interface UserSubscription
-  extends Promise<AsyncIterator<UserNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  username: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
-  uid: () => Promise<AsyncIterator<String>>;
-  token: () => Promise<AsyncIterator<String>>;
-  posts: <T = Promise<AsyncIterator<Array<PostSubscription>>>>(
-    args?: {
-      where?: PostWhereInput;
-      orderBy?: PostOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  regStatus: <T = RegStatusSubscription>() => T;
-}
-
-export interface AggregateSubjectNode {
-  count: Int;
-}
-
-export interface AggregateSubject
-  extends Promise<AggregateSubjectNode>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateSubjectSubscription
-  extends Promise<AsyncIterator<AggregateSubjectNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface PostSubscriptionPayloadNode {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface PostSubscriptionPayload
-  extends Promise<PostSubscriptionPayloadNode>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = Post>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = PostPreviousValues>() => T;
-}
-
-export interface PostSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<PostSubscriptionPayloadNode>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = PostSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = PostPreviousValuesSubscription>() => T;
-}
-
-export interface AggregateRegStatusNode {
-  count: Int;
-}
-
-export interface AggregateRegStatus
-  extends Promise<AggregateRegStatusNode>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateRegStatusSubscription
-  extends Promise<AsyncIterator<AggregateRegStatusNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface PostPreviousValuesNode {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  isPublished: Boolean;
-  title: String;
-  content: String;
-}
-
-export interface PostPreviousValues
-  extends Promise<PostPreviousValuesNode>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  isPublished: () => Promise<Boolean>;
-  title: () => Promise<String>;
-  content: () => Promise<String>;
-}
-
-export interface PostPreviousValuesSubscription
-  extends Promise<AsyncIterator<PostPreviousValuesNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  isPublished: () => Promise<AsyncIterator<Boolean>>;
-  title: () => Promise<AsyncIterator<String>>;
-  content: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ProvinceEdgeNode {
-  cursor: String;
-}
-
-export interface ProvinceEdge extends Promise<ProvinceEdgeNode>, Fragmentable {
-  node: <T = Province>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface ProvinceEdgeSubscription
-  extends Promise<AsyncIterator<ProvinceEdgeNode>>,
-    Fragmentable {
-  node: <T = ProvinceSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface CityEdgeNode {
-  cursor: String;
-}
-
-export interface CityEdge extends Promise<CityEdgeNode>, Fragmentable {
-  node: <T = City>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface CityEdgeSubscription
-  extends Promise<AsyncIterator<CityEdgeNode>>,
-    Fragmentable {
-  node: <T = CitySubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface PostConnectionNode {}
-
-export interface PostConnection
-  extends Promise<PostConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = Promise<Array<PostEdgeNode>>>() => T;
-  aggregate: <T = AggregatePost>() => T;
-}
-
-export interface PostConnectionSubscription
-  extends Promise<AsyncIterator<PostConnectionNode>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<Array<PostEdgeSubscription>>>>() => T;
-  aggregate: <T = AggregatePostSubscription>() => T;
-}
-
-export interface ProvinceSubscriptionPayloadNode {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface ProvinceSubscriptionPayload
-  extends Promise<ProvinceSubscriptionPayloadNode>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = Province>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = ProvincePreviousValues>() => T;
-}
-
-export interface ProvinceSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<ProvinceSubscriptionPayloadNode>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = ProvinceSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = ProvincePreviousValuesSubscription>() => T;
-}
-
-export interface AggregateEducationNode {
-  count: Int;
-}
-
-export interface AggregateEducation
-  extends Promise<AggregateEducationNode>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateEducationSubscription
-  extends Promise<AsyncIterator<AggregateEducationNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface ProvincePreviousValuesNode {
-  id: ID_Output;
-  name: String;
-}
-
-export interface ProvincePreviousValues
-  extends Promise<ProvincePreviousValuesNode>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface ProvincePreviousValuesSubscription
-  extends Promise<AsyncIterator<ProvincePreviousValuesNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface CountyEdgeNode {
-  cursor: String;
-}
-
-export interface CountyEdge extends Promise<CountyEdgeNode>, Fragmentable {
-  node: <T = County>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface CountyEdgeSubscription
-  extends Promise<AsyncIterator<CountyEdgeNode>>,
-    Fragmentable {
-  node: <T = CountySubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface SubjectNode {
-  id: ID_Output;
-  name: String;
-}
-
-export interface Subject extends Promise<SubjectNode>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface SubjectSubscription
-  extends Promise<AsyncIterator<SubjectNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface CollegeEntranceExamConnectionNode {}
-
-export interface CollegeEntranceExamConnection
-  extends Promise<CollegeEntranceExamConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = Promise<Array<CollegeEntranceExamEdgeNode>>>() => T;
-  aggregate: <T = AggregateCollegeEntranceExam>() => T;
-}
-
-export interface CollegeEntranceExamConnectionSubscription
-  extends Promise<AsyncIterator<CollegeEntranceExamConnectionNode>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <
-    T = Promise<AsyncIterator<Array<CollegeEntranceExamEdgeSubscription>>>
-  >() => T;
-  aggregate: <T = AggregateCollegeEntranceExamSubscription>() => T;
-}
-
-export interface RegStatusSubscriptionPayloadNode {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface RegStatusSubscriptionPayload
-  extends Promise<RegStatusSubscriptionPayloadNode>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = RegStatus>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = RegStatusPreviousValues>() => T;
-}
-
-export interface RegStatusSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<RegStatusSubscriptionPayloadNode>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = RegStatusSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = RegStatusPreviousValuesSubscription>() => T;
-}
-
-export interface TownEdgeNode {
-  cursor: String;
-}
-
-export interface TownEdge extends Promise<TownEdgeNode>, Fragmentable {
-  node: <T = Town>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface TownEdgeSubscription
-  extends Promise<AsyncIterator<TownEdgeNode>>,
-    Fragmentable {
-  node: <T = TownSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface RegStatusPreviousValuesNode {
-  id: ID_Output;
-}
-
-export interface RegStatusPreviousValues
-  extends Promise<RegStatusPreviousValuesNode>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-}
-
-export interface RegStatusPreviousValuesSubscription
-  extends Promise<AsyncIterator<RegStatusPreviousValuesNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-}
-
-export interface RegStatusConnectionNode {}
-
-export interface RegStatusConnection
-  extends Promise<RegStatusConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = Promise<Array<RegStatusEdgeNode>>>() => T;
-  aggregate: <T = AggregateRegStatus>() => T;
-}
-
-export interface RegStatusConnectionSubscription
-  extends Promise<AsyncIterator<RegStatusConnectionNode>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<Array<RegStatusEdgeSubscription>>>>() => T;
-  aggregate: <T = AggregateRegStatusSubscription>() => T;
-}
-
-export interface CollegeEntranceExamNode {
-  id: ID_Output;
-  culscore: Float;
-  proscore?: Float;
-  candidatenum: String;
-}
-
-export interface CollegeEntranceExam
-  extends Promise<CollegeEntranceExamNode>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  province: <T = Province>() => T;
-  subject: <T = Subject>() => T;
-  culscore: () => Promise<Float>;
-  proscore: () => Promise<Float>;
-  candidatenum: () => Promise<String>;
-  student: <T = User>() => T;
-}
-
-export interface CollegeEntranceExamSubscription
-  extends Promise<AsyncIterator<CollegeEntranceExamNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  province: <T = ProvinceSubscription>() => T;
-  subject: <T = SubjectSubscription>() => T;
-  culscore: () => Promise<AsyncIterator<Float>>;
-  proscore: () => Promise<AsyncIterator<Float>>;
-  candidatenum: () => Promise<AsyncIterator<String>>;
-  student: <T = UserSubscription>() => T;
-}
-
-export interface MajorEdgeNode {
-  cursor: String;
-}
-
-export interface MajorEdge extends Promise<MajorEdgeNode>, Fragmentable {
-  node: <T = Major>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface MajorEdgeSubscription
-  extends Promise<AsyncIterator<MajorEdgeNode>>,
-    Fragmentable {
-  node: <T = MajorSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateCollegeEntranceExamNode {
-  count: Int;
-}
-
-export interface AggregateCollegeEntranceExam
-  extends Promise<AggregateCollegeEntranceExamNode>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateCollegeEntranceExamSubscription
-  extends Promise<AsyncIterator<AggregateCollegeEntranceExamNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface TownSubscriptionPayloadNode {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface TownSubscriptionPayload
-  extends Promise<TownSubscriptionPayloadNode>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = Town>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = TownPreviousValues>() => T;
-}
-
-export interface TownSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<TownSubscriptionPayloadNode>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = TownSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = TownPreviousValuesSubscription>() => T;
-}
-
-export interface AggregateCityNode {
-  count: Int;
-}
-
-export interface AggregateCity
-  extends Promise<AggregateCityNode>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateCitySubscription
-  extends Promise<AsyncIterator<AggregateCityNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface SubjectPreviousValuesNode {
@@ -3676,96 +5422,80 @@ export interface SubjectSubscriptionPayloadSubscription
   previousValues: <T = SubjectPreviousValuesSubscription>() => T;
 }
 
-export interface UniversityPreviousValuesNode {
-  id: ID_Output;
-  name: String;
-  identifier: String;
-}
+export interface ProvinceConnectionNode {}
 
-export interface UniversityPreviousValues
-  extends Promise<UniversityPreviousValuesNode>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  identifier: () => Promise<String>;
-}
-
-export interface UniversityPreviousValuesSubscription
-  extends Promise<AsyncIterator<UniversityPreviousValuesNode>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  identifier: () => Promise<AsyncIterator<String>>;
-}
-
-export interface EducationConnectionNode {}
-
-export interface EducationConnection
-  extends Promise<EducationConnectionNode>,
+export interface ProvinceConnection
+  extends Promise<ProvinceConnectionNode>,
     Fragmentable {
   pageInfo: <T = PageInfo>() => T;
-  edges: <T = Promise<Array<EducationEdgeNode>>>() => T;
-  aggregate: <T = AggregateEducation>() => T;
+  edges: <T = Promise<Array<ProvinceEdgeNode>>>() => T;
+  aggregate: <T = AggregateProvince>() => T;
 }
 
-export interface EducationConnectionSubscription
-  extends Promise<AsyncIterator<EducationConnectionNode>>,
+export interface ProvinceConnectionSubscription
+  extends Promise<AsyncIterator<ProvinceConnectionNode>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<Array<EducationEdgeSubscription>>>>() => T;
-  aggregate: <T = AggregateEducationSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<Array<ProvinceEdgeSubscription>>>>() => T;
+  aggregate: <T = AggregateProvinceSubscription>() => T;
 }
 
-export interface AggregatePostNode {
+export interface UniversityEdgeNode {
+  cursor: String;
+}
+
+export interface UniversityEdge
+  extends Promise<UniversityEdgeNode>,
+    Fragmentable {
+  node: <T = University>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UniversityEdgeSubscription
+  extends Promise<AsyncIterator<UniversityEdgeNode>>,
+    Fragmentable {
+  node: <T = UniversitySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateEducationNode {
   count: Int;
 }
 
-export interface AggregatePost
-  extends Promise<AggregatePostNode>,
+export interface AggregateEducation
+  extends Promise<AggregateEducationNode>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregatePostSubscription
-  extends Promise<AsyncIterator<AggregatePostNode>>,
+export interface AggregateEducationSubscription
+  extends Promise<AsyncIterator<AggregateEducationNode>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface SubjectConnectionNode {}
-
-export interface SubjectConnection
-  extends Promise<SubjectConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = Promise<Array<SubjectEdgeNode>>>() => T;
-  aggregate: <T = AggregateSubject>() => T;
+export interface MajorEdgeNode {
+  cursor: String;
 }
 
-export interface SubjectConnectionSubscription
-  extends Promise<AsyncIterator<SubjectConnectionNode>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<Array<SubjectEdgeSubscription>>>>() => T;
-  aggregate: <T = AggregateSubjectSubscription>() => T;
+export interface MajorEdge extends Promise<MajorEdgeNode>, Fragmentable {
+  node: <T = Major>() => T;
+  cursor: () => Promise<String>;
 }
 
-export type Long = string;
-
-/*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
-*/
-export type String = string;
+export interface MajorEdgeSubscription
+  extends Promise<AsyncIterator<MajorEdgeNode>>,
+    Fragmentable {
+  node: <T = MajorSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
 export type Int = number;
 
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
+export type Long = string;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -3787,6 +5517,16 @@ export type DateTimeOutput = string;
 The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
 */
 export type Float = number;
+
+/*
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+*/
+export type String = string;
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
 
 /**
  * Type Defs

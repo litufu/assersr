@@ -29,6 +29,14 @@ type User {
   username: String! @unique
   password: String!
   name: String
+  gender:String
+  birthdaycalendar:String
+  birthday:DateTime
+  birthProvince:Province
+  birthCity:City
+  birthArea:Area
+  birthStreet:Street
+  birthVillage:Village
   uid:String! @unique
   token:String! @unique
   posts: [Post!]!
@@ -37,37 +45,67 @@ type User {
   regStatus:RegStatus
 }
 
-type Education {
-  id:ID! @unique
-  name:String! @unique
+type Person {
+  id: ID! @unique
+  name:String!
+  user:User
+}
+
+type Family {
+  id: ID! @unique
+  from:User!
+  to:Person!
+  relationship:String!
+  status:String!
 }
 
 type Province {
   id:ID! @unique
+  code:String! @unique
   name:String! @unique
   cities:[City!]!
+  people:[User!]!
 }
 
 type City {
   id:ID! @unique
+  code:String! @unique
   name:String!
   province:Province!
-  counties:[County!]!
+  areas:[Area!]!
+  people:[User!]!
 }
 
-type County {
+type Area {
   id:ID! @unique
+  code:String! @unique
   name:String!
   city:City!
-  towns:[Town!]!
+  towns:[Street!]!
+  people:[User!]!
 }
 
-type Town {
+type Street {
   id:ID! @unique
+  code:String! @unique
   name:String!
-  county:County!
+  Area:Area!
+  villages:[Village!]!
+  people:[User!]!
 }
 
+type Village {
+  id:ID! @unique
+  code:String! @unique
+  name:String!
+  street:Street!
+  people:[User!]!
+}
+
+type Education {
+  id:ID! @unique
+  name:String! @unique
+}
 
 type Major {
   id: ID! @unique
