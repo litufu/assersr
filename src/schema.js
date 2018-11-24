@@ -37,11 +37,10 @@ export const typeDefs = gql`
     login(username: String!, password: String!): User!
     changePassword(currentPassword:String!,newPassword: String!):User!
     addBasicInfo(name:String!,gender:String!,birthday:BirthdayInput!,birthplace:BirthplaceInput!):User!
-    createPerson(name:String!):Person!
     updatePerson(id: ID!,username:String!):Person!
-    deletePerson(id: ID!):Person
-    createFamily(username:String!,personId:ID!,relationship:String!,status:String!):Family
-    updateFamily(id:ID!, personId:ID,status:String):Family
+    createFamily(name:String!,relationship:String!):Family
+    updateFamily(id:ID!, name:String,relationship:String,status:String):Family
+    deleteFamily(familyId:ID!,toId:ID!):Family
   }
 
   type AuthPayload {

@@ -127,15 +127,6 @@ export const Mutation = {
     })
   },
 
-  createPerson:async (parent, { name }, ctx) => {
-    const userId = getUserId(ctx)
-    if (!userId) {
-      throw new Error("用户不存在")
-    }
-    const person = await ctx.db.createPerson({name,})
-    return person
-  },
-
   updatePerson:async (parent, { id,username }, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
@@ -148,43 +139,47 @@ export const Mutation = {
     return updatePerson
   },
 
-  deletePerson:async (parent, { id }, ctx) => {
-    const userId = getUserId(ctx)
-    if (!userId) {
-      throw new Error("用户不存在")
-    }
-    const deletePerson = await ctx.db.deletePerson({ id })
-    return deletePerson
-  },
-
-  createFamily:async (parent, { username,personId,relationship,status }, ctx) => {
+  createFamily:async (parent, { name,relationship }, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
     const family = await ctx.db.createFamily({
         relationship:relationship,
-        status:status,
-        from:{connect:{username}},
-        to:{connect:{id:personId}},
+        status:'0',
+        from:{connect:{uid:userId}},
+        to:{create:{name}},
     })
     return family
   },
 
-  updateFamily:async (parent, { id, personId,status }, ctx) => {
+  updateFamily:async (parent, { id, name,relationship,status="0" }, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
-    const updateFamily = ctx.db.updateFamily({
+    const updateFamily = await ctx.db.updateFamily({
       where:{ id },
       data:{
-        to:{connect:{id:personId}},
+        to:{update:{name}},
+        relationship,
         status
       },
     })
     return updateFamily
   },
+
+  deleteFamily: async (parent, { familyId,toId }, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const deleteFamily = await ctx.db.deleteFamily({ id:familyId })
+    const deletePerson = await  ctx.db.deletePerson({ id:toId })
+
+    return deleteFamily
+  },
+
 
   createDraft: async (parent, { title, content, authorEmail }, ctx) => {
     return ctx.db.createPost({
