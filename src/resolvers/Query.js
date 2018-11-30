@@ -4,7 +4,7 @@ export const Query = {
   me: (parent, args, ctx) => {
     return ctx.db.user({ uid: getUserId(ctx) })
   },
-  users:(parent, args, ctx)=> ctx.db.users(),
+  searchUser:(parent, {username}, ctx) => ctx.db.user({username}),
   cities:(parent, {code}, ctx)=> ctx.db.cities({where:{province:{code}}}),
   areas:(parent, {code}, ctx)=> ctx.db.areas({where:{city:{code}}}),
   streets:(parent, {code}, ctx)=> ctx.db.streets({where:{Area:{code}}}),

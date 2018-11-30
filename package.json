@@ -16,6 +16,7 @@
     "dateformat": "^3.0.3",
     "express": "^4.16.4",
     "graphql": "^14.0.2",
+    "graphql-depth-limit": "^1.1.0",
     "graphql-iso-date": "^3.6.1",
     "graphql-middleware": "^2.0.2",
     "graphql-shield": "^4.1.0",

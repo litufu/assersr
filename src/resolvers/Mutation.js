@@ -5,6 +5,7 @@ import uuidv4 from 'uuid/v4'
 import { APP_SECRET, getUserId } from '../services/utils'
 import getBasicInfoData from '../services/displayBasicInfoData'
 import validateBasicInfo from '../validate/basickInfo'
+import relationshipMap from '../services/relationshipMap'
 
 export const Mutation = {
   signup: async (parent, { username, password }, ctx) => {
@@ -28,17 +29,18 @@ export const Mutation = {
 
     const hashedPassword = await hash(password, 10)
     const uid = uuidv4()
-    console.log(uid)
     const token = sign({ userId: uid }, APP_SECRET)
-    console.log(token)
     try{
       const user = await ctx.db.createUser({
-        username:username,
+        username,
         password: hashedPassword,
-        uid:uid,
-        token:token,
+        uid,
+        token,
       })
-      return user
+      return {
+        token,
+        user
+      }
     }catch(error){
       console.log(error.message)
     }
@@ -68,7 +70,10 @@ export const Mutation = {
       throw new Error('密码错误')
     }
 
-    return user
+    return  {
+      token:user.token,
+      user
+    }
   },
   changePassword:async (parent, { currentPassword,newPassword }, ctx) => {
     const userId = getUserId(ctx)
@@ -98,7 +103,7 @@ export const Mutation = {
     const updateUser = await ctx.db.updateUser({
         data: {
           password:hashedNewPassword,
-          uid:uid,
+          uid,
           token:sign({ userId: uid }, APP_SECRET)
         },
         where: {
@@ -123,7 +128,7 @@ export const Mutation = {
 
     return ctx.db.updateUser({
       where: { uid: userId },
-      data:data
+      data
     })
   },
 
@@ -145,7 +150,7 @@ export const Mutation = {
       throw new Error("用户不存在")
     }
     const family = await ctx.db.createFamily({
-        relationship:relationship,
+        relationship,
         status:'0',
         from:{connect:{uid:userId}},
         to:{create:{name}},
@@ -178,6 +183,45 @@ export const Mutation = {
     const deletePerson = await  ctx.db.deletePerson({ id:toId })
 
     return deleteFamily
+  },
+
+  connectFamily:async (parent, { id, name,relationship }, ctx) => {
+    // id:亲属的id
+    // name:亲属的姓名
+    // relationship:和亲属的关系
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    // 用户自己
+    const user = await ctx.db.user({uid:userId})
+    // 亲人
+    const relative = await ctx.db.user({id})
+    if(relative.name!==name){
+      throw new Error("对方姓名与你拟添加的家庭成员姓名不一致")
+    }
+    // 亲人的家庭成员列表
+    const families = await ctx.db.families({where:{from:{id}}})
+    // 检查拟建立关系的亲人家庭成员中是否添加了与用户相同的名字和对应的关系。
+    if(families.length===0){
+      throw new Error("对方家庭成员中未找到你的名字")
+    }
+    let personId
+    let familyId 
+    for (const family of families){
+      // 获取亲人家庭成员的个人信息
+      const persons = await ctx.db.persons({where:{families_every:{id:family.id}}})
+      if(persons[0].name===user.name && relationshipMap[relationship].indexOf(family.relationship)>-1){
+        personId=persons[0].id
+        familyId = family.id
+      }
+    }
+
+    if(!personId){
+      throw new Error("对方家庭成员中未包含你的名字或关系不正确")
+    }
+
+    return families
   },
 
 

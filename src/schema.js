@@ -18,7 +18,7 @@ export const typeDefs = gql`
 
   type Query {
     me: User
-    users:[User]
+    searchUser(username:String!):User
     cities(code:String!):[City]
     areas(code:String!):[Area]
     streets(code:String!):[Street]
@@ -33,14 +33,15 @@ export const typeDefs = gql`
     createDraft(title: String!, content: String!, authorEmail: String!): Post!
     deletePost(id: ID!): Post
     publish(id: ID!): Post
-    signup(username: String!, password: String!): User!
-    login(username: String!, password: String!): User!
+    signup(username: String!, password: String!): AuthPayload!
+    login(username: String!, password: String!): AuthPayload!
     changePassword(currentPassword:String!,newPassword: String!):User!
     addBasicInfo(name:String!,gender:String!,birthday:BirthdayInput!,birthplace:BirthplaceInput!):User!
     updatePerson(id: ID!,username:String!):Person!
     createFamily(name:String!,relationship:String!):Family
     updateFamily(id:ID!, name:String,relationship:String,status:String):Family
     deleteFamily(familyId:ID!,toId:ID!):Family
+    connectFamily(id:ID!,name:String,relationship:String):Family
   }
 
   type AuthPayload {
@@ -61,8 +62,6 @@ export const typeDefs = gql`
   type User {
     id: ID!
     username: String!
-    uid:String!
-    token:String!
     name:String
     gender:String
     birthdaycalendar:String

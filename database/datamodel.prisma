@@ -43,12 +43,14 @@ type User {
   createdAt: DateTime!
   updatedAt: DateTime!
   regStatus:RegStatus
+  families:[Family!]!
 }
 
 type Person {
   id: ID! @unique
   name:String!
   user:User
+  families:[Family!]!
 }
 
 type Family {

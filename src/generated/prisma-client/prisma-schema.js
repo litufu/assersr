@@ -168,6 +168,11 @@ input AreaUpdateInput {
   people: UserUpdateManyWithoutBirthAreaInput
 }
 
+input AreaUpdateManyMutationInput {
+  code: String
+  name: String
+}
+
 input AreaUpdateManyWithoutCityInput {
   create: [AreaCreateWithoutCityInput!]
   delete: [AreaWhereUniqueInput!]
@@ -421,6 +426,11 @@ input CityUpdateInput {
   people: UserUpdateManyWithoutBirthCityInput
 }
 
+input CityUpdateManyMutationInput {
+  code: String
+  name: String
+}
+
 input CityUpdateManyWithoutProvinceInput {
   create: [CityCreateWithoutProvinceInput!]
   delete: [CityWhereUniqueInput!]
@@ -639,6 +649,12 @@ input CollegeEntranceExamUpdateInput {
   student: UserUpdateOneRequiredInput
 }
 
+input CollegeEntranceExamUpdateManyMutationInput {
+  culscore: Float
+  proscore: Float
+  candidatenum: String
+}
+
 input CollegeEntranceExamWhereInput {
   id: ID
   id_not: ID
@@ -765,6 +781,10 @@ input EducationUpdateInput {
   name: String
 }
 
+input EducationUpdateManyMutationInput {
+  name: String
+}
+
 input EducationUpdateOneRequiredInput {
   create: EducationCreateInput
   update: EducationUpdateDataInput
@@ -831,8 +851,30 @@ type FamilyConnection {
 }
 
 input FamilyCreateInput {
-  from: UserCreateOneInput!
-  to: PersonCreateOneInput!
+  from: UserCreateOneWithoutFamiliesInput!
+  to: PersonCreateOneWithoutFamiliesInput!
+  relationship: String!
+  status: String!
+}
+
+input FamilyCreateManyWithoutFromInput {
+  create: [FamilyCreateWithoutFromInput!]
+  connect: [FamilyWhereUniqueInput!]
+}
+
+input FamilyCreateManyWithoutToInput {
+  create: [FamilyCreateWithoutToInput!]
+  connect: [FamilyWhereUniqueInput!]
+}
+
+input FamilyCreateWithoutFromInput {
+  to: PersonCreateOneWithoutFamiliesInput!
+  relationship: String!
+  status: String!
+}
+
+input FamilyCreateWithoutToInput {
+  from: UserCreateOneWithoutFamiliesInput!
   relationship: String!
   status: String!
 }
@@ -880,10 +922,67 @@ input FamilySubscriptionWhereInput {
 }
 
 input FamilyUpdateInput {
-  from: UserUpdateOneRequiredInput
-  to: PersonUpdateOneRequiredInput
+  from: UserUpdateOneRequiredWithoutFamiliesInput
+  to: PersonUpdateOneRequiredWithoutFamiliesInput
   relationship: String
   status: String
+}
+
+input FamilyUpdateManyMutationInput {
+  relationship: String
+  status: String
+}
+
+input FamilyUpdateManyWithoutFromInput {
+  create: [FamilyCreateWithoutFromInput!]
+  delete: [FamilyWhereUniqueInput!]
+  connect: [FamilyWhereUniqueInput!]
+  disconnect: [FamilyWhereUniqueInput!]
+  update: [FamilyUpdateWithWhereUniqueWithoutFromInput!]
+  upsert: [FamilyUpsertWithWhereUniqueWithoutFromInput!]
+}
+
+input FamilyUpdateManyWithoutToInput {
+  create: [FamilyCreateWithoutToInput!]
+  delete: [FamilyWhereUniqueInput!]
+  connect: [FamilyWhereUniqueInput!]
+  disconnect: [FamilyWhereUniqueInput!]
+  update: [FamilyUpdateWithWhereUniqueWithoutToInput!]
+  upsert: [FamilyUpsertWithWhereUniqueWithoutToInput!]
+}
+
+input FamilyUpdateWithoutFromDataInput {
+  to: PersonUpdateOneRequiredWithoutFamiliesInput
+  relationship: String
+  status: String
+}
+
+input FamilyUpdateWithoutToDataInput {
+  from: UserUpdateOneRequiredWithoutFamiliesInput
+  relationship: String
+  status: String
+}
+
+input FamilyUpdateWithWhereUniqueWithoutFromInput {
+  where: FamilyWhereUniqueInput!
+  data: FamilyUpdateWithoutFromDataInput!
+}
+
+input FamilyUpdateWithWhereUniqueWithoutToInput {
+  where: FamilyWhereUniqueInput!
+  data: FamilyUpdateWithoutToDataInput!
+}
+
+input FamilyUpsertWithWhereUniqueWithoutFromInput {
+  where: FamilyWhereUniqueInput!
+  update: FamilyUpdateWithoutFromDataInput!
+  create: FamilyCreateWithoutFromInput!
+}
+
+input FamilyUpsertWithWhereUniqueWithoutToInput {
+  where: FamilyWhereUniqueInput!
+  update: FamilyUpdateWithoutToDataInput!
+  create: FamilyCreateWithoutToInput!
 }
 
 input FamilyWhereInput {
@@ -1027,6 +1126,12 @@ input MajorUpdateInput {
   code: String
 }
 
+input MajorUpdateManyMutationInput {
+  name: String
+  category: String
+  code: String
+}
+
 input MajorUpdateOneRequiredInput {
   create: MajorCreateInput
   update: MajorUpdateDataInput
@@ -1109,91 +1214,90 @@ input MajorWhereUniqueInput {
 type Mutation {
   createArea(data: AreaCreateInput!): Area!
   updateArea(data: AreaUpdateInput!, where: AreaWhereUniqueInput!): Area
-  updateManyAreas(data: AreaUpdateInput!, where: AreaWhereInput): BatchPayload!
+  updateManyAreas(data: AreaUpdateManyMutationInput!, where: AreaWhereInput): BatchPayload!
   upsertArea(where: AreaWhereUniqueInput!, create: AreaCreateInput!, update: AreaUpdateInput!): Area!
   deleteArea(where: AreaWhereUniqueInput!): Area
   deleteManyAreas(where: AreaWhereInput): BatchPayload!
   createCity(data: CityCreateInput!): City!
   updateCity(data: CityUpdateInput!, where: CityWhereUniqueInput!): City
-  updateManyCities(data: CityUpdateInput!, where: CityWhereInput): BatchPayload!
+  updateManyCities(data: CityUpdateManyMutationInput!, where: CityWhereInput): BatchPayload!
   upsertCity(where: CityWhereUniqueInput!, create: CityCreateInput!, update: CityUpdateInput!): City!
   deleteCity(where: CityWhereUniqueInput!): City
   deleteManyCities(where: CityWhereInput): BatchPayload!
   createCollegeEntranceExam(data: CollegeEntranceExamCreateInput!): CollegeEntranceExam!
   updateCollegeEntranceExam(data: CollegeEntranceExamUpdateInput!, where: CollegeEntranceExamWhereUniqueInput!): CollegeEntranceExam
-  updateManyCollegeEntranceExams(data: CollegeEntranceExamUpdateInput!, where: CollegeEntranceExamWhereInput): BatchPayload!
+  updateManyCollegeEntranceExams(data: CollegeEntranceExamUpdateManyMutationInput!, where: CollegeEntranceExamWhereInput): BatchPayload!
   upsertCollegeEntranceExam(where: CollegeEntranceExamWhereUniqueInput!, create: CollegeEntranceExamCreateInput!, update: CollegeEntranceExamUpdateInput!): CollegeEntranceExam!
   deleteCollegeEntranceExam(where: CollegeEntranceExamWhereUniqueInput!): CollegeEntranceExam
   deleteManyCollegeEntranceExams(where: CollegeEntranceExamWhereInput): BatchPayload!
   createEducation(data: EducationCreateInput!): Education!
   updateEducation(data: EducationUpdateInput!, where: EducationWhereUniqueInput!): Education
-  updateManyEducations(data: EducationUpdateInput!, where: EducationWhereInput): BatchPayload!
+  updateManyEducations(data: EducationUpdateManyMutationInput!, where: EducationWhereInput): BatchPayload!
   upsertEducation(where: EducationWhereUniqueInput!, create: EducationCreateInput!, update: EducationUpdateInput!): Education!
   deleteEducation(where: EducationWhereUniqueInput!): Education
   deleteManyEducations(where: EducationWhereInput): BatchPayload!
   createFamily(data: FamilyCreateInput!): Family!
   updateFamily(data: FamilyUpdateInput!, where: FamilyWhereUniqueInput!): Family
-  updateManyFamilies(data: FamilyUpdateInput!, where: FamilyWhereInput): BatchPayload!
+  updateManyFamilies(data: FamilyUpdateManyMutationInput!, where: FamilyWhereInput): BatchPayload!
   upsertFamily(where: FamilyWhereUniqueInput!, create: FamilyCreateInput!, update: FamilyUpdateInput!): Family!
   deleteFamily(where: FamilyWhereUniqueInput!): Family
   deleteManyFamilies(where: FamilyWhereInput): BatchPayload!
   createMajor(data: MajorCreateInput!): Major!
   updateMajor(data: MajorUpdateInput!, where: MajorWhereUniqueInput!): Major
-  updateManyMajors(data: MajorUpdateInput!, where: MajorWhereInput): BatchPayload!
+  updateManyMajors(data: MajorUpdateManyMutationInput!, where: MajorWhereInput): BatchPayload!
   upsertMajor(where: MajorWhereUniqueInput!, create: MajorCreateInput!, update: MajorUpdateInput!): Major!
   deleteMajor(where: MajorWhereUniqueInput!): Major
   deleteManyMajors(where: MajorWhereInput): BatchPayload!
   createPerson(data: PersonCreateInput!): Person!
   updatePerson(data: PersonUpdateInput!, where: PersonWhereUniqueInput!): Person
-  updateManyPersons(data: PersonUpdateInput!, where: PersonWhereInput): BatchPayload!
+  updateManyPersons(data: PersonUpdateManyMutationInput!, where: PersonWhereInput): BatchPayload!
   upsertPerson(where: PersonWhereUniqueInput!, create: PersonCreateInput!, update: PersonUpdateInput!): Person!
   deletePerson(where: PersonWhereUniqueInput!): Person
   deleteManyPersons(where: PersonWhereInput): BatchPayload!
   createPost(data: PostCreateInput!): Post!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
-  updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
+  updateManyPosts(data: PostUpdateManyMutationInput!, where: PostWhereInput): BatchPayload!
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   deletePost(where: PostWhereUniqueInput!): Post
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   createProvince(data: ProvinceCreateInput!): Province!
   updateProvince(data: ProvinceUpdateInput!, where: ProvinceWhereUniqueInput!): Province
-  updateManyProvinces(data: ProvinceUpdateInput!, where: ProvinceWhereInput): BatchPayload!
+  updateManyProvinces(data: ProvinceUpdateManyMutationInput!, where: ProvinceWhereInput): BatchPayload!
   upsertProvince(where: ProvinceWhereUniqueInput!, create: ProvinceCreateInput!, update: ProvinceUpdateInput!): Province!
   deleteProvince(where: ProvinceWhereUniqueInput!): Province
   deleteManyProvinces(where: ProvinceWhereInput): BatchPayload!
   createRegStatus(data: RegStatusCreateInput!): RegStatus!
   updateRegStatus(data: RegStatusUpdateInput!, where: RegStatusWhereUniqueInput!): RegStatus
-  updateManyRegStatuses(data: RegStatusUpdateInput!, where: RegStatusWhereInput): BatchPayload!
   upsertRegStatus(where: RegStatusWhereUniqueInput!, create: RegStatusCreateInput!, update: RegStatusUpdateInput!): RegStatus!
   deleteRegStatus(where: RegStatusWhereUniqueInput!): RegStatus
   deleteManyRegStatuses(where: RegStatusWhereInput): BatchPayload!
   createStreet(data: StreetCreateInput!): Street!
   updateStreet(data: StreetUpdateInput!, where: StreetWhereUniqueInput!): Street
-  updateManyStreets(data: StreetUpdateInput!, where: StreetWhereInput): BatchPayload!
+  updateManyStreets(data: StreetUpdateManyMutationInput!, where: StreetWhereInput): BatchPayload!
   upsertStreet(where: StreetWhereUniqueInput!, create: StreetCreateInput!, update: StreetUpdateInput!): Street!
   deleteStreet(where: StreetWhereUniqueInput!): Street
   deleteManyStreets(where: StreetWhereInput): BatchPayload!
   createSubject(data: SubjectCreateInput!): Subject!
   updateSubject(data: SubjectUpdateInput!, where: SubjectWhereUniqueInput!): Subject
-  updateManySubjects(data: SubjectUpdateInput!, where: SubjectWhereInput): BatchPayload!
+  updateManySubjects(data: SubjectUpdateManyMutationInput!, where: SubjectWhereInput): BatchPayload!
   upsertSubject(where: SubjectWhereUniqueInput!, create: SubjectCreateInput!, update: SubjectUpdateInput!): Subject!
   deleteSubject(where: SubjectWhereUniqueInput!): Subject
   deleteManySubjects(where: SubjectWhereInput): BatchPayload!
   createUniversity(data: UniversityCreateInput!): University!
   updateUniversity(data: UniversityUpdateInput!, where: UniversityWhereUniqueInput!): University
-  updateManyUniversities(data: UniversityUpdateInput!, where: UniversityWhereInput): BatchPayload!
+  updateManyUniversities(data: UniversityUpdateManyMutationInput!, where: UniversityWhereInput): BatchPayload!
   upsertUniversity(where: UniversityWhereUniqueInput!, create: UniversityCreateInput!, update: UniversityUpdateInput!): University!
   deleteUniversity(where: UniversityWhereUniqueInput!): University
   deleteManyUniversities(where: UniversityWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   createVillage(data: VillageCreateInput!): Village!
   updateVillage(data: VillageUpdateInput!, where: VillageWhereUniqueInput!): Village
-  updateManyVillages(data: VillageUpdateInput!, where: VillageWhereInput): BatchPayload!
+  updateManyVillages(data: VillageUpdateManyMutationInput!, where: VillageWhereInput): BatchPayload!
   upsertVillage(where: VillageWhereUniqueInput!, create: VillageCreateInput!, update: VillageUpdateInput!): Village!
   deleteVillage(where: VillageWhereUniqueInput!): Village
   deleteManyVillages(where: VillageWhereInput): BatchPayload!
@@ -1220,6 +1324,7 @@ type Person {
   id: ID!
   name: String!
   user: User
+  families(where: FamilyWhereInput, orderBy: FamilyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Family!]
 }
 
 type PersonConnection {
@@ -1231,11 +1336,17 @@ type PersonConnection {
 input PersonCreateInput {
   name: String!
   user: UserCreateOneInput
+  families: FamilyCreateManyWithoutToInput
 }
 
-input PersonCreateOneInput {
-  create: PersonCreateInput
+input PersonCreateOneWithoutFamiliesInput {
+  create: PersonCreateWithoutFamiliesInput
   connect: PersonWhereUniqueInput
+}
+
+input PersonCreateWithoutFamiliesInput {
+  name: String!
+  user: UserCreateOneInput
 }
 
 type PersonEdge {
@@ -1277,26 +1388,31 @@ input PersonSubscriptionWhereInput {
   NOT: [PersonSubscriptionWhereInput!]
 }
 
-input PersonUpdateDataInput {
-  name: String
-  user: UserUpdateOneInput
-}
-
 input PersonUpdateInput {
   name: String
   user: UserUpdateOneInput
+  families: FamilyUpdateManyWithoutToInput
 }
 
-input PersonUpdateOneRequiredInput {
-  create: PersonCreateInput
-  update: PersonUpdateDataInput
-  upsert: PersonUpsertNestedInput
+input PersonUpdateManyMutationInput {
+  name: String
+}
+
+input PersonUpdateOneRequiredWithoutFamiliesInput {
+  create: PersonCreateWithoutFamiliesInput
+  update: PersonUpdateWithoutFamiliesDataInput
+  upsert: PersonUpsertWithoutFamiliesInput
   connect: PersonWhereUniqueInput
 }
 
-input PersonUpsertNestedInput {
-  update: PersonUpdateDataInput!
-  create: PersonCreateInput!
+input PersonUpdateWithoutFamiliesDataInput {
+  name: String
+  user: UserUpdateOneInput
+}
+
+input PersonUpsertWithoutFamiliesInput {
+  update: PersonUpdateWithoutFamiliesDataInput!
+  create: PersonCreateWithoutFamiliesInput!
 }
 
 input PersonWhereInput {
@@ -1329,6 +1445,9 @@ input PersonWhereInput {
   name_ends_with: String
   name_not_ends_with: String
   user: UserWhereInput
+  families_every: FamilyWhereInput
+  families_some: FamilyWhereInput
+  families_none: FamilyWhereInput
   AND: [PersonWhereInput!]
   OR: [PersonWhereInput!]
   NOT: [PersonWhereInput!]
@@ -1424,6 +1543,12 @@ input PostUpdateInput {
   title: String
   content: String
   author: UserUpdateOneRequiredWithoutPostsInput
+}
+
+input PostUpdateManyMutationInput {
+  isPublished: Boolean
+  title: String
+  content: String
 }
 
 input PostUpdateManyWithoutAuthorInput {
@@ -1625,6 +1750,11 @@ input ProvinceUpdateInput {
   name: String
   cities: CityUpdateManyWithoutProvinceInput
   people: UserUpdateManyWithoutBirthProvinceInput
+}
+
+input ProvinceUpdateManyMutationInput {
+  code: String
+  name: String
 }
 
 input ProvinceUpdateOneRequiredInput {
@@ -2014,6 +2144,11 @@ input StreetUpdateInput {
   people: UserUpdateManyWithoutBirthStreetInput
 }
 
+input StreetUpdateManyMutationInput {
+  code: String
+  name: String
+}
+
 input StreetUpdateManyWithoutAreaInput {
   create: [StreetCreateWithoutAreaInput!]
   delete: [StreetWhereUniqueInput!]
@@ -2208,6 +2343,10 @@ input SubjectUpdateInput {
   name: String
 }
 
+input SubjectUpdateManyMutationInput {
+  name: String
+}
+
 input SubjectUpdateOneRequiredInput {
   create: SubjectCreateInput
   update: SubjectUpdateDataInput
@@ -2358,6 +2497,11 @@ input UniversityUpdateInput {
   city: CityUpdateOneRequiredInput
 }
 
+input UniversityUpdateManyMutationInput {
+  name: String
+  identifier: String
+}
+
 input UniversityUpdateOneInput {
   create: UniversityCreateInput
   update: UniversityUpdateDataInput
@@ -2447,6 +2591,7 @@ type User {
   createdAt: DateTime!
   updatedAt: DateTime!
   regStatus: RegStatus
+  families(where: FamilyWhereInput, orderBy: FamilyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Family!]
 }
 
 type UserConnection {
@@ -2471,6 +2616,7 @@ input UserCreateInput {
   token: String!
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
+  families: FamilyCreateManyWithoutFromInput
 }
 
 input UserCreateManyWithoutBirthAreaInput {
@@ -2508,6 +2654,11 @@ input UserCreateOneInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutFamiliesInput {
+  create: UserCreateWithoutFamiliesInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   connect: UserWhereUniqueInput
@@ -2528,6 +2679,7 @@ input UserCreateWithoutBirthAreaInput {
   token: String!
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
+  families: FamilyCreateManyWithoutFromInput
 }
 
 input UserCreateWithoutBirthCityInput {
@@ -2545,6 +2697,7 @@ input UserCreateWithoutBirthCityInput {
   token: String!
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
+  families: FamilyCreateManyWithoutFromInput
 }
 
 input UserCreateWithoutBirthProvinceInput {
@@ -2562,6 +2715,7 @@ input UserCreateWithoutBirthProvinceInput {
   token: String!
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
+  families: FamilyCreateManyWithoutFromInput
 }
 
 input UserCreateWithoutBirthStreetInput {
@@ -2579,6 +2733,7 @@ input UserCreateWithoutBirthStreetInput {
   token: String!
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
+  families: FamilyCreateManyWithoutFromInput
 }
 
 input UserCreateWithoutBirthVillageInput {
@@ -2592,6 +2747,25 @@ input UserCreateWithoutBirthVillageInput {
   birthCity: CityCreateOneWithoutPeopleInput
   birthArea: AreaCreateOneWithoutPeopleInput
   birthStreet: StreetCreateOneWithoutPeopleInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  families: FamilyCreateManyWithoutFromInput
+}
+
+input UserCreateWithoutFamiliesInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthProvince: ProvinceCreateOneWithoutPeopleInput
+  birthCity: CityCreateOneWithoutPeopleInput
+  birthArea: AreaCreateOneWithoutPeopleInput
+  birthStreet: StreetCreateOneWithoutPeopleInput
+  birthVillage: VillageCreateOneWithoutPeopleInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -2613,6 +2787,7 @@ input UserCreateWithoutPostsInput {
   uid: String!
   token: String!
   regStatus: RegStatusCreateOneWithoutApplicantsInput
+  families: FamilyCreateManyWithoutFromInput
 }
 
 input UserCreateWithoutRegStatusInput {
@@ -2630,6 +2805,7 @@ input UserCreateWithoutRegStatusInput {
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
+  families: FamilyCreateManyWithoutFromInput
 }
 
 type UserEdge {
@@ -2710,6 +2886,7 @@ input UserUpdateDataInput {
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  families: FamilyUpdateManyWithoutFromInput
 }
 
 input UserUpdateInput {
@@ -2728,6 +2905,18 @@ input UserUpdateInput {
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  families: FamilyUpdateManyWithoutFromInput
+}
+
+input UserUpdateManyMutationInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  birthdaycalendar: String
+  birthday: DateTime
+  uid: String
+  token: String
 }
 
 input UserUpdateManyWithoutBirthAreaInput {
@@ -2800,6 +2989,13 @@ input UserUpdateOneRequiredInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutFamiliesInput {
+  create: UserCreateWithoutFamiliesInput
+  update: UserUpdateWithoutFamiliesDataInput
+  upsert: UserUpsertWithoutFamiliesInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneRequiredWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   update: UserUpdateWithoutPostsDataInput
@@ -2822,6 +3018,7 @@ input UserUpdateWithoutBirthAreaDataInput {
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  families: FamilyUpdateManyWithoutFromInput
 }
 
 input UserUpdateWithoutBirthCityDataInput {
@@ -2839,6 +3036,7 @@ input UserUpdateWithoutBirthCityDataInput {
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  families: FamilyUpdateManyWithoutFromInput
 }
 
 input UserUpdateWithoutBirthProvinceDataInput {
@@ -2856,6 +3054,7 @@ input UserUpdateWithoutBirthProvinceDataInput {
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  families: FamilyUpdateManyWithoutFromInput
 }
 
 input UserUpdateWithoutBirthStreetDataInput {
@@ -2873,6 +3072,7 @@ input UserUpdateWithoutBirthStreetDataInput {
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  families: FamilyUpdateManyWithoutFromInput
 }
 
 input UserUpdateWithoutBirthVillageDataInput {
@@ -2886,6 +3086,25 @@ input UserUpdateWithoutBirthVillageDataInput {
   birthCity: CityUpdateOneWithoutPeopleInput
   birthArea: AreaUpdateOneWithoutPeopleInput
   birthStreet: StreetUpdateOneWithoutPeopleInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  families: FamilyUpdateManyWithoutFromInput
+}
+
+input UserUpdateWithoutFamiliesDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthProvince: ProvinceUpdateOneWithoutPeopleInput
+  birthCity: CityUpdateOneWithoutPeopleInput
+  birthArea: AreaUpdateOneWithoutPeopleInput
+  birthStreet: StreetUpdateOneWithoutPeopleInput
+  birthVillage: VillageUpdateOneWithoutPeopleInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -2907,6 +3126,7 @@ input UserUpdateWithoutPostsDataInput {
   uid: String
   token: String
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  families: FamilyUpdateManyWithoutFromInput
 }
 
 input UserUpdateWithoutRegStatusDataInput {
@@ -2924,6 +3144,7 @@ input UserUpdateWithoutRegStatusDataInput {
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
+  families: FamilyUpdateManyWithoutFromInput
 }
 
 input UserUpdateWithWhereUniqueWithoutBirthAreaInput {
@@ -2959,6 +3180,11 @@ input UserUpdateWithWhereUniqueWithoutRegStatusInput {
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutFamiliesInput {
+  update: UserUpdateWithoutFamiliesDataInput!
+  create: UserCreateWithoutFamiliesInput!
 }
 
 input UserUpsertWithoutPostsInput {
@@ -3148,6 +3374,9 @@ input UserWhereInput {
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
   regStatus: RegStatusWhereInput
+  families_every: FamilyWhereInput
+  families_some: FamilyWhereInput
+  families_none: FamilyWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
@@ -3250,6 +3479,11 @@ input VillageUpdateInput {
   name: String
   street: StreetUpdateOneRequiredWithoutVillagesInput
   people: UserUpdateManyWithoutBirthVillageInput
+}
+
+input VillageUpdateManyMutationInput {
+  code: String
+  name: String
 }
 
 input VillageUpdateManyWithoutStreetInput {
