@@ -841,6 +841,7 @@ type Family {
   from: User!
   to: Person!
   relationship: String!
+  spouse: Family
   status: String!
 }
 
@@ -854,6 +855,7 @@ input FamilyCreateInput {
   from: UserCreateOneWithoutFamiliesInput!
   to: PersonCreateOneWithoutFamiliesInput!
   relationship: String!
+  spouse: FamilyCreateOneInput
   status: String!
 }
 
@@ -867,15 +869,22 @@ input FamilyCreateManyWithoutToInput {
   connect: [FamilyWhereUniqueInput!]
 }
 
+input FamilyCreateOneInput {
+  create: FamilyCreateInput
+  connect: FamilyWhereUniqueInput
+}
+
 input FamilyCreateWithoutFromInput {
   to: PersonCreateOneWithoutFamiliesInput!
   relationship: String!
+  spouse: FamilyCreateOneInput
   status: String!
 }
 
 input FamilyCreateWithoutToInput {
   from: UserCreateOneWithoutFamiliesInput!
   relationship: String!
+  spouse: FamilyCreateOneInput
   status: String!
 }
 
@@ -921,10 +930,19 @@ input FamilySubscriptionWhereInput {
   NOT: [FamilySubscriptionWhereInput!]
 }
 
+input FamilyUpdateDataInput {
+  from: UserUpdateOneRequiredWithoutFamiliesInput
+  to: PersonUpdateOneRequiredWithoutFamiliesInput
+  relationship: String
+  spouse: FamilyUpdateOneInput
+  status: String
+}
+
 input FamilyUpdateInput {
   from: UserUpdateOneRequiredWithoutFamiliesInput
   to: PersonUpdateOneRequiredWithoutFamiliesInput
   relationship: String
+  spouse: FamilyUpdateOneInput
   status: String
 }
 
@@ -951,15 +969,26 @@ input FamilyUpdateManyWithoutToInput {
   upsert: [FamilyUpsertWithWhereUniqueWithoutToInput!]
 }
 
+input FamilyUpdateOneInput {
+  create: FamilyCreateInput
+  update: FamilyUpdateDataInput
+  upsert: FamilyUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: FamilyWhereUniqueInput
+}
+
 input FamilyUpdateWithoutFromDataInput {
   to: PersonUpdateOneRequiredWithoutFamiliesInput
   relationship: String
+  spouse: FamilyUpdateOneInput
   status: String
 }
 
 input FamilyUpdateWithoutToDataInput {
   from: UserUpdateOneRequiredWithoutFamiliesInput
   relationship: String
+  spouse: FamilyUpdateOneInput
   status: String
 }
 
@@ -971,6 +1000,11 @@ input FamilyUpdateWithWhereUniqueWithoutFromInput {
 input FamilyUpdateWithWhereUniqueWithoutToInput {
   where: FamilyWhereUniqueInput!
   data: FamilyUpdateWithoutToDataInput!
+}
+
+input FamilyUpsertNestedInput {
+  update: FamilyUpdateDataInput!
+  create: FamilyCreateInput!
 }
 
 input FamilyUpsertWithWhereUniqueWithoutFromInput {
@@ -1016,6 +1050,7 @@ input FamilyWhereInput {
   relationship_not_starts_with: String
   relationship_ends_with: String
   relationship_not_ends_with: String
+  spouse: FamilyWhereInput
   status: String
   status_not: String
   status_in: [String!]

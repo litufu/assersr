@@ -10,6 +10,7 @@
     "mytest": "cross-env NODE_ENV=dev nodemon --exec babel-node src/services/getPlaceData.js"
   },
   "dependencies": {
+    "apollo-server": "^2.2.5",
     "apollo-server-express": "^2.2.0",
     "bcrypt": "^3.0.2",
     "cors": "^2.8.5",

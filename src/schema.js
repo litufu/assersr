@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server-express';
+import { gql } from 'apollo-server';
 
 export const typeDefs = gql`
   scalar DateTime
@@ -38,10 +38,20 @@ export const typeDefs = gql`
     changePassword(currentPassword:String!,newPassword: String!):User!
     addBasicInfo(name:String!,gender:String!,birthday:BirthdayInput!,birthplace:BirthplaceInput!):User!
     updatePerson(id: ID!,username:String!):Person!
-    createFamily(name:String!,relationship:String!):Family
-    updateFamily(id:ID!, name:String,relationship:String,status:String):Family
+    deletePersons:BatchPayload
+    createFamily(name:String!,relationship:String!,spouseId:String):Family
+    updateFamily(id:ID!, name:String,relationship:String,spouseId:String,status:String):Family
     deleteFamily(familyId:ID!,toId:ID!):Family
-    connectFamily(id:ID!,name:String,relationship:String):Family
+    connectFamily(relativeId:ID!,familyId:ID!,name:String,relationship:String):Family
+    confirmFamily(familyId:ID!):Family
+  }
+
+  type Subscription {
+    familyConnected(familyIds:[ID!]): Family
+  }
+
+  type BatchPayload {
+    count: Int!
   }
 
   type AuthPayload {
@@ -87,6 +97,7 @@ export const typeDefs = gql`
     to:Person!
     relationship:String!
     status:String!
+    spouse:Family
   }
 
   type BasicInfo {

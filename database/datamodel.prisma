@@ -49,7 +49,7 @@ type User {
 type Person {
   id: ID! @unique
   name:String!
-  user:User
+  user:User @unique
   families:[Family!]!
 }
 
@@ -58,6 +58,7 @@ type Family {
   from:User!
   to:Person!
   relationship:String!
+  spouse:Family
   status:String!
 }
 
