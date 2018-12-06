@@ -37,8 +37,6 @@ export const typeDefs = gql`
     login(username: String!, password: String!): AuthPayload!
     changePassword(currentPassword:String!,newPassword: String!):User!
     addBasicInfo(name:String!,gender:String!,birthday:BirthdayInput!,birthplace:BirthplaceInput!):User!
-    updatePerson(id: ID!,username:String!):Person!
-    deletePersons:BatchPayload
     createFamily(name:String!,relationship:String!,spouseId:String):Family
     updateFamily(id:ID!, name:String,relationship:String,spouseId:String,status:String):Family
     deleteFamily(familyId:ID!,toId:ID!):Family
@@ -47,7 +45,8 @@ export const typeDefs = gql`
   }
 
   type Subscription {
-    familyConnected(familyIds:[ID!]): Family
+    familyConnected(familyIds:[ID!]): Family,
+    familyChanged:ID
   }
 
   type BatchPayload {
