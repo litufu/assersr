@@ -46,7 +46,11 @@ export const typeDefs = gql`
 
   type Subscription {
     familyConnected(familyIds:[ID!]): Family,
-    familyChanged:ID
+    familyChanged:Info
+  }
+
+  type Info {
+    text:String
   }
 
   type BatchPayload {

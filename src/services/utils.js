@@ -1,6 +1,11 @@
 import { verify } from 'jsonwebtoken'
 import { statusMap } from "../services/statusMap"
-import { relationIntersection,relationIntersectionNew,relationshipGenderMap } from "../services/relationship"
+import { 
+  relationIntersection,
+  relationIntersectionNew,
+  relationshipGenderMap ,
+  relationshipTOGender,
+} from "../services/relationship"
 import { pubsub } from '../subscriptions';
 
 const APP_SECRET = 'appsecret321'
@@ -40,15 +45,53 @@ const checkeCtxUserExist = async (ctx)=>{
   return true
 }
 
-const getCommonFamilies = (relationship, families,id) => (
+const getCommonFamilies = async (relationship, families,id,ctx) => {
   // 判断自己的家人中那些是共同的家人，如父亲与我共同的家人是（母亲、兄弟姐妹）
   // id代表被判断的那个人。即父亲的id
-  families.filter(
+  // 如果父亲有两任妻子，或母亲有两任丈夫，则需要判断哪个才是父亲、母亲和亲身兄弟姐妹。
+  console.log('relationship',relationship)
+  const commonFamilies =  families.filter(
     family => (family.relationship in relationIntersection[relationship])
   ).filter(
     f=>f.id!==id
   )
-)
+  console.log('commonFamilies',commonFamilies)
+
+  if(~['father','mother'].indexOf(relationship)){
+    const gender = relationshipTOGender[relationship]
+    let hasManySpouses
+    if(gender==="female"){
+      hasManySpouses = families.filter(family=>family.relationship==='husband').length>1
+    }else{
+      hasManySpouses = families.filter(family=>family.relationship==='wife').length>1
+    }
+    console.log('hasManySpouses',hasManySpouses)
+    const fatherOrMother = await ctx.db.family({id}).spouse()
+    console.log('fatherOrMother',fatherOrMother)
+    if(hasManySpouses){
+        const commonFamilies2 = []
+        for(const commonFamily of commonFamilies){
+          const spouse = await ctx.db.family({id:commonFamily.id}).spouse()
+          console.log('spouse',spouse)
+          if(spouse){
+            // 兄弟姐妹
+            if(spouse.id === fatherOrMother.id){
+              commonFamilies2.push(commonFamily)
+            }
+          }else{
+            // 父母
+            const isFatherorMother = commonFamily.id === fatherOrMother.id
+            if(isFatherorMother){
+              commonFamilies2.push(commonFamily)
+            }
+          }
+        }
+        console.log('commonFamilies2',commonFamilies2)
+      return  commonFamilies2
+    }
+  }
+  return commonFamilies
+}
 
 const getIntersectionFamiles= async (myFamilies,relativeFamiles,ctx)=>{
   const myIntersectionFamilies = []
@@ -86,6 +129,7 @@ const getDifferentFamilies = (myFamilies,myCommonFamilies)=>{
 }
 
 const updateCommonUserFamily = async (me,myRelationship,myCommonFamily, relative,relativeRelationship, ctx) => {
+  console.log('update',myCommonFamily)
   const relativePerson = await ctx.db
   .persons({
     where: {
@@ -94,19 +138,23 @@ const updateCommonUserFamily = async (me,myRelationship,myCommonFamily, relative
   })
 
   const commonUser = await ctx.db.family({ id: myCommonFamily.id }).to().user()
+  console.log(commonUser)
   const commonUserToRelativeFamily = await ctx.db.user({ id: commonUser.id }).families(
     { where: { to: { name: relative.name } } }
   )
+  console.log(commonUserToRelativeFamily)
   // 判断共同家庭成员中是否已经存在relative
   if (commonUserToRelativeFamily.length > 0) {
+    console.log("update3")
     // 存在则修改
-    await ctx.db.updateFamily({
+    const update3 = await ctx.db.updateFamily({
       where: { id: commonUserToRelativeFamily[0].id },
       data: {
         status: statusMap[myCommonFamily.status],
         to: { connect: { id: relativePerson[0].id } },
       }
     })
+    console.log(update3)
   } else {
     // 如果是自己的话不要增加。
     const isNotYourself = relativePerson[0].name!==commonUser.name
@@ -162,9 +210,9 @@ const updateCommonUserFamily = async (me,myRelationship,myCommonFamily, relative
         })
       }
     }
-    // 向commonuser推送familychanged
-    pubsub.publish('familyChanged',{"familyChanged":commonUser.id})
   }
+  // 向commonuser推送familychanged
+  pubsub.publish('familyChanged',{"familyChanged":{"text":commonUser.id}})
 }
 
 

@@ -2,7 +2,6 @@ import { withFilter } from 'apollo-server'
 
 import { pubsub } from '../subscriptions';
 
-import { getUserId } from '../services/utils'
 
 export const FAMILY_CONNECTED = 'familyConnected';
 export const FAMILY_CHANGED = 'familyChanged'
@@ -22,7 +21,7 @@ export const Subscription = {
     // Additional event labels can be passed to asyncIterator creation
     subscribe: withFilter(
         () => pubsub.asyncIterator(FAMILY_CHANGED),
-        (payload, variables,ctx) => Boolean(ctx.user.id === payload.relativeId)
+        (payload, variables,ctx) => Boolean(ctx.user.id === payload.text)
     )
   },
 }
