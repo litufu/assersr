@@ -77,6 +77,7 @@ export const typeDefs = gql`
     username: String!
     name:String
     gender:String
+    avatar:String
     birthdaycalendar:String
     birthday:String
     birthProvince:Province

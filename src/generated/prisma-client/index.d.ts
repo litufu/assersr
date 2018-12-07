@@ -821,6 +821,8 @@ export type UserOrderByInput =
   | "name_DESC"
   | "gender_ASC"
   | "gender_DESC"
+  | "avatar_ASC"
+  | "avatar_DESC"
   | "birthdaycalendar_ASC"
   | "birthdaycalendar_DESC"
   | "birthday_ASC"
@@ -1062,6 +1064,7 @@ export interface UserUpdateWithoutBirthCityDataInput {
   password?: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
@@ -1304,6 +1307,7 @@ export interface UserCreateInput {
   password: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceCreateOneWithoutPeopleInput;
@@ -1323,6 +1327,7 @@ export interface UserUpdateInput {
   password?: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
@@ -1472,6 +1477,7 @@ export interface UserCreateWithoutFamiliesInput {
   password: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceCreateOneWithoutPeopleInput;
@@ -1531,6 +1537,7 @@ export interface UserUpdateWithoutRegStatusDataInput {
   password?: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
@@ -1641,6 +1648,20 @@ export interface UserWhereInput {
   gender_not_starts_with?: String;
   gender_ends_with?: String;
   gender_not_ends_with?: String;
+  avatar?: String;
+  avatar_not?: String;
+  avatar_in?: String[] | String;
+  avatar_not_in?: String[] | String;
+  avatar_lt?: String;
+  avatar_lte?: String;
+  avatar_gt?: String;
+  avatar_gte?: String;
+  avatar_contains?: String;
+  avatar_not_contains?: String;
+  avatar_starts_with?: String;
+  avatar_not_starts_with?: String;
+  avatar_ends_with?: String;
+  avatar_not_ends_with?: String;
   birthdaycalendar?: String;
   birthdaycalendar_not?: String;
   birthdaycalendar_in?: String[] | String;
@@ -1744,6 +1765,7 @@ export interface UserCreateWithoutRegStatusInput {
   password: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceCreateOneWithoutPeopleInput;
@@ -1771,6 +1793,7 @@ export interface UserUpdateWithoutBirthProvinceDataInput {
   password?: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthCity?: CityUpdateOneWithoutPeopleInput;
@@ -1837,6 +1860,7 @@ export interface UserUpdateWithoutPostsDataInput {
   password?: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
@@ -2053,6 +2077,7 @@ export interface UserUpdateWithoutBirthVillageDataInput {
   password?: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
@@ -2312,6 +2337,7 @@ export interface UserCreateWithoutBirthProvinceInput {
   password: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthCity?: CityCreateOneWithoutPeopleInput;
@@ -2392,6 +2418,7 @@ export interface UserCreateWithoutBirthVillageInput {
   password: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceCreateOneWithoutPeopleInput;
@@ -2448,6 +2475,7 @@ export interface UserCreateWithoutBirthCityInput {
   password: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceCreateOneWithoutPeopleInput;
@@ -2466,6 +2494,7 @@ export interface UserUpdateWithoutBirthAreaDataInput {
   password?: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
@@ -2527,6 +2556,7 @@ export interface UserCreateWithoutBirthAreaInput {
   password: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceCreateOneWithoutPeopleInput;
@@ -2585,6 +2615,7 @@ export interface UserCreateWithoutBirthStreetInput {
   password: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceCreateOneWithoutPeopleInput;
@@ -2603,6 +2634,7 @@ export interface UserUpdateWithoutBirthStreetDataInput {
   password?: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
@@ -2746,6 +2778,7 @@ export interface UserUpdateManyMutationInput {
   password?: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   uid?: String;
@@ -2933,6 +2966,7 @@ export interface UserCreateWithoutPostsInput {
   password: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceCreateOneWithoutPeopleInput;
@@ -3063,6 +3097,7 @@ export interface UserUpdateDataInput {
   password?: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
@@ -3150,6 +3185,7 @@ export interface UserUpdateWithoutFamiliesDataInput {
   password?: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthProvince?: ProvinceUpdateOneWithoutPeopleInput;
@@ -3688,6 +3724,7 @@ export interface UserPreviousValues {
   password: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeOutput;
   uid: String;
@@ -3704,6 +3741,7 @@ export interface UserPreviousValuesPromise
   password: () => Promise<String>;
   name: () => Promise<String>;
   gender: () => Promise<String>;
+  avatar: () => Promise<String>;
   birthdaycalendar: () => Promise<String>;
   birthday: () => Promise<DateTimeOutput>;
   uid: () => Promise<String>;
@@ -3720,6 +3758,7 @@ export interface UserPreviousValuesSubscription
   password: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
   gender: () => Promise<AsyncIterator<String>>;
+  avatar: () => Promise<AsyncIterator<String>>;
   birthdaycalendar: () => Promise<AsyncIterator<String>>;
   birthday: () => Promise<AsyncIterator<DateTimeOutput>>;
   uid: () => Promise<AsyncIterator<String>>;
@@ -5708,6 +5747,7 @@ export interface User {
   password: String;
   name?: String;
   gender?: String;
+  avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeOutput;
   uid: String;
@@ -5722,6 +5762,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   password: () => Promise<String>;
   name: () => Promise<String>;
   gender: () => Promise<String>;
+  avatar: () => Promise<String>;
   birthdaycalendar: () => Promise<String>;
   birthday: () => Promise<DateTimeOutput>;
   birthProvince: <T = ProvincePromise>() => T;
@@ -5766,6 +5807,7 @@ export interface UserSubscription
   password: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
   gender: () => Promise<AsyncIterator<String>>;
+  avatar: () => Promise<AsyncIterator<String>>;
   birthdaycalendar: () => Promise<AsyncIterator<String>>;
   birthday: () => Promise<AsyncIterator<DateTimeOutput>>;
   birthProvince: <T = ProvinceSubscription>() => T;

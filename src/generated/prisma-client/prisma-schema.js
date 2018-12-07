@@ -2613,6 +2613,7 @@ type User {
   password: String!
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: Province
@@ -2640,6 +2641,7 @@ input UserCreateInput {
   password: String!
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceCreateOneWithoutPeopleInput
@@ -2704,6 +2706,7 @@ input UserCreateWithoutBirthAreaInput {
   password: String!
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceCreateOneWithoutPeopleInput
@@ -2722,6 +2725,7 @@ input UserCreateWithoutBirthCityInput {
   password: String!
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceCreateOneWithoutPeopleInput
@@ -2740,6 +2744,7 @@ input UserCreateWithoutBirthProvinceInput {
   password: String!
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthCity: CityCreateOneWithoutPeopleInput
@@ -2758,6 +2763,7 @@ input UserCreateWithoutBirthStreetInput {
   password: String!
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceCreateOneWithoutPeopleInput
@@ -2776,6 +2782,7 @@ input UserCreateWithoutBirthVillageInput {
   password: String!
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceCreateOneWithoutPeopleInput
@@ -2794,6 +2801,7 @@ input UserCreateWithoutFamiliesInput {
   password: String!
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceCreateOneWithoutPeopleInput
@@ -2812,6 +2820,7 @@ input UserCreateWithoutPostsInput {
   password: String!
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceCreateOneWithoutPeopleInput
@@ -2830,6 +2839,7 @@ input UserCreateWithoutRegStatusInput {
   password: String!
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceCreateOneWithoutPeopleInput
@@ -2859,6 +2869,8 @@ enum UserOrderByInput {
   name_DESC
   gender_ASC
   gender_DESC
+  avatar_ASC
+  avatar_DESC
   birthdaycalendar_ASC
   birthdaycalendar_DESC
   birthday_ASC
@@ -2879,6 +2891,7 @@ type UserPreviousValues {
   password: String!
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   uid: String!
@@ -2910,6 +2923,7 @@ input UserUpdateDataInput {
   password: String
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceUpdateOneWithoutPeopleInput
@@ -2929,6 +2943,7 @@ input UserUpdateInput {
   password: String
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceUpdateOneWithoutPeopleInput
@@ -2948,6 +2963,7 @@ input UserUpdateManyMutationInput {
   password: String
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   uid: String
@@ -3043,6 +3059,7 @@ input UserUpdateWithoutBirthAreaDataInput {
   password: String
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceUpdateOneWithoutPeopleInput
@@ -3061,6 +3078,7 @@ input UserUpdateWithoutBirthCityDataInput {
   password: String
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceUpdateOneWithoutPeopleInput
@@ -3079,6 +3097,7 @@ input UserUpdateWithoutBirthProvinceDataInput {
   password: String
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthCity: CityUpdateOneWithoutPeopleInput
@@ -3097,6 +3116,7 @@ input UserUpdateWithoutBirthStreetDataInput {
   password: String
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceUpdateOneWithoutPeopleInput
@@ -3115,6 +3135,7 @@ input UserUpdateWithoutBirthVillageDataInput {
   password: String
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceUpdateOneWithoutPeopleInput
@@ -3133,6 +3154,7 @@ input UserUpdateWithoutFamiliesDataInput {
   password: String
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceUpdateOneWithoutPeopleInput
@@ -3151,6 +3173,7 @@ input UserUpdateWithoutPostsDataInput {
   password: String
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceUpdateOneWithoutPeopleInput
@@ -3169,6 +3192,7 @@ input UserUpdateWithoutRegStatusDataInput {
   password: String
   name: String
   gender: String
+  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   birthProvince: ProvinceUpdateOneWithoutPeopleInput
@@ -3334,6 +3358,20 @@ input UserWhereInput {
   gender_not_starts_with: String
   gender_ends_with: String
   gender_not_ends_with: String
+  avatar: String
+  avatar_not: String
+  avatar_in: [String!]
+  avatar_not_in: [String!]
+  avatar_lt: String
+  avatar_lte: String
+  avatar_gt: String
+  avatar_gte: String
+  avatar_contains: String
+  avatar_not_contains: String
+  avatar_starts_with: String
+  avatar_not_starts_with: String
+  avatar_ends_with: String
+  avatar_not_ends_with: String
   birthdaycalendar: String
   birthdaycalendar_not: String
   birthdaycalendar_in: [String!]

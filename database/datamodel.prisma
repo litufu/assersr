@@ -30,6 +30,7 @@ type User {
   password: String!
   name: String
   gender:String
+  avatar:String
   birthdaycalendar:String
   birthday:DateTime
   birthProvince:Province
