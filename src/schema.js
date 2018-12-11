@@ -80,6 +80,7 @@ export const typeDefs = gql`
     avatar:String
     birthdaycalendar:String
     birthday:String
+    birthplace:Location
     birthProvince:Province
     birthCity:City
     birthArea:Area
@@ -87,6 +88,9 @@ export const typeDefs = gql`
     birthVillage:Village
     posts: [Post!]!
     createdAt: String!
+    studies:[SchoolEdu]
+    works:[CompanyJob]
+    lifes:[Live]
   }
 
   type Person {
@@ -107,6 +111,100 @@ export const typeDefs = gql`
   type BasicInfo {
     id: ID!
     user:User!
+  }
+
+ 
+  type Live {
+    id: ID!
+    startTime:String!
+    endTime:String!
+    location:Location
+    title:String
+    description:String
+    user:User
+  }
+
+  type CompanyJob {
+    id: ID!
+    company:Company
+    startTime:String!
+    department:String
+    post:String
+    jobContent:String
+    workers:[User!]!
+  }
+
+  type Company{
+    id: ID!
+    name:String
+    code:String
+    establishmentDate:DateTime
+    representative:String
+    location:Location
+    BusinessScope:String
+  }
+
+  enum Educationkind {
+    PrimarySchool, #初等教育-小学
+    JuniorMiddleSchool,#中等教育-初中
+    HighSchool, #中等教育-高中
+    VocationalHighSchool, #中等教育-职业中学教育
+    TechnicalSchool, #中等教育-技工学校教育
+    SecondarySpecializedSchool, #中等教育-中等专业教育
+    JuniorCollege,#普通高等教育-大专
+    Undergraduate,#普通高等教育-本科
+    Master,#普通高等教育-硕士研究生
+    Doctor,#普通高等教育-博士研究生
+    JuniorToCollege ,#成人高等教育-专科起点本科
+    HighToCollege,#成人高等教育-高中起点升本科
+    HighToJunior,#成人高等教育-高中起点升专科
+  }
+
+  # 学校
+  type School {
+    id: ID!
+    name:String
+    kind:Educationkind
+    location:Location
+  }
+  # 学校开设的课程
+  type SchoolEdu{
+    id: ID!
+    school:School
+    startTime:String!
+    major:Major
+    grade:Int
+    className:String
+    students:[User]
+  }
+
+  type Major {
+    id: ID!
+    name: String!
+    category:String!
+    education:Educationkind!
+    universities:[University!]!
+  }
+
+  type University {
+    id: ID!
+    name: String!
+    location:Location
+    major:[Major!]!
+  }
+
+  type Location {
+    id: ID! 
+    name:String
+    province:Province
+    city:City
+    area:Area
+    street:Street
+    village:Village
+    schools:[School]
+    companies:[Company]
+    universities:[University]
+    people:[User]
   }
 
   type Province {

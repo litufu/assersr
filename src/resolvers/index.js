@@ -5,6 +5,10 @@ import { User } from './User'
 import { Post } from './Post'
 import { Family } from './Family'
 import { Person } from './Person'
+import { School } from './School'
+import { Location } from './Location'
+import { SchoolEdu } from './SchoolEdu'
+
 
 export const resolvers = {
   Query,
@@ -14,4 +18,7 @@ export const resolvers = {
   Post,
   Family,
   Person,
+  School,
+  Location,
+  SchoolEdu,
 }

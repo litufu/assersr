@@ -33,6 +33,7 @@ type User {
   avatar:String
   birthdaycalendar:String
   birthday:DateTime
+  birthplace:Location
   birthProvince:Province
   birthCity:City
   birthArea:Area
@@ -45,6 +46,22 @@ type User {
   updatedAt: DateTime!
   regStatus:RegStatus
   families:[Family!]!
+  studies:[SchoolEdu!]!
+  works:[CompanyJob!]!
+  lifes:[Live!]!
+}
+
+type Location {
+  id: ID! @unique
+  province:Province
+  city:City
+  area:Area
+  street:Street
+  village:Village
+  schools:[School!]!
+  companies:[Company!]!
+  universities:[University!]!
+  people:[User!]!
 }
 
 type Person {
@@ -52,6 +69,85 @@ type Person {
   name:String!
   user:User @unique
   families:[Family!]!
+}
+
+type Live {
+  id: ID! @unique
+  startTime:DateTime!
+  endTime:DateTime
+  location:Location
+  title:String
+  description:String
+  user:User
+}
+
+type CompanyJob {
+  id: ID! @unique
+  company:Company
+  startTime:DateTime
+  department:String
+  post:String
+  jobContent:String
+  workers:[User!]!
+}
+
+type Company{
+  id: ID! @unique
+  name:String
+  code:String
+  establishmentDate:DateTime
+  representative:String
+  location:Location
+  BusinessScope:String
+}
+
+enum Educationkind {
+  PrimarySchool, #初等教育-小学
+  JuniorMiddleSchool,#中等教育-初中
+  HighSchool, #中等教育-高中
+  VocationalHighSchool, #中等教育-职业中学教育
+  TechnicalSchool, #中等教育-技工学校教育
+  SecondarySpecializedSchool, #中等教育-中等专业教育
+  JuniorCollege,#普通高等教育-大专
+  Undergraduate,#普通高等教育-本科
+  Master,#普通高等教育-硕士研究生
+  Doctor,#普通高等教育-博士研究生
+  JuniorToCollege ,#成人高等教育-专科起点本科
+  HighToCollege,#成人高等教育-高中起点升本科
+  HighToJunior,#成人高等教育-高中起点升专科
+}
+
+# 学校
+type School {
+  id: ID! @unique
+  name:String
+  kind:Educationkind
+  location:Location
+}
+# 学校开设的课程
+type SchoolEdu{
+  id: ID! @unique
+  school:School
+  startTime:DateTime
+  major:Major
+  grade:Int
+  className:String
+  students:[User!]!
+}
+
+type Major {
+  id: ID! @unique
+  name: String!
+  category:String!
+  education:Educationkind!
+  universities:[University!]!
+}
+
+type University {
+  id: ID! @unique
+  name: String! @unique
+  location:Location
+  major:[Major!]!
 }
 
 type Family {
@@ -104,27 +200,6 @@ type Village {
   name:String!
   street:Street!
   people:[User!]!
-}
-
-type Education {
-  id:ID! @unique
-  name:String! @unique
-}
-
-type Major {
-  id: ID! @unique
-  name: String!
-  category:String!
-  education:Education!
-  code:String
-}
-
-type University {
-  id: ID! @unique
-  name: String! @unique
-  education:Education!
-  identifier:String! @unique
-  city:City!
 }
 
 type RegStatus {

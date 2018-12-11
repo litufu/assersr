@@ -6,6 +6,15 @@ const getBasicInfoData=(name,gender,birthday,birthplace)=>{
       gender,
       birthdaycalendar:birthday.calendar,
       birthday:birthday.date,
+      birthplace:{
+        create:{
+          province:{connect:{code:birthplace.province}},
+          city:{connect:{code:birthplace.city}},
+          area:{connect:{code:birthplace.area}},
+          street:{connect:{code:birthplace.street}},
+          village:{connect:{code:birthplace.village}},
+        }
+      },
       birthProvince:{connect:{code:birthplace.province}} ,
       birthCity:{connect:{code:birthplace.city}},
       birthArea:{connect:{code:birthplace.area}},
@@ -18,6 +27,14 @@ const getBasicInfoData=(name,gender,birthday,birthplace)=>{
       gender,
       birthdaycalendar:birthday.calendar,
       birthday:birthday.date,
+      birthplace:{
+        create:{
+          province:{connect:{code:birthplace.province}},
+          city:{connect:{code:birthplace.city}},
+          area:{connect:{code:birthplace.area}},
+          street:{connect:{code:birthplace.street}},
+        }
+      },
       birthProvince:{connect:{code:birthplace.province}} ,
       birthCity:{connect:{code:birthplace.city}},
       birthArea:{connect:{code:birthplace.area}},
@@ -29,6 +46,13 @@ const getBasicInfoData=(name,gender,birthday,birthplace)=>{
       gender,
       birthdaycalendar:birthday.calendar,
       birthday:birthday.date,
+      birthplace:{
+        create:{
+          province:{connect:{code:birthplace.province}},
+          city:{connect:{code:birthplace.city}},
+          area:{connect:{code:birthplace.area}},
+        }
+      },
       birthProvince:{connect:{code:birthplace.province}} ,
       birthCity:{connect:{code:birthplace.city}},
       birthArea:{connect:{code:birthplace.area}},
@@ -39,6 +63,12 @@ const getBasicInfoData=(name,gender,birthday,birthplace)=>{
       gender,
       birthdaycalendar:birthday.calendar,
       birthday:birthday.date,
+      birthplace:{
+        create:{
+          province:{connect:{code:birthplace.province}},
+          city:{connect:{code:birthplace.city}},
+        }
+      },
       birthProvince:{connect:{code:birthplace.province}} ,
       birthCity:{connect:{code:birthplace.city}},
     }
@@ -48,6 +78,11 @@ const getBasicInfoData=(name,gender,birthday,birthplace)=>{
       gender,
       birthdaycalendar:birthday.calendar,
       birthday:birthday.date,
+      birthplace:{
+        create:{
+          province:{connect:{code:birthplace.province}},
+        }
+      },
       birthProvince:{connect:{code:birthplace.province}} ,
     }
   }else{

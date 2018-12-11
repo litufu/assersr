@@ -3,9 +3,13 @@ export const User = {
   name:(parent, args, ctx) => ctx.db.user({ id: parent.id }).name(),
   posts: (parent, args, ctx) => ctx.db.user({ id: parent.id }).posts(),
   birthday: (parent, args, ctx) => ctx.db.user({ id: parent.id }).birthday(),
+  birthplace: (parent, args, ctx) => ctx.db.user({ id: parent.id }).birthplace(),
   birthProvince: (parent, args, ctx) => ctx.db.user({ id: parent.id }).birthProvince(),
   birthCity: (parent, args, ctx) => ctx.db.user({ id: parent.id }).birthCity(),
   birthArea: (parent, args, ctx) => ctx.db.user({ id: parent.id }).birthArea(),
   birthStreet: (parent, args, ctx) => ctx.db.user({ id: parent.id }).birthStreet(),
   birthVillage: (parent, args, ctx) => ctx.db.user({ id: parent.id }).birthVillage(),
+  studies: (parent, args, ctx) => ctx.db.user({ id: parent.id }).studies(),
+  works: (parent, args, ctx) => ctx.db.user({ id: parent.id }).works(),
+  lifes: (parent, args, ctx) => ctx.db.user({ id: parent.id }).lifes(),
 }

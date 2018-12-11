@@ -17,11 +17,27 @@ var models = [
     embedded: false
   },
   {
-    name: "Education",
+    name: "Company",
+    embedded: false
+  },
+  {
+    name: "CompanyJob",
+    embedded: false
+  },
+  {
+    name: "Educationkind",
     embedded: false
   },
   {
     name: "Family",
+    embedded: false
+  },
+  {
+    name: "Live",
+    embedded: false
+  },
+  {
+    name: "Location",
     embedded: false
   },
   {
@@ -42,6 +58,14 @@ var models = [
   },
   {
     name: "RegStatus",
+    embedded: false
+  },
+  {
+    name: "School",
+    embedded: false
+  },
+  {
+    name: "SchoolEdu",
     embedded: false
   },
   {
