@@ -23,10 +23,6 @@ type AggregateFamily {
   count: Int!
 }
 
-type AggregateLive {
-  count: Int!
-}
-
 type AggregateLocation {
   count: Int!
 }
@@ -85,7 +81,6 @@ type Area {
   name: String!
   city: City!
   towns(where: StreetWhereInput, orderBy: StreetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Street!]
-  people(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
 
 type AreaConnection {
@@ -99,7 +94,6 @@ input AreaCreateInput {
   name: String!
   city: CityCreateOneWithoutAreasInput!
   towns: StreetCreateManyWithoutAreaInput
-  people: UserCreateManyWithoutBirthAreaInput
 }
 
 input AreaCreateManyWithoutCityInput {
@@ -112,11 +106,6 @@ input AreaCreateOneInput {
   connect: AreaWhereUniqueInput
 }
 
-input AreaCreateOneWithoutPeopleInput {
-  create: AreaCreateWithoutPeopleInput
-  connect: AreaWhereUniqueInput
-}
-
 input AreaCreateOneWithoutTownsInput {
   create: AreaCreateWithoutTownsInput
   connect: AreaWhereUniqueInput
@@ -126,21 +115,12 @@ input AreaCreateWithoutCityInput {
   code: String!
   name: String!
   towns: StreetCreateManyWithoutAreaInput
-  people: UserCreateManyWithoutBirthAreaInput
-}
-
-input AreaCreateWithoutPeopleInput {
-  code: String!
-  name: String!
-  city: CityCreateOneWithoutAreasInput!
-  towns: StreetCreateManyWithoutAreaInput
 }
 
 input AreaCreateWithoutTownsInput {
   code: String!
   name: String!
   city: CityCreateOneWithoutAreasInput!
-  people: UserCreateManyWithoutBirthAreaInput
 }
 
 type AreaEdge {
@@ -190,7 +170,6 @@ input AreaUpdateDataInput {
   name: String
   city: CityUpdateOneRequiredWithoutAreasInput
   towns: StreetUpdateManyWithoutAreaInput
-  people: UserUpdateManyWithoutBirthAreaInput
 }
 
 input AreaUpdateInput {
@@ -198,7 +177,6 @@ input AreaUpdateInput {
   name: String
   city: CityUpdateOneRequiredWithoutAreasInput
   towns: StreetUpdateManyWithoutAreaInput
-  people: UserUpdateManyWithoutBirthAreaInput
 }
 
 input AreaUpdateManyMutationInput {
@@ -231,26 +209,9 @@ input AreaUpdateOneRequiredWithoutTownsInput {
   connect: AreaWhereUniqueInput
 }
 
-input AreaUpdateOneWithoutPeopleInput {
-  create: AreaCreateWithoutPeopleInput
-  update: AreaUpdateWithoutPeopleDataInput
-  upsert: AreaUpsertWithoutPeopleInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: AreaWhereUniqueInput
-}
-
 input AreaUpdateWithoutCityDataInput {
   code: String
   name: String
-  towns: StreetUpdateManyWithoutAreaInput
-  people: UserUpdateManyWithoutBirthAreaInput
-}
-
-input AreaUpdateWithoutPeopleDataInput {
-  code: String
-  name: String
-  city: CityUpdateOneRequiredWithoutAreasInput
   towns: StreetUpdateManyWithoutAreaInput
 }
 
@@ -258,7 +219,6 @@ input AreaUpdateWithoutTownsDataInput {
   code: String
   name: String
   city: CityUpdateOneRequiredWithoutAreasInput
-  people: UserUpdateManyWithoutBirthAreaInput
 }
 
 input AreaUpdateWithWhereUniqueWithoutCityInput {
@@ -269,11 +229,6 @@ input AreaUpdateWithWhereUniqueWithoutCityInput {
 input AreaUpsertNestedInput {
   update: AreaUpdateDataInput!
   create: AreaCreateInput!
-}
-
-input AreaUpsertWithoutPeopleInput {
-  update: AreaUpdateWithoutPeopleDataInput!
-  create: AreaCreateWithoutPeopleInput!
 }
 
 input AreaUpsertWithoutTownsInput {
@@ -334,9 +289,6 @@ input AreaWhereInput {
   towns_every: StreetWhereInput
   towns_some: StreetWhereInput
   towns_none: StreetWhereInput
-  people_every: UserWhereInput
-  people_some: UserWhereInput
-  people_none: UserWhereInput
   AND: [AreaWhereInput!]
   OR: [AreaWhereInput!]
   NOT: [AreaWhereInput!]
@@ -357,7 +309,6 @@ type City {
   name: String!
   province: Province!
   areas(where: AreaWhereInput, orderBy: AreaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Area!]
-  people(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
 
 type CityConnection {
@@ -371,7 +322,6 @@ input CityCreateInput {
   name: String!
   province: ProvinceCreateOneWithoutCitiesInput!
   areas: AreaCreateManyWithoutCityInput
-  people: UserCreateManyWithoutBirthCityInput
 }
 
 input CityCreateManyWithoutProvinceInput {
@@ -389,30 +339,16 @@ input CityCreateOneWithoutAreasInput {
   connect: CityWhereUniqueInput
 }
 
-input CityCreateOneWithoutPeopleInput {
-  create: CityCreateWithoutPeopleInput
-  connect: CityWhereUniqueInput
-}
-
 input CityCreateWithoutAreasInput {
   code: String!
   name: String!
   province: ProvinceCreateOneWithoutCitiesInput!
-  people: UserCreateManyWithoutBirthCityInput
-}
-
-input CityCreateWithoutPeopleInput {
-  code: String!
-  name: String!
-  province: ProvinceCreateOneWithoutCitiesInput!
-  areas: AreaCreateManyWithoutCityInput
 }
 
 input CityCreateWithoutProvinceInput {
   code: String!
   name: String!
   areas: AreaCreateManyWithoutCityInput
-  people: UserCreateManyWithoutBirthCityInput
 }
 
 type CityEdge {
@@ -462,7 +398,6 @@ input CityUpdateDataInput {
   name: String
   province: ProvinceUpdateOneRequiredWithoutCitiesInput
   areas: AreaUpdateManyWithoutCityInput
-  people: UserUpdateManyWithoutBirthCityInput
 }
 
 input CityUpdateInput {
@@ -470,7 +405,6 @@ input CityUpdateInput {
   name: String
   province: ProvinceUpdateOneRequiredWithoutCitiesInput
   areas: AreaUpdateManyWithoutCityInput
-  people: UserUpdateManyWithoutBirthCityInput
 }
 
 input CityUpdateManyMutationInput {
@@ -503,34 +437,16 @@ input CityUpdateOneRequiredWithoutAreasInput {
   connect: CityWhereUniqueInput
 }
 
-input CityUpdateOneWithoutPeopleInput {
-  create: CityCreateWithoutPeopleInput
-  update: CityUpdateWithoutPeopleDataInput
-  upsert: CityUpsertWithoutPeopleInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: CityWhereUniqueInput
-}
-
 input CityUpdateWithoutAreasDataInput {
   code: String
   name: String
   province: ProvinceUpdateOneRequiredWithoutCitiesInput
-  people: UserUpdateManyWithoutBirthCityInput
-}
-
-input CityUpdateWithoutPeopleDataInput {
-  code: String
-  name: String
-  province: ProvinceUpdateOneRequiredWithoutCitiesInput
-  areas: AreaUpdateManyWithoutCityInput
 }
 
 input CityUpdateWithoutProvinceDataInput {
   code: String
   name: String
   areas: AreaUpdateManyWithoutCityInput
-  people: UserUpdateManyWithoutBirthCityInput
 }
 
 input CityUpdateWithWhereUniqueWithoutProvinceInput {
@@ -546,11 +462,6 @@ input CityUpsertNestedInput {
 input CityUpsertWithoutAreasInput {
   update: CityUpdateWithoutAreasDataInput!
   create: CityCreateWithoutAreasInput!
-}
-
-input CityUpsertWithoutPeopleInput {
-  update: CityUpdateWithoutPeopleDataInput!
-  create: CityCreateWithoutPeopleInput!
 }
 
 input CityUpsertWithWhereUniqueWithoutProvinceInput {
@@ -606,9 +517,6 @@ input CityWhereInput {
   areas_every: AreaWhereInput
   areas_some: AreaWhereInput
   areas_none: AreaWhereInput
-  people_every: UserWhereInput
-  people_some: UserWhereInput
-  people_none: UserWhereInput
   AND: [CityWhereInput!]
   OR: [CityWhereInput!]
   NOT: [CityWhereInput!]
@@ -1476,208 +1384,9 @@ input FamilyWhereUniqueInput {
   id: ID
 }
 
-type Live {
-  id: ID!
-  startTime: DateTime!
-  endTime: DateTime
-  location: Location
-  title: String
-  description: String
-  user: User
-}
-
-type LiveConnection {
-  pageInfo: PageInfo!
-  edges: [LiveEdge]!
-  aggregate: AggregateLive!
-}
-
-input LiveCreateInput {
-  startTime: DateTime!
-  endTime: DateTime
-  location: LocationCreateOneInput
-  title: String
-  description: String
-  user: UserCreateOneWithoutLifesInput
-}
-
-input LiveCreateManyWithoutUserInput {
-  create: [LiveCreateWithoutUserInput!]
-  connect: [LiveWhereUniqueInput!]
-}
-
-input LiveCreateWithoutUserInput {
-  startTime: DateTime!
-  endTime: DateTime
-  location: LocationCreateOneInput
-  title: String
-  description: String
-}
-
-type LiveEdge {
-  node: Live!
-  cursor: String!
-}
-
-enum LiveOrderByInput {
-  id_ASC
-  id_DESC
-  startTime_ASC
-  startTime_DESC
-  endTime_ASC
-  endTime_DESC
-  title_ASC
-  title_DESC
-  description_ASC
-  description_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type LivePreviousValues {
-  id: ID!
-  startTime: DateTime!
-  endTime: DateTime
-  title: String
-  description: String
-}
-
-type LiveSubscriptionPayload {
-  mutation: MutationType!
-  node: Live
-  updatedFields: [String!]
-  previousValues: LivePreviousValues
-}
-
-input LiveSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: LiveWhereInput
-  AND: [LiveSubscriptionWhereInput!]
-  OR: [LiveSubscriptionWhereInput!]
-  NOT: [LiveSubscriptionWhereInput!]
-}
-
-input LiveUpdateInput {
-  startTime: DateTime
-  endTime: DateTime
-  location: LocationUpdateOneInput
-  title: String
-  description: String
-  user: UserUpdateOneWithoutLifesInput
-}
-
-input LiveUpdateManyMutationInput {
-  startTime: DateTime
-  endTime: DateTime
-  title: String
-  description: String
-}
-
-input LiveUpdateManyWithoutUserInput {
-  create: [LiveCreateWithoutUserInput!]
-  delete: [LiveWhereUniqueInput!]
-  connect: [LiveWhereUniqueInput!]
-  disconnect: [LiveWhereUniqueInput!]
-  update: [LiveUpdateWithWhereUniqueWithoutUserInput!]
-  upsert: [LiveUpsertWithWhereUniqueWithoutUserInput!]
-}
-
-input LiveUpdateWithoutUserDataInput {
-  startTime: DateTime
-  endTime: DateTime
-  location: LocationUpdateOneInput
-  title: String
-  description: String
-}
-
-input LiveUpdateWithWhereUniqueWithoutUserInput {
-  where: LiveWhereUniqueInput!
-  data: LiveUpdateWithoutUserDataInput!
-}
-
-input LiveUpsertWithWhereUniqueWithoutUserInput {
-  where: LiveWhereUniqueInput!
-  update: LiveUpdateWithoutUserDataInput!
-  create: LiveCreateWithoutUserInput!
-}
-
-input LiveWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  startTime: DateTime
-  startTime_not: DateTime
-  startTime_in: [DateTime!]
-  startTime_not_in: [DateTime!]
-  startTime_lt: DateTime
-  startTime_lte: DateTime
-  startTime_gt: DateTime
-  startTime_gte: DateTime
-  endTime: DateTime
-  endTime_not: DateTime
-  endTime_in: [DateTime!]
-  endTime_not_in: [DateTime!]
-  endTime_lt: DateTime
-  endTime_lte: DateTime
-  endTime_gt: DateTime
-  endTime_gte: DateTime
-  location: LocationWhereInput
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
-  description: String
-  description_not: String
-  description_in: [String!]
-  description_not_in: [String!]
-  description_lt: String
-  description_lte: String
-  description_gt: String
-  description_gte: String
-  description_contains: String
-  description_not_contains: String
-  description_starts_with: String
-  description_not_starts_with: String
-  description_ends_with: String
-  description_not_ends_with: String
-  user: UserWhereInput
-  AND: [LiveWhereInput!]
-  OR: [LiveWhereInput!]
-  NOT: [LiveWhereInput!]
-}
-
-input LiveWhereUniqueInput {
-  id: ID
-}
-
 type Location {
   id: ID!
+  name: String
   province: Province
   city: City
   area: Area
@@ -1696,6 +1405,7 @@ type LocationConnection {
 }
 
 input LocationCreateInput {
+  name: String
   province: ProvinceCreateOneInput
   city: CityCreateOneInput
   area: AreaCreateOneInput
@@ -1705,11 +1415,6 @@ input LocationCreateInput {
   companies: CompanyCreateManyWithoutLocationInput
   universities: UniversityCreateManyWithoutLocationInput
   people: UserCreateManyWithoutBirthplaceInput
-}
-
-input LocationCreateOneInput {
-  create: LocationCreateInput
-  connect: LocationWhereUniqueInput
 }
 
 input LocationCreateOneWithoutCompaniesInput {
@@ -1733,6 +1438,7 @@ input LocationCreateOneWithoutUniversitiesInput {
 }
 
 input LocationCreateWithoutCompaniesInput {
+  name: String
   province: ProvinceCreateOneInput
   city: CityCreateOneInput
   area: AreaCreateOneInput
@@ -1744,6 +1450,7 @@ input LocationCreateWithoutCompaniesInput {
 }
 
 input LocationCreateWithoutPeopleInput {
+  name: String
   province: ProvinceCreateOneInput
   city: CityCreateOneInput
   area: AreaCreateOneInput
@@ -1755,6 +1462,7 @@ input LocationCreateWithoutPeopleInput {
 }
 
 input LocationCreateWithoutSchoolsInput {
+  name: String
   province: ProvinceCreateOneInput
   city: CityCreateOneInput
   area: AreaCreateOneInput
@@ -1766,6 +1474,7 @@ input LocationCreateWithoutSchoolsInput {
 }
 
 input LocationCreateWithoutUniversitiesInput {
+  name: String
   province: ProvinceCreateOneInput
   city: CityCreateOneInput
   area: AreaCreateOneInput
@@ -1784,6 +1493,8 @@ type LocationEdge {
 enum LocationOrderByInput {
   id_ASC
   id_DESC
+  name_ASC
+  name_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1792,6 +1503,7 @@ enum LocationOrderByInput {
 
 type LocationPreviousValues {
   id: ID!
+  name: String
 }
 
 type LocationSubscriptionPayload {
@@ -1812,19 +1524,8 @@ input LocationSubscriptionWhereInput {
   NOT: [LocationSubscriptionWhereInput!]
 }
 
-input LocationUpdateDataInput {
-  province: ProvinceUpdateOneInput
-  city: CityUpdateOneInput
-  area: AreaUpdateOneInput
-  street: StreetUpdateOneInput
-  village: VillageUpdateOneInput
-  schools: SchoolUpdateManyWithoutLocationInput
-  companies: CompanyUpdateManyWithoutLocationInput
-  universities: UniversityUpdateManyWithoutLocationInput
-  people: UserUpdateManyWithoutBirthplaceInput
-}
-
 input LocationUpdateInput {
+  name: String
   province: ProvinceUpdateOneInput
   city: CityUpdateOneInput
   area: AreaUpdateOneInput
@@ -1836,13 +1537,8 @@ input LocationUpdateInput {
   people: UserUpdateManyWithoutBirthplaceInput
 }
 
-input LocationUpdateOneInput {
-  create: LocationCreateInput
-  update: LocationUpdateDataInput
-  upsert: LocationUpsertNestedInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: LocationWhereUniqueInput
+input LocationUpdateManyMutationInput {
+  name: String
 }
 
 input LocationUpdateOneWithoutCompaniesInput {
@@ -1882,6 +1578,7 @@ input LocationUpdateOneWithoutUniversitiesInput {
 }
 
 input LocationUpdateWithoutCompaniesDataInput {
+  name: String
   province: ProvinceUpdateOneInput
   city: CityUpdateOneInput
   area: AreaUpdateOneInput
@@ -1893,6 +1590,7 @@ input LocationUpdateWithoutCompaniesDataInput {
 }
 
 input LocationUpdateWithoutPeopleDataInput {
+  name: String
   province: ProvinceUpdateOneInput
   city: CityUpdateOneInput
   area: AreaUpdateOneInput
@@ -1904,6 +1602,7 @@ input LocationUpdateWithoutPeopleDataInput {
 }
 
 input LocationUpdateWithoutSchoolsDataInput {
+  name: String
   province: ProvinceUpdateOneInput
   city: CityUpdateOneInput
   area: AreaUpdateOneInput
@@ -1915,6 +1614,7 @@ input LocationUpdateWithoutSchoolsDataInput {
 }
 
 input LocationUpdateWithoutUniversitiesDataInput {
+  name: String
   province: ProvinceUpdateOneInput
   city: CityUpdateOneInput
   area: AreaUpdateOneInput
@@ -1923,11 +1623,6 @@ input LocationUpdateWithoutUniversitiesDataInput {
   schools: SchoolUpdateManyWithoutLocationInput
   companies: CompanyUpdateManyWithoutLocationInput
   people: UserUpdateManyWithoutBirthplaceInput
-}
-
-input LocationUpsertNestedInput {
-  update: LocationUpdateDataInput!
-  create: LocationCreateInput!
 }
 
 input LocationUpsertWithoutCompaniesInput {
@@ -1965,6 +1660,20 @@ input LocationWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
   province: ProvinceWhereInput
   city: CityWhereInput
   area: AreaWhereInput
@@ -1989,6 +1698,7 @@ input LocationWhereInput {
 
 input LocationWhereUniqueInput {
   id: ID
+  name: String
 }
 
 scalar Long
@@ -2238,14 +1948,9 @@ type Mutation {
   upsertFamily(where: FamilyWhereUniqueInput!, create: FamilyCreateInput!, update: FamilyUpdateInput!): Family!
   deleteFamily(where: FamilyWhereUniqueInput!): Family
   deleteManyFamilies(where: FamilyWhereInput): BatchPayload!
-  createLive(data: LiveCreateInput!): Live!
-  updateLive(data: LiveUpdateInput!, where: LiveWhereUniqueInput!): Live
-  updateManyLives(data: LiveUpdateManyMutationInput!, where: LiveWhereInput): BatchPayload!
-  upsertLive(where: LiveWhereUniqueInput!, create: LiveCreateInput!, update: LiveUpdateInput!): Live!
-  deleteLive(where: LiveWhereUniqueInput!): Live
-  deleteManyLives(where: LiveWhereInput): BatchPayload!
   createLocation(data: LocationCreateInput!): Location!
   updateLocation(data: LocationUpdateInput!, where: LocationWhereUniqueInput!): Location
+  updateManyLocations(data: LocationUpdateManyMutationInput!, where: LocationWhereInput): BatchPayload!
   upsertLocation(where: LocationWhereUniqueInput!, create: LocationCreateInput!, update: LocationUpdateInput!): Location!
   deleteLocation(where: LocationWhereUniqueInput!): Location
   deleteManyLocations(where: LocationWhereInput): BatchPayload!
@@ -2672,7 +2377,6 @@ type Province {
   code: String!
   name: String!
   cities(where: CityWhereInput, orderBy: CityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [City!]
-  people(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
 
 type ProvinceConnection {
@@ -2685,7 +2389,6 @@ input ProvinceCreateInput {
   code: String!
   name: String!
   cities: CityCreateManyWithoutProvinceInput
-  people: UserCreateManyWithoutBirthProvinceInput
 }
 
 input ProvinceCreateOneInput {
@@ -2698,21 +2401,9 @@ input ProvinceCreateOneWithoutCitiesInput {
   connect: ProvinceWhereUniqueInput
 }
 
-input ProvinceCreateOneWithoutPeopleInput {
-  create: ProvinceCreateWithoutPeopleInput
-  connect: ProvinceWhereUniqueInput
-}
-
 input ProvinceCreateWithoutCitiesInput {
   code: String!
   name: String!
-  people: UserCreateManyWithoutBirthProvinceInput
-}
-
-input ProvinceCreateWithoutPeopleInput {
-  code: String!
-  name: String!
-  cities: CityCreateManyWithoutProvinceInput
 }
 
 type ProvinceEdge {
@@ -2761,14 +2452,12 @@ input ProvinceUpdateDataInput {
   code: String
   name: String
   cities: CityUpdateManyWithoutProvinceInput
-  people: UserUpdateManyWithoutBirthProvinceInput
 }
 
 input ProvinceUpdateInput {
   code: String
   name: String
   cities: CityUpdateManyWithoutProvinceInput
-  people: UserUpdateManyWithoutBirthProvinceInput
 }
 
 input ProvinceUpdateManyMutationInput {
@@ -2799,25 +2488,9 @@ input ProvinceUpdateOneRequiredWithoutCitiesInput {
   connect: ProvinceWhereUniqueInput
 }
 
-input ProvinceUpdateOneWithoutPeopleInput {
-  create: ProvinceCreateWithoutPeopleInput
-  update: ProvinceUpdateWithoutPeopleDataInput
-  upsert: ProvinceUpsertWithoutPeopleInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: ProvinceWhereUniqueInput
-}
-
 input ProvinceUpdateWithoutCitiesDataInput {
   code: String
   name: String
-  people: UserUpdateManyWithoutBirthProvinceInput
-}
-
-input ProvinceUpdateWithoutPeopleDataInput {
-  code: String
-  name: String
-  cities: CityUpdateManyWithoutProvinceInput
 }
 
 input ProvinceUpsertNestedInput {
@@ -2828,11 +2501,6 @@ input ProvinceUpsertNestedInput {
 input ProvinceUpsertWithoutCitiesInput {
   update: ProvinceUpdateWithoutCitiesDataInput!
   create: ProvinceCreateWithoutCitiesInput!
-}
-
-input ProvinceUpsertWithoutPeopleInput {
-  update: ProvinceUpdateWithoutPeopleDataInput!
-  create: ProvinceCreateWithoutPeopleInput!
 }
 
 input ProvinceWhereInput {
@@ -2881,9 +2549,6 @@ input ProvinceWhereInput {
   cities_every: CityWhereInput
   cities_some: CityWhereInput
   cities_none: CityWhereInput
-  people_every: UserWhereInput
-  people_some: UserWhereInput
-  people_none: UserWhereInput
   AND: [ProvinceWhereInput!]
   OR: [ProvinceWhereInput!]
   NOT: [ProvinceWhereInput!]
@@ -2914,9 +2579,6 @@ type Query {
   family(where: FamilyWhereUniqueInput!): Family
   families(where: FamilyWhereInput, orderBy: FamilyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Family]!
   familiesConnection(where: FamilyWhereInput, orderBy: FamilyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FamilyConnection!
-  live(where: LiveWhereUniqueInput!): Live
-  lives(where: LiveWhereInput, orderBy: LiveOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Live]!
-  livesConnection(where: LiveWhereInput, orderBy: LiveOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LiveConnection!
   location(where: LocationWhereUniqueInput!): Location
   locations(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Location]!
   locationsConnection(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LocationConnection!
@@ -3444,7 +3106,6 @@ type Street {
   name: String!
   Area: Area!
   villages(where: VillageWhereInput, orderBy: VillageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Village!]
-  people(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
 
 type StreetConnection {
@@ -3458,7 +3119,6 @@ input StreetCreateInput {
   name: String!
   Area: AreaCreateOneWithoutTownsInput!
   villages: VillageCreateManyWithoutStreetInput
-  people: UserCreateManyWithoutBirthStreetInput
 }
 
 input StreetCreateManyWithoutAreaInput {
@@ -3471,11 +3131,6 @@ input StreetCreateOneInput {
   connect: StreetWhereUniqueInput
 }
 
-input StreetCreateOneWithoutPeopleInput {
-  create: StreetCreateWithoutPeopleInput
-  connect: StreetWhereUniqueInput
-}
-
 input StreetCreateOneWithoutVillagesInput {
   create: StreetCreateWithoutVillagesInput
   connect: StreetWhereUniqueInput
@@ -3485,21 +3140,12 @@ input StreetCreateWithoutAreaInput {
   code: String!
   name: String!
   villages: VillageCreateManyWithoutStreetInput
-  people: UserCreateManyWithoutBirthStreetInput
-}
-
-input StreetCreateWithoutPeopleInput {
-  code: String!
-  name: String!
-  Area: AreaCreateOneWithoutTownsInput!
-  villages: VillageCreateManyWithoutStreetInput
 }
 
 input StreetCreateWithoutVillagesInput {
   code: String!
   name: String!
   Area: AreaCreateOneWithoutTownsInput!
-  people: UserCreateManyWithoutBirthStreetInput
 }
 
 type StreetEdge {
@@ -3549,7 +3195,6 @@ input StreetUpdateDataInput {
   name: String
   Area: AreaUpdateOneRequiredWithoutTownsInput
   villages: VillageUpdateManyWithoutStreetInput
-  people: UserUpdateManyWithoutBirthStreetInput
 }
 
 input StreetUpdateInput {
@@ -3557,7 +3202,6 @@ input StreetUpdateInput {
   name: String
   Area: AreaUpdateOneRequiredWithoutTownsInput
   villages: VillageUpdateManyWithoutStreetInput
-  people: UserUpdateManyWithoutBirthStreetInput
 }
 
 input StreetUpdateManyMutationInput {
@@ -3590,26 +3234,9 @@ input StreetUpdateOneRequiredWithoutVillagesInput {
   connect: StreetWhereUniqueInput
 }
 
-input StreetUpdateOneWithoutPeopleInput {
-  create: StreetCreateWithoutPeopleInput
-  update: StreetUpdateWithoutPeopleDataInput
-  upsert: StreetUpsertWithoutPeopleInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: StreetWhereUniqueInput
-}
-
 input StreetUpdateWithoutAreaDataInput {
   code: String
   name: String
-  villages: VillageUpdateManyWithoutStreetInput
-  people: UserUpdateManyWithoutBirthStreetInput
-}
-
-input StreetUpdateWithoutPeopleDataInput {
-  code: String
-  name: String
-  Area: AreaUpdateOneRequiredWithoutTownsInput
   villages: VillageUpdateManyWithoutStreetInput
 }
 
@@ -3617,7 +3244,6 @@ input StreetUpdateWithoutVillagesDataInput {
   code: String
   name: String
   Area: AreaUpdateOneRequiredWithoutTownsInput
-  people: UserUpdateManyWithoutBirthStreetInput
 }
 
 input StreetUpdateWithWhereUniqueWithoutAreaInput {
@@ -3628,11 +3254,6 @@ input StreetUpdateWithWhereUniqueWithoutAreaInput {
 input StreetUpsertNestedInput {
   update: StreetUpdateDataInput!
   create: StreetCreateInput!
-}
-
-input StreetUpsertWithoutPeopleInput {
-  update: StreetUpdateWithoutPeopleDataInput!
-  create: StreetCreateWithoutPeopleInput!
 }
 
 input StreetUpsertWithoutVillagesInput {
@@ -3693,9 +3314,6 @@ input StreetWhereInput {
   villages_every: VillageWhereInput
   villages_some: VillageWhereInput
   villages_none: VillageWhereInput
-  people_every: UserWhereInput
-  people_some: UserWhereInput
-  people_none: UserWhereInput
   AND: [StreetWhereInput!]
   OR: [StreetWhereInput!]
   NOT: [StreetWhereInput!]
@@ -3834,7 +3452,6 @@ type Subscription {
   company(where: CompanySubscriptionWhereInput): CompanySubscriptionPayload
   companyJob(where: CompanyJobSubscriptionWhereInput): CompanyJobSubscriptionPayload
   family(where: FamilySubscriptionWhereInput): FamilySubscriptionPayload
-  live(where: LiveSubscriptionWhereInput): LiveSubscriptionPayload
   location(where: LocationSubscriptionWhereInput): LocationSubscriptionPayload
   major(where: MajorSubscriptionWhereInput): MajorSubscriptionPayload
   person(where: PersonSubscriptionWhereInput): PersonSubscriptionPayload
@@ -4066,11 +3683,6 @@ type User {
   birthdaycalendar: String
   birthday: DateTime
   birthplace: Location
-  birthProvince: Province
-  birthCity: City
-  birthArea: Area
-  birthStreet: Street
-  birthVillage: Village
   uid: String!
   token: String!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
@@ -4080,7 +3692,6 @@ type User {
   families(where: FamilyWhereInput, orderBy: FamilyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Family!]
   studies(where: SchoolEduWhereInput, orderBy: SchoolEduOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SchoolEdu!]
   works(where: CompanyJobWhereInput, orderBy: CompanyJobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CompanyJob!]
-  lifes(where: LiveWhereInput, orderBy: LiveOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Live!]
 }
 
 type UserConnection {
@@ -4098,11 +3709,6 @@ input UserCreateInput {
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutPeopleInput
-  birthProvince: ProvinceCreateOneWithoutPeopleInput
-  birthCity: CityCreateOneWithoutPeopleInput
-  birthArea: AreaCreateOneWithoutPeopleInput
-  birthStreet: StreetCreateOneWithoutPeopleInput
-  birthVillage: VillageCreateOneWithoutPeopleInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -4110,36 +3716,10 @@ input UserCreateInput {
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: CompanyJobCreateManyWithoutWorkersInput
-  lifes: LiveCreateManyWithoutUserInput
-}
-
-input UserCreateManyWithoutBirthAreaInput {
-  create: [UserCreateWithoutBirthAreaInput!]
-  connect: [UserWhereUniqueInput!]
-}
-
-input UserCreateManyWithoutBirthCityInput {
-  create: [UserCreateWithoutBirthCityInput!]
-  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateManyWithoutBirthplaceInput {
   create: [UserCreateWithoutBirthplaceInput!]
-  connect: [UserWhereUniqueInput!]
-}
-
-input UserCreateManyWithoutBirthProvinceInput {
-  create: [UserCreateWithoutBirthProvinceInput!]
-  connect: [UserWhereUniqueInput!]
-}
-
-input UserCreateManyWithoutBirthStreetInput {
-  create: [UserCreateWithoutBirthStreetInput!]
-  connect: [UserWhereUniqueInput!]
-}
-
-input UserCreateManyWithoutBirthVillageInput {
-  create: [UserCreateWithoutBirthVillageInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -4168,60 +3748,9 @@ input UserCreateOneWithoutFamiliesInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutLifesInput {
-  create: UserCreateWithoutLifesInput
-  connect: UserWhereUniqueInput
-}
-
 input UserCreateOneWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   connect: UserWhereUniqueInput
-}
-
-input UserCreateWithoutBirthAreaInput {
-  username: String!
-  password: String!
-  name: String
-  gender: String
-  avatar: String
-  birthdaycalendar: String
-  birthday: DateTime
-  birthplace: LocationCreateOneWithoutPeopleInput
-  birthProvince: ProvinceCreateOneWithoutPeopleInput
-  birthCity: CityCreateOneWithoutPeopleInput
-  birthStreet: StreetCreateOneWithoutPeopleInput
-  birthVillage: VillageCreateOneWithoutPeopleInput
-  uid: String!
-  token: String!
-  posts: PostCreateManyWithoutAuthorInput
-  regStatus: RegStatusCreateOneWithoutApplicantsInput
-  families: FamilyCreateManyWithoutFromInput
-  studies: SchoolEduCreateManyWithoutStudentsInput
-  works: CompanyJobCreateManyWithoutWorkersInput
-  lifes: LiveCreateManyWithoutUserInput
-}
-
-input UserCreateWithoutBirthCityInput {
-  username: String!
-  password: String!
-  name: String
-  gender: String
-  avatar: String
-  birthdaycalendar: String
-  birthday: DateTime
-  birthplace: LocationCreateOneWithoutPeopleInput
-  birthProvince: ProvinceCreateOneWithoutPeopleInput
-  birthArea: AreaCreateOneWithoutPeopleInput
-  birthStreet: StreetCreateOneWithoutPeopleInput
-  birthVillage: VillageCreateOneWithoutPeopleInput
-  uid: String!
-  token: String!
-  posts: PostCreateManyWithoutAuthorInput
-  regStatus: RegStatusCreateOneWithoutApplicantsInput
-  families: FamilyCreateManyWithoutFromInput
-  studies: SchoolEduCreateManyWithoutStudentsInput
-  works: CompanyJobCreateManyWithoutWorkersInput
-  lifes: LiveCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutBirthplaceInput {
@@ -4232,11 +3761,6 @@ input UserCreateWithoutBirthplaceInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthProvince: ProvinceCreateOneWithoutPeopleInput
-  birthCity: CityCreateOneWithoutPeopleInput
-  birthArea: AreaCreateOneWithoutPeopleInput
-  birthStreet: StreetCreateOneWithoutPeopleInput
-  birthVillage: VillageCreateOneWithoutPeopleInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -4244,76 +3768,6 @@ input UserCreateWithoutBirthplaceInput {
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: CompanyJobCreateManyWithoutWorkersInput
-  lifes: LiveCreateManyWithoutUserInput
-}
-
-input UserCreateWithoutBirthProvinceInput {
-  username: String!
-  password: String!
-  name: String
-  gender: String
-  avatar: String
-  birthdaycalendar: String
-  birthday: DateTime
-  birthplace: LocationCreateOneWithoutPeopleInput
-  birthCity: CityCreateOneWithoutPeopleInput
-  birthArea: AreaCreateOneWithoutPeopleInput
-  birthStreet: StreetCreateOneWithoutPeopleInput
-  birthVillage: VillageCreateOneWithoutPeopleInput
-  uid: String!
-  token: String!
-  posts: PostCreateManyWithoutAuthorInput
-  regStatus: RegStatusCreateOneWithoutApplicantsInput
-  families: FamilyCreateManyWithoutFromInput
-  studies: SchoolEduCreateManyWithoutStudentsInput
-  works: CompanyJobCreateManyWithoutWorkersInput
-  lifes: LiveCreateManyWithoutUserInput
-}
-
-input UserCreateWithoutBirthStreetInput {
-  username: String!
-  password: String!
-  name: String
-  gender: String
-  avatar: String
-  birthdaycalendar: String
-  birthday: DateTime
-  birthplace: LocationCreateOneWithoutPeopleInput
-  birthProvince: ProvinceCreateOneWithoutPeopleInput
-  birthCity: CityCreateOneWithoutPeopleInput
-  birthArea: AreaCreateOneWithoutPeopleInput
-  birthVillage: VillageCreateOneWithoutPeopleInput
-  uid: String!
-  token: String!
-  posts: PostCreateManyWithoutAuthorInput
-  regStatus: RegStatusCreateOneWithoutApplicantsInput
-  families: FamilyCreateManyWithoutFromInput
-  studies: SchoolEduCreateManyWithoutStudentsInput
-  works: CompanyJobCreateManyWithoutWorkersInput
-  lifes: LiveCreateManyWithoutUserInput
-}
-
-input UserCreateWithoutBirthVillageInput {
-  username: String!
-  password: String!
-  name: String
-  gender: String
-  avatar: String
-  birthdaycalendar: String
-  birthday: DateTime
-  birthplace: LocationCreateOneWithoutPeopleInput
-  birthProvince: ProvinceCreateOneWithoutPeopleInput
-  birthCity: CityCreateOneWithoutPeopleInput
-  birthArea: AreaCreateOneWithoutPeopleInput
-  birthStreet: StreetCreateOneWithoutPeopleInput
-  uid: String!
-  token: String!
-  posts: PostCreateManyWithoutAuthorInput
-  regStatus: RegStatusCreateOneWithoutApplicantsInput
-  families: FamilyCreateManyWithoutFromInput
-  studies: SchoolEduCreateManyWithoutStudentsInput
-  works: CompanyJobCreateManyWithoutWorkersInput
-  lifes: LiveCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutFamiliesInput {
@@ -4325,39 +3779,10 @@ input UserCreateWithoutFamiliesInput {
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutPeopleInput
-  birthProvince: ProvinceCreateOneWithoutPeopleInput
-  birthCity: CityCreateOneWithoutPeopleInput
-  birthArea: AreaCreateOneWithoutPeopleInput
-  birthStreet: StreetCreateOneWithoutPeopleInput
-  birthVillage: VillageCreateOneWithoutPeopleInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
-  studies: SchoolEduCreateManyWithoutStudentsInput
-  works: CompanyJobCreateManyWithoutWorkersInput
-  lifes: LiveCreateManyWithoutUserInput
-}
-
-input UserCreateWithoutLifesInput {
-  username: String!
-  password: String!
-  name: String
-  gender: String
-  avatar: String
-  birthdaycalendar: String
-  birthday: DateTime
-  birthplace: LocationCreateOneWithoutPeopleInput
-  birthProvince: ProvinceCreateOneWithoutPeopleInput
-  birthCity: CityCreateOneWithoutPeopleInput
-  birthArea: AreaCreateOneWithoutPeopleInput
-  birthStreet: StreetCreateOneWithoutPeopleInput
-  birthVillage: VillageCreateOneWithoutPeopleInput
-  uid: String!
-  token: String!
-  posts: PostCreateManyWithoutAuthorInput
-  regStatus: RegStatusCreateOneWithoutApplicantsInput
-  families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: CompanyJobCreateManyWithoutWorkersInput
 }
@@ -4371,18 +3796,12 @@ input UserCreateWithoutPostsInput {
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutPeopleInput
-  birthProvince: ProvinceCreateOneWithoutPeopleInput
-  birthCity: CityCreateOneWithoutPeopleInput
-  birthArea: AreaCreateOneWithoutPeopleInput
-  birthStreet: StreetCreateOneWithoutPeopleInput
-  birthVillage: VillageCreateOneWithoutPeopleInput
   uid: String!
   token: String!
   regStatus: RegStatusCreateOneWithoutApplicantsInput
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: CompanyJobCreateManyWithoutWorkersInput
-  lifes: LiveCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutRegStatusInput {
@@ -4394,18 +3813,12 @@ input UserCreateWithoutRegStatusInput {
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutPeopleInput
-  birthProvince: ProvinceCreateOneWithoutPeopleInput
-  birthCity: CityCreateOneWithoutPeopleInput
-  birthArea: AreaCreateOneWithoutPeopleInput
-  birthStreet: StreetCreateOneWithoutPeopleInput
-  birthVillage: VillageCreateOneWithoutPeopleInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: CompanyJobCreateManyWithoutWorkersInput
-  lifes: LiveCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutStudiesInput {
@@ -4417,18 +3830,12 @@ input UserCreateWithoutStudiesInput {
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutPeopleInput
-  birthProvince: ProvinceCreateOneWithoutPeopleInput
-  birthCity: CityCreateOneWithoutPeopleInput
-  birthArea: AreaCreateOneWithoutPeopleInput
-  birthStreet: StreetCreateOneWithoutPeopleInput
-  birthVillage: VillageCreateOneWithoutPeopleInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
   families: FamilyCreateManyWithoutFromInput
   works: CompanyJobCreateManyWithoutWorkersInput
-  lifes: LiveCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutWorksInput {
@@ -4440,18 +3847,12 @@ input UserCreateWithoutWorksInput {
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutPeopleInput
-  birthProvince: ProvinceCreateOneWithoutPeopleInput
-  birthCity: CityCreateOneWithoutPeopleInput
-  birthArea: AreaCreateOneWithoutPeopleInput
-  birthStreet: StreetCreateOneWithoutPeopleInput
-  birthVillage: VillageCreateOneWithoutPeopleInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
-  lifes: LiveCreateManyWithoutUserInput
 }
 
 type UserEdge {
@@ -4528,11 +3929,6 @@ input UserUpdateDataInput {
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutPeopleInput
-  birthProvince: ProvinceUpdateOneWithoutPeopleInput
-  birthCity: CityUpdateOneWithoutPeopleInput
-  birthArea: AreaUpdateOneWithoutPeopleInput
-  birthStreet: StreetUpdateOneWithoutPeopleInput
-  birthVillage: VillageUpdateOneWithoutPeopleInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -4540,7 +3936,6 @@ input UserUpdateDataInput {
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: CompanyJobUpdateManyWithoutWorkersInput
-  lifes: LiveUpdateManyWithoutUserInput
 }
 
 input UserUpdateInput {
@@ -4552,11 +3947,6 @@ input UserUpdateInput {
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutPeopleInput
-  birthProvince: ProvinceUpdateOneWithoutPeopleInput
-  birthCity: CityUpdateOneWithoutPeopleInput
-  birthArea: AreaUpdateOneWithoutPeopleInput
-  birthStreet: StreetUpdateOneWithoutPeopleInput
-  birthVillage: VillageUpdateOneWithoutPeopleInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -4564,7 +3954,6 @@ input UserUpdateInput {
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: CompanyJobUpdateManyWithoutWorkersInput
-  lifes: LiveUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyMutationInput {
@@ -4579,24 +3968,6 @@ input UserUpdateManyMutationInput {
   token: String
 }
 
-input UserUpdateManyWithoutBirthAreaInput {
-  create: [UserCreateWithoutBirthAreaInput!]
-  delete: [UserWhereUniqueInput!]
-  connect: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutBirthAreaInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutBirthAreaInput!]
-}
-
-input UserUpdateManyWithoutBirthCityInput {
-  create: [UserCreateWithoutBirthCityInput!]
-  delete: [UserWhereUniqueInput!]
-  connect: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutBirthCityInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutBirthCityInput!]
-}
-
 input UserUpdateManyWithoutBirthplaceInput {
   create: [UserCreateWithoutBirthplaceInput!]
   delete: [UserWhereUniqueInput!]
@@ -4604,33 +3975,6 @@ input UserUpdateManyWithoutBirthplaceInput {
   disconnect: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutBirthplaceInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutBirthplaceInput!]
-}
-
-input UserUpdateManyWithoutBirthProvinceInput {
-  create: [UserCreateWithoutBirthProvinceInput!]
-  delete: [UserWhereUniqueInput!]
-  connect: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutBirthProvinceInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutBirthProvinceInput!]
-}
-
-input UserUpdateManyWithoutBirthStreetInput {
-  create: [UserCreateWithoutBirthStreetInput!]
-  delete: [UserWhereUniqueInput!]
-  connect: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutBirthStreetInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutBirthStreetInput!]
-}
-
-input UserUpdateManyWithoutBirthVillageInput {
-  create: [UserCreateWithoutBirthVillageInput!]
-  delete: [UserWhereUniqueInput!]
-  connect: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutBirthVillageInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutBirthVillageInput!]
 }
 
 input UserUpdateManyWithoutRegStatusInput {
@@ -4690,61 +4034,6 @@ input UserUpdateOneRequiredWithoutPostsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneWithoutLifesInput {
-  create: UserCreateWithoutLifesInput
-  update: UserUpdateWithoutLifesDataInput
-  upsert: UserUpsertWithoutLifesInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: UserWhereUniqueInput
-}
-
-input UserUpdateWithoutBirthAreaDataInput {
-  username: String
-  password: String
-  name: String
-  gender: String
-  avatar: String
-  birthdaycalendar: String
-  birthday: DateTime
-  birthplace: LocationUpdateOneWithoutPeopleInput
-  birthProvince: ProvinceUpdateOneWithoutPeopleInput
-  birthCity: CityUpdateOneWithoutPeopleInput
-  birthStreet: StreetUpdateOneWithoutPeopleInput
-  birthVillage: VillageUpdateOneWithoutPeopleInput
-  uid: String
-  token: String
-  posts: PostUpdateManyWithoutAuthorInput
-  regStatus: RegStatusUpdateOneWithoutApplicantsInput
-  families: FamilyUpdateManyWithoutFromInput
-  studies: SchoolEduUpdateManyWithoutStudentsInput
-  works: CompanyJobUpdateManyWithoutWorkersInput
-  lifes: LiveUpdateManyWithoutUserInput
-}
-
-input UserUpdateWithoutBirthCityDataInput {
-  username: String
-  password: String
-  name: String
-  gender: String
-  avatar: String
-  birthdaycalendar: String
-  birthday: DateTime
-  birthplace: LocationUpdateOneWithoutPeopleInput
-  birthProvince: ProvinceUpdateOneWithoutPeopleInput
-  birthArea: AreaUpdateOneWithoutPeopleInput
-  birthStreet: StreetUpdateOneWithoutPeopleInput
-  birthVillage: VillageUpdateOneWithoutPeopleInput
-  uid: String
-  token: String
-  posts: PostUpdateManyWithoutAuthorInput
-  regStatus: RegStatusUpdateOneWithoutApplicantsInput
-  families: FamilyUpdateManyWithoutFromInput
-  studies: SchoolEduUpdateManyWithoutStudentsInput
-  works: CompanyJobUpdateManyWithoutWorkersInput
-  lifes: LiveUpdateManyWithoutUserInput
-}
-
 input UserUpdateWithoutBirthplaceDataInput {
   username: String
   password: String
@@ -4753,11 +4042,6 @@ input UserUpdateWithoutBirthplaceDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthProvince: ProvinceUpdateOneWithoutPeopleInput
-  birthCity: CityUpdateOneWithoutPeopleInput
-  birthArea: AreaUpdateOneWithoutPeopleInput
-  birthStreet: StreetUpdateOneWithoutPeopleInput
-  birthVillage: VillageUpdateOneWithoutPeopleInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -4765,76 +4049,6 @@ input UserUpdateWithoutBirthplaceDataInput {
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: CompanyJobUpdateManyWithoutWorkersInput
-  lifes: LiveUpdateManyWithoutUserInput
-}
-
-input UserUpdateWithoutBirthProvinceDataInput {
-  username: String
-  password: String
-  name: String
-  gender: String
-  avatar: String
-  birthdaycalendar: String
-  birthday: DateTime
-  birthplace: LocationUpdateOneWithoutPeopleInput
-  birthCity: CityUpdateOneWithoutPeopleInput
-  birthArea: AreaUpdateOneWithoutPeopleInput
-  birthStreet: StreetUpdateOneWithoutPeopleInput
-  birthVillage: VillageUpdateOneWithoutPeopleInput
-  uid: String
-  token: String
-  posts: PostUpdateManyWithoutAuthorInput
-  regStatus: RegStatusUpdateOneWithoutApplicantsInput
-  families: FamilyUpdateManyWithoutFromInput
-  studies: SchoolEduUpdateManyWithoutStudentsInput
-  works: CompanyJobUpdateManyWithoutWorkersInput
-  lifes: LiveUpdateManyWithoutUserInput
-}
-
-input UserUpdateWithoutBirthStreetDataInput {
-  username: String
-  password: String
-  name: String
-  gender: String
-  avatar: String
-  birthdaycalendar: String
-  birthday: DateTime
-  birthplace: LocationUpdateOneWithoutPeopleInput
-  birthProvince: ProvinceUpdateOneWithoutPeopleInput
-  birthCity: CityUpdateOneWithoutPeopleInput
-  birthArea: AreaUpdateOneWithoutPeopleInput
-  birthVillage: VillageUpdateOneWithoutPeopleInput
-  uid: String
-  token: String
-  posts: PostUpdateManyWithoutAuthorInput
-  regStatus: RegStatusUpdateOneWithoutApplicantsInput
-  families: FamilyUpdateManyWithoutFromInput
-  studies: SchoolEduUpdateManyWithoutStudentsInput
-  works: CompanyJobUpdateManyWithoutWorkersInput
-  lifes: LiveUpdateManyWithoutUserInput
-}
-
-input UserUpdateWithoutBirthVillageDataInput {
-  username: String
-  password: String
-  name: String
-  gender: String
-  avatar: String
-  birthdaycalendar: String
-  birthday: DateTime
-  birthplace: LocationUpdateOneWithoutPeopleInput
-  birthProvince: ProvinceUpdateOneWithoutPeopleInput
-  birthCity: CityUpdateOneWithoutPeopleInput
-  birthArea: AreaUpdateOneWithoutPeopleInput
-  birthStreet: StreetUpdateOneWithoutPeopleInput
-  uid: String
-  token: String
-  posts: PostUpdateManyWithoutAuthorInput
-  regStatus: RegStatusUpdateOneWithoutApplicantsInput
-  families: FamilyUpdateManyWithoutFromInput
-  studies: SchoolEduUpdateManyWithoutStudentsInput
-  works: CompanyJobUpdateManyWithoutWorkersInput
-  lifes: LiveUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutFamiliesDataInput {
@@ -4846,39 +4060,10 @@ input UserUpdateWithoutFamiliesDataInput {
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutPeopleInput
-  birthProvince: ProvinceUpdateOneWithoutPeopleInput
-  birthCity: CityUpdateOneWithoutPeopleInput
-  birthArea: AreaUpdateOneWithoutPeopleInput
-  birthStreet: StreetUpdateOneWithoutPeopleInput
-  birthVillage: VillageUpdateOneWithoutPeopleInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
-  studies: SchoolEduUpdateManyWithoutStudentsInput
-  works: CompanyJobUpdateManyWithoutWorkersInput
-  lifes: LiveUpdateManyWithoutUserInput
-}
-
-input UserUpdateWithoutLifesDataInput {
-  username: String
-  password: String
-  name: String
-  gender: String
-  avatar: String
-  birthdaycalendar: String
-  birthday: DateTime
-  birthplace: LocationUpdateOneWithoutPeopleInput
-  birthProvince: ProvinceUpdateOneWithoutPeopleInput
-  birthCity: CityUpdateOneWithoutPeopleInput
-  birthArea: AreaUpdateOneWithoutPeopleInput
-  birthStreet: StreetUpdateOneWithoutPeopleInput
-  birthVillage: VillageUpdateOneWithoutPeopleInput
-  uid: String
-  token: String
-  posts: PostUpdateManyWithoutAuthorInput
-  regStatus: RegStatusUpdateOneWithoutApplicantsInput
-  families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: CompanyJobUpdateManyWithoutWorkersInput
 }
@@ -4892,18 +4077,12 @@ input UserUpdateWithoutPostsDataInput {
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutPeopleInput
-  birthProvince: ProvinceUpdateOneWithoutPeopleInput
-  birthCity: CityUpdateOneWithoutPeopleInput
-  birthArea: AreaUpdateOneWithoutPeopleInput
-  birthStreet: StreetUpdateOneWithoutPeopleInput
-  birthVillage: VillageUpdateOneWithoutPeopleInput
   uid: String
   token: String
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: CompanyJobUpdateManyWithoutWorkersInput
-  lifes: LiveUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutRegStatusDataInput {
@@ -4915,18 +4094,12 @@ input UserUpdateWithoutRegStatusDataInput {
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutPeopleInput
-  birthProvince: ProvinceUpdateOneWithoutPeopleInput
-  birthCity: CityUpdateOneWithoutPeopleInput
-  birthArea: AreaUpdateOneWithoutPeopleInput
-  birthStreet: StreetUpdateOneWithoutPeopleInput
-  birthVillage: VillageUpdateOneWithoutPeopleInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: CompanyJobUpdateManyWithoutWorkersInput
-  lifes: LiveUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutStudiesDataInput {
@@ -4938,18 +4111,12 @@ input UserUpdateWithoutStudiesDataInput {
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutPeopleInput
-  birthProvince: ProvinceUpdateOneWithoutPeopleInput
-  birthCity: CityUpdateOneWithoutPeopleInput
-  birthArea: AreaUpdateOneWithoutPeopleInput
-  birthStreet: StreetUpdateOneWithoutPeopleInput
-  birthVillage: VillageUpdateOneWithoutPeopleInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
   families: FamilyUpdateManyWithoutFromInput
   works: CompanyJobUpdateManyWithoutWorkersInput
-  lifes: LiveUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutWorksDataInput {
@@ -4961,48 +4128,17 @@ input UserUpdateWithoutWorksDataInput {
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutPeopleInput
-  birthProvince: ProvinceUpdateOneWithoutPeopleInput
-  birthCity: CityUpdateOneWithoutPeopleInput
-  birthArea: AreaUpdateOneWithoutPeopleInput
-  birthStreet: StreetUpdateOneWithoutPeopleInput
-  birthVillage: VillageUpdateOneWithoutPeopleInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
-  lifes: LiveUpdateManyWithoutUserInput
-}
-
-input UserUpdateWithWhereUniqueWithoutBirthAreaInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutBirthAreaDataInput!
-}
-
-input UserUpdateWithWhereUniqueWithoutBirthCityInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutBirthCityDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutBirthplaceInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutBirthplaceDataInput!
-}
-
-input UserUpdateWithWhereUniqueWithoutBirthProvinceInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutBirthProvinceDataInput!
-}
-
-input UserUpdateWithWhereUniqueWithoutBirthStreetInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutBirthStreetDataInput!
-}
-
-input UserUpdateWithWhereUniqueWithoutBirthVillageInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutBirthVillageDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutRegStatusInput {
@@ -5030,50 +4166,15 @@ input UserUpsertWithoutFamiliesInput {
   create: UserCreateWithoutFamiliesInput!
 }
 
-input UserUpsertWithoutLifesInput {
-  update: UserUpdateWithoutLifesDataInput!
-  create: UserCreateWithoutLifesInput!
-}
-
 input UserUpsertWithoutPostsInput {
   update: UserUpdateWithoutPostsDataInput!
   create: UserCreateWithoutPostsInput!
-}
-
-input UserUpsertWithWhereUniqueWithoutBirthAreaInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutBirthAreaDataInput!
-  create: UserCreateWithoutBirthAreaInput!
-}
-
-input UserUpsertWithWhereUniqueWithoutBirthCityInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutBirthCityDataInput!
-  create: UserCreateWithoutBirthCityInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutBirthplaceInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutBirthplaceDataInput!
   create: UserCreateWithoutBirthplaceInput!
-}
-
-input UserUpsertWithWhereUniqueWithoutBirthProvinceInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutBirthProvinceDataInput!
-  create: UserCreateWithoutBirthProvinceInput!
-}
-
-input UserUpsertWithWhereUniqueWithoutBirthStreetInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutBirthStreetDataInput!
-  create: UserCreateWithoutBirthStreetInput!
-}
-
-input UserUpsertWithWhereUniqueWithoutBirthVillageInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutBirthVillageDataInput!
-  create: UserCreateWithoutBirthVillageInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutRegStatusInput {
@@ -5202,11 +4303,6 @@ input UserWhereInput {
   birthday_gt: DateTime
   birthday_gte: DateTime
   birthplace: LocationWhereInput
-  birthProvince: ProvinceWhereInput
-  birthCity: CityWhereInput
-  birthArea: AreaWhereInput
-  birthStreet: StreetWhereInput
-  birthVillage: VillageWhereInput
   uid: String
   uid_not: String
   uid_in: [String!]
@@ -5264,9 +4360,6 @@ input UserWhereInput {
   works_every: CompanyJobWhereInput
   works_some: CompanyJobWhereInput
   works_none: CompanyJobWhereInput
-  lifes_every: LiveWhereInput
-  lifes_some: LiveWhereInput
-  lifes_none: LiveWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
@@ -5284,7 +4377,6 @@ type Village {
   code: String!
   name: String!
   street: Street!
-  people(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
 
 type VillageConnection {
@@ -5297,7 +4389,6 @@ input VillageCreateInput {
   code: String!
   name: String!
   street: StreetCreateOneWithoutVillagesInput!
-  people: UserCreateManyWithoutBirthVillageInput
 }
 
 input VillageCreateManyWithoutStreetInput {
@@ -5310,21 +4401,9 @@ input VillageCreateOneInput {
   connect: VillageWhereUniqueInput
 }
 
-input VillageCreateOneWithoutPeopleInput {
-  create: VillageCreateWithoutPeopleInput
-  connect: VillageWhereUniqueInput
-}
-
-input VillageCreateWithoutPeopleInput {
-  code: String!
-  name: String!
-  street: StreetCreateOneWithoutVillagesInput!
-}
-
 input VillageCreateWithoutStreetInput {
   code: String!
   name: String!
-  people: UserCreateManyWithoutBirthVillageInput
 }
 
 type VillageEdge {
@@ -5373,14 +4452,12 @@ input VillageUpdateDataInput {
   code: String
   name: String
   street: StreetUpdateOneRequiredWithoutVillagesInput
-  people: UserUpdateManyWithoutBirthVillageInput
 }
 
 input VillageUpdateInput {
   code: String
   name: String
   street: StreetUpdateOneRequiredWithoutVillagesInput
-  people: UserUpdateManyWithoutBirthVillageInput
 }
 
 input VillageUpdateManyMutationInput {
@@ -5406,25 +4483,9 @@ input VillageUpdateOneInput {
   connect: VillageWhereUniqueInput
 }
 
-input VillageUpdateOneWithoutPeopleInput {
-  create: VillageCreateWithoutPeopleInput
-  update: VillageUpdateWithoutPeopleDataInput
-  upsert: VillageUpsertWithoutPeopleInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: VillageWhereUniqueInput
-}
-
-input VillageUpdateWithoutPeopleDataInput {
-  code: String
-  name: String
-  street: StreetUpdateOneRequiredWithoutVillagesInput
-}
-
 input VillageUpdateWithoutStreetDataInput {
   code: String
   name: String
-  people: UserUpdateManyWithoutBirthVillageInput
 }
 
 input VillageUpdateWithWhereUniqueWithoutStreetInput {
@@ -5435,11 +4496,6 @@ input VillageUpdateWithWhereUniqueWithoutStreetInput {
 input VillageUpsertNestedInput {
   update: VillageUpdateDataInput!
   create: VillageCreateInput!
-}
-
-input VillageUpsertWithoutPeopleInput {
-  update: VillageUpdateWithoutPeopleDataInput!
-  create: VillageCreateWithoutPeopleInput!
 }
 
 input VillageUpsertWithWhereUniqueWithoutStreetInput {
@@ -5492,9 +4548,6 @@ input VillageWhereInput {
   name_ends_with: String
   name_not_ends_with: String
   street: StreetWhereInput
-  people_every: UserWhereInput
-  people_some: UserWhereInput
-  people_none: UserWhereInput
   AND: [VillageWhereInput!]
   OR: [VillageWhereInput!]
   NOT: [VillageWhereInput!]

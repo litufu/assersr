@@ -2,6 +2,7 @@ import { getUserId } from '../services/utils'
 
 export const Query = {
   me: (parent, args, ctx) => {
+
     return ctx.db.user({ uid: getUserId(ctx) })
   },
   searchUser:(parent, {username}, ctx) => ctx.db.user({username}),
@@ -24,4 +25,5 @@ export const Query = {
     }
   })
   },
+  
 }

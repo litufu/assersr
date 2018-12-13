@@ -22,8 +22,7 @@ type CollegeEntranceExam {
   candidatenum:String!
   student:User!
 }
-
-
+# 用户
 type User {
   id: ID! @unique
   username: String! @unique
@@ -34,11 +33,6 @@ type User {
   birthdaycalendar:String
   birthday:DateTime
   birthplace:Location
-  birthProvince:Province
-  birthCity:City
-  birthArea:Area
-  birthStreet:Street
-  birthVillage:Village
   uid:String! @unique
   token:String! @unique
   posts: [Post!]!
@@ -48,11 +42,11 @@ type User {
   families:[Family!]!
   studies:[SchoolEdu!]!
   works:[CompanyJob!]!
-  lifes:[Live!]!
 }
-
+# 地理位置
 type Location {
   id: ID! @unique
+  name:String @unique
   province:Province
   city:City
   area:Area
@@ -63,7 +57,7 @@ type Location {
   universities:[University!]!
   people:[User!]!
 }
-
+# family to person
 type Person {
   id: ID! @unique
   name:String!
@@ -71,16 +65,7 @@ type Person {
   families:[Family!]!
 }
 
-type Live {
-  id: ID! @unique
-  startTime:DateTime!
-  endTime:DateTime
-  location:Location
-  title:String
-  description:String
-  user:User
-}
-
+# 公司提供的岗位
 type CompanyJob {
   id: ID! @unique
   company:Company
@@ -90,7 +75,7 @@ type CompanyJob {
   jobContent:String
   workers:[User!]!
 }
-
+# 公司
 type Company{
   id: ID! @unique
   name:String
@@ -164,7 +149,6 @@ type Province {
   code:String! @unique
   name:String! @unique
   cities:[City!]!
-  people:[User!]!
 }
 
 type City {
@@ -173,7 +157,6 @@ type City {
   name:String!
   province:Province!
   areas:[Area!]!
-  people:[User!]!
 }
 
 type Area {
@@ -182,7 +165,6 @@ type Area {
   name:String!
   city:City!
   towns:[Street!]!
-  people:[User!]!
 }
 
 type Street {
@@ -191,7 +173,6 @@ type Street {
   name:String!
   Area:Area!
   villages:[Village!]!
-  people:[User!]!
 }
 
 type Village {
@@ -199,7 +180,6 @@ type Village {
   code:String! @unique
   name:String!
   street:Street!
-  people:[User!]!
 }
 
 type RegStatus {

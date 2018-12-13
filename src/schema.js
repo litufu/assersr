@@ -81,16 +81,10 @@ export const typeDefs = gql`
     birthdaycalendar:String
     birthday:String
     birthplace:Location
-    birthProvince:Province
-    birthCity:City
-    birthArea:Area
-    birthStreet:Street
-    birthVillage:Village
     posts: [Post!]!
     createdAt: String!
     studies:[SchoolEdu]
     works:[CompanyJob]
-    lifes:[Live]
   }
 
   type Person {
@@ -113,17 +107,6 @@ export const typeDefs = gql`
     user:User!
   }
 
- 
-  type Live {
-    id: ID!
-    startTime:String!
-    endTime:String!
-    location:Location
-    title:String
-    description:String
-    user:User
-  }
-
   type CompanyJob {
     id: ID!
     company:Company
@@ -131,7 +114,7 @@ export const typeDefs = gql`
     department:String
     post:String
     jobContent:String
-    workers:[User!]!
+    workers:[User]
   }
 
   type Company{
@@ -249,8 +232,6 @@ export const typeDefs = gql`
     street:Street!
     people:[User!]!
   }
-
-
 
 
 

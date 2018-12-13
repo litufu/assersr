@@ -33,10 +33,6 @@ var models = [
     embedded: false
   },
   {
-    name: "Live",
-    embedded: false
-  },
-  {
     name: "Location",
     embedded: false
   },
