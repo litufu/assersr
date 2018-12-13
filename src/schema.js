@@ -8,7 +8,7 @@ export const typeDefs = gql`
     date: String!
   }
 
-  input BirthplaceInput {
+  input PlaceInput {
     province:String!
     city:String
     area:String
@@ -36,12 +36,15 @@ export const typeDefs = gql`
     signup(username: String!, password: String!): AuthPayload!
     login(username: String!, password: String!): AuthPayload!
     changePassword(currentPassword:String!,newPassword: String!):User!
-    addBasicInfo(name:String!,gender:String!,birthday:BirthdayInput!,birthplace:BirthplaceInput!):User!
+    addBasicInfo(name:String!,gender:String!,birthday:BirthdayInput!,birthplace:PlaceInput!):User!
     createFamily(name:String!,relationship:String!,spouseId:String):Family
     updateFamily(id:ID!, name:String,relationship:String,spouseId:String,status:String):Family
     deleteFamily(familyId:ID!,toId:ID!):Family
     connectFamily(relativeId:ID!,familyId:ID!,name:String,relationship:String):Family
     confirmFamily(familyId:ID!):Family
+    addLocation(location:PlaceInput,locationName:String):Location
+    addSchool(name:String,kind:String,locationId:String):School
+    addStudy(year:String,schoolId:String,majorId:String,grade:Int,className:String):SchoolEdu
   }
 
   type Subscription {

@@ -8,7 +8,7 @@ import {
   updateCommonUserFamily,
   getCommonFamilies,
   getIntersectionFamiles,
-  getDifferentFamilies
+  getDifferentFamilies,
 } from '../services/utils'
 
 import getBasicInfoData from '../services/displayBasicInfoData'
@@ -393,7 +393,6 @@ export const Mutation = {
   },
 
   confirmFamily: async (parent, { familyId }, ctx) => {
-    console.log('确认family')
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -413,22 +412,18 @@ export const Mutation = {
       where: { id: familyId },
       data: { status: "3" }
     })
-    console.log(myUpdateFamily)
     // 获取relative famliy
     // 获取relative
     const relative = await ctx.db.family(
        { id: familyId },
     ).to().user()
-    console.log(relative)
     // 获取relative Family
     const relativeFamily = await ctx.db.user({ id: relative.id }).families({ where: { to: { user: { uid: userId } } } })
-    console.log(relativeFamily)
     // 更新relative family  status
-     const relativeFamilyUpdate = await ctx.db.updateFamily({
+      await ctx.db.updateFamily({
       where: { id: relativeFamily[0].id },
       data: { status: "3" }
     })
-    console.log(relativeFamilyUpdate)
     // 删除多余的person 见deletePersons
     // 没有必要每个删除，可以定时的删除所有family为[],并且user 为null的person.
 
@@ -438,25 +433,18 @@ export const Mutation = {
     // rel的家庭成员==》rel的共同家庭成员==》使用rel的共同家庭成员同步我的family，同时更新共同家庭成员family
 
     const myRelationship = myUpdateFamily.relationship
-    console.log(myRelationship)
     const relativeRelationship = relativeFamily[0].relationship
-    console.log(relativeRelationship)
     const myFamilies = await ctx.db.user({ uid: userId }).families()
-    console.log(myFamilies)
     const relativeFamilies = await ctx.db.user({ id: relative.id }).families()
-    console.log(relativeFamilies)
     // 获取共同的亲人
     const myCommonFamilies = await getCommonFamilies(relativeRelationship, myFamilies, myUpdateFamily.id,ctx)
-    console.log(myCommonFamilies)
     const relativeCommonFamilies = await getCommonFamilies(myRelationship, relativeFamilies, relativeFamily[0].id,ctx)
-    console.log(relativeCommonFamilies)
     // 获取共同家庭成员的交集
     const { myIntersectionFamilies, relativeIntersectionFamilies } = await getIntersectionFamiles(myCommonFamilies, relativeCommonFamilies, ctx)
     // 获取me共同成员的差集
     const myDifferentFamilies = getDifferentFamilies(myCommonFamilies, myIntersectionFamilies)
     // 获取relative共同成员的差集
     const relativeDifferentFamilies = getDifferentFamilies(relativeCommonFamilies, relativeIntersectionFamilies)
-    console.log('start1')
     // 第一部分：遍历共同的家庭成员交集，用status大的一方更新小的一方。
     for (const myCommonFamily of myIntersectionFamilies) {
       const myCommonFamilyTo = await ctx.db.family({ id: myCommonFamily.id }).to()
@@ -505,7 +493,6 @@ export const Mutation = {
         }
       }
     }
-    console.log('start2')
 
     // 第二部分：遍历relative共同成员差集
     for (const relativeCommonFamily of relativeDifferentFamilies) {
@@ -542,7 +529,6 @@ export const Mutation = {
       pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: {"text":user.id} })
     }
 
-    console.log('start3')
     // 第三部分：遍历me共同成员的差集
     for (const myCommonFamily of myDifferentFamilies) {
       const myCommonFamilyTo = await ctx.db.family({ id: myCommonFamily.id }).to()
@@ -601,6 +587,171 @@ export const Mutation = {
     return myUpdateFamily
   },
 
+  addLocation : async (parent,{location,locationName},ctx)=>{
+    // 权限验证
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    // -----------------------------------------------
+    // 输入数据验证
+    // validateBasicInfo(name, gender, birthday, birthplace)
+    // -----------------------------------------------
+    // 获取要输入的数据。 
+    // 获取学校地址
+    let place
+    place = await ctx.db.location({name:locationName})
+    if(!place){
+      if(location.village!==""){
+        place = await ctx.db.createLocation({
+          name:locationName,
+          province:{connect:{code:location.province}},
+          city:{connect:{code:location.city}},
+          area:{connect:{code:location.area}},
+          street:{connect:{code:location.street}},
+          village:{connect:{code:location.village}},
+        })
+      }else if(location.street!==""){
+        place = await ctx.db.createLocation({
+          name:locationName,
+          province:{connect:{code:location.province}},
+          city:{connect:{code:location.city}},
+          area:{connect:{code:location.area}},
+          street:{connect:{code:location.street}},
+        })
+      }else if(location.area!==""){
+        place = await ctx.db.createLocation({
+          name:locationName,
+          province:{connect:{code:location.province}},
+          city:{connect:{code:location.city}},
+          area:{connect:{code:location.area}},
+        })
+      }else if(location.city!==""){
+        place = await ctx.db.createLocation({
+          name:locationName,
+          province:{connect:{code:location.province}},
+          city:{connect:{code:location.city}},
+        })
+      }else if(location.province!==""){
+        place = await ctx.db.createLocation({
+          name:locationName,
+          province:{connect:{code:location.province}},
+        })
+      }else{
+        place = await ctx.db.createLocation({
+          name:locationName,
+        })
+      }
+    }
+
+    return place
+  } ,
+
+  addSchool: async (parent,{name,kind,locationId},ctx)=>{
+    const schools = await ctx.db.schools(
+      {
+        where:{
+          AND: [
+            {name},
+            {kind},
+            {location:{id:locationId}}
+          ]
+      }}
+    )
+
+    if(schools.length===0){
+      return ctx.db.createSchool({
+        name,
+        kind,
+        location:{connect:{id:locationId}}
+      })
+    }
+    return schools[0]
+    
+  },
+
+  addStudy:async (parent, { year,schoolId,grade,className,majorId="" }, ctx) => {
+    // 权限验证
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    // -----------------------------------------------
+    // 输入数据验证
+    // validateBasicInfo(name, gender, birthday, birthplace)
+    // -----------------------------------------------
+    // 获取要输入的数据。 
+    // 获取学校地址
+    const startTime = `${year}-9-1`
+    let schoolEdus
+    if(majorId===""){
+      schoolEdus = await ctx.db.schoolEdus({
+        where:{
+          AND:[
+            {startTime},
+            {grade},
+            {className},
+            {school:{id:schoolId}},
+          ]
+        }
+      })
+
+      if(schoolEdus.length===0){
+        return ctx.db.createSchoolEdu({
+          startTime,
+          grade,
+          className,
+          school:{connect:{id:schoolId}},
+          students:{connect:{uid:userId}}
+        })
+      }
+
+      return ctx.db.updateSchoolEdu(
+        {
+          where:{id:schoolEdus[0].id},
+          data:{students:{connect:{uid:userId}}}
+        }
+      )
+    }
+    
+    schoolEdus = await ctx.db.schoolEdus({
+      where:{
+        AND:[
+          {startTime},
+          {grade},
+          {className},
+          {school:{id:schoolId}},
+          {major:{id:majorId}}
+        ]
+      }
+    })
+
+    if(schoolEdus.length===0){
+      return ctx.db.createSchoolEdu({
+        startTime,
+        grade,
+        className,
+        school:{connect:{id:schoolId}},
+        major:{connect:{id:majorId}},
+        students:{connect:{uid:userId}}
+      })
+    }
+
+    return ctx.db.updateSchoolEdu(
+      {
+        where:{id:schoolEdus[0].id},
+        data:{students:{connect:{uid:userId}}}
+      }
+    )      
+  },
 
   createDraft: async (parent, { title, content, authorEmail }, ctx) => ctx.db.createPost({
     title,
