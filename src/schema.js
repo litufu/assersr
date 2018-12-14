@@ -27,6 +27,7 @@ export const typeDefs = gql`
     drafts: [Post!]!
     post(id: ID!): Post
     family:[Family!]!
+    getSchools(locationName:String):[School]
   }
 
   type Mutation {
@@ -43,7 +44,7 @@ export const typeDefs = gql`
     connectFamily(relativeId:ID!,familyId:ID!,name:String,relationship:String):Family
     confirmFamily(familyId:ID!):Family
     addLocation(location:PlaceInput,locationName:String):Location
-    addSchool(name:String,kind:String,locationId:String):School
+    addSchool(name:String,kind:String,locationName:String):School
     addStudy(year:String,schoolId:String,majorId:String,grade:Int,className:String):SchoolEdu
   }
 

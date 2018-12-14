@@ -25,5 +25,16 @@ export const Query = {
     }
   })
   },
+  getSchools:(parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    return ctx.db.schools({
+    where: {
+      location: {name:args.locationName}
+    }
+  })
+  },
   
 }

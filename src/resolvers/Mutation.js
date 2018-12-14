@@ -651,14 +651,14 @@ export const Mutation = {
     return place
   } ,
 
-  addSchool: async (parent,{name,kind,locationId},ctx)=>{
+  addSchool: async (parent,{name,kind,locationName},ctx)=>{
     const schools = await ctx.db.schools(
       {
         where:{
           AND: [
             {name},
             {kind},
-            {location:{id:locationId}}
+            {location:{name:locationName}}
           ]
       }}
     )
@@ -667,10 +667,11 @@ export const Mutation = {
       return ctx.db.createSchool({
         name,
         kind,
-        location:{connect:{id:locationId}}
+        location:{connect:{name:locationName}}
       })
     }
-    return schools[0]
+
+    throw new Error('学校已存在')
     
   },
 
