@@ -5,11 +5,13 @@ import readline from "readline"
 import stream from 'stream'
 
 import { prisma } from '../generated/prisma-client'
+
 const provinceFile = 'H:/projectNew/data/province.csv'
 const cityFile = 'H:/projectNew/data/city.csv'
 const areaFile = 'H:/projectNew/data/area.csv'
 const streetFile = 'H:/projectNew/data/street.csv'
 const villageFile = 'H:/projectNew/data/village.csv'
+const majorFile = 'H:/projectNew/data/major.csv'
 
 const readFile = function (fileName,encode) {
   return new Promise(function (resolve, reject) {
@@ -28,6 +30,29 @@ const parseCsv = function (data) {
   });
 };
 
+// 添加专业信息
+async function addMajor(){
+  try {
+    const file = await readFile(majorFile, 'utf8')
+    const results = await parseCsv(file)
+    for(let value of results.data) {
+      try{
+      const newMajor = await prisma
+        .createMajor({
+          name: value[1],
+          category: value[0],
+          education:value[2]
+        })
+      console.log(newMajor);
+    }catch(err){
+      console.log(err)
+      continue
+    }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
 // 添加省份信息
 async function addProvince() {
   try {

@@ -74,3 +74,12 @@ export const checkStatus = (status)=>{
     throw new Error("status输入错误")
   }
 }
+
+export const checkCnEnNum=(name)=>{
+  // 检查中文英文和数字
+  const rxName =/^[a-zA-Z0-9\u4E00-\u9FA5\uf900-\ufa2d·s]+$/
+  if(!rxName.test(name)){
+    throw new Error("格式输入错误")
+  }
+  return true
+}

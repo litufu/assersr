@@ -7,7 +7,7 @@
     "dev": "cross-env NODE_ENV=dev nodemon --exec babel-node --max-old-space-size=4096 src/index.js",
     "prettier": "prettier --single-quote --print-width 80 --trailing-comma all --write \"src/**/*.js\"",
     "test": "jest",
-    "mytest": "cross-env NODE_ENV=dev nodemon --exec babel-node src/services/getPlaceData.js"
+    "getData": "cross-env NODE_ENV=dev nodemon --exec babel-node src/services/getData.js"
   },
   "dependencies": {
     "apollo-server": "^2.2.5",
