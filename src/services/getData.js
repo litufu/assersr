@@ -11,7 +11,7 @@ const cityFile = 'H:/projectNew/data/city.csv'
 const areaFile = 'H:/projectNew/data/area.csv'
 const streetFile = 'H:/projectNew/data/street.csv'
 const villageFile = 'H:/projectNew/data/village.csv'
-const majorFile = 'H:/projectNew/data/major.csv'
+const majorFile = 'H:/projectNew/data/ts.csv'
 
 const readFile = function (fileName,encode) {
   return new Promise(function (resolve, reject) {
@@ -53,6 +53,7 @@ async function addMajor(){
     console.log(err);
   }
 }
+addMajor()
 // 添加省份信息
 async function addProvince() {
   try {

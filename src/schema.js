@@ -27,7 +27,8 @@ export const typeDefs = gql`
     drafts: [Post!]!
     post(id: ID!): Post
     family:[Family!]!
-    getSchools(locationName:String):[School]
+    getSchools(locationName:String,kind:String):[School]
+    getMajors(majorName:String):[Major]
   }
 
   type Mutation {

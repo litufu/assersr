@@ -81,5 +81,10 @@ export const checkCnEnNum=(name)=>{
   if(!rxName.test(name)){
     throw new Error("格式输入错误")
   }
-  return true
+}
+
+export const checkNum = (str)=>{
+  if(!/^\d+$/.test(str)){
+    throw new Error("数字输入错误")
+    }
 }

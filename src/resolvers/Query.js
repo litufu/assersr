@@ -30,11 +30,25 @@ export const Query = {
     if (!userId) {
       throw new Error("用户不存在")
     }
-    return ctx.db.schools({
-    where: {
-      location: {name:args.locationName}
+    return ctx.db.schools({where: {
+      AND: [{
+        location: {name:args.locationName}
+      }, {
+        kind:args.kind
+      }]
+    }}
+    )
+  },
+  getMajors:(parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
     }
-  })
+    return ctx.db.majors({
+      where: {
+        name_contains: args.majorName
+      }
+    })
   },
   
 }

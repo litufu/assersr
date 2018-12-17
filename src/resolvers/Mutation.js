@@ -20,6 +20,8 @@ import {
   checkId,
   checkStatus,
   validateBasicInfo,
+  checkNum,
+  checkCnEnNum,
 } from '../validate'
 import {
   relationshipMap,
@@ -687,7 +689,13 @@ export const Mutation = {
     }
     // -----------------------------------------------
     // 输入数据验证
-    // validateBasicInfo(name, gender, birthday, birthplace)
+    checkNum(year)
+    checkId(schoolId)
+    checkNum(grade)
+    checkCnEnNum(className)
+    if(majorId!==""){
+      checkId(majorId)
+    }
     // -----------------------------------------------
     // 获取要输入的数据。 
     // 获取学校地址
@@ -706,21 +714,23 @@ export const Mutation = {
       })
 
       if(schoolEdus.length===0){
-        return ctx.db.createSchoolEdu({
+        const res0 = await ctx.db.createSchoolEdu({
           startTime,
           grade,
           className,
           school:{connect:{id:schoolId}},
           students:{connect:{uid:userId}}
         })
+        return res0
       }
 
-      return ctx.db.updateSchoolEdu(
+      const res1 = await ctx.db.updateSchoolEdu(
         {
           where:{id:schoolEdus[0].id},
           data:{students:{connect:{uid:userId}}}
         }
       )
+      return res1
     }
     
     schoolEdus = await ctx.db.schoolEdus({
@@ -736,7 +746,7 @@ export const Mutation = {
     })
 
     if(schoolEdus.length===0){
-      return ctx.db.createSchoolEdu({
+      const res2 = await  ctx.db.createSchoolEdu({
         startTime,
         grade,
         className,
@@ -744,14 +754,16 @@ export const Mutation = {
         major:{connect:{id:majorId}},
         students:{connect:{uid:userId}}
       })
+      return res2
     }
 
-    return ctx.db.updateSchoolEdu(
+    const res3 = await ctx.db.updateSchoolEdu(
       {
         where:{id:schoolEdus[0].id},
         data:{students:{connect:{uid:userId}}}
       }
-    )      
+    )
+    return res3      
   },
 
   createDraft: async (parent, { title, content, authorEmail }, ctx) => ctx.db.createPost({
