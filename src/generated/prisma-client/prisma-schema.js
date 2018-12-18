@@ -15,10 +15,6 @@ type AggregateCompany {
   count: Int!
 }
 
-type AggregateCompanyJob {
-  count: Int!
-}
-
 type AggregateFamily {
   count: Int!
 }
@@ -72,6 +68,10 @@ type AggregateUser {
 }
 
 type AggregateVillage {
+  count: Int!
+}
+
+type AggregateWork {
   count: Int!
 }
 
@@ -677,6 +677,7 @@ type Company {
   representative: String
   location: Location
   BusinessScope: String
+  works(where: WorkWhereInput, orderBy: WorkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Work!]
 }
 
 type CompanyConnection {
@@ -692,6 +693,7 @@ input CompanyCreateInput {
   representative: String
   location: LocationCreateOneWithoutCompaniesInput
   BusinessScope: String
+  works: WorkCreateManyWithoutCompanyInput
 }
 
 input CompanyCreateManyWithoutLocationInput {
@@ -699,8 +701,8 @@ input CompanyCreateManyWithoutLocationInput {
   connect: [CompanyWhereUniqueInput!]
 }
 
-input CompanyCreateOneInput {
-  create: CompanyCreateInput
+input CompanyCreateOneWithoutWorksInput {
+  create: CompanyCreateWithoutWorksInput
   connect: CompanyWhereUniqueInput
 }
 
@@ -710,219 +712,21 @@ input CompanyCreateWithoutLocationInput {
   establishmentDate: DateTime
   representative: String
   BusinessScope: String
+  works: WorkCreateManyWithoutCompanyInput
+}
+
+input CompanyCreateWithoutWorksInput {
+  name: String
+  code: String
+  establishmentDate: DateTime
+  representative: String
+  location: LocationCreateOneWithoutCompaniesInput
+  BusinessScope: String
 }
 
 type CompanyEdge {
   node: Company!
   cursor: String!
-}
-
-type CompanyJob {
-  id: ID!
-  company: Company
-  startTime: DateTime
-  department: String
-  post: String
-  jobContent: String
-  workers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
-}
-
-type CompanyJobConnection {
-  pageInfo: PageInfo!
-  edges: [CompanyJobEdge]!
-  aggregate: AggregateCompanyJob!
-}
-
-input CompanyJobCreateInput {
-  company: CompanyCreateOneInput
-  startTime: DateTime
-  department: String
-  post: String
-  jobContent: String
-  workers: UserCreateManyWithoutWorksInput
-}
-
-input CompanyJobCreateManyWithoutWorkersInput {
-  create: [CompanyJobCreateWithoutWorkersInput!]
-  connect: [CompanyJobWhereUniqueInput!]
-}
-
-input CompanyJobCreateWithoutWorkersInput {
-  company: CompanyCreateOneInput
-  startTime: DateTime
-  department: String
-  post: String
-  jobContent: String
-}
-
-type CompanyJobEdge {
-  node: CompanyJob!
-  cursor: String!
-}
-
-enum CompanyJobOrderByInput {
-  id_ASC
-  id_DESC
-  startTime_ASC
-  startTime_DESC
-  department_ASC
-  department_DESC
-  post_ASC
-  post_DESC
-  jobContent_ASC
-  jobContent_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type CompanyJobPreviousValues {
-  id: ID!
-  startTime: DateTime
-  department: String
-  post: String
-  jobContent: String
-}
-
-type CompanyJobSubscriptionPayload {
-  mutation: MutationType!
-  node: CompanyJob
-  updatedFields: [String!]
-  previousValues: CompanyJobPreviousValues
-}
-
-input CompanyJobSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: CompanyJobWhereInput
-  AND: [CompanyJobSubscriptionWhereInput!]
-  OR: [CompanyJobSubscriptionWhereInput!]
-  NOT: [CompanyJobSubscriptionWhereInput!]
-}
-
-input CompanyJobUpdateInput {
-  company: CompanyUpdateOneInput
-  startTime: DateTime
-  department: String
-  post: String
-  jobContent: String
-  workers: UserUpdateManyWithoutWorksInput
-}
-
-input CompanyJobUpdateManyMutationInput {
-  startTime: DateTime
-  department: String
-  post: String
-  jobContent: String
-}
-
-input CompanyJobUpdateManyWithoutWorkersInput {
-  create: [CompanyJobCreateWithoutWorkersInput!]
-  delete: [CompanyJobWhereUniqueInput!]
-  connect: [CompanyJobWhereUniqueInput!]
-  disconnect: [CompanyJobWhereUniqueInput!]
-  update: [CompanyJobUpdateWithWhereUniqueWithoutWorkersInput!]
-  upsert: [CompanyJobUpsertWithWhereUniqueWithoutWorkersInput!]
-}
-
-input CompanyJobUpdateWithoutWorkersDataInput {
-  company: CompanyUpdateOneInput
-  startTime: DateTime
-  department: String
-  post: String
-  jobContent: String
-}
-
-input CompanyJobUpdateWithWhereUniqueWithoutWorkersInput {
-  where: CompanyJobWhereUniqueInput!
-  data: CompanyJobUpdateWithoutWorkersDataInput!
-}
-
-input CompanyJobUpsertWithWhereUniqueWithoutWorkersInput {
-  where: CompanyJobWhereUniqueInput!
-  update: CompanyJobUpdateWithoutWorkersDataInput!
-  create: CompanyJobCreateWithoutWorkersInput!
-}
-
-input CompanyJobWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  company: CompanyWhereInput
-  startTime: DateTime
-  startTime_not: DateTime
-  startTime_in: [DateTime!]
-  startTime_not_in: [DateTime!]
-  startTime_lt: DateTime
-  startTime_lte: DateTime
-  startTime_gt: DateTime
-  startTime_gte: DateTime
-  department: String
-  department_not: String
-  department_in: [String!]
-  department_not_in: [String!]
-  department_lt: String
-  department_lte: String
-  department_gt: String
-  department_gte: String
-  department_contains: String
-  department_not_contains: String
-  department_starts_with: String
-  department_not_starts_with: String
-  department_ends_with: String
-  department_not_ends_with: String
-  post: String
-  post_not: String
-  post_in: [String!]
-  post_not_in: [String!]
-  post_lt: String
-  post_lte: String
-  post_gt: String
-  post_gte: String
-  post_contains: String
-  post_not_contains: String
-  post_starts_with: String
-  post_not_starts_with: String
-  post_ends_with: String
-  post_not_ends_with: String
-  jobContent: String
-  jobContent_not: String
-  jobContent_in: [String!]
-  jobContent_not_in: [String!]
-  jobContent_lt: String
-  jobContent_lte: String
-  jobContent_gt: String
-  jobContent_gte: String
-  jobContent_contains: String
-  jobContent_not_contains: String
-  jobContent_starts_with: String
-  jobContent_not_starts_with: String
-  jobContent_ends_with: String
-  jobContent_not_ends_with: String
-  workers_every: UserWhereInput
-  workers_some: UserWhereInput
-  workers_none: UserWhereInput
-  AND: [CompanyJobWhereInput!]
-  OR: [CompanyJobWhereInput!]
-  NOT: [CompanyJobWhereInput!]
-}
-
-input CompanyJobWhereUniqueInput {
-  id: ID
 }
 
 enum CompanyOrderByInput {
@@ -971,15 +775,6 @@ input CompanySubscriptionWhereInput {
   NOT: [CompanySubscriptionWhereInput!]
 }
 
-input CompanyUpdateDataInput {
-  name: String
-  code: String
-  establishmentDate: DateTime
-  representative: String
-  location: LocationUpdateOneWithoutCompaniesInput
-  BusinessScope: String
-}
-
 input CompanyUpdateInput {
   name: String
   code: String
@@ -987,6 +782,7 @@ input CompanyUpdateInput {
   representative: String
   location: LocationUpdateOneWithoutCompaniesInput
   BusinessScope: String
+  works: WorkUpdateManyWithoutCompanyInput
 }
 
 input CompanyUpdateManyMutationInput {
@@ -1006,10 +802,10 @@ input CompanyUpdateManyWithoutLocationInput {
   upsert: [CompanyUpsertWithWhereUniqueWithoutLocationInput!]
 }
 
-input CompanyUpdateOneInput {
-  create: CompanyCreateInput
-  update: CompanyUpdateDataInput
-  upsert: CompanyUpsertNestedInput
+input CompanyUpdateOneWithoutWorksInput {
+  create: CompanyCreateWithoutWorksInput
+  update: CompanyUpdateWithoutWorksDataInput
+  upsert: CompanyUpsertWithoutWorksInput
   delete: Boolean
   disconnect: Boolean
   connect: CompanyWhereUniqueInput
@@ -1021,6 +817,16 @@ input CompanyUpdateWithoutLocationDataInput {
   establishmentDate: DateTime
   representative: String
   BusinessScope: String
+  works: WorkUpdateManyWithoutCompanyInput
+}
+
+input CompanyUpdateWithoutWorksDataInput {
+  name: String
+  code: String
+  establishmentDate: DateTime
+  representative: String
+  location: LocationUpdateOneWithoutCompaniesInput
+  BusinessScope: String
 }
 
 input CompanyUpdateWithWhereUniqueWithoutLocationInput {
@@ -1028,9 +834,9 @@ input CompanyUpdateWithWhereUniqueWithoutLocationInput {
   data: CompanyUpdateWithoutLocationDataInput!
 }
 
-input CompanyUpsertNestedInput {
-  update: CompanyUpdateDataInput!
-  create: CompanyCreateInput!
+input CompanyUpsertWithoutWorksInput {
+  update: CompanyUpdateWithoutWorksDataInput!
+  create: CompanyCreateWithoutWorksInput!
 }
 
 input CompanyUpsertWithWhereUniqueWithoutLocationInput {
@@ -1119,6 +925,9 @@ input CompanyWhereInput {
   BusinessScope_not_starts_with: String
   BusinessScope_ends_with: String
   BusinessScope_not_ends_with: String
+  works_every: WorkWhereInput
+  works_some: WorkWhereInput
+  works_none: WorkWhereInput
   AND: [CompanyWhereInput!]
   OR: [CompanyWhereInput!]
   NOT: [CompanyWhereInput!]
@@ -1126,6 +935,7 @@ input CompanyWhereInput {
 
 input CompanyWhereUniqueInput {
   id: ID
+  name: String
 }
 
 scalar DateTime
@@ -1936,12 +1746,6 @@ type Mutation {
   upsertCompany(where: CompanyWhereUniqueInput!, create: CompanyCreateInput!, update: CompanyUpdateInput!): Company!
   deleteCompany(where: CompanyWhereUniqueInput!): Company
   deleteManyCompanies(where: CompanyWhereInput): BatchPayload!
-  createCompanyJob(data: CompanyJobCreateInput!): CompanyJob!
-  updateCompanyJob(data: CompanyJobUpdateInput!, where: CompanyJobWhereUniqueInput!): CompanyJob
-  updateManyCompanyJobs(data: CompanyJobUpdateManyMutationInput!, where: CompanyJobWhereInput): BatchPayload!
-  upsertCompanyJob(where: CompanyJobWhereUniqueInput!, create: CompanyJobCreateInput!, update: CompanyJobUpdateInput!): CompanyJob!
-  deleteCompanyJob(where: CompanyJobWhereUniqueInput!): CompanyJob
-  deleteManyCompanyJobs(where: CompanyJobWhereInput): BatchPayload!
   createFamily(data: FamilyCreateInput!): Family!
   updateFamily(data: FamilyUpdateInput!, where: FamilyWhereUniqueInput!): Family
   updateManyFamilies(data: FamilyUpdateManyMutationInput!, where: FamilyWhereInput): BatchPayload!
@@ -2025,6 +1829,12 @@ type Mutation {
   upsertVillage(where: VillageWhereUniqueInput!, create: VillageCreateInput!, update: VillageUpdateInput!): Village!
   deleteVillage(where: VillageWhereUniqueInput!): Village
   deleteManyVillages(where: VillageWhereInput): BatchPayload!
+  createWork(data: WorkCreateInput!): Work!
+  updateWork(data: WorkUpdateInput!, where: WorkWhereUniqueInput!): Work
+  updateManyWorks(data: WorkUpdateManyMutationInput!, where: WorkWhereInput): BatchPayload!
+  upsertWork(where: WorkWhereUniqueInput!, create: WorkCreateInput!, update: WorkUpdateInput!): Work!
+  deleteWork(where: WorkWhereUniqueInput!): Work
+  deleteManyWorks(where: WorkWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -2573,9 +2383,6 @@ type Query {
   company(where: CompanyWhereUniqueInput!): Company
   companies(where: CompanyWhereInput, orderBy: CompanyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Company]!
   companiesConnection(where: CompanyWhereInput, orderBy: CompanyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CompanyConnection!
-  companyJob(where: CompanyJobWhereUniqueInput!): CompanyJob
-  companyJobs(where: CompanyJobWhereInput, orderBy: CompanyJobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CompanyJob]!
-  companyJobsConnection(where: CompanyJobWhereInput, orderBy: CompanyJobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CompanyJobConnection!
   family(where: FamilyWhereUniqueInput!): Family
   families(where: FamilyWhereInput, orderBy: FamilyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Family]!
   familiesConnection(where: FamilyWhereInput, orderBy: FamilyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FamilyConnection!
@@ -2618,6 +2425,9 @@ type Query {
   village(where: VillageWhereUniqueInput!): Village
   villages(where: VillageWhereInput, orderBy: VillageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Village]!
   villagesConnection(where: VillageWhereInput, orderBy: VillageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): VillageConnection!
+  work(where: WorkWhereUniqueInput!): Work
+  works(where: WorkWhereInput, orderBy: WorkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Work]!
+  worksConnection(where: WorkWhereInput, orderBy: WorkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): WorkConnection!
   node(id: ID!): Node
 }
 
@@ -3450,7 +3260,6 @@ type Subscription {
   city(where: CitySubscriptionWhereInput): CitySubscriptionPayload
   collegeEntranceExam(where: CollegeEntranceExamSubscriptionWhereInput): CollegeEntranceExamSubscriptionPayload
   company(where: CompanySubscriptionWhereInput): CompanySubscriptionPayload
-  companyJob(where: CompanyJobSubscriptionWhereInput): CompanyJobSubscriptionPayload
   family(where: FamilySubscriptionWhereInput): FamilySubscriptionPayload
   location(where: LocationSubscriptionWhereInput): LocationSubscriptionPayload
   major(where: MajorSubscriptionWhereInput): MajorSubscriptionPayload
@@ -3465,6 +3274,7 @@ type Subscription {
   university(where: UniversitySubscriptionWhereInput): UniversitySubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   village(where: VillageSubscriptionWhereInput): VillageSubscriptionPayload
+  work(where: WorkSubscriptionWhereInput): WorkSubscriptionPayload
 }
 
 type University {
@@ -3691,7 +3501,7 @@ type User {
   regStatus: RegStatus
   families(where: FamilyWhereInput, orderBy: FamilyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Family!]
   studies(where: SchoolEduWhereInput, orderBy: SchoolEduOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SchoolEdu!]
-  works(where: CompanyJobWhereInput, orderBy: CompanyJobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CompanyJob!]
+  works(where: WorkWhereInput, orderBy: WorkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Work!]
 }
 
 type UserConnection {
@@ -3715,7 +3525,7 @@ input UserCreateInput {
   regStatus: RegStatusCreateOneWithoutApplicantsInput
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
-  works: CompanyJobCreateManyWithoutWorkersInput
+  works: WorkCreateManyWithoutWorkerInput
 }
 
 input UserCreateManyWithoutBirthplaceInput {
@@ -3730,11 +3540,6 @@ input UserCreateManyWithoutRegStatusInput {
 
 input UserCreateManyWithoutStudiesInput {
   create: [UserCreateWithoutStudiesInput!]
-  connect: [UserWhereUniqueInput!]
-}
-
-input UserCreateManyWithoutWorksInput {
-  create: [UserCreateWithoutWorksInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -3753,6 +3558,11 @@ input UserCreateOneWithoutPostsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutWorksInput {
+  create: UserCreateWithoutWorksInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateWithoutBirthplaceInput {
   username: String!
   password: String!
@@ -3767,7 +3577,7 @@ input UserCreateWithoutBirthplaceInput {
   regStatus: RegStatusCreateOneWithoutApplicantsInput
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
-  works: CompanyJobCreateManyWithoutWorkersInput
+  works: WorkCreateManyWithoutWorkerInput
 }
 
 input UserCreateWithoutFamiliesInput {
@@ -3784,7 +3594,7 @@ input UserCreateWithoutFamiliesInput {
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
   studies: SchoolEduCreateManyWithoutStudentsInput
-  works: CompanyJobCreateManyWithoutWorkersInput
+  works: WorkCreateManyWithoutWorkerInput
 }
 
 input UserCreateWithoutPostsInput {
@@ -3801,7 +3611,7 @@ input UserCreateWithoutPostsInput {
   regStatus: RegStatusCreateOneWithoutApplicantsInput
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
-  works: CompanyJobCreateManyWithoutWorkersInput
+  works: WorkCreateManyWithoutWorkerInput
 }
 
 input UserCreateWithoutRegStatusInput {
@@ -3818,7 +3628,7 @@ input UserCreateWithoutRegStatusInput {
   posts: PostCreateManyWithoutAuthorInput
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
-  works: CompanyJobCreateManyWithoutWorkersInput
+  works: WorkCreateManyWithoutWorkerInput
 }
 
 input UserCreateWithoutStudiesInput {
@@ -3835,7 +3645,7 @@ input UserCreateWithoutStudiesInput {
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
   families: FamilyCreateManyWithoutFromInput
-  works: CompanyJobCreateManyWithoutWorkersInput
+  works: WorkCreateManyWithoutWorkerInput
 }
 
 input UserCreateWithoutWorksInput {
@@ -3935,7 +3745,7 @@ input UserUpdateDataInput {
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
-  works: CompanyJobUpdateManyWithoutWorkersInput
+  works: WorkUpdateManyWithoutWorkerInput
 }
 
 input UserUpdateInput {
@@ -3953,7 +3763,7 @@ input UserUpdateInput {
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
-  works: CompanyJobUpdateManyWithoutWorkersInput
+  works: WorkUpdateManyWithoutWorkerInput
 }
 
 input UserUpdateManyMutationInput {
@@ -3995,15 +3805,6 @@ input UserUpdateManyWithoutStudiesInput {
   upsert: [UserUpsertWithWhereUniqueWithoutStudiesInput!]
 }
 
-input UserUpdateManyWithoutWorksInput {
-  create: [UserCreateWithoutWorksInput!]
-  delete: [UserWhereUniqueInput!]
-  connect: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutWorksInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutWorksInput!]
-}
-
 input UserUpdateOneInput {
   create: UserCreateInput
   update: UserUpdateDataInput
@@ -4034,6 +3835,15 @@ input UserUpdateOneRequiredWithoutPostsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneWithoutWorksInput {
+  create: UserCreateWithoutWorksInput
+  update: UserUpdateWithoutWorksDataInput
+  upsert: UserUpsertWithoutWorksInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateWithoutBirthplaceDataInput {
   username: String
   password: String
@@ -4048,7 +3858,7 @@ input UserUpdateWithoutBirthplaceDataInput {
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
-  works: CompanyJobUpdateManyWithoutWorkersInput
+  works: WorkUpdateManyWithoutWorkerInput
 }
 
 input UserUpdateWithoutFamiliesDataInput {
@@ -4065,7 +3875,7 @@ input UserUpdateWithoutFamiliesDataInput {
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
-  works: CompanyJobUpdateManyWithoutWorkersInput
+  works: WorkUpdateManyWithoutWorkerInput
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -4082,7 +3892,7 @@ input UserUpdateWithoutPostsDataInput {
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
-  works: CompanyJobUpdateManyWithoutWorkersInput
+  works: WorkUpdateManyWithoutWorkerInput
 }
 
 input UserUpdateWithoutRegStatusDataInput {
@@ -4099,7 +3909,7 @@ input UserUpdateWithoutRegStatusDataInput {
   posts: PostUpdateManyWithoutAuthorInput
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
-  works: CompanyJobUpdateManyWithoutWorkersInput
+  works: WorkUpdateManyWithoutWorkerInput
 }
 
 input UserUpdateWithoutStudiesDataInput {
@@ -4116,7 +3926,7 @@ input UserUpdateWithoutStudiesDataInput {
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
   families: FamilyUpdateManyWithoutFromInput
-  works: CompanyJobUpdateManyWithoutWorkersInput
+  works: WorkUpdateManyWithoutWorkerInput
 }
 
 input UserUpdateWithoutWorksDataInput {
@@ -4151,11 +3961,6 @@ input UserUpdateWithWhereUniqueWithoutStudiesInput {
   data: UserUpdateWithoutStudiesDataInput!
 }
 
-input UserUpdateWithWhereUniqueWithoutWorksInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutWorksDataInput!
-}
-
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
@@ -4169,6 +3974,11 @@ input UserUpsertWithoutFamiliesInput {
 input UserUpsertWithoutPostsInput {
   update: UserUpdateWithoutPostsDataInput!
   create: UserCreateWithoutPostsInput!
+}
+
+input UserUpsertWithoutWorksInput {
+  update: UserUpdateWithoutWorksDataInput!
+  create: UserCreateWithoutWorksInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutBirthplaceInput {
@@ -4187,12 +3997,6 @@ input UserUpsertWithWhereUniqueWithoutStudiesInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutStudiesDataInput!
   create: UserCreateWithoutStudiesInput!
-}
-
-input UserUpsertWithWhereUniqueWithoutWorksInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutWorksDataInput!
-  create: UserCreateWithoutWorksInput!
 }
 
 input UserWhereInput {
@@ -4357,9 +4161,9 @@ input UserWhereInput {
   studies_every: SchoolEduWhereInput
   studies_some: SchoolEduWhereInput
   studies_none: SchoolEduWhereInput
-  works_every: CompanyJobWhereInput
-  works_some: CompanyJobWhereInput
-  works_none: CompanyJobWhereInput
+  works_every: WorkWhereInput
+  works_some: WorkWhereInput
+  works_none: WorkWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
@@ -4556,6 +4360,272 @@ input VillageWhereInput {
 input VillageWhereUniqueInput {
   id: ID
   code: String
+}
+
+type Work {
+  id: ID!
+  startTime: DateTime
+  endTime: DateTime
+  company: Company
+  department: String
+  post: String
+  jobContent: String
+  worker: User
+}
+
+type WorkConnection {
+  pageInfo: PageInfo!
+  edges: [WorkEdge]!
+  aggregate: AggregateWork!
+}
+
+input WorkCreateInput {
+  startTime: DateTime
+  endTime: DateTime
+  company: CompanyCreateOneWithoutWorksInput
+  department: String
+  post: String
+  jobContent: String
+  worker: UserCreateOneWithoutWorksInput
+}
+
+input WorkCreateManyWithoutCompanyInput {
+  create: [WorkCreateWithoutCompanyInput!]
+  connect: [WorkWhereUniqueInput!]
+}
+
+input WorkCreateManyWithoutWorkerInput {
+  create: [WorkCreateWithoutWorkerInput!]
+  connect: [WorkWhereUniqueInput!]
+}
+
+input WorkCreateWithoutCompanyInput {
+  startTime: DateTime
+  endTime: DateTime
+  department: String
+  post: String
+  jobContent: String
+  worker: UserCreateOneWithoutWorksInput
+}
+
+input WorkCreateWithoutWorkerInput {
+  startTime: DateTime
+  endTime: DateTime
+  company: CompanyCreateOneWithoutWorksInput
+  department: String
+  post: String
+  jobContent: String
+}
+
+type WorkEdge {
+  node: Work!
+  cursor: String!
+}
+
+enum WorkOrderByInput {
+  id_ASC
+  id_DESC
+  startTime_ASC
+  startTime_DESC
+  endTime_ASC
+  endTime_DESC
+  department_ASC
+  department_DESC
+  post_ASC
+  post_DESC
+  jobContent_ASC
+  jobContent_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type WorkPreviousValues {
+  id: ID!
+  startTime: DateTime
+  endTime: DateTime
+  department: String
+  post: String
+  jobContent: String
+}
+
+type WorkSubscriptionPayload {
+  mutation: MutationType!
+  node: Work
+  updatedFields: [String!]
+  previousValues: WorkPreviousValues
+}
+
+input WorkSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: WorkWhereInput
+  AND: [WorkSubscriptionWhereInput!]
+  OR: [WorkSubscriptionWhereInput!]
+  NOT: [WorkSubscriptionWhereInput!]
+}
+
+input WorkUpdateInput {
+  startTime: DateTime
+  endTime: DateTime
+  company: CompanyUpdateOneWithoutWorksInput
+  department: String
+  post: String
+  jobContent: String
+  worker: UserUpdateOneWithoutWorksInput
+}
+
+input WorkUpdateManyMutationInput {
+  startTime: DateTime
+  endTime: DateTime
+  department: String
+  post: String
+  jobContent: String
+}
+
+input WorkUpdateManyWithoutCompanyInput {
+  create: [WorkCreateWithoutCompanyInput!]
+  delete: [WorkWhereUniqueInput!]
+  connect: [WorkWhereUniqueInput!]
+  disconnect: [WorkWhereUniqueInput!]
+  update: [WorkUpdateWithWhereUniqueWithoutCompanyInput!]
+  upsert: [WorkUpsertWithWhereUniqueWithoutCompanyInput!]
+}
+
+input WorkUpdateManyWithoutWorkerInput {
+  create: [WorkCreateWithoutWorkerInput!]
+  delete: [WorkWhereUniqueInput!]
+  connect: [WorkWhereUniqueInput!]
+  disconnect: [WorkWhereUniqueInput!]
+  update: [WorkUpdateWithWhereUniqueWithoutWorkerInput!]
+  upsert: [WorkUpsertWithWhereUniqueWithoutWorkerInput!]
+}
+
+input WorkUpdateWithoutCompanyDataInput {
+  startTime: DateTime
+  endTime: DateTime
+  department: String
+  post: String
+  jobContent: String
+  worker: UserUpdateOneWithoutWorksInput
+}
+
+input WorkUpdateWithoutWorkerDataInput {
+  startTime: DateTime
+  endTime: DateTime
+  company: CompanyUpdateOneWithoutWorksInput
+  department: String
+  post: String
+  jobContent: String
+}
+
+input WorkUpdateWithWhereUniqueWithoutCompanyInput {
+  where: WorkWhereUniqueInput!
+  data: WorkUpdateWithoutCompanyDataInput!
+}
+
+input WorkUpdateWithWhereUniqueWithoutWorkerInput {
+  where: WorkWhereUniqueInput!
+  data: WorkUpdateWithoutWorkerDataInput!
+}
+
+input WorkUpsertWithWhereUniqueWithoutCompanyInput {
+  where: WorkWhereUniqueInput!
+  update: WorkUpdateWithoutCompanyDataInput!
+  create: WorkCreateWithoutCompanyInput!
+}
+
+input WorkUpsertWithWhereUniqueWithoutWorkerInput {
+  where: WorkWhereUniqueInput!
+  update: WorkUpdateWithoutWorkerDataInput!
+  create: WorkCreateWithoutWorkerInput!
+}
+
+input WorkWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  startTime: DateTime
+  startTime_not: DateTime
+  startTime_in: [DateTime!]
+  startTime_not_in: [DateTime!]
+  startTime_lt: DateTime
+  startTime_lte: DateTime
+  startTime_gt: DateTime
+  startTime_gte: DateTime
+  endTime: DateTime
+  endTime_not: DateTime
+  endTime_in: [DateTime!]
+  endTime_not_in: [DateTime!]
+  endTime_lt: DateTime
+  endTime_lte: DateTime
+  endTime_gt: DateTime
+  endTime_gte: DateTime
+  company: CompanyWhereInput
+  department: String
+  department_not: String
+  department_in: [String!]
+  department_not_in: [String!]
+  department_lt: String
+  department_lte: String
+  department_gt: String
+  department_gte: String
+  department_contains: String
+  department_not_contains: String
+  department_starts_with: String
+  department_not_starts_with: String
+  department_ends_with: String
+  department_not_ends_with: String
+  post: String
+  post_not: String
+  post_in: [String!]
+  post_not_in: [String!]
+  post_lt: String
+  post_lte: String
+  post_gt: String
+  post_gte: String
+  post_contains: String
+  post_not_contains: String
+  post_starts_with: String
+  post_not_starts_with: String
+  post_ends_with: String
+  post_not_ends_with: String
+  jobContent: String
+  jobContent_not: String
+  jobContent_in: [String!]
+  jobContent_not_in: [String!]
+  jobContent_lt: String
+  jobContent_lte: String
+  jobContent_gt: String
+  jobContent_gte: String
+  jobContent_contains: String
+  jobContent_not_contains: String
+  jobContent_starts_with: String
+  jobContent_not_starts_with: String
+  jobContent_ends_with: String
+  jobContent_not_ends_with: String
+  worker: UserWhereInput
+  AND: [WorkWhereInput!]
+  OR: [WorkWhereInput!]
+  NOT: [WorkWhereInput!]
+}
+
+input WorkWhereUniqueInput {
+  id: ID
 }
 `
       }

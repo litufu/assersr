@@ -47,6 +47,7 @@ export const typeDefs = gql`
     addLocation(location:PlaceInput,locationName:String):Location
     addSchool(name:String,kind:String,locationName:String):School
     addStudy(year:String,schoolId:String,majorId:String,grade:Int,className:String):SchoolEdu
+    addWork(companyName:String,startTime:String,endTime:String,department:String,post:String):Work
   }
 
   type Subscription {
@@ -89,7 +90,7 @@ export const typeDefs = gql`
     posts: [Post!]!
     createdAt: String!
     studies:[SchoolEdu]
-    works:[CompanyJob]
+    works:[Work]
   }
 
   type Person {
@@ -112,26 +113,29 @@ export const typeDefs = gql`
     user:User!
   }
 
-  type CompanyJob {
-    id: ID!
+  type Work{
+    id:ID!
+    startTime:String
+    endTime:String
     company:Company
-    startTime:String!
     department:String
     post:String
     jobContent:String
-    workers:[User]
+    worker:User
   }
 
   type Company{
-    id: ID!
-    name:String
-    code:String
-    establishmentDate:DateTime
+    id: ID! 
+    name:String 
+    code:String 
+    establishmentDate:String
     representative:String
     location:Location
     BusinessScope:String
+    works:[Work!]!
   }
 
+  
   enum Educationkind {
     PrimarySchool, #初等教育-小学
     JuniorMiddleSchool,#中等教育-初中

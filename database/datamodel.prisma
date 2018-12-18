@@ -41,7 +41,7 @@ type User {
   regStatus:RegStatus
   families:[Family!]!
   studies:[SchoolEdu!]!
-  works:[CompanyJob!]!
+  works:[Work!]!
 }
 # 地理位置
 type Location {
@@ -65,25 +65,27 @@ type Person {
   families:[Family!]!
 }
 
-# 公司提供的岗位
-type CompanyJob {
-  id: ID! @unique
-  company:Company
+type Work{
+  id:ID! @unique
   startTime:DateTime
+  endTime:DateTime
+  company:Company
   department:String
   post:String
   jobContent:String
-  workers:[User!]!
+  worker:User
 }
+
 # 公司
 type Company{
   id: ID! @unique
-  name:String
-  code:String
+  name:String @unique
+  code:String 
   establishmentDate:DateTime
   representative:String
   location:Location
   BusinessScope:String
+  works:[Work!]!
 }
 
 enum Educationkind {

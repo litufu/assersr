@@ -21,10 +21,6 @@ var models = [
     embedded: false
   },
   {
-    name: "CompanyJob",
-    embedded: false
-  },
-  {
     name: "Educationkind",
     embedded: false
   },
@@ -82,6 +78,10 @@ var models = [
   },
   {
     name: "Village",
+    embedded: false
+  },
+  {
+    name: "Work",
     embedded: false
   }
 ];

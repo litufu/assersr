@@ -22,6 +22,8 @@ import {
   validateBasicInfo,
   checkNum,
   checkCnEnNum,
+  checkDate,
+  checkCompanyName,
 } from '../validate'
 import {
   relationshipMap,
@@ -31,6 +33,7 @@ import {
 } from "../services/relationship"
 import { FAMILY_CHANGED } from './Subscription'
 import { pubsub } from '../subscriptions';
+import { worker } from 'cluster';
 
 export const Mutation = {
   signup: async (parent, { username, password }, ctx) => {
@@ -764,6 +767,47 @@ export const Mutation = {
       }
     )
     return res3      
+  },
+
+  addWork:async (parent, { companyName,startTime,endTime,department,post }, ctx) => {
+    // 权限验证
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    // -----------------------------------------------
+    // 输入数据验证
+    checkDate(startTime)
+    checkDate(endTime)
+    checkCompanyName(companyName)
+    checkName(department)
+    checkName(post)
+    // -----------------------------------------------
+    // 获取要输入的数据。 
+    // 获取学校地址
+    const companies = ctx.db.companies({where:{name:companyName}})
+    if(companies.length>0){
+      return ctx.db.createWork({
+        startTime,
+        endTime,
+        department,
+        post,
+        company:{connect:{id:companies[0].id}},
+        worker:{connect:{uid:userId}}
+      })
+    }
+    return ctx.db.createWork({
+      startTime,
+      endTime,
+      department,
+      post,
+      company:{create:{name:companyName}},
+      worker:{connect:{uid:userId}}
+    })
   },
 
   createDraft: async (parent, { title, content, authorEmail }, ctx) => ctx.db.createPost({

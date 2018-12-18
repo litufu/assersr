@@ -12,6 +12,13 @@ export const validateBasicInfo=(name,gender,birthday,birthplace)=>{
   checkHasInput(birthplace.street,'所在村')
 }
 
+export const checkCompanyName = (companyName)=>{
+  const rxName =/^[（()）\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/
+  if(!rxName.test(companyName)){
+    throw new Error('公司名称错误')
+  }
+}
+
 export const checkName = (name)=>{
   const rxName =/^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/
   if(!rxName.test(name)){
@@ -33,7 +40,7 @@ export  const checkCalendar = (calendar)=>{
 
 export const checkDate= (date)=>{
   if(isNaN(Date.parse(date))){
-     throw new Error('你的生日选择错误')
+     throw new Error('日期错误')
   }
 }
 
