@@ -8,15 +8,11 @@ type Post {
   author: User!
 }
 
-type Subject {
-  id: ID! @unique
-  name:String!
-}
 
 type CollegeEntranceExam {
   id: ID! @unique
   province:Province!
-  subject:Subject!
+  subject:String!
   culscore:Float!
   proscore:Float
   candidatenum:String!

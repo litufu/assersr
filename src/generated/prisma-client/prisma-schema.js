@@ -55,10 +55,6 @@ type AggregateStreet {
   count: Int!
 }
 
-type AggregateSubject {
-  count: Int!
-}
-
 type AggregateUniversity {
   count: Int!
 }
@@ -530,7 +526,7 @@ input CityWhereUniqueInput {
 type CollegeEntranceExam {
   id: ID!
   province: Province!
-  subject: Subject!
+  subject: String!
   culscore: Float!
   proscore: Float
   candidatenum: String!
@@ -545,7 +541,7 @@ type CollegeEntranceExamConnection {
 
 input CollegeEntranceExamCreateInput {
   province: ProvinceCreateOneInput!
-  subject: SubjectCreateOneInput!
+  subject: String!
   culscore: Float!
   proscore: Float
   candidatenum: String!
@@ -560,6 +556,8 @@ type CollegeEntranceExamEdge {
 enum CollegeEntranceExamOrderByInput {
   id_ASC
   id_DESC
+  subject_ASC
+  subject_DESC
   culscore_ASC
   culscore_DESC
   proscore_ASC
@@ -574,6 +572,7 @@ enum CollegeEntranceExamOrderByInput {
 
 type CollegeEntranceExamPreviousValues {
   id: ID!
+  subject: String!
   culscore: Float!
   proscore: Float
   candidatenum: String!
@@ -599,7 +598,7 @@ input CollegeEntranceExamSubscriptionWhereInput {
 
 input CollegeEntranceExamUpdateInput {
   province: ProvinceUpdateOneRequiredInput
-  subject: SubjectUpdateOneRequiredInput
+  subject: String
   culscore: Float
   proscore: Float
   candidatenum: String
@@ -607,6 +606,7 @@ input CollegeEntranceExamUpdateInput {
 }
 
 input CollegeEntranceExamUpdateManyMutationInput {
+  subject: String
   culscore: Float
   proscore: Float
   candidatenum: String
@@ -628,7 +628,20 @@ input CollegeEntranceExamWhereInput {
   id_ends_with: ID
   id_not_ends_with: ID
   province: ProvinceWhereInput
-  subject: SubjectWhereInput
+  subject: String
+  subject_not: String
+  subject_in: [String!]
+  subject_not_in: [String!]
+  subject_lt: String
+  subject_lte: String
+  subject_gt: String
+  subject_gte: String
+  subject_contains: String
+  subject_not_contains: String
+  subject_starts_with: String
+  subject_not_starts_with: String
+  subject_ends_with: String
+  subject_not_ends_with: String
   culscore: Float
   culscore_not: Float
   culscore_in: [Float!]
@@ -1805,12 +1818,6 @@ type Mutation {
   upsertStreet(where: StreetWhereUniqueInput!, create: StreetCreateInput!, update: StreetUpdateInput!): Street!
   deleteStreet(where: StreetWhereUniqueInput!): Street
   deleteManyStreets(where: StreetWhereInput): BatchPayload!
-  createSubject(data: SubjectCreateInput!): Subject!
-  updateSubject(data: SubjectUpdateInput!, where: SubjectWhereUniqueInput!): Subject
-  updateManySubjects(data: SubjectUpdateManyMutationInput!, where: SubjectWhereInput): BatchPayload!
-  upsertSubject(where: SubjectWhereUniqueInput!, create: SubjectCreateInput!, update: SubjectUpdateInput!): Subject!
-  deleteSubject(where: SubjectWhereUniqueInput!): Subject
-  deleteManySubjects(where: SubjectWhereInput): BatchPayload!
   createUniversity(data: UniversityCreateInput!): University!
   updateUniversity(data: UniversityUpdateInput!, where: UniversityWhereUniqueInput!): University
   updateManyUniversities(data: UniversityUpdateManyMutationInput!, where: UniversityWhereInput): BatchPayload!
@@ -2413,9 +2420,6 @@ type Query {
   street(where: StreetWhereUniqueInput!): Street
   streets(where: StreetWhereInput, orderBy: StreetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Street]!
   streetsConnection(where: StreetWhereInput, orderBy: StreetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StreetConnection!
-  subject(where: SubjectWhereUniqueInput!): Subject
-  subjects(where: SubjectWhereInput, orderBy: SubjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Subject]!
-  subjectsConnection(where: SubjectWhereInput, orderBy: SubjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SubjectConnection!
   university(where: UniversityWhereUniqueInput!): University
   universities(where: UniversityWhereInput, orderBy: UniversityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [University]!
   universitiesConnection(where: UniversityWhereInput, orderBy: UniversityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UniversityConnection!
@@ -3134,127 +3138,6 @@ input StreetWhereUniqueInput {
   code: String
 }
 
-type Subject {
-  id: ID!
-  name: String!
-}
-
-type SubjectConnection {
-  pageInfo: PageInfo!
-  edges: [SubjectEdge]!
-  aggregate: AggregateSubject!
-}
-
-input SubjectCreateInput {
-  name: String!
-}
-
-input SubjectCreateOneInput {
-  create: SubjectCreateInput
-  connect: SubjectWhereUniqueInput
-}
-
-type SubjectEdge {
-  node: Subject!
-  cursor: String!
-}
-
-enum SubjectOrderByInput {
-  id_ASC
-  id_DESC
-  name_ASC
-  name_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type SubjectPreviousValues {
-  id: ID!
-  name: String!
-}
-
-type SubjectSubscriptionPayload {
-  mutation: MutationType!
-  node: Subject
-  updatedFields: [String!]
-  previousValues: SubjectPreviousValues
-}
-
-input SubjectSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: SubjectWhereInput
-  AND: [SubjectSubscriptionWhereInput!]
-  OR: [SubjectSubscriptionWhereInput!]
-  NOT: [SubjectSubscriptionWhereInput!]
-}
-
-input SubjectUpdateDataInput {
-  name: String
-}
-
-input SubjectUpdateInput {
-  name: String
-}
-
-input SubjectUpdateManyMutationInput {
-  name: String
-}
-
-input SubjectUpdateOneRequiredInput {
-  create: SubjectCreateInput
-  update: SubjectUpdateDataInput
-  upsert: SubjectUpsertNestedInput
-  connect: SubjectWhereUniqueInput
-}
-
-input SubjectUpsertNestedInput {
-  update: SubjectUpdateDataInput!
-  create: SubjectCreateInput!
-}
-
-input SubjectWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  AND: [SubjectWhereInput!]
-  OR: [SubjectWhereInput!]
-  NOT: [SubjectWhereInput!]
-}
-
-input SubjectWhereUniqueInput {
-  id: ID
-}
-
 type Subscription {
   area(where: AreaSubscriptionWhereInput): AreaSubscriptionPayload
   city(where: CitySubscriptionWhereInput): CitySubscriptionPayload
@@ -3270,7 +3153,6 @@ type Subscription {
   school(where: SchoolSubscriptionWhereInput): SchoolSubscriptionPayload
   schoolEdu(where: SchoolEduSubscriptionWhereInput): SchoolEduSubscriptionPayload
   street(where: StreetSubscriptionWhereInput): StreetSubscriptionPayload
-  subject(where: SubjectSubscriptionWhereInput): SubjectSubscriptionPayload
   university(where: UniversitySubscriptionWhereInput): UniversitySubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   village(where: VillageSubscriptionWhereInput): VillageSubscriptionPayload

@@ -9,6 +9,7 @@ import { School } from './School'
 import { Location } from './Location'
 import { SchoolEdu } from './SchoolEdu'
 import { Work } from './Work'
+import { CollegeEntranceExam } from './CollegeEntranceExam'
 
 export const resolvers = {
   Query,
@@ -21,5 +22,6 @@ export const resolvers = {
   School,
   Location,
   SchoolEdu,
-  Work
+  Work,
+  CollegeEntranceExam
 }

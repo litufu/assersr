@@ -65,10 +65,6 @@ var models = [
     embedded: false
   },
   {
-    name: "Subject",
-    embedded: false
-  },
-  {
     name: "University",
     embedded: false
   },

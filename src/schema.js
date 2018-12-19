@@ -29,6 +29,7 @@ export const typeDefs = gql`
     family:[Family!]!
     getSchools(locationName:String,kind:String):[School]
     getMajors(majorName:String):[Major]
+    getExamBasicInfo:CollegeEntranceExam
   }
 
   type Mutation {
@@ -48,6 +49,7 @@ export const typeDefs = gql`
     addSchool(name:String,kind:String,locationName:String):School
     addStudy(year:String,schoolId:String,majorId:String,grade:Int,className:String):SchoolEdu
     addWork(companyName:String,startTime:String,endTime:String,department:String,post:String):Work
+    addExamBasicInfo(province:String, section:String, score:String, specialScore:String, examineeCardNumber:String):CollegeEntranceExam
   }
 
   type Subscription {
@@ -92,6 +94,8 @@ export const typeDefs = gql`
     studies:[SchoolEdu]
     works:[Work]
   }
+
+
 
   type Person {
     id: ID!
@@ -152,6 +156,8 @@ export const typeDefs = gql`
     HighToJunior,#成人高等教育-高中起点升专科
   }
 
+
+
   # 学校
   type School {
     id: ID!
@@ -183,6 +189,16 @@ export const typeDefs = gql`
     name: String!
     location:Location
     major:[Major!]!
+  }
+
+  type CollegeEntranceExam {
+    id: ID!
+    province:Province!
+    subject:String!
+    culscore:Float!
+    proscore:Float
+    candidatenum:String!
+    student:User!
   }
 
   type Location {

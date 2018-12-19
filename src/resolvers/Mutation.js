@@ -33,7 +33,6 @@ import {
 } from "../services/relationship"
 import { FAMILY_CHANGED } from './Subscription'
 import { pubsub } from '../subscriptions';
-import { worker } from 'cluster';
 
 export const Mutation = {
   signup: async (parent, { username, password }, ctx) => {
@@ -788,7 +787,6 @@ export const Mutation = {
     checkName(post)
     // -----------------------------------------------
     // 获取要输入的数据。 
-    // 获取学校地址
     const companies = ctx.db.companies({where:{name:companyName}})
     if(companies.length>0){
       return ctx.db.createWork({
@@ -809,6 +807,31 @@ export const Mutation = {
       worker:{connect:{uid:userId}}
     })
   },
+
+  addExamBasicInfo: async (parent, {  province, section, score, specialScore, examineeCardNumber }, ctx) => {
+     // 权限验证
+     const userId = getUserId(ctx)
+     if (!userId) {
+       throw new Error("用户不存在")
+     }
+     const user = await ctx.db.user({ uid: userId })
+     if (!user) {
+       throw new Error("用户不存在")
+     }
+     // -----------------------------------------------
+     // 输入数据验证
+    
+     // -----------------------------------------------
+     return ctx.db.createCollegeEntranceExam({
+       province:{connect:{code:province}},
+       subject:section,
+       culscore:parseFloat(score),
+       proscore:parseFloat(specialScore),
+       candidatenum:examineeCardNumber,
+       student:{connect:{uid:userId}}
+     })
+  },
+
 
   createDraft: async (parent, { title, content, authorEmail }, ctx) => ctx.db.createPost({
     title,

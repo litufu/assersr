@@ -50,5 +50,20 @@ export const Query = {
       }
     })
   },
+  getExamBasicInfo: async (parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const results = await ctx.db.collegeEntranceExams({
+      where: {
+        student: {uid:userId}
+      }
+    })
+    if(results.length===0){
+      return null
+    } 
+    return results[0]
+  },
   
 }
