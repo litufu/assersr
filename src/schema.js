@@ -50,6 +50,7 @@ export const typeDefs = gql`
     addStudy(year:String,schoolId:String,majorId:String,grade:Int,className:String):SchoolEdu
     addWork(companyName:String,startTime:String,endTime:String,department:String,post:String):Work
     addExamBasicInfo(province:String, section:String, score:String, specialScore:String, examineeCardNumber:String):CollegeEntranceExam
+    updateExamBasicInfo(province:String, section:String, score:String, specialScore:String, examineeCardNumber:String):CollegeEntranceExam
   }
 
   type Subscription {
@@ -91,6 +92,7 @@ export const typeDefs = gql`
     birthplace:Location
     posts: [Post!]!
     createdAt: String!
+    families:[Family]
     studies:[SchoolEdu]
     works:[Work]
   }
@@ -198,6 +200,7 @@ export const typeDefs = gql`
     culscore:Float!
     proscore:Float
     candidatenum:String!
+    times:Int
     student:User!
   }
 

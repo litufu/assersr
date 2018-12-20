@@ -16,6 +16,7 @@ type CollegeEntranceExam {
   culscore:Float!
   proscore:Float
   candidatenum:String!
+  times:Int
   student:User!
 }
 # 用户

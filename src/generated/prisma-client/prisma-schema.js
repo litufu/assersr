@@ -530,6 +530,7 @@ type CollegeEntranceExam {
   culscore: Float!
   proscore: Float
   candidatenum: String!
+  times: Int
   student: User!
 }
 
@@ -545,6 +546,7 @@ input CollegeEntranceExamCreateInput {
   culscore: Float!
   proscore: Float
   candidatenum: String!
+  times: Int
   student: UserCreateOneInput!
 }
 
@@ -564,6 +566,8 @@ enum CollegeEntranceExamOrderByInput {
   proscore_DESC
   candidatenum_ASC
   candidatenum_DESC
+  times_ASC
+  times_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -576,6 +580,7 @@ type CollegeEntranceExamPreviousValues {
   culscore: Float!
   proscore: Float
   candidatenum: String!
+  times: Int
 }
 
 type CollegeEntranceExamSubscriptionPayload {
@@ -602,6 +607,7 @@ input CollegeEntranceExamUpdateInput {
   culscore: Float
   proscore: Float
   candidatenum: String
+  times: Int
   student: UserUpdateOneRequiredInput
 }
 
@@ -610,6 +616,7 @@ input CollegeEntranceExamUpdateManyMutationInput {
   culscore: Float
   proscore: Float
   candidatenum: String
+  times: Int
 }
 
 input CollegeEntranceExamWhereInput {
@@ -672,6 +679,14 @@ input CollegeEntranceExamWhereInput {
   candidatenum_not_starts_with: String
   candidatenum_ends_with: String
   candidatenum_not_ends_with: String
+  times: Int
+  times_not: Int
+  times_in: [Int!]
+  times_not_in: [Int!]
+  times_lt: Int
+  times_lte: Int
+  times_gt: Int
+  times_gte: Int
   student: UserWhereInput
   AND: [CollegeEntranceExamWhereInput!]
   OR: [CollegeEntranceExamWhereInput!]

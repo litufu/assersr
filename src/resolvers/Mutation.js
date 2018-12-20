@@ -24,6 +24,7 @@ import {
   checkCnEnNum,
   checkDate,
   checkCompanyName,
+  checkScore
 } from '../validate'
 import {
   relationshipMap,
@@ -820,7 +821,13 @@ export const Mutation = {
      }
      // -----------------------------------------------
      // 输入数据验证
-    
+      checkNum(province)
+      if(!~["none","arts","science"].indexOf(section)){
+        throw new Error('选择的文理科不正确')
+      }
+      checkScore(score)
+      checkScore(specialScore)
+      checkNum(examineeCardNumber)
      // -----------------------------------------------
      return ctx.db.createCollegeEntranceExam({
        province:{connect:{code:province}},
@@ -828,9 +835,53 @@ export const Mutation = {
        culscore:parseFloat(score),
        proscore:parseFloat(specialScore),
        candidatenum:examineeCardNumber,
+       times:1,
        student:{connect:{uid:userId}}
      })
   },
+
+  updateExamBasicInfo: async (parent, {  province, section, score, specialScore, examineeCardNumber }, ctx) => {
+    // 权限验证
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    // -----------------------------------------------
+    // 输入数据验证
+    checkNum(province)
+    if(!~["none","arts","science"].indexOf(section)){
+      throw new Error('选择的文理科不正确')
+    }
+    checkScore(score)
+    checkScore(specialScore)
+    checkNum(examineeCardNumber)
+    // -----------------------------------------------
+    const oldExamBasicInfo = await ctx.db.collegeEntranceExams({
+      where:{student:{uid:userId}}
+    })
+    if(oldExamBasicInfo.length===0){
+      throw new Error('尚未创建高考信息')
+    }
+    if(oldExamBasicInfo[0].times>=3){
+      throw new Error('你修改的次数已达到上限')
+    }
+
+    return ctx.db.updateCollegeEntranceExam({
+      where:{id:oldExamBasicInfo[0].id},
+      data:{
+        province:{connect:{code:province}},
+        subject:section,
+        culscore:parseFloat(score),
+        proscore:parseFloat(specialScore),
+        candidatenum:examineeCardNumber,
+        times:oldExamBasicInfo[0].times + 1,
+      }
+    })
+ },
 
 
   createDraft: async (parent, { title, content, authorEmail }, ctx) => ctx.db.createPost({

@@ -95,3 +95,10 @@ export const checkNum = (str)=>{
     throw new Error("数字输入错误")
     }
 }
+
+export const checkScore = (str)=>{
+  const pattern = /^[0-9]+(.[0-9]{1,2})?$/
+  if(!pattern.test(str)){
+    throw new Error("分数格式错误")
+  }
+}

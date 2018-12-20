@@ -955,6 +955,8 @@ export type CollegeEntranceExamOrderByInput =
   | "proscore_DESC"
   | "candidatenum_ASC"
   | "candidatenum_DESC"
+  | "times_ASC"
+  | "times_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -1941,6 +1943,14 @@ export interface CollegeEntranceExamWhereInput {
   candidatenum_not_starts_with?: String;
   candidatenum_ends_with?: String;
   candidatenum_not_ends_with?: String;
+  times?: Int;
+  times_not?: Int;
+  times_in?: Int[] | Int;
+  times_not_in?: Int[] | Int;
+  times_lt?: Int;
+  times_lte?: Int;
+  times_gt?: Int;
+  times_gte?: Int;
   student?: UserWhereInput;
   AND?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
   OR?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
@@ -2406,6 +2416,7 @@ export interface CollegeEntranceExamUpdateInput {
   culscore?: Float;
   proscore?: Float;
   candidatenum?: String;
+  times?: Int;
   student?: UserUpdateOneRequiredInput;
 }
 
@@ -2708,6 +2719,7 @@ export interface CollegeEntranceExamUpdateManyMutationInput {
   culscore?: Float;
   proscore?: Float;
   candidatenum?: String;
+  times?: Int;
 }
 
 export interface AreaUpdateOneRequiredWithoutTownsInput {
@@ -2771,6 +2783,7 @@ export interface CollegeEntranceExamCreateInput {
   culscore: Float;
   proscore?: Float;
   candidatenum: String;
+  times?: Int;
   student: UserCreateOneInput;
 }
 
@@ -5319,6 +5332,7 @@ export interface CollegeEntranceExamPreviousValues {
   culscore: Float;
   proscore?: Float;
   candidatenum: String;
+  times?: Int;
 }
 
 export interface CollegeEntranceExamPreviousValuesPromise
@@ -5329,6 +5343,7 @@ export interface CollegeEntranceExamPreviousValuesPromise
   culscore: () => Promise<Float>;
   proscore: () => Promise<Float>;
   candidatenum: () => Promise<String>;
+  times: () => Promise<Int>;
 }
 
 export interface CollegeEntranceExamPreviousValuesSubscription
@@ -5339,6 +5354,7 @@ export interface CollegeEntranceExamPreviousValuesSubscription
   culscore: () => Promise<AsyncIterator<Float>>;
   proscore: () => Promise<AsyncIterator<Float>>;
   candidatenum: () => Promise<AsyncIterator<String>>;
+  times: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface ProvinceEdge {
@@ -7016,6 +7032,7 @@ export interface CollegeEntranceExam {
   culscore: Float;
   proscore?: Float;
   candidatenum: String;
+  times?: Int;
 }
 
 export interface CollegeEntranceExamPromise
@@ -7027,6 +7044,7 @@ export interface CollegeEntranceExamPromise
   culscore: () => Promise<Float>;
   proscore: () => Promise<Float>;
   candidatenum: () => Promise<String>;
+  times: () => Promise<Int>;
   student: <T = UserPromise>() => T;
 }
 
@@ -7039,6 +7057,7 @@ export interface CollegeEntranceExamSubscription
   culscore: () => Promise<AsyncIterator<Float>>;
   proscore: () => Promise<AsyncIterator<Float>>;
   candidatenum: () => Promise<AsyncIterator<String>>;
+  times: () => Promise<AsyncIterator<Int>>;
   student: <T = UserSubscription>() => T;
 }
 
