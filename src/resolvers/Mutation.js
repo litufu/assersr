@@ -902,7 +902,9 @@ export const Mutation = {
   }
   // -----------------------------------------------
   // 输入数据验证
-  if(!~['Undergraduate','JuniorCollege'].indexOf(education)){
+  console.log(education)
+  console.log(['Undergraduate','JuniorCollege'].indexOf(education))
+  if(!~(['Undergraduate','JuniorCollege'].indexOf(education))){
     throw new Error('请选择本科或者专科')
   }
   checkId(universityId)
