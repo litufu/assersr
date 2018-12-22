@@ -50,6 +50,17 @@ export const Query = {
       }
     })
   },
+  getUniversities:(parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    return ctx.db.universities({
+      where: {
+        name_contains: args.universityName
+      }
+    })
+  },
   getExamBasicInfo: async (parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
@@ -65,5 +76,100 @@ export const Query = {
     } 
     return results[0]
   },
+  getRegStatusApplicants:async (parent, {  education, universityId, majorId}, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const userExams = await ctx.db.collegeEntranceExams(
+      {
+        where:{student:{uid:userId}}
+      }
+    )
+    if(userExams.length===0){
+      throw new Error('尚未填写高考基本信息')
+    }
+    const userExamProvinceId = await ctx.db.collegeEntranceExam({
+      id:userExams[0].id
+    }).province().id()
+    const userExamSubject =  await ctx.db.collegeEntranceExam({
+      id:userExams[0].id
+    }).subject()
+
+    const regStatuses = await ctx.db.regStatuses({
+      where: {
+        education,
+        university:{id:universityId},
+        major:{id:majorId},
+      }
+    })
+    if(regStatuses.length===0){
+      return []
+    }
+
+    const applicants = await ctx.db.regStatus(
+      {
+        id:regStatuses[0].id
+      }
+    ).applicants({
+      where:{
+        exam:{
+          AND:[
+            {province:{id:userExamProvinceId}},
+            {subject:userExamSubject}
+          ]
+        }
+      }
+    })
+    
+    return applicants
+  },
+  getRegStatusApplicantsById:async (parent, {  regStatusId}, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const userExams = await ctx.db.collegeEntranceExams(
+      {
+        where:{student:{uid:userId}}
+      }
+    )
+    if(userExams.length===0){
+      throw new Error('尚未填写高考基本信息')
+    }
+    const userExamProvinceId = await ctx.db.collegeEntranceExam({
+      id:userExams[0].id
+    }).province().id()
+    const userExamSubject =  await ctx.db.collegeEntranceExam({
+      id:userExams[0].id
+    }).subject()
+
+    const applicants = await ctx.db.regStatus(
+      {
+        id:regStatusId
+      }
+    ).applicants({
+      where:{
+        exam:{
+          AND:[
+            {province:{id:userExamProvinceId}},
+            {subject:userExamSubject}
+          ]
+        }
+      }
+    })
+
   
+    return applicants
+  },
+  getRegStatus:async (parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    return await ctx.db.user(
+      {uid:userId}
+    ).regStatus()
+
+  },
 }

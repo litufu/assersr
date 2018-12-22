@@ -8,17 +8,36 @@ type Post {
   author: User!
 }
 
-
+# 高考基本信息
 type CollegeEntranceExam {
   id: ID! @unique
   province:Province!
   subject:String!
   culscore:Float!
   proscore:Float
-  candidatenum:String!
+  candidatenum:String! @unique
   times:Int
   student:User!
 }
+
+# 高考报名情况
+type RegStatus {
+  id: ID! @unique
+  education:Educationkind!
+  university:University
+  major:Major!
+  applicants:[User!]!
+}
+
+type University {
+  id: ID! @unique
+  name: String! @unique
+  education:Educationkind!
+  department:String
+  location:String
+  desc:String
+}
+
 # 用户
 type User {
   id: ID! @unique
@@ -36,9 +55,12 @@ type User {
   createdAt: DateTime!
   updatedAt: DateTime!
   regStatus:RegStatus
+  regTimes:Int
+  maxRegTimes:Int
   families:[Family!]!
   studies:[SchoolEdu!]!
   works:[Work!]!
+  exam:CollegeEntranceExam
 }
 # 地理位置
 type Location {
@@ -107,6 +129,7 @@ type School {
   name:String
   kind:Educationkind
   location:Location
+
 }
 # 学校开设的课程
 type SchoolEdu{
@@ -124,14 +147,6 @@ type Major {
   name: String!
   category:String!
   education:Educationkind!
-  universities:[University!]!
-}
-
-type University {
-  id: ID! @unique
-  name: String! @unique
-  location:Location
-  major:[Major!]!
 }
 
 type Family {
@@ -179,11 +194,4 @@ type Village {
   code:String! @unique
   name:String!
   street:Street!
-}
-
-type RegStatus {
-  id: ID! @unique
-  university:University
-  major:Major!
-  applicants:[User!]!
 }

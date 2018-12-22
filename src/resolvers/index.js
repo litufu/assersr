@@ -10,6 +10,8 @@ import { Location } from './Location'
 import { SchoolEdu } from './SchoolEdu'
 import { Work } from './Work'
 import { CollegeEntranceExam } from './CollegeEntranceExam'
+import {University} from './University'
+import {RegStatus} from './RegStatus'
 
 export const resolvers = {
   Query,
@@ -23,5 +25,7 @@ export const resolvers = {
   Location,
   SchoolEdu,
   Work,
-  CollegeEntranceExam
+  CollegeEntranceExam,
+  University,
+  RegStatus
 }

@@ -649,6 +649,12 @@ export interface Prisma {
   updateRegStatus: (
     args: { data: RegStatusUpdateInput; where: RegStatusWhereUniqueInput }
   ) => RegStatusPromise;
+  updateManyRegStatuses: (
+    args: {
+      data: RegStatusUpdateManyMutationInput;
+      where?: RegStatusWhereInput;
+    }
+  ) => BatchPayloadPromise;
   upsertRegStatus: (
     args: {
       where: RegStatusWhereUniqueInput;
@@ -876,35 +882,25 @@ export type Educationkind =
   | "HighToCollege"
   | "HighToJunior";
 
-export type UserOrderByInput =
+export type PostOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "username_ASC"
-  | "username_DESC"
-  | "password_ASC"
-  | "password_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "gender_ASC"
-  | "gender_DESC"
-  | "avatar_ASC"
-  | "avatar_DESC"
-  | "birthdaycalendar_ASC"
-  | "birthdaycalendar_DESC"
-  | "birthday_ASC"
-  | "birthday_DESC"
-  | "uid_ASC"
-  | "uid_DESC"
-  | "token_ASC"
-  | "token_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
-  | "updatedAt_DESC";
+  | "updatedAt_DESC"
+  | "isPublished_ASC"
+  | "isPublished_DESC"
+  | "title_ASC"
+  | "title_DESC"
+  | "content_ASC"
+  | "content_DESC";
 
 export type RegStatusOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "education_ASC"
+  | "education_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -944,45 +940,55 @@ export type StreetOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type CollegeEntranceExamOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "subject_ASC"
-  | "subject_DESC"
-  | "culscore_ASC"
-  | "culscore_DESC"
-  | "proscore_ASC"
-  | "proscore_DESC"
-  | "candidatenum_ASC"
-  | "candidatenum_DESC"
-  | "times_ASC"
-  | "times_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export type MajorOrderByInput =
+export type LocationOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "name_ASC"
   | "name_DESC"
-  | "category_ASC"
-  | "category_DESC"
-  | "education_ASC"
-  | "education_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type FamilyOrderByInput =
+export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "relationship_ASC"
-  | "relationship_DESC"
-  | "status_ASC"
-  | "status_DESC"
+  | "username_ASC"
+  | "username_DESC"
+  | "password_ASC"
+  | "password_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "gender_ASC"
+  | "gender_DESC"
+  | "avatar_ASC"
+  | "avatar_DESC"
+  | "birthdaycalendar_ASC"
+  | "birthdaycalendar_DESC"
+  | "birthday_ASC"
+  | "birthday_DESC"
+  | "uid_ASC"
+  | "uid_DESC"
+  | "token_ASC"
+  | "token_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "regTimes_ASC"
+  | "regTimes_DESC"
+  | "maxRegTimes_ASC"
+  | "maxRegTimes_DESC";
+
+export type SchoolEduOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "startTime_ASC"
+  | "startTime_DESC"
+  | "grade_ASC"
+  | "grade_DESC"
+  | "className_ASC"
+  | "className_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -1055,6 +1061,14 @@ export type UniversityOrderByInput =
   | "id_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "education_ASC"
+  | "education_DESC"
+  | "department_ASC"
+  | "department_DESC"
+  | "location_ASC"
+  | "location_DESC"
+  | "desc_ASC"
+  | "desc_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -1072,51 +1086,57 @@ export type ProvinceOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type PostOrderByInput =
+export type FamilyOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "isPublished_ASC"
-  | "isPublished_DESC"
-  | "title_ASC"
-  | "title_DESC"
-  | "content_ASC"
-  | "content_DESC";
-
-export type SchoolEduOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "startTime_ASC"
-  | "startTime_DESC"
-  | "grade_ASC"
-  | "grade_DESC"
-  | "className_ASC"
-  | "className_DESC"
+  | "relationship_ASC"
+  | "relationship_DESC"
+  | "status_ASC"
+  | "status_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type LocationOrderByInput =
+export type CollegeEntranceExamOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "subject_ASC"
+  | "subject_DESC"
+  | "culscore_ASC"
+  | "culscore_DESC"
+  | "proscore_ASC"
+  | "proscore_DESC"
+  | "candidatenum_ASC"
+  | "candidatenum_DESC"
+  | "times_ASC"
+  | "times_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type MajorOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "category_ASC"
+  | "category_DESC"
+  | "education_ASC"
+  | "education_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export interface CompanyCreateWithoutWorksInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  location?: LocationCreateOneWithoutCompaniesInput;
-  BusinessScope?: String;
+export interface CollegeEntranceExamCreateWithoutStudentInput {
+  province: ProvinceCreateOneInput;
+  subject: String;
+  culscore: Float;
+  proscore?: Float;
+  candidatenum: String;
+  times?: Int;
 }
 
 export type AreaWhereUniqueInput = AtLeastOne<{
@@ -1124,33 +1144,32 @@ export type AreaWhereUniqueInput = AtLeastOne<{
   code?: String;
 }>;
 
-export interface VillageCreateOneInput {
-  create?: VillageCreateInput;
-  connect?: VillageWhereUniqueInput;
+export interface StreetCreateOneInput {
+  create?: StreetCreateInput;
+  connect?: StreetWhereUniqueInput;
 }
 
-export interface CompanyUpsertWithWhereUniqueWithoutLocationInput {
-  where: CompanyWhereUniqueInput;
-  update: CompanyUpdateWithoutLocationDataInput;
-  create: CompanyCreateWithoutLocationInput;
+export interface UserUpsertWithoutExamInput {
+  update: UserUpdateWithoutExamDataInput;
+  create: UserCreateWithoutExamInput;
 }
 
-export interface VillageCreateInput {
+export interface StreetCreateInput {
   code: String;
   name: String;
-  street: StreetCreateOneWithoutVillagesInput;
+  Area: AreaCreateOneWithoutTownsInput;
+  villages?: VillageCreateManyWithoutStreetInput;
 }
 
-export interface UserUpdateOneRequiredInput {
-  create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
-  connect?: UserWhereUniqueInput;
+export interface CityUpsertWithWhereUniqueWithoutProvinceInput {
+  where: CityWhereUniqueInput;
+  update: CityUpdateWithoutProvinceDataInput;
+  create: CityCreateWithoutProvinceInput;
 }
 
-export interface StreetCreateOneWithoutVillagesInput {
-  create?: StreetCreateWithoutVillagesInput;
-  connect?: StreetWhereUniqueInput;
+export interface AreaCreateOneWithoutTownsInput {
+  create?: AreaCreateWithoutTownsInput;
+  connect?: AreaWhereUniqueInput;
 }
 
 export interface VillageSubscriptionWhereInput {
@@ -1164,21 +1183,20 @@ export interface VillageSubscriptionWhereInput {
   NOT?: VillageSubscriptionWhereInput[] | VillageSubscriptionWhereInput;
 }
 
-export interface StreetCreateWithoutVillagesInput {
+export interface AreaCreateWithoutTownsInput {
   code: String;
   name: String;
-  Area: AreaCreateOneWithoutTownsInput;
+  city: CityCreateOneWithoutAreasInput;
 }
 
 export type CollegeEntranceExamWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
+  candidatenum?: String;
 }>;
 
-export interface SchoolCreateManyWithoutLocationInput {
-  create?:
-    | SchoolCreateWithoutLocationInput[]
-    | SchoolCreateWithoutLocationInput;
-  connect?: SchoolWhereUniqueInput[] | SchoolWhereUniqueInput;
+export interface VillageCreateOneInput {
+  create?: VillageCreateInput;
+  connect?: VillageWhereUniqueInput;
 }
 
 export interface StreetSubscriptionWhereInput {
@@ -1192,9 +1210,10 @@ export interface StreetSubscriptionWhereInput {
   NOT?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
 }
 
-export interface SchoolCreateWithoutLocationInput {
-  name?: String;
-  kind?: Educationkind;
+export interface VillageCreateInput {
+  code: String;
+  name: String;
+  street: StreetCreateOneWithoutVillagesInput;
 }
 
 export interface SchoolSubscriptionWhereInput {
@@ -1208,11 +1227,9 @@ export interface SchoolSubscriptionWhereInput {
   NOT?: SchoolSubscriptionWhereInput[] | SchoolSubscriptionWhereInput;
 }
 
-export interface CompanyCreateManyWithoutLocationInput {
-  create?:
-    | CompanyCreateWithoutLocationInput[]
-    | CompanyCreateWithoutLocationInput;
-  connect?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
+export interface StreetCreateOneWithoutVillagesInput {
+  create?: StreetCreateWithoutVillagesInput;
+  connect?: StreetWhereUniqueInput;
 }
 
 export interface SchoolWhereInput {
@@ -1254,13 +1271,10 @@ export interface SchoolWhereInput {
   NOT?: SchoolWhereInput[] | SchoolWhereInput;
 }
 
-export interface CompanyCreateWithoutLocationInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  BusinessScope?: String;
-  works?: WorkCreateManyWithoutCompanyInput;
+export interface StreetCreateWithoutVillagesInput {
+  code: String;
+  name: String;
+  Area: AreaCreateOneWithoutTownsInput;
 }
 
 export interface LocationWhereInput {
@@ -1314,9 +1328,11 @@ export interface LocationWhereInput {
   NOT?: LocationWhereInput[] | LocationWhereInput;
 }
 
-export interface WorkCreateManyWithoutCompanyInput {
-  create?: WorkCreateWithoutCompanyInput[] | WorkCreateWithoutCompanyInput;
-  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
+export interface SchoolCreateManyWithoutLocationInput {
+  create?:
+    | SchoolCreateWithoutLocationInput[]
+    | SchoolCreateWithoutLocationInput;
+  connect?: SchoolWhereUniqueInput[] | SchoolWhereUniqueInput;
 }
 
 export interface WorkWhereInput {
@@ -1399,13 +1415,9 @@ export interface WorkWhereInput {
   NOT?: WorkWhereInput[] | WorkWhereInput;
 }
 
-export interface WorkCreateWithoutCompanyInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  department?: String;
-  post?: String;
-  jobContent?: String;
-  worker?: UserCreateOneWithoutWorksInput;
+export interface SchoolCreateWithoutLocationInput {
+  name?: String;
+  kind?: Educationkind;
 }
 
 export interface PostWhereInput {
@@ -1475,9 +1487,11 @@ export interface PostWhereInput {
   NOT?: PostWhereInput[] | PostWhereInput;
 }
 
-export interface UserCreateOneWithoutWorksInput {
-  create?: UserCreateWithoutWorksInput;
-  connect?: UserWhereUniqueInput;
+export interface CompanyCreateManyWithoutLocationInput {
+  create?:
+    | CompanyCreateWithoutLocationInput[]
+    | CompanyCreateWithoutLocationInput;
+  connect?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
 }
 
 export interface UniversityWhereInput {
@@ -1509,30 +1523,64 @@ export interface UniversityWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
-  location?: LocationWhereInput;
-  major_every?: MajorWhereInput;
-  major_some?: MajorWhereInput;
-  major_none?: MajorWhereInput;
+  education?: Educationkind;
+  education_not?: Educationkind;
+  education_in?: Educationkind[] | Educationkind;
+  education_not_in?: Educationkind[] | Educationkind;
+  department?: String;
+  department_not?: String;
+  department_in?: String[] | String;
+  department_not_in?: String[] | String;
+  department_lt?: String;
+  department_lte?: String;
+  department_gt?: String;
+  department_gte?: String;
+  department_contains?: String;
+  department_not_contains?: String;
+  department_starts_with?: String;
+  department_not_starts_with?: String;
+  department_ends_with?: String;
+  department_not_ends_with?: String;
+  location?: String;
+  location_not?: String;
+  location_in?: String[] | String;
+  location_not_in?: String[] | String;
+  location_lt?: String;
+  location_lte?: String;
+  location_gt?: String;
+  location_gte?: String;
+  location_contains?: String;
+  location_not_contains?: String;
+  location_starts_with?: String;
+  location_not_starts_with?: String;
+  location_ends_with?: String;
+  location_not_ends_with?: String;
+  desc?: String;
+  desc_not?: String;
+  desc_in?: String[] | String;
+  desc_not_in?: String[] | String;
+  desc_lt?: String;
+  desc_lte?: String;
+  desc_gt?: String;
+  desc_gte?: String;
+  desc_contains?: String;
+  desc_not_contains?: String;
+  desc_starts_with?: String;
+  desc_not_starts_with?: String;
+  desc_ends_with?: String;
+  desc_not_ends_with?: String;
   AND?: UniversityWhereInput[] | UniversityWhereInput;
   OR?: UniversityWhereInput[] | UniversityWhereInput;
   NOT?: UniversityWhereInput[] | UniversityWhereInput;
 }
 
-export interface UserCreateWithoutWorksInput {
-  username: String;
-  password: String;
+export interface CompanyCreateWithoutLocationInput {
   name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutPeopleInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  BusinessScope?: String;
+  works?: WorkCreateManyWithoutCompanyInput;
 }
 
 export interface FamilyWhereInput {
@@ -1586,9 +1634,9 @@ export interface FamilyWhereInput {
   NOT?: FamilyWhereInput[] | FamilyWhereInput;
 }
 
-export interface PostCreateManyWithoutAuthorInput {
-  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput;
-  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput;
+export interface WorkCreateManyWithoutCompanyInput {
+  create?: WorkCreateWithoutCompanyInput[] | WorkCreateWithoutCompanyInput;
+  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
 }
 
 export interface SchoolEduWhereInput {
@@ -1646,21 +1694,110 @@ export interface SchoolEduWhereInput {
   NOT?: SchoolEduWhereInput[] | SchoolEduWhereInput;
 }
 
+export interface WorkCreateWithoutCompanyInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  department?: String;
+  post?: String;
+  jobContent?: String;
+  worker?: UserCreateOneWithoutWorksInput;
+}
+
+export interface PostSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: PostWhereInput;
+  AND?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
+  OR?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
+  NOT?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
+}
+
+export interface UserCreateOneWithoutWorksInput {
+  create?: UserCreateWithoutWorksInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface MajorSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: MajorWhereInput;
+  AND?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
+  OR?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
+  NOT?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
+}
+
+export interface UserCreateWithoutWorksInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutPeopleInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+}
+
+export interface FamilySubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: FamilyWhereInput;
+  AND?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
+  OR?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
+  NOT?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
+}
+
+export interface PostCreateManyWithoutAuthorInput {
+  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput;
+  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput;
+}
+
+export interface CollegeEntranceExamSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: CollegeEntranceExamWhereInput;
+  AND?:
+    | CollegeEntranceExamSubscriptionWhereInput[]
+    | CollegeEntranceExamSubscriptionWhereInput;
+  OR?:
+    | CollegeEntranceExamSubscriptionWhereInput[]
+    | CollegeEntranceExamSubscriptionWhereInput;
+  NOT?:
+    | CollegeEntranceExamSubscriptionWhereInput[]
+    | CollegeEntranceExamSubscriptionWhereInput;
+}
+
 export interface PostCreateWithoutAuthorInput {
   isPublished?: Boolean;
   title: String;
   content: String;
 }
 
-export interface PersonSubscriptionWhereInput {
+export interface AreaSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: PersonWhereInput;
-  AND?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
-  OR?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
-  NOT?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
+  node?: AreaWhereInput;
+  AND?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
+  OR?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
+  NOT?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
 }
 
 export interface RegStatusCreateOneWithoutApplicantsInput {
@@ -1668,31 +1805,25 @@ export interface RegStatusCreateOneWithoutApplicantsInput {
   connect?: RegStatusWhereUniqueInput;
 }
 
-export interface LocationSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: LocationWhereInput;
-  AND?: LocationSubscriptionWhereInput[] | LocationSubscriptionWhereInput;
-  OR?: LocationSubscriptionWhereInput[] | LocationSubscriptionWhereInput;
-  NOT?: LocationSubscriptionWhereInput[] | LocationSubscriptionWhereInput;
+export interface WorkUpdateInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  company?: CompanyUpdateOneWithoutWorksInput;
+  department?: String;
+  post?: String;
+  jobContent?: String;
+  worker?: UserUpdateOneWithoutWorksInput;
 }
 
 export interface RegStatusCreateWithoutApplicantsInput {
+  education: Educationkind;
   university?: UniversityCreateOneInput;
   major: MajorCreateOneInput;
 }
 
-export interface CompanySubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: CompanyWhereInput;
-  AND?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
-  OR?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
-  NOT?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
+export interface VillageUpdateManyMutationInput {
+  code?: String;
+  name?: String;
 }
 
 export interface UniversityCreateOneInput {
@@ -1700,37 +1831,21 @@ export interface UniversityCreateOneInput {
   connect?: UniversityWhereUniqueInput;
 }
 
-export interface CitySubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: CityWhereInput;
-  AND?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
-  OR?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
-  NOT?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
+export interface VillageUpdateInput {
+  code?: String;
+  name?: String;
+  street?: StreetUpdateOneRequiredWithoutVillagesInput;
 }
 
 export interface UniversityCreateInput {
   name: String;
-  location?: LocationCreateOneWithoutUniversitiesInput;
-  major?: MajorCreateManyWithoutUniversitiesInput;
-}
-
-export interface WorkUpdateManyMutationInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
+  education: Educationkind;
   department?: String;
-  post?: String;
-  jobContent?: String;
+  location?: String;
+  desc?: String;
 }
 
-export interface LocationCreateOneWithoutUniversitiesInput {
-  create?: LocationCreateWithoutUniversitiesInput;
-  connect?: LocationWhereUniqueInput;
-}
-
-export interface VillageWhereInput {
+export interface StreetWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -1773,57 +1888,18 @@ export interface VillageWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
-  street?: StreetWhereInput;
-  AND?: VillageWhereInput[] | VillageWhereInput;
-  OR?: VillageWhereInput[] | VillageWhereInput;
-  NOT?: VillageWhereInput[] | VillageWhereInput;
+  Area?: AreaWhereInput;
+  villages_every?: VillageWhereInput;
+  villages_some?: VillageWhereInput;
+  villages_none?: VillageWhereInput;
+  AND?: StreetWhereInput[] | StreetWhereInput;
+  OR?: StreetWhereInput[] | StreetWhereInput;
+  NOT?: StreetWhereInput[] | StreetWhereInput;
 }
 
-export interface LocationCreateWithoutUniversitiesInput {
-  name?: String;
-  province?: ProvinceCreateOneInput;
-  city?: CityCreateOneInput;
-  area?: AreaCreateOneInput;
-  street?: StreetCreateOneInput;
-  village?: VillageCreateOneInput;
-  schools?: SchoolCreateManyWithoutLocationInput;
-  companies?: CompanyCreateManyWithoutLocationInput;
-  people?: UserCreateManyWithoutBirthplaceInput;
-}
-
-export interface VillageUpdateManyMutationInput {
-  code?: String;
-  name?: String;
-}
-
-export interface UserCreateManyWithoutBirthplaceInput {
-  create?:
-    | UserCreateWithoutBirthplaceInput[]
-    | UserCreateWithoutBirthplaceInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface VillageUpdateInput {
-  code?: String;
-  name?: String;
-  street?: StreetUpdateOneRequiredWithoutVillagesInput;
-}
-
-export interface UserCreateWithoutBirthplaceInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
+export interface MajorCreateOneInput {
+  create?: MajorCreateInput;
+  connect?: MajorWhereUniqueInput;
 }
 
 export interface AreaWhereInput {
@@ -1878,84 +1954,29 @@ export interface AreaWhereInput {
   NOT?: AreaWhereInput[] | AreaWhereInput;
 }
 
+export interface MajorCreateInput {
+  name: String;
+  category: String;
+  education: Educationkind;
+}
+
+export interface UniversityUpdateInput {
+  name?: String;
+  education?: Educationkind;
+  department?: String;
+  location?: String;
+  desc?: String;
+}
+
 export interface FamilyCreateManyWithoutFromInput {
   create?: FamilyCreateWithoutFromInput[] | FamilyCreateWithoutFromInput;
   connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
 }
 
-export interface CollegeEntranceExamWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  province?: ProvinceWhereInput;
-  subject?: String;
-  subject_not?: String;
-  subject_in?: String[] | String;
-  subject_not_in?: String[] | String;
-  subject_lt?: String;
-  subject_lte?: String;
-  subject_gt?: String;
-  subject_gte?: String;
-  subject_contains?: String;
-  subject_not_contains?: String;
-  subject_starts_with?: String;
-  subject_not_starts_with?: String;
-  subject_ends_with?: String;
-  subject_not_ends_with?: String;
-  culscore?: Float;
-  culscore_not?: Float;
-  culscore_in?: Float[] | Float;
-  culscore_not_in?: Float[] | Float;
-  culscore_lt?: Float;
-  culscore_lte?: Float;
-  culscore_gt?: Float;
-  culscore_gte?: Float;
-  proscore?: Float;
-  proscore_not?: Float;
-  proscore_in?: Float[] | Float;
-  proscore_not_in?: Float[] | Float;
-  proscore_lt?: Float;
-  proscore_lte?: Float;
-  proscore_gt?: Float;
-  proscore_gte?: Float;
-  candidatenum?: String;
-  candidatenum_not?: String;
-  candidatenum_in?: String[] | String;
-  candidatenum_not_in?: String[] | String;
-  candidatenum_lt?: String;
-  candidatenum_lte?: String;
-  candidatenum_gt?: String;
-  candidatenum_gte?: String;
-  candidatenum_contains?: String;
-  candidatenum_not_contains?: String;
-  candidatenum_starts_with?: String;
-  candidatenum_not_starts_with?: String;
-  candidatenum_ends_with?: String;
-  candidatenum_not_ends_with?: String;
-  times?: Int;
-  times_not?: Int;
-  times_in?: Int[] | Int;
-  times_not_in?: Int[] | Int;
-  times_lt?: Int;
-  times_lte?: Int;
-  times_gt?: Int;
-  times_gte?: Int;
-  student?: UserWhereInput;
-  AND?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
-  OR?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
-  NOT?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
-}
+export type CompanyWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
 
 export interface FamilyCreateWithoutFromInput {
   to: PersonCreateOneWithoutFamiliesInput;
@@ -1964,8 +1985,10 @@ export interface FamilyCreateWithoutFromInput {
   status: String;
 }
 
-export interface UniversityUpdateManyMutationInput {
-  name?: String;
+export interface SchoolEduUpdateManyMutationInput {
+  startTime?: DateTimeInput;
+  grade?: Int;
+  className?: String;
 }
 
 export interface PersonCreateOneWithoutFamiliesInput {
@@ -1973,78 +1996,31 @@ export interface PersonCreateOneWithoutFamiliesInput {
   connect?: PersonWhereUniqueInput;
 }
 
-export interface StreetUpdateManyMutationInput {
-  code?: String;
-  name?: String;
-}
+export type FamilyWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface PersonCreateWithoutFamiliesInput {
   name: String;
   user?: UserCreateOneInput;
 }
 
-export interface StreetUpdateInput {
-  code?: String;
-  name?: String;
-  Area?: AreaUpdateOneRequiredWithoutTownsInput;
-  villages?: VillageUpdateManyWithoutStreetInput;
-}
-
-export interface FamilyCreateOneInput {
-  create?: FamilyCreateInput;
-  connect?: FamilyWhereUniqueInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutStudiesInput {
+export interface UserUpdateWithWhereUniqueWithoutStudiesInput {
   where: UserWhereUniqueInput;
-  update: UserUpdateWithoutStudiesDataInput;
-  create: UserCreateWithoutStudiesInput;
+  data: UserUpdateWithoutStudiesDataInput;
 }
 
-export interface FamilyCreateInput {
-  from: UserCreateOneWithoutFamiliesInput;
-  to: PersonCreateOneWithoutFamiliesInput;
-  relationship: String;
-  spouse?: FamilyCreateOneInput;
-  status: String;
-}
-
-export interface UserUpdateWithoutStudiesDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutPeopleInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  families?: FamilyUpdateManyWithoutFromInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-}
-
-export interface UserCreateOneWithoutFamiliesInput {
-  create?: UserCreateWithoutFamiliesInput;
+export interface UserCreateOneInput {
+  create?: UserCreateInput;
   connect?: UserWhereUniqueInput;
 }
 
-export interface UserUpdateManyWithoutStudiesInput {
-  create?: UserCreateWithoutStudiesInput[] | UserCreateWithoutStudiesInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutStudiesInput[]
-    | UserUpdateWithWhereUniqueWithoutStudiesInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutStudiesInput[]
-    | UserUpsertWithWhereUniqueWithoutStudiesInput;
-}
+export type LocationWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
 
-export interface UserCreateWithoutFamiliesInput {
+export interface UserCreateInput {
   username: String;
   password: String;
   name?: String;
@@ -2057,8 +2033,41 @@ export interface UserCreateWithoutFamiliesInput {
   token: String;
   posts?: PostCreateManyWithoutAuthorInput;
   regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
   studies?: SchoolEduCreateManyWithoutStudentsInput;
   works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+}
+
+export interface SchoolEduUpdateInput {
+  school?: SchoolUpdateOneInput;
+  startTime?: DateTimeInput;
+  major?: MajorUpdateOneInput;
+  grade?: Int;
+  className?: String;
+  students?: UserUpdateManyWithoutStudiesInput;
+}
+
+export interface SchoolEduCreateManyWithoutStudentsInput {
+  create?:
+    | SchoolEduCreateWithoutStudentsInput[]
+    | SchoolEduCreateWithoutStudentsInput;
+  connect?: SchoolEduWhereUniqueInput[] | SchoolEduWhereUniqueInput;
+}
+
+export interface UserCreateManyWithoutStudiesInput {
+  create?: UserCreateWithoutStudiesInput[] | UserCreateWithoutStudiesInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface SchoolEduCreateWithoutStudentsInput {
+  school?: SchoolCreateOneInput;
+  startTime?: DateTimeInput;
+  major?: MajorCreateOneInput;
+  grade?: Int;
+  className?: String;
 }
 
 export interface CityWhereInput {
@@ -2113,42 +2122,6 @@ export interface CityWhereInput {
   NOT?: CityWhereInput[] | CityWhereInput;
 }
 
-export interface SchoolEduCreateManyWithoutStudentsInput {
-  create?:
-    | SchoolEduCreateWithoutStudentsInput[]
-    | SchoolEduCreateWithoutStudentsInput;
-  connect?: SchoolEduWhereUniqueInput[] | SchoolEduWhereUniqueInput;
-}
-
-export interface UserCreateWithoutStudiesInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutPeopleInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  families?: FamilyCreateManyWithoutFromInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-}
-
-export interface SchoolEduCreateWithoutStudentsInput {
-  school?: SchoolCreateOneInput;
-  startTime?: DateTimeInput;
-  major?: MajorCreateOneInput;
-  grade?: Int;
-  className?: String;
-}
-
-export type MajorWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
 export interface SchoolCreateOneInput {
   create?: SchoolCreateInput;
   connect?: SchoolWhereUniqueInput;
@@ -2174,21 +2147,10 @@ export interface LocationCreateOneWithoutSchoolsInput {
   connect?: LocationWhereUniqueInput;
 }
 
-export interface UserUpdateWithoutRegStatusDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutPeopleInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
+export interface UserUpsertWithWhereUniqueWithoutRegStatusInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutRegStatusDataInput;
+  create: UserCreateWithoutRegStatusInput;
 }
 
 export interface LocationCreateWithoutSchoolsInput {
@@ -2199,8 +2161,18 @@ export interface LocationCreateWithoutSchoolsInput {
   street?: StreetCreateOneInput;
   village?: VillageCreateOneInput;
   companies?: CompanyCreateManyWithoutLocationInput;
-  universities?: UniversityCreateManyWithoutLocationInput;
+  universities?: UniversityCreateManyInput;
   people?: UserCreateManyWithoutBirthplaceInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutRegStatusInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutRegStatusDataInput;
+}
+
+export interface UniversityCreateManyInput {
+  create?: UniversityCreateInput[] | UniversityCreateInput;
+  connect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
 }
 
 export interface UserUpdateManyWithoutRegStatusInput {
@@ -2216,107 +2188,14 @@ export interface UserUpdateManyWithoutRegStatusInput {
     | UserUpsertWithWhereUniqueWithoutRegStatusInput;
 }
 
-export interface UniversityCreateManyWithoutLocationInput {
+export interface UserCreateManyWithoutBirthplaceInput {
   create?:
-    | UniversityCreateWithoutLocationInput[]
-    | UniversityCreateWithoutLocationInput;
-  connect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
-}
-
-export interface RegStatusUpdateInput {
-  university?: UniversityUpdateOneInput;
-  major?: MajorUpdateOneRequiredInput;
-  applicants?: UserUpdateManyWithoutRegStatusInput;
-}
-
-export interface UniversityCreateWithoutLocationInput {
-  name: String;
-  major?: MajorCreateManyWithoutUniversitiesInput;
-}
-
-export interface UserCreateManyWithoutRegStatusInput {
-  create?: UserCreateWithoutRegStatusInput[] | UserCreateWithoutRegStatusInput;
+    | UserCreateWithoutBirthplaceInput[]
+    | UserCreateWithoutBirthplaceInput;
   connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
-export interface MajorCreateManyWithoutUniversitiesInput {
-  create?:
-    | MajorCreateWithoutUniversitiesInput[]
-    | MajorCreateWithoutUniversitiesInput;
-  connect?: MajorWhereUniqueInput[] | MajorWhereUniqueInput;
-}
-
-export interface RegStatusCreateInput {
-  university?: UniversityCreateOneInput;
-  major: MajorCreateOneInput;
-  applicants?: UserCreateManyWithoutRegStatusInput;
-}
-
-export interface MajorCreateWithoutUniversitiesInput {
-  name: String;
-  category: String;
-  education: Educationkind;
-}
-
-export interface ProvinceUpdateInput {
-  code?: String;
-  name?: String;
-  cities?: CityUpdateManyWithoutProvinceInput;
-}
-
-export interface MajorCreateOneInput {
-  create?: MajorCreateInput;
-  connect?: MajorWhereUniqueInput;
-}
-
-export type RegStatusWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface MajorCreateInput {
-  name: String;
-  category: String;
-  education: Educationkind;
-  universities?: UniversityCreateManyWithoutMajorInput;
-}
-
-export interface UserUpdateWithoutPostsDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutPeopleInput;
-  uid?: String;
-  token?: String;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-}
-
-export interface UniversityCreateManyWithoutMajorInput {
-  create?:
-    | UniversityCreateWithoutMajorInput[]
-    | UniversityCreateWithoutMajorInput;
-  connect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
-}
-
-export interface PostUpdateInput {
-  isPublished?: Boolean;
-  title?: String;
-  content?: String;
-  author?: UserUpdateOneRequiredWithoutPostsInput;
-}
-
-export interface UniversityCreateWithoutMajorInput {
-  name: String;
-  location?: LocationCreateOneWithoutUniversitiesInput;
-}
-
-export interface UserCreateWithoutPostsInput {
+export interface UserCreateWithoutRegStatusInput {
   username: String;
   password: String;
   name?: String;
@@ -2327,10 +2206,38 @@ export interface UserCreateWithoutPostsInput {
   birthplace?: LocationCreateOneWithoutPeopleInput;
   uid: String;
   token: String;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
   families?: FamilyCreateManyWithoutFromInput;
   studies?: SchoolEduCreateManyWithoutStudentsInput;
   works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+}
+
+export interface UserCreateWithoutBirthplaceInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+}
+
+export interface UserCreateManyWithoutRegStatusInput {
+  create?: UserCreateWithoutRegStatusInput[] | UserCreateWithoutRegStatusInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
 export interface WorkCreateManyWithoutWorkerInput {
@@ -2338,11 +2245,9 @@ export interface WorkCreateManyWithoutWorkerInput {
   connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
 }
 
-export interface PostCreateInput {
-  isPublished?: Boolean;
-  title: String;
-  content: String;
-  author: UserCreateOneWithoutPostsInput;
+export interface ProvinceUpdateManyMutationInput {
+  code?: String;
+  name?: String;
 }
 
 export interface WorkCreateWithoutWorkerInput {
@@ -2354,30 +2259,34 @@ export interface WorkCreateWithoutWorkerInput {
   jobContent?: String;
 }
 
-export interface PersonUpdateManyMutationInput {
-  name?: String;
-}
+export type RegStatusWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface CompanyCreateOneWithoutWorksInput {
   create?: CompanyCreateWithoutWorksInput;
   connect?: CompanyWhereUniqueInput;
 }
 
-export interface FamilyUpdateWithoutToDataInput {
-  from?: UserUpdateOneRequiredWithoutFamiliesInput;
-  relationship?: String;
-  spouse?: FamilyUpdateOneInput;
-  status?: String;
+export interface UserUpsertWithoutPostsInput {
+  update: UserUpdateWithoutPostsDataInput;
+  create: UserCreateWithoutPostsInput;
 }
 
-export interface LocationUpsertWithoutPeopleInput {
-  update: LocationUpdateWithoutPeopleDataInput;
-  create: LocationCreateWithoutPeopleInput;
+export interface CompanyCreateWithoutWorksInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  location?: LocationCreateOneWithoutCompaniesInput;
+  BusinessScope?: String;
 }
 
-export interface FamilyUpdateWithWhereUniqueWithoutToInput {
-  where: FamilyWhereUniqueInput;
-  data: FamilyUpdateWithoutToDataInput;
+export interface UserUpdateOneRequiredWithoutPostsInput {
+  create?: UserCreateWithoutPostsInput;
+  update?: UserUpdateWithoutPostsDataInput;
+  upsert?: UserUpsertWithoutPostsInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface LocationCreateOneWithoutCompaniesInput {
@@ -2385,10 +2294,11 @@ export interface LocationCreateOneWithoutCompaniesInput {
   connect?: LocationWhereUniqueInput;
 }
 
-export interface PersonUpdateInput {
-  name?: String;
-  user?: UserUpdateOneInput;
-  families?: FamilyUpdateManyWithoutToInput;
+export interface PostUpdateInput {
+  isPublished?: Boolean;
+  title?: String;
+  content?: String;
+  author?: UserUpdateOneRequiredWithoutPostsInput;
 }
 
 export interface LocationCreateWithoutCompaniesInput {
@@ -2399,15 +2309,108 @@ export interface LocationCreateWithoutCompaniesInput {
   street?: StreetCreateOneInput;
   village?: VillageCreateOneInput;
   schools?: SchoolCreateManyWithoutLocationInput;
-  universities?: UniversityCreateManyWithoutLocationInput;
+  universities?: UniversityCreateManyInput;
   people?: UserCreateManyWithoutBirthplaceInput;
 }
 
-export interface FamilyCreateWithoutToInput {
+export interface UserCreateOneWithoutPostsInput {
+  create?: UserCreateWithoutPostsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface CollegeEntranceExamCreateOneWithoutStudentInput {
+  create?: CollegeEntranceExamCreateWithoutStudentInput;
+  connect?: CollegeEntranceExamWhereUniqueInput;
+}
+
+export interface PostCreateInput {
+  isPublished?: Boolean;
+  title: String;
+  content: String;
+  author: UserCreateOneWithoutPostsInput;
+}
+
+export interface CollegeEntranceExamUpdateManyMutationInput {
+  subject?: String;
+  culscore?: Float;
+  proscore?: Float;
+  candidatenum?: String;
+  times?: Int;
+}
+
+export interface FamilyUpsertWithWhereUniqueWithoutToInput {
+  where: FamilyWhereUniqueInput;
+  update: FamilyUpdateWithoutToDataInput;
+  create: FamilyCreateWithoutToInput;
+}
+
+export interface FamilyCreateOneInput {
+  create?: FamilyCreateInput;
+  connect?: FamilyWhereUniqueInput;
+}
+
+export interface FamilyUpdateWithoutToDataInput {
+  from?: UserUpdateOneRequiredWithoutFamiliesInput;
+  relationship?: String;
+  spouse?: FamilyUpdateOneInput;
+  status?: String;
+}
+
+export interface FamilyCreateInput {
   from: UserCreateOneWithoutFamiliesInput;
+  to: PersonCreateOneWithoutFamiliesInput;
   relationship: String;
   spouse?: FamilyCreateOneInput;
   status: String;
+}
+
+export interface FamilyUpdateManyWithoutToInput {
+  create?: FamilyCreateWithoutToInput[] | FamilyCreateWithoutToInput;
+  delete?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+  disconnect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+  update?:
+    | FamilyUpdateWithWhereUniqueWithoutToInput[]
+    | FamilyUpdateWithWhereUniqueWithoutToInput;
+  upsert?:
+    | FamilyUpsertWithWhereUniqueWithoutToInput[]
+    | FamilyUpsertWithWhereUniqueWithoutToInput;
+}
+
+export interface UserCreateOneWithoutFamiliesInput {
+  create?: UserCreateWithoutFamiliesInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface PersonUpdateInput {
+  name?: String;
+  user?: UserUpdateOneInput;
+  families?: FamilyUpdateManyWithoutToInput;
+}
+
+export interface UserCreateWithoutFamiliesInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutPeopleInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+}
+
+export interface FamilyCreateManyWithoutToInput {
+  create?: FamilyCreateWithoutToInput[] | FamilyCreateWithoutToInput;
+  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
 }
 
 export interface CollegeEntranceExamUpdateInput {
@@ -2417,7 +2420,7 @@ export interface CollegeEntranceExamUpdateInput {
   proscore?: Float;
   candidatenum?: String;
   times?: Int;
-  student?: UserUpdateOneRequiredInput;
+  student?: UserUpdateOneRequiredWithoutExamInput;
 }
 
 export interface PersonCreateInput {
@@ -2433,7 +2436,7 @@ export interface ProvinceUpdateOneRequiredInput {
   connect?: ProvinceWhereUniqueInput;
 }
 
-export interface MajorUpdateManyMutationInput {
+export interface MajorUpdateInput {
   name?: String;
   category?: String;
   education?: Educationkind;
@@ -2462,17 +2465,17 @@ export interface CityUpdateManyWithoutProvinceInput {
     | CityUpsertWithWhereUniqueWithoutProvinceInput;
 }
 
-export interface LocationUpdateInput {
+export interface LocationCreateInput {
   name?: String;
-  province?: ProvinceUpdateOneInput;
-  city?: CityUpdateOneInput;
-  area?: AreaUpdateOneInput;
-  street?: StreetUpdateOneInput;
-  village?: VillageUpdateOneInput;
-  schools?: SchoolUpdateManyWithoutLocationInput;
-  companies?: CompanyUpdateManyWithoutLocationInput;
-  universities?: UniversityUpdateManyWithoutLocationInput;
-  people?: UserUpdateManyWithoutBirthplaceInput;
+  province?: ProvinceCreateOneInput;
+  city?: CityCreateOneInput;
+  area?: AreaCreateOneInput;
+  street?: StreetCreateOneInput;
+  village?: VillageCreateOneInput;
+  schools?: SchoolCreateManyWithoutLocationInput;
+  companies?: CompanyCreateManyWithoutLocationInput;
+  universities?: UniversityCreateManyInput;
+  people?: UserCreateManyWithoutBirthplaceInput;
 }
 
 export interface CityUpdateWithWhereUniqueWithoutProvinceInput {
@@ -2491,34 +2494,18 @@ export interface CityUpdateWithoutProvinceDataInput {
   areas?: AreaUpdateManyWithoutCityInput;
 }
 
-export interface FamilyUpdateInput {
-  from?: UserUpdateOneRequiredWithoutFamiliesInput;
-  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
-  relationship?: String;
-  spouse?: FamilyUpdateOneInput;
-  status?: String;
-}
-
-export interface CityUpsertWithWhereUniqueWithoutProvinceInput {
-  where: CityWhereUniqueInput;
-  update: CityUpdateWithoutProvinceDataInput;
-  create: CityCreateWithoutProvinceInput;
-}
-
-export interface CompanyUpdateInput {
+export interface CompanyUpdateManyMutationInput {
   name?: String;
   code?: String;
   establishmentDate?: DateTimeInput;
   representative?: String;
-  location?: LocationUpdateOneWithoutCompaniesInput;
   BusinessScope?: String;
-  works?: WorkUpdateManyWithoutCompanyInput;
 }
 
-export interface ProvinceUpsertNestedInput {
-  update: ProvinceUpdateDataInput;
-  create: ProvinceCreateInput;
-}
+export type CityWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+}>;
 
 export interface AreaCreateInput {
   code: String;
@@ -2527,10 +2514,10 @@ export interface AreaCreateInput {
   towns?: StreetCreateManyWithoutAreaInput;
 }
 
-export type CityWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  code?: String;
-}>;
+export interface ProvinceUpsertNestedInput {
+  update: ProvinceUpdateDataInput;
+  create: ProvinceCreateInput;
+}
 
 export interface CityCreateWithoutAreasInput {
   code: String;
@@ -2538,7 +2525,19 @@ export interface CityCreateWithoutAreasInput {
   province: ProvinceCreateOneWithoutCitiesInput;
 }
 
-export interface UserUpdateDataInput {
+export interface UserUpdateOneRequiredWithoutExamInput {
+  create?: UserCreateWithoutExamInput;
+  update?: UserUpdateWithoutExamDataInput;
+  upsert?: UserUpsertWithoutExamInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface ProvinceCreateWithoutCitiesInput {
+  code: String;
+  name: String;
+}
+
+export interface UserUpdateWithoutExamDataInput {
   username?: String;
   password?: String;
   name?: String;
@@ -2551,14 +2550,17 @@ export interface UserUpdateDataInput {
   token?: String;
   posts?: PostUpdateManyWithoutAuthorInput;
   regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
   families?: FamilyUpdateManyWithoutFromInput;
   studies?: SchoolEduUpdateManyWithoutStudentsInput;
   works?: WorkUpdateManyWithoutWorkerInput;
 }
 
-export interface ProvinceCreateWithoutCitiesInput {
+export interface StreetCreateWithoutAreaInput {
   code: String;
   name: String;
+  villages?: VillageCreateManyWithoutStreetInput;
 }
 
 export interface LocationUpdateOneWithoutPeopleInput {
@@ -2570,10 +2572,9 @@ export interface LocationUpdateOneWithoutPeopleInput {
   connect?: LocationWhereUniqueInput;
 }
 
-export interface StreetCreateWithoutAreaInput {
+export interface VillageCreateWithoutStreetInput {
   code: String;
   name: String;
-  villages?: VillageCreateManyWithoutStreetInput;
 }
 
 export interface LocationUpdateWithoutPeopleDataInput {
@@ -2585,12 +2586,14 @@ export interface LocationUpdateWithoutPeopleDataInput {
   village?: VillageUpdateOneInput;
   schools?: SchoolUpdateManyWithoutLocationInput;
   companies?: CompanyUpdateManyWithoutLocationInput;
-  universities?: UniversityUpdateManyWithoutLocationInput;
+  universities?: UniversityUpdateManyInput;
 }
 
-export interface VillageCreateWithoutStreetInput {
-  code: String;
-  name: String;
+export interface CityUpdateOneRequiredWithoutAreasInput {
+  create?: CityCreateWithoutAreasInput;
+  update?: CityUpdateWithoutAreasDataInput;
+  upsert?: CityUpsertWithoutAreasInput;
+  connect?: CityWhereUniqueInput;
 }
 
 export interface ProvinceUpdateOneInput {
@@ -2602,11 +2605,11 @@ export interface ProvinceUpdateOneInput {
   connect?: ProvinceWhereUniqueInput;
 }
 
-export interface CityUpdateOneRequiredWithoutAreasInput {
-  create?: CityCreateWithoutAreasInput;
-  update?: CityUpdateWithoutAreasDataInput;
-  upsert?: CityUpsertWithoutAreasInput;
-  connect?: CityWhereUniqueInput;
+export interface ProvinceUpdateOneRequiredWithoutCitiesInput {
+  create?: ProvinceCreateWithoutCitiesInput;
+  update?: ProvinceUpdateWithoutCitiesDataInput;
+  upsert?: ProvinceUpsertWithoutCitiesInput;
+  connect?: ProvinceWhereUniqueInput;
 }
 
 export interface CityUpdateOneInput {
@@ -2618,11 +2621,9 @@ export interface CityUpdateOneInput {
   connect?: CityWhereUniqueInput;
 }
 
-export interface ProvinceUpdateOneRequiredWithoutCitiesInput {
-  create?: ProvinceCreateWithoutCitiesInput;
-  update?: ProvinceUpdateWithoutCitiesDataInput;
-  upsert?: ProvinceUpsertWithoutCitiesInput;
-  connect?: ProvinceWhereUniqueInput;
+export interface ProvinceUpsertWithoutCitiesInput {
+  update: ProvinceUpdateWithoutCitiesDataInput;
+  create: ProvinceCreateWithoutCitiesInput;
 }
 
 export interface CityUpdateDataInput {
@@ -2630,16 +2631,6 @@ export interface CityUpdateDataInput {
   name?: String;
   province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
   areas?: AreaUpdateManyWithoutCityInput;
-}
-
-export interface ProvinceUpsertWithoutCitiesInput {
-  update: ProvinceUpdateWithoutCitiesDataInput;
-  create: ProvinceCreateWithoutCitiesInput;
-}
-
-export interface CityUpsertNestedInput {
-  update: CityUpdateDataInput;
-  create: CityCreateInput;
 }
 
 export interface StreetUpdateManyWithoutAreaInput {
@@ -2655,6 +2646,17 @@ export interface StreetUpdateManyWithoutAreaInput {
     | StreetUpsertWithWhereUniqueWithoutAreaInput;
 }
 
+export interface CityUpsertNestedInput {
+  update: CityUpdateDataInput;
+  create: CityCreateInput;
+}
+
+export interface StreetUpdateWithoutAreaDataInput {
+  code?: String;
+  name?: String;
+  villages?: VillageUpdateManyWithoutStreetInput;
+}
+
 export interface AreaUpdateOneInput {
   create?: AreaCreateInput;
   update?: AreaUpdateDataInput;
@@ -2664,10 +2666,9 @@ export interface AreaUpdateOneInput {
   connect?: AreaWhereUniqueInput;
 }
 
-export interface StreetUpdateWithoutAreaDataInput {
-  code?: String;
-  name?: String;
-  villages?: VillageUpdateManyWithoutStreetInput;
+export interface VillageUpdateWithWhereUniqueWithoutStreetInput {
+  where: VillageWhereUniqueInput;
+  data: VillageUpdateWithoutStreetDataInput;
 }
 
 export interface AreaUpdateDataInput {
@@ -2677,9 +2678,10 @@ export interface AreaUpdateDataInput {
   towns?: StreetUpdateManyWithoutAreaInput;
 }
 
-export interface VillageUpdateWithWhereUniqueWithoutStreetInput {
+export interface VillageUpsertWithWhereUniqueWithoutStreetInput {
   where: VillageWhereUniqueInput;
-  data: VillageUpdateWithoutStreetDataInput;
+  update: VillageUpdateWithoutStreetDataInput;
+  create: VillageCreateWithoutStreetInput;
 }
 
 export interface AreaUpsertNestedInput {
@@ -2687,10 +2689,9 @@ export interface AreaUpsertNestedInput {
   create: AreaCreateInput;
 }
 
-export interface VillageUpsertWithWhereUniqueWithoutStreetInput {
-  where: VillageWhereUniqueInput;
-  update: VillageUpdateWithoutStreetDataInput;
-  create: VillageCreateWithoutStreetInput;
+export interface AreaUpdateManyMutationInput {
+  code?: String;
+  name?: String;
 }
 
 export interface StreetUpdateOneInput {
@@ -2702,9 +2703,14 @@ export interface StreetUpdateOneInput {
   connect?: StreetWhereUniqueInput;
 }
 
-export interface AreaUpdateManyMutationInput {
-  code?: String;
+export interface CompanyCreateInput {
   name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  location?: LocationCreateOneWithoutCompaniesInput;
+  BusinessScope?: String;
+  works?: WorkCreateManyWithoutCompanyInput;
 }
 
 export interface StreetUpdateDataInput {
@@ -2714,12 +2720,9 @@ export interface StreetUpdateDataInput {
   villages?: VillageUpdateManyWithoutStreetInput;
 }
 
-export interface CollegeEntranceExamUpdateManyMutationInput {
-  subject?: String;
-  culscore?: Float;
-  proscore?: Float;
-  candidatenum?: String;
-  times?: Int;
+export interface AreaCreateManyWithoutCityInput {
+  create?: AreaCreateWithoutCityInput[] | AreaCreateWithoutCityInput;
+  connect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
 }
 
 export interface AreaUpdateOneRequiredWithoutTownsInput {
@@ -2729,9 +2732,11 @@ export interface AreaUpdateOneRequiredWithoutTownsInput {
   connect?: AreaWhereUniqueInput;
 }
 
-export interface AreaCreateManyWithoutCityInput {
-  create?: AreaCreateWithoutCityInput[] | AreaCreateWithoutCityInput;
-  connect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
+export interface CityUpdateInput {
+  code?: String;
+  name?: String;
+  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
+  areas?: AreaUpdateManyWithoutCityInput;
 }
 
 export interface AreaUpdateWithoutTownsDataInput {
@@ -2740,11 +2745,9 @@ export interface AreaUpdateWithoutTownsDataInput {
   city?: CityUpdateOneRequiredWithoutAreasInput;
 }
 
-export interface CityUpdateInput {
-  code?: String;
-  name?: String;
-  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
-  areas?: AreaUpdateManyWithoutCityInput;
+export interface AreaUpdateWithWhereUniqueWithoutCityInput {
+  where: AreaWhereUniqueInput;
+  data: AreaUpdateWithoutCityDataInput;
 }
 
 export interface AreaUpsertWithoutTownsInput {
@@ -2752,9 +2755,10 @@ export interface AreaUpsertWithoutTownsInput {
   create: AreaCreateWithoutTownsInput;
 }
 
-export interface AreaUpdateWithWhereUniqueWithoutCityInput {
+export interface AreaUpsertWithWhereUniqueWithoutCityInput {
   where: AreaWhereUniqueInput;
-  data: AreaUpdateWithoutCityDataInput;
+  update: AreaUpdateWithoutCityDataInput;
+  create: AreaCreateWithoutCityInput;
 }
 
 export interface StreetUpsertNestedInput {
@@ -2762,10 +2766,14 @@ export interface StreetUpsertNestedInput {
   create: StreetCreateInput;
 }
 
-export interface AreaUpsertWithWhereUniqueWithoutCityInput {
-  where: AreaWhereUniqueInput;
-  update: AreaUpdateWithoutCityDataInput;
-  create: AreaCreateWithoutCityInput;
+export interface CollegeEntranceExamCreateInput {
+  province: ProvinceCreateOneInput;
+  subject: String;
+  culscore: Float;
+  proscore?: Float;
+  candidatenum: String;
+  times?: Int;
+  student: UserCreateOneWithoutExamInput;
 }
 
 export interface VillageUpdateOneInput {
@@ -2777,14 +2785,10 @@ export interface VillageUpdateOneInput {
   connect?: VillageWhereUniqueInput;
 }
 
-export interface CollegeEntranceExamCreateInput {
-  province: ProvinceCreateOneInput;
-  subject: String;
-  culscore: Float;
-  proscore?: Float;
-  candidatenum: String;
-  times?: Int;
-  student: UserCreateOneInput;
+export interface ProvinceCreateInput {
+  code: String;
+  name: String;
+  cities?: CityCreateManyWithoutProvinceInput;
 }
 
 export interface VillageUpdateDataInput {
@@ -2793,10 +2797,10 @@ export interface VillageUpdateDataInput {
   street?: StreetUpdateOneRequiredWithoutVillagesInput;
 }
 
-export interface ProvinceCreateInput {
+export interface CityCreateWithoutProvinceInput {
   code: String;
   name: String;
-  cities?: CityCreateManyWithoutProvinceInput;
+  areas?: AreaCreateManyWithoutCityInput;
 }
 
 export interface StreetUpdateOneRequiredWithoutVillagesInput {
@@ -2806,19 +2810,7 @@ export interface StreetUpdateOneRequiredWithoutVillagesInput {
   connect?: StreetWhereUniqueInput;
 }
 
-export interface CityCreateWithoutProvinceInput {
-  code: String;
-  name: String;
-  areas?: AreaCreateManyWithoutCityInput;
-}
-
-export interface StreetUpdateWithoutVillagesDataInput {
-  code?: String;
-  name?: String;
-  Area?: AreaUpdateOneRequiredWithoutTownsInput;
-}
-
-export interface UserCreateInput {
+export interface UserCreateWithoutExamInput {
   username: String;
   password: String;
   name?: String;
@@ -2831,14 +2823,17 @@ export interface UserCreateInput {
   token: String;
   posts?: PostCreateManyWithoutAuthorInput;
   regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
   families?: FamilyCreateManyWithoutFromInput;
   studies?: SchoolEduCreateManyWithoutStudentsInput;
   works?: WorkCreateManyWithoutWorkerInput;
 }
 
-export interface StreetUpsertWithoutVillagesInput {
-  update: StreetUpdateWithoutVillagesDataInput;
-  create: StreetCreateWithoutVillagesInput;
+export interface StreetUpdateWithoutVillagesDataInput {
+  code?: String;
+  name?: String;
+  Area?: AreaUpdateOneRequiredWithoutTownsInput;
 }
 
 export interface LocationCreateWithoutPeopleInput {
@@ -2850,7 +2845,17 @@ export interface LocationCreateWithoutPeopleInput {
   village?: VillageCreateOneInput;
   schools?: SchoolCreateManyWithoutLocationInput;
   companies?: CompanyCreateManyWithoutLocationInput;
-  universities?: UniversityCreateManyWithoutLocationInput;
+  universities?: UniversityCreateManyInput;
+}
+
+export interface StreetUpsertWithoutVillagesInput {
+  update: StreetUpdateWithoutVillagesDataInput;
+  create: StreetCreateWithoutVillagesInput;
+}
+
+export interface AreaCreateOneInput {
+  create?: AreaCreateInput;
+  connect?: AreaWhereUniqueInput;
 }
 
 export interface VillageUpsertNestedInput {
@@ -2858,9 +2863,15 @@ export interface VillageUpsertNestedInput {
   create: VillageCreateInput;
 }
 
-export interface AreaCreateOneInput {
-  create?: AreaCreateInput;
-  connect?: AreaWhereUniqueInput;
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
 }
 
 export interface SchoolUpdateManyWithoutLocationInput {
@@ -2878,46 +2889,6 @@ export interface SchoolUpdateManyWithoutLocationInput {
     | SchoolUpsertWithWhereUniqueWithoutLocationInput;
 }
 
-export interface StreetCreateInput {
-  code: String;
-  name: String;
-  Area: AreaCreateOneWithoutTownsInput;
-  villages?: VillageCreateManyWithoutStreetInput;
-}
-
-export interface SchoolUpdateWithWhereUniqueWithoutLocationInput {
-  where: SchoolWhereUniqueInput;
-  data: SchoolUpdateWithoutLocationDataInput;
-}
-
-export interface AreaCreateWithoutTownsInput {
-  code: String;
-  name: String;
-  city: CityCreateOneWithoutAreasInput;
-}
-
-export interface SchoolUpdateWithoutLocationDataInput {
-  name?: String;
-  kind?: Educationkind;
-}
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-}
-
-export interface SchoolUpsertWithWhereUniqueWithoutLocationInput {
-  where: SchoolWhereUniqueInput;
-  update: SchoolUpdateWithoutLocationDataInput;
-  create: SchoolCreateWithoutLocationInput;
-}
-
 export interface SchoolEduSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
@@ -2929,19 +2900,9 @@ export interface SchoolEduSubscriptionWhereInput {
   NOT?: SchoolEduSubscriptionWhereInput[] | SchoolEduSubscriptionWhereInput;
 }
 
-export interface CompanyUpdateManyWithoutLocationInput {
-  create?:
-    | CompanyCreateWithoutLocationInput[]
-    | CompanyCreateWithoutLocationInput;
-  delete?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
-  connect?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
-  disconnect?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
-  update?:
-    | CompanyUpdateWithWhereUniqueWithoutLocationInput[]
-    | CompanyUpdateWithWhereUniqueWithoutLocationInput;
-  upsert?:
-    | CompanyUpsertWithWhereUniqueWithoutLocationInput[]
-    | CompanyUpsertWithWhereUniqueWithoutLocationInput;
+export interface SchoolUpdateWithWhereUniqueWithoutLocationInput {
+  where: SchoolWhereUniqueInput;
+  data: SchoolUpdateWithoutLocationDataInput;
 }
 
 export interface ProvinceSubscriptionWhereInput {
@@ -2955,9 +2916,9 @@ export interface ProvinceSubscriptionWhereInput {
   NOT?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
 }
 
-export interface CompanyUpdateWithWhereUniqueWithoutLocationInput {
-  where: CompanyWhereUniqueInput;
-  data: CompanyUpdateWithoutLocationDataInput;
+export interface SchoolUpdateWithoutLocationDataInput {
+  name?: String;
+  kind?: Educationkind;
 }
 
 export interface UserWhereInput {
@@ -3116,6 +3077,22 @@ export interface UserWhereInput {
   updatedAt_gt?: DateTimeInput;
   updatedAt_gte?: DateTimeInput;
   regStatus?: RegStatusWhereInput;
+  regTimes?: Int;
+  regTimes_not?: Int;
+  regTimes_in?: Int[] | Int;
+  regTimes_not_in?: Int[] | Int;
+  regTimes_lt?: Int;
+  regTimes_lte?: Int;
+  regTimes_gt?: Int;
+  regTimes_gte?: Int;
+  maxRegTimes?: Int;
+  maxRegTimes_not?: Int;
+  maxRegTimes_in?: Int[] | Int;
+  maxRegTimes_not_in?: Int[] | Int;
+  maxRegTimes_lt?: Int;
+  maxRegTimes_lte?: Int;
+  maxRegTimes_gt?: Int;
+  maxRegTimes_gte?: Int;
   families_every?: FamilyWhereInput;
   families_some?: FamilyWhereInput;
   families_none?: FamilyWhereInput;
@@ -3125,18 +3102,16 @@ export interface UserWhereInput {
   works_every?: WorkWhereInput;
   works_some?: WorkWhereInput;
   works_none?: WorkWhereInput;
+  exam?: CollegeEntranceExamWhereInput;
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface CompanyUpdateWithoutLocationDataInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  BusinessScope?: String;
-  works?: WorkUpdateManyWithoutCompanyInput;
+export interface SchoolUpsertWithWhereUniqueWithoutLocationInput {
+  where: SchoolWhereUniqueInput;
+  update: SchoolUpdateWithoutLocationDataInput;
+  create: SchoolCreateWithoutLocationInput;
 }
 
 export interface MajorWhereInput {
@@ -3186,12 +3161,134 @@ export interface MajorWhereInput {
   education_not?: Educationkind;
   education_in?: Educationkind[] | Educationkind;
   education_not_in?: Educationkind[] | Educationkind;
-  universities_every?: UniversityWhereInput;
-  universities_some?: UniversityWhereInput;
-  universities_none?: UniversityWhereInput;
   AND?: MajorWhereInput[] | MajorWhereInput;
   OR?: MajorWhereInput[] | MajorWhereInput;
   NOT?: MajorWhereInput[] | MajorWhereInput;
+}
+
+export interface CompanyUpdateManyWithoutLocationInput {
+  create?:
+    | CompanyCreateWithoutLocationInput[]
+    | CompanyCreateWithoutLocationInput;
+  delete?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
+  connect?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
+  disconnect?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
+  update?:
+    | CompanyUpdateWithWhereUniqueWithoutLocationInput[]
+    | CompanyUpdateWithWhereUniqueWithoutLocationInput;
+  upsert?:
+    | CompanyUpsertWithWhereUniqueWithoutLocationInput[]
+    | CompanyUpsertWithWhereUniqueWithoutLocationInput;
+}
+
+export interface CollegeEntranceExamWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  province?: ProvinceWhereInput;
+  subject?: String;
+  subject_not?: String;
+  subject_in?: String[] | String;
+  subject_not_in?: String[] | String;
+  subject_lt?: String;
+  subject_lte?: String;
+  subject_gt?: String;
+  subject_gte?: String;
+  subject_contains?: String;
+  subject_not_contains?: String;
+  subject_starts_with?: String;
+  subject_not_starts_with?: String;
+  subject_ends_with?: String;
+  subject_not_ends_with?: String;
+  culscore?: Float;
+  culscore_not?: Float;
+  culscore_in?: Float[] | Float;
+  culscore_not_in?: Float[] | Float;
+  culscore_lt?: Float;
+  culscore_lte?: Float;
+  culscore_gt?: Float;
+  culscore_gte?: Float;
+  proscore?: Float;
+  proscore_not?: Float;
+  proscore_in?: Float[] | Float;
+  proscore_not_in?: Float[] | Float;
+  proscore_lt?: Float;
+  proscore_lte?: Float;
+  proscore_gt?: Float;
+  proscore_gte?: Float;
+  candidatenum?: String;
+  candidatenum_not?: String;
+  candidatenum_in?: String[] | String;
+  candidatenum_not_in?: String[] | String;
+  candidatenum_lt?: String;
+  candidatenum_lte?: String;
+  candidatenum_gt?: String;
+  candidatenum_gte?: String;
+  candidatenum_contains?: String;
+  candidatenum_not_contains?: String;
+  candidatenum_starts_with?: String;
+  candidatenum_not_starts_with?: String;
+  candidatenum_ends_with?: String;
+  candidatenum_not_ends_with?: String;
+  times?: Int;
+  times_not?: Int;
+  times_in?: Int[] | Int;
+  times_not_in?: Int[] | Int;
+  times_lt?: Int;
+  times_lte?: Int;
+  times_gt?: Int;
+  times_gte?: Int;
+  student?: UserWhereInput;
+  AND?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
+  OR?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
+  NOT?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
+}
+
+export interface CompanyUpdateWithWhereUniqueWithoutLocationInput {
+  where: CompanyWhereUniqueInput;
+  data: CompanyUpdateWithoutLocationDataInput;
+}
+
+export interface LocationSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: LocationWhereInput;
+  AND?: LocationSubscriptionWhereInput[] | LocationSubscriptionWhereInput;
+  OR?: LocationSubscriptionWhereInput[] | LocationSubscriptionWhereInput;
+  NOT?: LocationSubscriptionWhereInput[] | LocationSubscriptionWhereInput;
+}
+
+export interface CompanyUpdateWithoutLocationDataInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  BusinessScope?: String;
+  works?: WorkUpdateManyWithoutCompanyInput;
+}
+
+export interface CitySubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: CityWhereInput;
+  AND?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
+  OR?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
+  NOT?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
 }
 
 export interface WorkUpdateManyWithoutCompanyInput {
@@ -3207,15 +3304,14 @@ export interface WorkUpdateManyWithoutCompanyInput {
     | WorkUpsertWithWhereUniqueWithoutCompanyInput;
 }
 
-export interface PostSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: PostWhereInput;
-  AND?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
-  OR?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
-  NOT?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
+export interface WorkCreateInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  company?: CompanyCreateOneWithoutWorksInput;
+  department?: String;
+  post?: String;
+  jobContent?: String;
+  worker?: UserCreateOneWithoutWorksInput;
 }
 
 export interface WorkUpdateWithWhereUniqueWithoutCompanyInput {
@@ -3223,15 +3319,18 @@ export interface WorkUpdateWithWhereUniqueWithoutCompanyInput {
   data: WorkUpdateWithoutCompanyDataInput;
 }
 
-export interface FamilySubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: FamilyWhereInput;
-  AND?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
-  OR?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
-  NOT?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
+export interface UserUpdateManyMutationInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  uid?: String;
+  token?: String;
+  regTimes?: Int;
+  maxRegTimes?: Int;
 }
 
 export interface WorkUpdateWithoutCompanyDataInput {
@@ -3243,15 +3342,12 @@ export interface WorkUpdateWithoutCompanyDataInput {
   worker?: UserUpdateOneWithoutWorksInput;
 }
 
-export interface AreaSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: AreaWhereInput;
-  AND?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
-  OR?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
-  NOT?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
+export interface UniversityUpdateManyMutationInput {
+  name?: String;
+  education?: Educationkind;
+  department?: String;
+  location?: String;
+  desc?: String;
 }
 
 export interface UserUpdateOneWithoutWorksInput {
@@ -3263,14 +3359,11 @@ export interface UserUpdateOneWithoutWorksInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface WorkCreateInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  company?: CompanyCreateOneWithoutWorksInput;
-  department?: String;
-  post?: String;
-  jobContent?: String;
-  worker?: UserCreateOneWithoutWorksInput;
+export interface StreetUpdateInput {
+  code?: String;
+  name?: String;
+  Area?: AreaUpdateOneRequiredWithoutTownsInput;
+  villages?: VillageUpdateManyWithoutStreetInput;
 }
 
 export interface UserUpdateWithoutWorksDataInput {
@@ -3286,11 +3379,14 @@ export interface UserUpdateWithoutWorksDataInput {
   token?: String;
   posts?: PostUpdateManyWithoutAuthorInput;
   regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
   families?: FamilyUpdateManyWithoutFromInput;
   studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
 }
 
-export interface UserUpdateManyMutationInput {
+export interface UserUpdateWithoutStudiesDataInput {
   username?: String;
   password?: String;
   name?: String;
@@ -3298,8 +3394,16 @@ export interface UserUpdateManyMutationInput {
   avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutPeopleInput;
   uid?: String;
   token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
 }
 
 export interface PostUpdateManyWithoutAuthorInput {
@@ -3371,9 +3475,8 @@ export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
   data: PostUpdateWithoutAuthorDataInput;
 }
 
-export type CompanyWhereUniqueInput = AtLeastOne<{
+export type MajorWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
-  name?: String;
 }>;
 
 export interface PostUpdateWithoutAuthorDataInput {
@@ -3382,9 +3485,11 @@ export interface PostUpdateWithoutAuthorDataInput {
   content?: String;
 }
 
-export type FamilyWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface SchoolUpdateInput {
+  name?: String;
+  kind?: Educationkind;
+  location?: LocationUpdateOneWithoutSchoolsInput;
+}
 
 export interface PostUpsertWithWhereUniqueWithoutAuthorInput {
   where: PostWhereUniqueInput;
@@ -3392,10 +3497,25 @@ export interface PostUpsertWithWhereUniqueWithoutAuthorInput {
   create: PostCreateWithoutAuthorInput;
 }
 
-export type LocationWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
+export interface UserUpdateWithoutRegStatusDataInput {
+  username?: String;
+  password?: String;
   name?: String;
-}>;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutPeopleInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+}
 
 export interface RegStatusUpdateOneWithoutApplicantsInput {
   create?: RegStatusCreateWithoutApplicantsInput;
@@ -3406,20 +3526,24 @@ export interface RegStatusUpdateOneWithoutApplicantsInput {
   connect?: RegStatusWhereUniqueInput;
 }
 
-export interface UserCreateManyWithoutStudiesInput {
-  create?: UserCreateWithoutStudiesInput[] | UserCreateWithoutStudiesInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+export interface RegStatusUpdateInput {
+  education?: Educationkind;
+  university?: UniversityUpdateOneInput;
+  major?: MajorUpdateOneRequiredInput;
+  applicants?: UserUpdateManyWithoutRegStatusInput;
 }
 
 export interface RegStatusUpdateWithoutApplicantsDataInput {
+  education?: Educationkind;
   university?: UniversityUpdateOneInput;
   major?: MajorUpdateOneRequiredInput;
 }
 
-export interface SchoolUpdateInput {
-  name?: String;
-  kind?: Educationkind;
-  location?: LocationUpdateOneWithoutSchoolsInput;
+export interface RegStatusCreateInput {
+  education: Educationkind;
+  university?: UniversityCreateOneInput;
+  major: MajorCreateOneInput;
+  applicants?: UserCreateManyWithoutRegStatusInput;
 }
 
 export interface UniversityUpdateOneInput {
@@ -3431,111 +3555,74 @@ export interface UniversityUpdateOneInput {
   connect?: UniversityWhereUniqueInput;
 }
 
-export interface UserUpdateWithWhereUniqueWithoutRegStatusInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutRegStatusDataInput;
+export interface PostUpdateManyMutationInput {
+  isPublished?: Boolean;
+  title?: String;
+  content?: String;
 }
 
 export interface UniversityUpdateDataInput {
   name?: String;
-  location?: LocationUpdateOneWithoutUniversitiesInput;
-  major?: MajorUpdateManyWithoutUniversitiesInput;
-}
-
-export interface UserCreateWithoutRegStatusInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutPeopleInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-}
-
-export interface LocationUpdateOneWithoutUniversitiesInput {
-  create?: LocationCreateWithoutUniversitiesInput;
-  update?: LocationUpdateWithoutUniversitiesDataInput;
-  upsert?: LocationUpsertWithoutUniversitiesInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: LocationWhereUniqueInput;
-}
-
-export interface ProvinceUpdateManyMutationInput {
-  code?: String;
-  name?: String;
-}
-
-export interface LocationUpdateWithoutUniversitiesDataInput {
-  name?: String;
-  province?: ProvinceUpdateOneInput;
-  city?: CityUpdateOneInput;
-  area?: AreaUpdateOneInput;
-  street?: StreetUpdateOneInput;
-  village?: VillageUpdateOneInput;
-  schools?: SchoolUpdateManyWithoutLocationInput;
-  companies?: CompanyUpdateManyWithoutLocationInput;
-  people?: UserUpdateManyWithoutBirthplaceInput;
-}
-
-export interface UserUpsertWithoutPostsInput {
-  update: UserUpdateWithoutPostsDataInput;
-  create: UserCreateWithoutPostsInput;
-}
-
-export interface UserUpdateManyWithoutBirthplaceInput {
-  create?:
-    | UserCreateWithoutBirthplaceInput[]
-    | UserCreateWithoutBirthplaceInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutBirthplaceInput[]
-    | UserUpdateWithWhereUniqueWithoutBirthplaceInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutBirthplaceInput[]
-    | UserUpsertWithWhereUniqueWithoutBirthplaceInput;
+  education?: Educationkind;
+  department?: String;
+  location?: String;
+  desc?: String;
 }
 
 export type SchoolWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface UserUpdateWithWhereUniqueWithoutBirthplaceInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutBirthplaceDataInput;
+export interface UniversityUpsertNestedInput {
+  update: UniversityUpdateDataInput;
+  create: UniversityCreateInput;
 }
 
 export type SchoolEduWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface UserUpdateWithoutBirthplaceDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
+export interface MajorUpdateOneRequiredInput {
+  create?: MajorCreateInput;
+  update?: MajorUpdateDataInput;
+  upsert?: MajorUpsertNestedInput;
+  connect?: MajorWhereUniqueInput;
 }
 
 export type StreetWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+}>;
+
+export interface MajorUpdateDataInput {
+  name?: String;
+  category?: String;
+  education?: Educationkind;
+}
+
+export type UniversityWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
+
+export interface MajorUpsertNestedInput {
+  update: MajorUpdateDataInput;
+  create: MajorCreateInput;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  username?: String;
+  uid?: String;
+  token?: String;
+}>;
+
+export interface RegStatusUpsertWithoutApplicantsInput {
+  update: RegStatusUpdateWithoutApplicantsDataInput;
+  create: RegStatusCreateWithoutApplicantsInput;
+}
+
+export type VillageWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
   code?: String;
 }>;
@@ -3553,9 +3640,8 @@ export interface FamilyUpdateManyWithoutFromInput {
     | FamilyUpsertWithWhereUniqueWithoutFromInput;
 }
 
-export type UniversityWhereUniqueInput = AtLeastOne<{
+export type WorkWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
-  name?: String;
 }>;
 
 export interface FamilyUpdateWithWhereUniqueWithoutFromInput {
@@ -3563,12 +3649,10 @@ export interface FamilyUpdateWithWhereUniqueWithoutFromInput {
   data: FamilyUpdateWithoutFromDataInput;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  username?: String;
-  uid?: String;
-  token?: String;
-}>;
+export interface ProvinceCreateOneWithoutCitiesInput {
+  create?: ProvinceCreateWithoutCitiesInput;
+  connect?: ProvinceWhereUniqueInput;
+}
 
 export interface FamilyUpdateWithoutFromDataInput {
   to?: PersonUpdateOneRequiredWithoutFamiliesInput;
@@ -3577,10 +3661,10 @@ export interface FamilyUpdateWithoutFromDataInput {
   status?: String;
 }
 
-export type VillageWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  code?: String;
-}>;
+export interface VillageCreateManyWithoutStreetInput {
+  create?: VillageCreateWithoutStreetInput[] | VillageCreateWithoutStreetInput;
+  connect?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
+}
 
 export interface PersonUpdateOneRequiredWithoutFamiliesInput {
   create?: PersonCreateWithoutFamiliesInput;
@@ -3589,18 +3673,20 @@ export interface PersonUpdateOneRequiredWithoutFamiliesInput {
   connect?: PersonWhereUniqueInput;
 }
 
-export type WorkWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface CityUpdateWithoutAreasDataInput {
+  code?: String;
+  name?: String;
+  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
+}
 
 export interface PersonUpdateWithoutFamiliesDataInput {
   name?: String;
   user?: UserUpdateOneInput;
 }
 
-export interface ProvinceCreateOneWithoutCitiesInput {
-  create?: ProvinceCreateWithoutCitiesInput;
-  connect?: ProvinceWhereUniqueInput;
+export interface CityUpsertWithoutAreasInput {
+  update: CityUpdateWithoutAreasDataInput;
+  create: CityCreateWithoutAreasInput;
 }
 
 export interface UserUpdateOneInput {
@@ -3610,41 +3696,6 @@ export interface UserUpdateOneInput {
   delete?: Boolean;
   disconnect?: Boolean;
   connect?: UserWhereUniqueInput;
-}
-
-export interface VillageCreateManyWithoutStreetInput {
-  create?: VillageCreateWithoutStreetInput[] | VillageCreateWithoutStreetInput;
-  connect?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
-}
-
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
-}
-
-export interface CityUpdateWithoutAreasDataInput {
-  code?: String;
-  name?: String;
-  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
-}
-
-export interface PersonUpsertWithoutFamiliesInput {
-  update: PersonUpdateWithoutFamiliesDataInput;
-  create: PersonCreateWithoutFamiliesInput;
-}
-
-export interface CityUpsertWithoutAreasInput {
-  update: CityUpdateWithoutAreasDataInput;
-  create: CityCreateWithoutAreasInput;
-}
-
-export interface FamilyUpdateOneInput {
-  create?: FamilyCreateInput;
-  update?: FamilyUpdateDataInput;
-  upsert?: FamilyUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: FamilyWhereUniqueInput;
 }
 
 export interface VillageUpdateManyWithoutStreetInput {
@@ -3660,35 +3711,7 @@ export interface VillageUpdateManyWithoutStreetInput {
     | VillageUpsertWithWhereUniqueWithoutStreetInput;
 }
 
-export interface FamilyUpdateDataInput {
-  from?: UserUpdateOneRequiredWithoutFamiliesInput;
-  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
-  relationship?: String;
-  spouse?: FamilyUpdateOneInput;
-  status?: String;
-}
-
-export interface StreetUpsertWithWhereUniqueWithoutAreaInput {
-  where: StreetWhereUniqueInput;
-  update: StreetUpdateWithoutAreaDataInput;
-  create: StreetCreateWithoutAreaInput;
-}
-
-export interface UserUpdateOneRequiredWithoutFamiliesInput {
-  create?: UserCreateWithoutFamiliesInput;
-  update?: UserUpdateWithoutFamiliesDataInput;
-  upsert?: UserUpsertWithoutFamiliesInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface CityCreateInput {
-  code: String;
-  name: String;
-  province: ProvinceCreateOneWithoutCitiesInput;
-  areas?: AreaCreateManyWithoutCityInput;
-}
-
-export interface UserUpdateWithoutFamiliesDataInput {
+export interface UserUpdateDataInput {
   username?: String;
   password?: String;
   name?: String;
@@ -3701,21 +3724,18 @@ export interface UserUpdateWithoutFamiliesDataInput {
   token?: String;
   posts?: PostUpdateManyWithoutAuthorInput;
   regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
   studies?: SchoolEduUpdateManyWithoutStudentsInput;
   works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
 }
 
-export interface AreaUpdateManyWithoutCityInput {
-  create?: AreaCreateWithoutCityInput[] | AreaCreateWithoutCityInput;
-  delete?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
-  connect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
-  disconnect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
-  update?:
-    | AreaUpdateWithWhereUniqueWithoutCityInput[]
-    | AreaUpdateWithWhereUniqueWithoutCityInput;
-  upsert?:
-    | AreaUpsertWithWhereUniqueWithoutCityInput[]
-    | AreaUpsertWithWhereUniqueWithoutCityInput;
+export interface StreetUpsertWithWhereUniqueWithoutAreaInput {
+  where: StreetWhereUniqueInput;
+  update: StreetUpdateWithoutAreaDataInput;
+  create: StreetCreateWithoutAreaInput;
 }
 
 export interface SchoolEduUpdateManyWithoutStudentsInput {
@@ -3733,9 +3753,11 @@ export interface SchoolEduUpdateManyWithoutStudentsInput {
     | SchoolEduUpsertWithWhereUniqueWithoutStudentsInput;
 }
 
-export interface CityUpdateManyMutationInput {
-  code?: String;
-  name?: String;
+export interface CityCreateInput {
+  code: String;
+  name: String;
+  province: ProvinceCreateOneWithoutCitiesInput;
+  areas?: AreaCreateManyWithoutCityInput;
 }
 
 export interface SchoolEduUpdateWithWhereUniqueWithoutStudentsInput {
@@ -3743,9 +3765,17 @@ export interface SchoolEduUpdateWithWhereUniqueWithoutStudentsInput {
   data: SchoolEduUpdateWithoutStudentsDataInput;
 }
 
-export interface CityCreateManyWithoutProvinceInput {
-  create?: CityCreateWithoutProvinceInput[] | CityCreateWithoutProvinceInput;
-  connect?: CityWhereUniqueInput[] | CityWhereUniqueInput;
+export interface AreaUpdateManyWithoutCityInput {
+  create?: AreaCreateWithoutCityInput[] | AreaCreateWithoutCityInput;
+  delete?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
+  connect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
+  disconnect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
+  update?:
+    | AreaUpdateWithWhereUniqueWithoutCityInput[]
+    | AreaUpdateWithWhereUniqueWithoutCityInput;
+  upsert?:
+    | AreaUpsertWithWhereUniqueWithoutCityInput[]
+    | AreaUpsertWithWhereUniqueWithoutCityInput;
 }
 
 export interface SchoolEduUpdateWithoutStudentsDataInput {
@@ -3756,9 +3786,9 @@ export interface SchoolEduUpdateWithoutStudentsDataInput {
   className?: String;
 }
 
-export interface LocationCreateOneWithoutPeopleInput {
-  create?: LocationCreateWithoutPeopleInput;
-  connect?: LocationWhereUniqueInput;
+export interface CityUpdateManyMutationInput {
+  code?: String;
+  name?: String;
 }
 
 export interface SchoolUpdateOneInput {
@@ -3770,15 +3800,29 @@ export interface SchoolUpdateOneInput {
   connect?: SchoolWhereUniqueInput;
 }
 
-export interface StreetCreateOneInput {
-  create?: StreetCreateInput;
-  connect?: StreetWhereUniqueInput;
+export interface CityCreateManyWithoutProvinceInput {
+  create?: CityCreateWithoutProvinceInput[] | CityCreateWithoutProvinceInput;
+  connect?: CityWhereUniqueInput[] | CityWhereUniqueInput;
 }
 
 export interface SchoolUpdateDataInput {
   name?: String;
   kind?: Educationkind;
   location?: LocationUpdateOneWithoutSchoolsInput;
+}
+
+export interface LocationCreateOneWithoutPeopleInput {
+  create?: LocationCreateWithoutPeopleInput;
+  connect?: LocationWhereUniqueInput;
+}
+
+export interface LocationUpdateOneWithoutSchoolsInput {
+  create?: LocationCreateWithoutSchoolsInput;
+  update?: LocationUpdateWithoutSchoolsDataInput;
+  upsert?: LocationUpsertWithoutSchoolsInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: LocationWhereUniqueInput;
 }
 
 export interface WorkSubscriptionWhereInput {
@@ -3792,13 +3836,16 @@ export interface WorkSubscriptionWhereInput {
   NOT?: WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput;
 }
 
-export interface LocationUpdateOneWithoutSchoolsInput {
-  create?: LocationCreateWithoutSchoolsInput;
-  update?: LocationUpdateWithoutSchoolsDataInput;
-  upsert?: LocationUpsertWithoutSchoolsInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: LocationWhereUniqueInput;
+export interface LocationUpdateWithoutSchoolsDataInput {
+  name?: String;
+  province?: ProvinceUpdateOneInput;
+  city?: CityUpdateOneInput;
+  area?: AreaUpdateOneInput;
+  street?: StreetUpdateOneInput;
+  village?: VillageUpdateOneInput;
+  companies?: CompanyUpdateManyWithoutLocationInput;
+  universities?: UniversityUpdateManyInput;
+  people?: UserUpdateManyWithoutBirthplaceInput;
 }
 
 export interface RegStatusSubscriptionWhereInput {
@@ -3812,16 +3859,17 @@ export interface RegStatusSubscriptionWhereInput {
   NOT?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
 }
 
-export interface LocationUpdateWithoutSchoolsDataInput {
-  name?: String;
-  province?: ProvinceUpdateOneInput;
-  city?: CityUpdateOneInput;
-  area?: AreaUpdateOneInput;
-  street?: StreetUpdateOneInput;
-  village?: VillageUpdateOneInput;
-  companies?: CompanyUpdateManyWithoutLocationInput;
-  universities?: UniversityUpdateManyWithoutLocationInput;
-  people?: UserUpdateManyWithoutBirthplaceInput;
+export interface UniversityUpdateManyInput {
+  create?: UniversityCreateInput[] | UniversityCreateInput;
+  update?:
+    | UniversityUpdateWithWhereUniqueNestedInput[]
+    | UniversityUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | UniversityUpsertWithWhereUniqueNestedInput[]
+    | UniversityUpsertWithWhereUniqueNestedInput;
+  delete?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
+  connect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
+  disconnect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
 }
 
 export interface RegStatusWhereInput {
@@ -3839,6 +3887,10 @@ export interface RegStatusWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  education?: Educationkind;
+  education_not?: Educationkind;
+  education_in?: Educationkind[] | Educationkind;
+  education_not_in?: Educationkind[] | Educationkind;
   university?: UniversityWhereInput;
   major?: MajorWhereInput;
   applicants_every?: UserWhereInput;
@@ -3849,50 +3901,49 @@ export interface RegStatusWhereInput {
   NOT?: RegStatusWhereInput[] | RegStatusWhereInput;
 }
 
-export interface UniversityUpdateManyWithoutLocationInput {
-  create?:
-    | UniversityCreateWithoutLocationInput[]
-    | UniversityCreateWithoutLocationInput;
-  delete?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
-  connect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
-  disconnect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
-  update?:
-    | UniversityUpdateWithWhereUniqueWithoutLocationInput[]
-    | UniversityUpdateWithWhereUniqueWithoutLocationInput;
-  upsert?:
-    | UniversityUpsertWithWhereUniqueWithoutLocationInput[]
-    | UniversityUpsertWithWhereUniqueWithoutLocationInput;
+export interface UniversityUpdateWithWhereUniqueNestedInput {
+  where: UniversityWhereUniqueInput;
+  data: UniversityUpdateDataInput;
 }
 
-export interface MajorSubscriptionWhereInput {
+export interface PersonSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: MajorWhereInput;
-  AND?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
-  OR?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
-  NOT?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
+  node?: PersonWhereInput;
+  AND?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
+  OR?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
+  NOT?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
 }
 
-export interface UniversityUpdateWithWhereUniqueWithoutLocationInput {
+export interface UniversityUpsertWithWhereUniqueNestedInput {
   where: UniversityWhereUniqueInput;
-  data: UniversityUpdateWithoutLocationDataInput;
+  update: UniversityUpdateDataInput;
+  create: UniversityCreateInput;
 }
 
-export interface WorkUpdateInput {
+export interface WorkUpdateManyMutationInput {
   startTime?: DateTimeInput;
   endTime?: DateTimeInput;
-  company?: CompanyUpdateOneWithoutWorksInput;
   department?: String;
   post?: String;
   jobContent?: String;
-  worker?: UserUpdateOneWithoutWorksInput;
 }
 
-export interface UniversityUpdateWithoutLocationDataInput {
-  name?: String;
-  major?: MajorUpdateManyWithoutUniversitiesInput;
+export interface UserUpdateManyWithoutBirthplaceInput {
+  create?:
+    | UserCreateWithoutBirthplaceInput[]
+    | UserCreateWithoutBirthplaceInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutBirthplaceInput[]
+    | UserUpdateWithWhereUniqueWithoutBirthplaceInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutBirthplaceInput[]
+    | UserUpsertWithWhereUniqueWithoutBirthplaceInput;
 }
 
 export interface UserUpdateInput {
@@ -3908,216 +3959,63 @@ export interface UserUpdateInput {
   token?: String;
   posts?: PostUpdateManyWithoutAuthorInput;
   regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
   families?: FamilyUpdateManyWithoutFromInput;
   studies?: SchoolEduUpdateManyWithoutStudentsInput;
   works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
 }
 
-export interface MajorUpdateManyWithoutUniversitiesInput {
-  create?:
-    | MajorCreateWithoutUniversitiesInput[]
-    | MajorCreateWithoutUniversitiesInput;
-  delete?: MajorWhereUniqueInput[] | MajorWhereUniqueInput;
-  connect?: MajorWhereUniqueInput[] | MajorWhereUniqueInput;
-  disconnect?: MajorWhereUniqueInput[] | MajorWhereUniqueInput;
-  update?:
-    | MajorUpdateWithWhereUniqueWithoutUniversitiesInput[]
-    | MajorUpdateWithWhereUniqueWithoutUniversitiesInput;
-  upsert?:
-    | MajorUpsertWithWhereUniqueWithoutUniversitiesInput[]
-    | MajorUpsertWithWhereUniqueWithoutUniversitiesInput;
-}
-
-export interface SchoolEduUpdateManyMutationInput {
-  startTime?: DateTimeInput;
-  grade?: Int;
-  className?: String;
-}
-
-export interface MajorUpdateWithWhereUniqueWithoutUniversitiesInput {
-  where: MajorWhereUniqueInput;
-  data: MajorUpdateWithoutUniversitiesDataInput;
-}
-
-export interface SchoolEduUpdateInput {
-  school?: SchoolUpdateOneInput;
-  startTime?: DateTimeInput;
-  major?: MajorUpdateOneInput;
-  grade?: Int;
-  className?: String;
-  students?: UserUpdateManyWithoutStudiesInput;
-}
-
-export interface MajorUpdateWithoutUniversitiesDataInput {
-  name?: String;
-  category?: String;
-  education?: Educationkind;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutRegStatusInput {
+export interface UserUpdateWithWhereUniqueWithoutBirthplaceInput {
   where: UserWhereUniqueInput;
-  update: UserUpdateWithoutRegStatusDataInput;
-  create: UserCreateWithoutRegStatusInput;
+  data: UserUpdateWithoutBirthplaceDataInput;
 }
 
-export interface MajorUpsertWithWhereUniqueWithoutUniversitiesInput {
-  where: MajorWhereUniqueInput;
-  update: MajorUpdateWithoutUniversitiesDataInput;
-  create: MajorCreateWithoutUniversitiesInput;
+export interface UserUpsertWithWhereUniqueWithoutStudiesInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutStudiesDataInput;
+  create: UserCreateWithoutStudiesInput;
 }
 
-export type ProvinceWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  code?: String;
+export interface UserUpdateWithoutBirthplaceDataInput {
+  username?: String;
+  password?: String;
   name?: String;
-}>;
-
-export interface UniversityUpsertWithWhereUniqueWithoutLocationInput {
-  where: UniversityWhereUniqueInput;
-  update: UniversityUpdateWithoutLocationDataInput;
-  create: UniversityCreateWithoutLocationInput;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
 }
 
-export interface UserUpdateOneRequiredWithoutPostsInput {
-  create?: UserCreateWithoutPostsInput;
-  update?: UserUpdateWithoutPostsDataInput;
-  upsert?: UserUpsertWithoutPostsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface LocationUpsertWithoutSchoolsInput {
-  update: LocationUpdateWithoutSchoolsDataInput;
-  create: LocationCreateWithoutSchoolsInput;
-}
-
-export interface FamilyUpsertWithWhereUniqueWithoutToInput {
-  where: FamilyWhereUniqueInput;
-  update: FamilyUpdateWithoutToDataInput;
-  create: FamilyCreateWithoutToInput;
-}
-
-export interface SchoolUpsertNestedInput {
-  update: SchoolUpdateDataInput;
-  create: SchoolCreateInput;
-}
-
-export interface FamilyCreateManyWithoutToInput {
-  create?: FamilyCreateWithoutToInput[] | FamilyCreateWithoutToInput;
-  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-}
-
-export interface MajorUpdateOneInput {
-  create?: MajorCreateInput;
-  update?: MajorUpdateDataInput;
-  upsert?: MajorUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: MajorWhereUniqueInput;
-}
-
-export interface LocationCreateInput {
+export interface UserCreateWithoutStudiesInput {
+  username: String;
+  password: String;
   name?: String;
-  province?: ProvinceCreateOneInput;
-  city?: CityCreateOneInput;
-  area?: AreaCreateOneInput;
-  street?: StreetCreateOneInput;
-  village?: VillageCreateOneInput;
-  schools?: SchoolCreateManyWithoutLocationInput;
-  companies?: CompanyCreateManyWithoutLocationInput;
-  universities?: UniversityCreateManyWithoutLocationInput;
-  people?: UserCreateManyWithoutBirthplaceInput;
-}
-
-export interface MajorUpdateDataInput {
-  name?: String;
-  category?: String;
-  education?: Educationkind;
-  universities?: UniversityUpdateManyWithoutMajorInput;
-}
-
-export interface CityCreateOneWithoutAreasInput {
-  create?: CityCreateWithoutAreasInput;
-  connect?: CityWhereUniqueInput;
-}
-
-export interface UniversityUpdateManyWithoutMajorInput {
-  create?:
-    | UniversityCreateWithoutMajorInput[]
-    | UniversityCreateWithoutMajorInput;
-  delete?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
-  connect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
-  disconnect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
-  update?:
-    | UniversityUpdateWithWhereUniqueWithoutMajorInput[]
-    | UniversityUpdateWithWhereUniqueWithoutMajorInput;
-  upsert?:
-    | UniversityUpsertWithWhereUniqueWithoutMajorInput[]
-    | UniversityUpsertWithWhereUniqueWithoutMajorInput;
-}
-
-export interface AreaUpdateInput {
-  code?: String;
-  name?: String;
-  city?: CityUpdateOneRequiredWithoutAreasInput;
-  towns?: StreetUpdateManyWithoutAreaInput;
-}
-
-export interface UniversityUpdateWithWhereUniqueWithoutMajorInput {
-  where: UniversityWhereUniqueInput;
-  data: UniversityUpdateWithoutMajorDataInput;
-}
-
-export interface StreetUpdateWithWhereUniqueWithoutAreaInput {
-  where: StreetWhereUniqueInput;
-  data: StreetUpdateWithoutAreaDataInput;
-}
-
-export interface UniversityUpdateWithoutMajorDataInput {
-  name?: String;
-  location?: LocationUpdateOneWithoutUniversitiesInput;
-}
-
-export interface CompanyCreateInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  location?: LocationCreateOneWithoutCompaniesInput;
-  BusinessScope?: String;
-  works?: WorkCreateManyWithoutCompanyInput;
-}
-
-export interface UniversityUpsertWithWhereUniqueWithoutMajorInput {
-  where: UniversityWhereUniqueInput;
-  update: UniversityUpdateWithoutMajorDataInput;
-  create: UniversityCreateWithoutMajorInput;
-}
-
-export interface AreaUpdateWithoutCityDataInput {
-  code?: String;
-  name?: String;
-  towns?: StreetUpdateManyWithoutAreaInput;
-}
-
-export interface MajorUpsertNestedInput {
-  update: MajorUpdateDataInput;
-  create: MajorCreateInput;
-}
-
-export interface UserCreateOneInput {
-  create?: UserCreateInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface SchoolEduUpsertWithWhereUniqueWithoutStudentsInput {
-  where: SchoolEduWhereUniqueInput;
-  update: SchoolEduUpdateWithoutStudentsDataInput;
-  create: SchoolEduCreateWithoutStudentsInput;
-}
-
-export interface AreaCreateOneWithoutTownsInput {
-  create?: AreaCreateWithoutTownsInput;
-  connect?: AreaWhereUniqueInput;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutPeopleInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
 }
 
 export interface WorkUpdateManyWithoutWorkerInput {
@@ -4131,6 +4029,411 @@ export interface WorkUpdateManyWithoutWorkerInput {
   upsert?:
     | WorkUpsertWithWhereUniqueWithoutWorkerInput[]
     | WorkUpsertWithWhereUniqueWithoutWorkerInput;
+}
+
+export interface RegStatusUpdateManyMutationInput {
+  education?: Educationkind;
+}
+
+export interface WorkUpdateWithWhereUniqueWithoutWorkerInput {
+  where: WorkWhereUniqueInput;
+  data: WorkUpdateWithoutWorkerDataInput;
+}
+
+export type ProvinceWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+  name?: String;
+}>;
+
+export interface WorkUpdateWithoutWorkerDataInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  company?: CompanyUpdateOneWithoutWorksInput;
+  department?: String;
+  post?: String;
+  jobContent?: String;
+}
+
+export interface UserUpdateWithoutPostsDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutPeopleInput;
+  uid?: String;
+  token?: String;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+}
+
+export interface CompanyUpdateOneWithoutWorksInput {
+  create?: CompanyCreateWithoutWorksInput;
+  update?: CompanyUpdateWithoutWorksDataInput;
+  upsert?: CompanyUpsertWithoutWorksInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: CompanyWhereUniqueInput;
+}
+
+export interface PersonUpdateManyMutationInput {
+  name?: String;
+}
+
+export interface CompanyUpdateWithoutWorksDataInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  location?: LocationUpdateOneWithoutCompaniesInput;
+  BusinessScope?: String;
+}
+
+export interface FamilyCreateWithoutToInput {
+  from: UserCreateOneWithoutFamiliesInput;
+  relationship: String;
+  spouse?: FamilyCreateOneInput;
+  status: String;
+}
+
+export interface LocationUpdateOneWithoutCompaniesInput {
+  create?: LocationCreateWithoutCompaniesInput;
+  update?: LocationUpdateWithoutCompaniesDataInput;
+  upsert?: LocationUpsertWithoutCompaniesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: LocationWhereUniqueInput;
+}
+
+export interface LocationUpdateInput {
+  name?: String;
+  province?: ProvinceUpdateOneInput;
+  city?: CityUpdateOneInput;
+  area?: AreaUpdateOneInput;
+  street?: StreetUpdateOneInput;
+  village?: VillageUpdateOneInput;
+  schools?: SchoolUpdateManyWithoutLocationInput;
+  companies?: CompanyUpdateManyWithoutLocationInput;
+  universities?: UniversityUpdateManyInput;
+  people?: UserUpdateManyWithoutBirthplaceInput;
+}
+
+export interface LocationUpdateWithoutCompaniesDataInput {
+  name?: String;
+  province?: ProvinceUpdateOneInput;
+  city?: CityUpdateOneInput;
+  area?: AreaUpdateOneInput;
+  street?: StreetUpdateOneInput;
+  village?: VillageUpdateOneInput;
+  schools?: SchoolUpdateManyWithoutLocationInput;
+  universities?: UniversityUpdateManyInput;
+  people?: UserUpdateManyWithoutBirthplaceInput;
+}
+
+export interface CityCreateOneWithoutAreasInput {
+  create?: CityCreateWithoutAreasInput;
+  connect?: CityWhereUniqueInput;
+}
+
+export interface LocationUpsertWithoutCompaniesInput {
+  update: LocationUpdateWithoutCompaniesDataInput;
+  create: LocationCreateWithoutCompaniesInput;
+}
+
+export interface AreaUpdateInput {
+  code?: String;
+  name?: String;
+  city?: CityUpdateOneRequiredWithoutAreasInput;
+  towns?: StreetUpdateManyWithoutAreaInput;
+}
+
+export interface CompanyUpsertWithoutWorksInput {
+  update: CompanyUpdateWithoutWorksDataInput;
+  create: CompanyCreateWithoutWorksInput;
+}
+
+export interface StreetUpdateWithWhereUniqueWithoutAreaInput {
+  where: StreetWhereUniqueInput;
+  data: StreetUpdateWithoutAreaDataInput;
+}
+
+export interface WorkUpsertWithWhereUniqueWithoutWorkerInput {
+  where: WorkWhereUniqueInput;
+  update: WorkUpdateWithoutWorkerDataInput;
+  create: WorkCreateWithoutWorkerInput;
+}
+
+export interface CompanyUpdateInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  location?: LocationUpdateOneWithoutCompaniesInput;
+  BusinessScope?: String;
+  works?: WorkUpdateManyWithoutCompanyInput;
+}
+
+export interface CollegeEntranceExamUpdateOneWithoutStudentInput {
+  create?: CollegeEntranceExamCreateWithoutStudentInput;
+  update?: CollegeEntranceExamUpdateWithoutStudentDataInput;
+  upsert?: CollegeEntranceExamUpsertWithoutStudentInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: CollegeEntranceExamWhereUniqueInput;
+}
+
+export interface AreaUpdateWithoutCityDataInput {
+  code?: String;
+  name?: String;
+  towns?: StreetUpdateManyWithoutAreaInput;
+}
+
+export interface CollegeEntranceExamUpdateWithoutStudentDataInput {
+  province?: ProvinceUpdateOneRequiredInput;
+  subject?: String;
+  culscore?: Float;
+  proscore?: Float;
+  candidatenum?: String;
+  times?: Int;
+}
+
+export interface UserCreateOneWithoutExamInput {
+  create?: UserCreateWithoutExamInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface CollegeEntranceExamUpsertWithoutStudentInput {
+  update: CollegeEntranceExamUpdateWithoutStudentDataInput;
+  create: CollegeEntranceExamCreateWithoutStudentInput;
+}
+
+export interface UniversitySubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UniversityWhereInput;
+  AND?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
+  OR?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
+  NOT?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutBirthplaceInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutBirthplaceDataInput;
+  create: UserCreateWithoutBirthplaceInput;
+}
+
+export interface PersonWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  user?: UserWhereInput;
+  families_every?: FamilyWhereInput;
+  families_some?: FamilyWhereInput;
+  families_none?: FamilyWhereInput;
+  AND?: PersonWhereInput[] | PersonWhereInput;
+  OR?: PersonWhereInput[] | PersonWhereInput;
+  NOT?: PersonWhereInput[] | PersonWhereInput;
+}
+
+export interface LocationUpsertWithoutSchoolsInput {
+  update: LocationUpdateWithoutSchoolsDataInput;
+  create: LocationCreateWithoutSchoolsInput;
+}
+
+export interface VillageWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  code?: String;
+  code_not?: String;
+  code_in?: String[] | String;
+  code_not_in?: String[] | String;
+  code_lt?: String;
+  code_lte?: String;
+  code_gt?: String;
+  code_gte?: String;
+  code_contains?: String;
+  code_not_contains?: String;
+  code_starts_with?: String;
+  code_not_starts_with?: String;
+  code_ends_with?: String;
+  code_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  street?: StreetWhereInput;
+  AND?: VillageWhereInput[] | VillageWhereInput;
+  OR?: VillageWhereInput[] | VillageWhereInput;
+  NOT?: VillageWhereInput[] | VillageWhereInput;
+}
+
+export interface SchoolUpsertNestedInput {
+  update: SchoolUpdateDataInput;
+  create: SchoolCreateInput;
+}
+
+export interface UserUpdateManyWithoutStudiesInput {
+  create?: UserCreateWithoutStudiesInput[] | UserCreateWithoutStudiesInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutStudiesInput[]
+    | UserUpdateWithWhereUniqueWithoutStudiesInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutStudiesInput[]
+    | UserUpsertWithWhereUniqueWithoutStudiesInput;
+}
+
+export interface MajorUpdateOneInput {
+  create?: MajorCreateInput;
+  update?: MajorUpdateDataInput;
+  upsert?: MajorUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: MajorWhereUniqueInput;
+}
+
+export type PostWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface SchoolEduUpsertWithWhereUniqueWithoutStudentsInput {
+  where: SchoolEduWhereUniqueInput;
+  update: SchoolEduUpdateWithoutStudentsDataInput;
+  create: SchoolEduCreateWithoutStudentsInput;
+}
+
+export interface UserCreateWithoutPostsInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutPeopleInput;
+  uid: String;
+  token: String;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface MajorUpdateManyMutationInput {
+  name?: String;
+  category?: String;
+  education?: Educationkind;
+}
+
+export interface PersonUpsertWithoutFamiliesInput {
+  update: PersonUpdateWithoutFamiliesDataInput;
+  create: PersonCreateWithoutFamiliesInput;
+}
+
+export interface StreetCreateManyWithoutAreaInput {
+  create?: StreetCreateWithoutAreaInput[] | StreetCreateWithoutAreaInput;
+  connect?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
+}
+
+export interface FamilyUpdateOneInput {
+  create?: FamilyCreateInput;
+  update?: FamilyUpdateDataInput;
+  upsert?: FamilyUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: FamilyWhereUniqueInput;
+}
+
+export interface VillageUpdateWithoutStreetDataInput {
+  code?: String;
+  name?: String;
+}
+
+export interface FamilyUpdateDataInput {
+  from?: UserUpdateOneRequiredWithoutFamiliesInput;
+  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
+  relationship?: String;
+  spouse?: FamilyUpdateOneInput;
+  status?: String;
+}
+
+export interface ProvinceCreateOneInput {
+  create?: ProvinceCreateInput;
+  connect?: ProvinceWhereUniqueInput;
+}
+
+export interface UserUpdateOneRequiredWithoutFamiliesInput {
+  create?: UserCreateWithoutFamiliesInput;
+  update?: UserUpdateWithoutFamiliesDataInput;
+  upsert?: UserUpsertWithoutFamiliesInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface CompanyWhereInput {
@@ -4221,148 +4524,29 @@ export interface CompanyWhereInput {
   NOT?: CompanyWhereInput[] | CompanyWhereInput;
 }
 
-export interface WorkUpdateWithWhereUniqueWithoutWorkerInput {
-  where: WorkWhereUniqueInput;
-  data: WorkUpdateWithoutWorkerDataInput;
-}
-
-export interface CollegeEntranceExamSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: CollegeEntranceExamWhereInput;
-  AND?:
-    | CollegeEntranceExamSubscriptionWhereInput[]
-    | CollegeEntranceExamSubscriptionWhereInput;
-  OR?:
-    | CollegeEntranceExamSubscriptionWhereInput[]
-    | CollegeEntranceExamSubscriptionWhereInput;
-  NOT?:
-    | CollegeEntranceExamSubscriptionWhereInput[]
-    | CollegeEntranceExamSubscriptionWhereInput;
-}
-
-export interface WorkUpdateWithoutWorkerDataInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  company?: CompanyUpdateOneWithoutWorksInput;
-  department?: String;
-  post?: String;
-  jobContent?: String;
-}
-
-export interface UniversityUpdateInput {
+export interface UserUpdateWithoutFamiliesDataInput {
+  username?: String;
+  password?: String;
   name?: String;
-  location?: LocationUpdateOneWithoutUniversitiesInput;
-  major?: MajorUpdateManyWithoutUniversitiesInput;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutPeopleInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
 }
 
-export interface CompanyUpdateOneWithoutWorksInput {
-  create?: CompanyCreateWithoutWorksInput;
-  update?: CompanyUpdateWithoutWorksDataInput;
-  upsert?: CompanyUpsertWithoutWorksInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: CompanyWhereUniqueInput;
-}
-
-export interface SchoolEduCreateInput {
-  school?: SchoolCreateOneInput;
-  startTime?: DateTimeInput;
-  major?: MajorCreateOneInput;
-  grade?: Int;
-  className?: String;
-  students?: UserCreateManyWithoutStudiesInput;
-}
-
-export interface CompanyUpdateWithoutWorksDataInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  location?: LocationUpdateOneWithoutCompaniesInput;
-  BusinessScope?: String;
-}
-
-export interface PostUpdateManyMutationInput {
-  isPublished?: Boolean;
-  title?: String;
-  content?: String;
-}
-
-export interface LocationUpdateOneWithoutCompaniesInput {
-  create?: LocationCreateWithoutCompaniesInput;
-  update?: LocationUpdateWithoutCompaniesDataInput;
-  upsert?: LocationUpsertWithoutCompaniesInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: LocationWhereUniqueInput;
-}
-
-export interface FamilyUpdateManyWithoutToInput {
-  create?: FamilyCreateWithoutToInput[] | FamilyCreateWithoutToInput;
-  delete?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-  disconnect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-  update?:
-    | FamilyUpdateWithWhereUniqueWithoutToInput[]
-    | FamilyUpdateWithWhereUniqueWithoutToInput;
-  upsert?:
-    | FamilyUpsertWithWhereUniqueWithoutToInput[]
-    | FamilyUpsertWithWhereUniqueWithoutToInput;
-}
-
-export interface LocationUpdateWithoutCompaniesDataInput {
-  name?: String;
-  province?: ProvinceUpdateOneInput;
-  city?: CityUpdateOneInput;
-  area?: AreaUpdateOneInput;
-  street?: StreetUpdateOneInput;
-  village?: VillageUpdateOneInput;
-  schools?: SchoolUpdateManyWithoutLocationInput;
-  universities?: UniversityUpdateManyWithoutLocationInput;
-  people?: UserUpdateManyWithoutBirthplaceInput;
-}
-
-export interface CompanyUpdateManyMutationInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  BusinessScope?: String;
-}
-
-export interface LocationUpsertWithoutCompaniesInput {
-  update: LocationUpdateWithoutCompaniesDataInput;
-  create: LocationCreateWithoutCompaniesInput;
-}
-
-export interface ProvinceUpdateWithoutCitiesDataInput {
+export interface StreetUpdateManyMutationInput {
   code?: String;
   name?: String;
-}
-
-export interface CompanyUpsertWithoutWorksInput {
-  update: CompanyUpdateWithoutWorksDataInput;
-  create: CompanyCreateWithoutWorksInput;
-}
-
-export interface AreaCreateWithoutCityInput {
-  code: String;
-  name: String;
-  towns?: StreetCreateManyWithoutAreaInput;
-}
-
-export interface WorkUpsertWithWhereUniqueWithoutWorkerInput {
-  where: WorkWhereUniqueInput;
-  update: WorkUpdateWithoutWorkerDataInput;
-  create: WorkCreateWithoutWorkerInput;
-}
-
-export interface CityCreateOneInput {
-  create?: CityCreateInput;
-  connect?: CityWhereUniqueInput;
 }
 
 export interface UserUpsertWithoutFamiliesInput {
@@ -4370,42 +4554,10 @@ export interface UserUpsertWithoutFamiliesInput {
   create: UserCreateWithoutFamiliesInput;
 }
 
-export interface PersonWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
+export interface ProvinceUpdateInput {
+  code?: String;
   name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  user?: UserWhereInput;
-  families_every?: FamilyWhereInput;
-  families_some?: FamilyWhereInput;
-  families_none?: FamilyWhereInput;
-  AND?: PersonWhereInput[] | PersonWhereInput;
-  OR?: PersonWhereInput[] | PersonWhereInput;
-  NOT?: PersonWhereInput[] | PersonWhereInput;
+  cities?: CityUpdateManyWithoutProvinceInput;
 }
 
 export interface FamilyUpsertNestedInput {
@@ -4413,9 +4565,12 @@ export interface FamilyUpsertNestedInput {
   create: FamilyCreateInput;
 }
 
-export interface UserUpdateWithWhereUniqueWithoutStudiesInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutStudiesDataInput;
+export interface FamilyUpdateInput {
+  from?: UserUpdateOneRequiredWithoutFamiliesInput;
+  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
+  relationship?: String;
+  spouse?: FamilyUpdateOneInput;
+  status?: String;
 }
 
 export interface FamilyUpsertWithWhereUniqueWithoutFromInput {
@@ -4424,87 +4579,21 @@ export interface FamilyUpsertWithWhereUniqueWithoutFromInput {
   create: FamilyCreateWithoutFromInput;
 }
 
-export interface UserCreateOneWithoutPostsInput {
-  create?: UserCreateWithoutPostsInput;
-  connect?: UserWhereUniqueInput;
+export interface AreaCreateWithoutCityInput {
+  code: String;
+  name: String;
+  towns?: StreetCreateManyWithoutAreaInput;
 }
 
-export interface UserUpsertWithWhereUniqueWithoutBirthplaceInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutBirthplaceDataInput;
-  create: UserCreateWithoutBirthplaceInput;
+export interface LocationUpsertWithoutPeopleInput {
+  update: LocationUpdateWithoutPeopleDataInput;
+  create: LocationCreateWithoutPeopleInput;
 }
 
-export interface StreetCreateManyWithoutAreaInput {
-  create?: StreetCreateWithoutAreaInput[] | StreetCreateWithoutAreaInput;
-  connect?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
-}
-
-export interface LocationUpsertWithoutUniversitiesInput {
-  update: LocationUpdateWithoutUniversitiesDataInput;
-  create: LocationCreateWithoutUniversitiesInput;
-}
-
-export interface ProvinceCreateOneInput {
-  create?: ProvinceCreateInput;
-  connect?: ProvinceWhereUniqueInput;
-}
-
-export interface UniversityUpsertNestedInput {
-  update: UniversityUpdateDataInput;
-  create: UniversityCreateInput;
-}
-
-export interface StreetWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  code?: String;
-  code_not?: String;
-  code_in?: String[] | String;
-  code_not_in?: String[] | String;
-  code_lt?: String;
-  code_lte?: String;
-  code_gt?: String;
-  code_gte?: String;
-  code_contains?: String;
-  code_not_contains?: String;
-  code_starts_with?: String;
-  code_not_starts_with?: String;
-  code_ends_with?: String;
-  code_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  Area?: AreaWhereInput;
-  villages_every?: VillageWhereInput;
-  villages_some?: VillageWhereInput;
-  villages_none?: VillageWhereInput;
-  AND?: StreetWhereInput[] | StreetWhereInput;
-  OR?: StreetWhereInput[] | StreetWhereInput;
-  NOT?: StreetWhereInput[] | StreetWhereInput;
+export interface CompanyUpsertWithWhereUniqueWithoutLocationInput {
+  where: CompanyWhereUniqueInput;
+  update: CompanyUpdateWithoutLocationDataInput;
+  create: CompanyCreateWithoutLocationInput;
 }
 
 export interface WorkUpsertWithWhereUniqueWithoutCompanyInput {
@@ -4518,43 +4607,39 @@ export interface UserUpsertWithoutWorksInput {
   create: UserCreateWithoutWorksInput;
 }
 
-export interface RegStatusUpsertWithoutApplicantsInput {
-  update: RegStatusUpdateWithoutApplicantsDataInput;
-  create: RegStatusCreateWithoutApplicantsInput;
+export interface CityCreateOneInput {
+  create?: CityCreateInput;
+  connect?: CityWhereUniqueInput;
 }
 
-export interface MajorUpdateOneRequiredInput {
-  create?: MajorCreateInput;
-  update?: MajorUpdateDataInput;
-  upsert?: MajorUpsertNestedInput;
-  connect?: MajorWhereUniqueInput;
-}
-
-export type PostWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface UniversitySubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UniversityWhereInput;
-  AND?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
-  OR?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
-  NOT?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
-}
-
-export interface VillageUpdateWithoutStreetDataInput {
+export interface ProvinceUpdateWithoutCitiesDataInput {
   code?: String;
   name?: String;
 }
 
-export interface MajorUpdateInput {
-  name?: String;
-  category?: String;
-  education?: Educationkind;
-  universities?: UniversityUpdateManyWithoutMajorInput;
+export interface FamilyUpdateWithWhereUniqueWithoutToInput {
+  where: FamilyWhereUniqueInput;
+  data: FamilyUpdateWithoutToDataInput;
+}
+
+export interface SchoolEduCreateInput {
+  school?: SchoolCreateOneInput;
+  startTime?: DateTimeInput;
+  major?: MajorCreateOneInput;
+  grade?: Int;
+  className?: String;
+  students?: UserCreateManyWithoutStudiesInput;
+}
+
+export interface CompanySubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: CompanyWhereInput;
+  AND?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
+  OR?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
+  NOT?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
 }
 
 export interface NodeNode {
@@ -4592,6 +4677,65 @@ export interface WorkPreviousValuesSubscription
   jobContent: () => Promise<AsyncIterator<String>>;
 }
 
+export interface RegStatus {
+  id: ID_Output;
+  education: Educationkind;
+}
+
+export interface RegStatusPromise extends Promise<RegStatus>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  education: () => Promise<Educationkind>;
+  university: <T = UniversityPromise>() => T;
+  major: <T = MajorPromise>() => T;
+  applicants: <T = FragmentableArray<User>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface RegStatusSubscription
+  extends Promise<AsyncIterator<RegStatus>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  education: () => Promise<AsyncIterator<Educationkind>>;
+  university: <T = UniversitySubscription>() => T;
+  major: <T = MajorSubscription>() => T;
+  applicants: <T = Promise<AsyncIterator<UserSubscription>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface AggregateArea {
+  count: Int;
+}
+
+export interface AggregateAreaPromise
+  extends Promise<AggregateArea>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateAreaSubscription
+  extends Promise<AsyncIterator<AggregateArea>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface Post {
   id: ID_Output;
   createdAt: DateTimeOutput;
@@ -4623,46 +4767,43 @@ export interface PostSubscription
   author: <T = UserSubscription>() => T;
 }
 
-export interface AggregateArea {
-  count: Int;
+export interface BatchPayload {
+  count: Long;
 }
 
-export interface AggregateAreaPromise
-  extends Promise<AggregateArea>,
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
     Fragmentable {
-  count: () => Promise<Int>;
+  count: () => Promise<Long>;
 }
 
-export interface AggregateAreaSubscription
-  extends Promise<AsyncIterator<AggregateArea>>,
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  count: () => Promise<AsyncIterator<Long>>;
 }
 
-export interface Family {
+export interface Major {
   id: ID_Output;
-  relationship: String;
-  status: String;
+  name: String;
+  category: String;
+  education: Educationkind;
 }
 
-export interface FamilyPromise extends Promise<Family>, Fragmentable {
+export interface MajorPromise extends Promise<Major>, Fragmentable {
   id: () => Promise<ID_Output>;
-  from: <T = UserPromise>() => T;
-  to: <T = PersonPromise>() => T;
-  relationship: () => Promise<String>;
-  spouse: <T = FamilyPromise>() => T;
-  status: () => Promise<String>;
+  name: () => Promise<String>;
+  category: () => Promise<String>;
+  education: () => Promise<Educationkind>;
 }
 
-export interface FamilySubscription
-  extends Promise<AsyncIterator<Family>>,
+export interface MajorSubscription
+  extends Promise<AsyncIterator<Major>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  from: <T = UserSubscription>() => T;
-  to: <T = PersonSubscription>() => T;
-  relationship: () => Promise<AsyncIterator<String>>;
-  spouse: <T = FamilySubscription>() => T;
-  status: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  category: () => Promise<AsyncIterator<String>>;
+  education: () => Promise<AsyncIterator<Educationkind>>;
 }
 
 export interface UserPreviousValues {
@@ -4678,6 +4819,8 @@ export interface UserPreviousValues {
   token: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
 }
 
 export interface UserPreviousValuesPromise
@@ -4695,6 +4838,8 @@ export interface UserPreviousValuesPromise
   token: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
+  regTimes: () => Promise<Int>;
+  maxRegTimes: () => Promise<Int>;
 }
 
 export interface UserPreviousValuesSubscription
@@ -4712,62 +4857,8 @@ export interface UserPreviousValuesSubscription
   token: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface RegStatus {
-  id: ID_Output;
-}
-
-export interface RegStatusPromise extends Promise<RegStatus>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  university: <T = UniversityPromise>() => T;
-  major: <T = MajorPromise>() => T;
-  applicants: <T = FragmentableArray<User>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-}
-
-export interface RegStatusSubscription
-  extends Promise<AsyncIterator<RegStatus>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  university: <T = UniversitySubscription>() => T;
-  major: <T = MajorSubscription>() => T;
-  applicants: <T = Promise<AsyncIterator<UserSubscription>>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
+  regTimes: () => Promise<AsyncIterator<Int>>;
+  maxRegTimes: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface WorkSubscriptionPayload {
@@ -4793,22 +4884,20 @@ export interface WorkSubscriptionPayloadSubscription
   previousValues: <T = WorkPreviousValuesSubscription>() => T;
 }
 
-export interface WorkConnection {}
-
-export interface WorkConnectionPromise
-  extends Promise<WorkConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<WorkEdge>>() => T;
-  aggregate: <T = AggregateWorkPromise>() => T;
+export interface WorkEdge {
+  cursor: String;
 }
 
-export interface WorkConnectionSubscription
-  extends Promise<AsyncIterator<WorkConnection>>,
+export interface WorkEdgePromise extends Promise<WorkEdge>, Fragmentable {
+  node: <T = WorkPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface WorkEdgeSubscription
+  extends Promise<AsyncIterator<WorkEdge>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<WorkEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateWorkSubscription>() => T;
+  node: <T = WorkSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface AggregateWork {
@@ -4843,49 +4932,22 @@ export interface VillageEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface Major {
-  id: ID_Output;
-  name: String;
-  category: String;
-  education: Educationkind;
-}
+export interface WorkConnection {}
 
-export interface MajorPromise extends Promise<Major>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  category: () => Promise<String>;
-  education: () => Promise<Educationkind>;
-  universities: <T = FragmentableArray<University>>(
-    args?: {
-      where?: UniversityWhereInput;
-      orderBy?: UniversityOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-}
-
-export interface MajorSubscription
-  extends Promise<AsyncIterator<Major>>,
+export interface WorkConnectionPromise
+  extends Promise<WorkConnection>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  category: () => Promise<AsyncIterator<String>>;
-  education: () => Promise<AsyncIterator<Educationkind>>;
-  universities: <T = Promise<AsyncIterator<UniversitySubscription>>>(
-    args?: {
-      where?: UniversityWhereInput;
-      orderBy?: UniversityOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<WorkEdge>>() => T;
+  aggregate: <T = AggregateWorkPromise>() => T;
+}
+
+export interface WorkConnectionSubscription
+  extends Promise<AsyncIterator<WorkConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<WorkEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateWorkSubscription>() => T;
 }
 
 export interface AggregateUser {
@@ -5084,23 +5146,19 @@ export interface StreetConnectionSubscription
 export interface University {
   id: ID_Output;
   name: String;
+  education: Educationkind;
+  department?: String;
+  location?: String;
+  desc?: String;
 }
 
 export interface UniversityPromise extends Promise<University>, Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
-  location: <T = LocationPromise>() => T;
-  major: <T = FragmentableArray<Major>>(
-    args?: {
-      where?: MajorWhereInput;
-      orderBy?: MajorOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  education: () => Promise<Educationkind>;
+  department: () => Promise<String>;
+  location: () => Promise<String>;
+  desc: () => Promise<String>;
 }
 
 export interface UniversitySubscription
@@ -5108,18 +5166,10 @@ export interface UniversitySubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
-  location: <T = LocationSubscription>() => T;
-  major: <T = Promise<AsyncIterator<MajorSubscription>>>(
-    args?: {
-      where?: MajorWhereInput;
-      orderBy?: MajorOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  education: () => Promise<AsyncIterator<Educationkind>>;
+  department: () => Promise<AsyncIterator<String>>;
+  location: () => Promise<AsyncIterator<String>>;
+  desc: () => Promise<AsyncIterator<String>>;
 }
 
 export interface SchoolEduEdge {
@@ -6499,18 +6549,21 @@ export interface AggregateLocationSubscription
 
 export interface RegStatusPreviousValues {
   id: ID_Output;
+  education: Educationkind;
 }
 
 export interface RegStatusPreviousValuesPromise
   extends Promise<RegStatusPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  education: () => Promise<Educationkind>;
 }
 
 export interface RegStatusPreviousValuesSubscription
   extends Promise<AsyncIterator<RegStatusPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  education: () => Promise<AsyncIterator<Educationkind>>;
 }
 
 export interface FamilyEdge {
@@ -6695,6 +6748,8 @@ export interface User {
   token: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
@@ -6723,6 +6778,8 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
   regStatus: <T = RegStatusPromise>() => T;
+  regTimes: () => Promise<Int>;
+  maxRegTimes: () => Promise<Int>;
   families: <T = FragmentableArray<Family>>(
     args?: {
       where?: FamilyWhereInput;
@@ -6756,6 +6813,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
       last?: Int;
     }
   ) => T;
+  exam: <T = CollegeEntranceExamPromise>() => T;
 }
 
 export interface UserSubscription
@@ -6786,6 +6844,8 @@ export interface UserSubscription
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   regStatus: <T = RegStatusSubscription>() => T;
+  regTimes: () => Promise<AsyncIterator<Int>>;
+  maxRegTimes: () => Promise<AsyncIterator<Int>>;
   families: <T = Promise<AsyncIterator<FamilySubscription>>>(
     args?: {
       where?: FamilyWhereInput;
@@ -6819,6 +6879,7 @@ export interface UserSubscription
       last?: Int;
     }
   ) => T;
+  exam: <T = CollegeEntranceExamSubscription>() => T;
 }
 
 export interface StreetEdge {
@@ -7010,20 +7071,30 @@ export interface StreetPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface WorkEdge {
-  cursor: String;
+export interface Family {
+  id: ID_Output;
+  relationship: String;
+  status: String;
 }
 
-export interface WorkEdgePromise extends Promise<WorkEdge>, Fragmentable {
-  node: <T = WorkPromise>() => T;
-  cursor: () => Promise<String>;
+export interface FamilyPromise extends Promise<Family>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  from: <T = UserPromise>() => T;
+  to: <T = PersonPromise>() => T;
+  relationship: () => Promise<String>;
+  spouse: <T = FamilyPromise>() => T;
+  status: () => Promise<String>;
 }
 
-export interface WorkEdgeSubscription
-  extends Promise<AsyncIterator<WorkEdge>>,
+export interface FamilySubscription
+  extends Promise<AsyncIterator<Family>>,
     Fragmentable {
-  node: <T = WorkSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  from: <T = UserSubscription>() => T;
+  to: <T = PersonSubscription>() => T;
+  relationship: () => Promise<AsyncIterator<String>>;
+  spouse: <T = FamilySubscription>() => T;
+  status: () => Promise<AsyncIterator<String>>;
 }
 
 export interface CollegeEntranceExam {
@@ -7137,6 +7208,10 @@ export interface AggregateCitySubscription
 export interface UniversityPreviousValues {
   id: ID_Output;
   name: String;
+  education: Educationkind;
+  department?: String;
+  location?: String;
+  desc?: String;
 }
 
 export interface UniversityPreviousValuesPromise
@@ -7144,6 +7219,10 @@ export interface UniversityPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  education: () => Promise<Educationkind>;
+  department: () => Promise<String>;
+  location: () => Promise<String>;
+  desc: () => Promise<String>;
 }
 
 export interface UniversityPreviousValuesSubscription
@@ -7151,6 +7230,10 @@ export interface UniversityPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
+  education: () => Promise<AsyncIterator<Educationkind>>;
+  department: () => Promise<AsyncIterator<String>>;
+  location: () => Promise<AsyncIterator<String>>;
+  desc: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UniversitySubscriptionPayload {

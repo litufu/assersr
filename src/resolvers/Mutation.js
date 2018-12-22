@@ -34,6 +34,7 @@ import {
 } from "../services/relationship"
 import { FAMILY_CHANGED } from './Subscription'
 import { pubsub } from '../subscriptions';
+import {fee} from '../services/settings'
 
 export const Mutation = {
   signup: async (parent, { username, password }, ctx) => {
@@ -828,6 +829,12 @@ export const Mutation = {
       checkScore(score)
       checkScore(specialScore)
       checkNum(examineeCardNumber)
+      const isExistcandidatenum = await ctx.db.collegeEntranceExam({
+        candidatenum:examineeCardNumber,
+      })
+      if(isExistcandidatenum){
+        throw new Error('准考证号已被人注册，请检查准考证号是否正确，如存在被人盗用情况请联系客服。')
+      }
      // -----------------------------------------------
      return ctx.db.createCollegeEntranceExam({
        province:{connect:{code:province}},
@@ -882,6 +889,74 @@ export const Mutation = {
       }
     })
  },
+
+ addRegStatus: async (parent, {  education, universityId, majorId}, ctx) => {
+  // 权限验证
+  const userId = getUserId(ctx)
+  if (!userId) {
+    throw new Error("用户不存在")
+  }
+  const user = await ctx.db.user({ uid: userId })
+  if (!user) {
+    throw new Error("用户不存在")
+  }
+  // -----------------------------------------------
+  // 输入数据验证
+  if(!~['Undergraduate','JuniorCollege'].indexOf(education)){
+    throw new Error('请选择本科或者专科')
+  }
+  checkId(universityId)
+  checkId(majorId)
+ 
+  // -----------------------------------------------
+  // 检查该用户是否已经注册
+  const userRegStatus = await ctx.db.user({
+    uid:userId
+  }).regStatus()
+  if(userRegStatus && userRegStatus.id){
+    throw new Error('只能进行一次报名，如需重新报名，请先退出当前报名')
+  }
+
+
+  // 检查是否已经存在相关学校和专业的注册记录
+  const regStatuses = await ctx.db.regStatuses({
+    where: {
+      education,
+      university:{id:universityId},
+      major:{id:majorId}
+    }
+  })
+
+  // 如果存在
+  let userReg
+  if(regStatuses.length>0){
+      userReg = await ctx.db.updateRegStatus({
+      where:{id:regStatuses[0].id},
+      data:{
+        applicants:{connect:{uid:userId}}
+      }
+    })
+  }else{
+    userReg = await ctx.db.createRegStatus({
+      education,
+      university:{connect:{id:universityId}},
+      major:{connect:{id:majorId}},
+      applicants:{connect:{uid:userId}}
+    })
+  }
+
+  if(fee){
+    if(user.regTimes>=user.maxRegTimes){
+      throw new Error('你的报名次数已用完,请充值后再继续报名')
+    }
+    await ctx.db.user({
+      where:{uid:userId},
+      data:{regTimes:user.regTimes+1}
+    })
+  }
+
+  return userReg
+},
 
 
   createDraft: async (parent, { title, content, authorEmail }, ctx) => ctx.db.createPost({

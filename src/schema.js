@@ -29,7 +29,11 @@ export const typeDefs = gql`
     family:[Family!]!
     getSchools(locationName:String,kind:String):[School]
     getMajors(majorName:String):[Major]
+    getUniversities(universityName:String):[University]
     getExamBasicInfo:CollegeEntranceExam
+    getRegStatus:RegStatus
+    getRegStatusApplicants(education:String,universityId:String,majorId:String):[User]
+    getRegStatusApplicantsById(regStatusId:String):[User]
   }
 
   type Mutation {
@@ -51,6 +55,7 @@ export const typeDefs = gql`
     addWork(companyName:String,startTime:String,endTime:String,department:String,post:String):Work
     addExamBasicInfo(province:String, section:String, score:String, specialScore:String, examineeCardNumber:String):CollegeEntranceExam
     updateExamBasicInfo(province:String, section:String, score:String, specialScore:String, examineeCardNumber:String):CollegeEntranceExam
+    addRegStatus(education:String,universityId:String,majorId:String):RegStatus
   }
 
   type Subscription {
@@ -95,9 +100,10 @@ export const typeDefs = gql`
     families:[Family]
     studies:[SchoolEdu]
     works:[Work]
+    exam:CollegeEntranceExam
+    regStatus:RegStatus
+    regTimes:Int
   }
-
-
 
   type Person {
     id: ID!
@@ -189,8 +195,10 @@ export const typeDefs = gql`
   type University {
     id: ID!
     name: String!
-    location:Location
-    major:[Major!]!
+    education:Educationkind
+    department:String
+    location:String
+    desc:String
   }
 
   type CollegeEntranceExam {
@@ -202,6 +210,14 @@ export const typeDefs = gql`
     candidatenum:String!
     times:Int
     student:User!
+  }
+
+  type RegStatus {
+    id: ID!
+    education:Educationkind!
+    university:University
+    major:Major!
+    applicants:[User!]!
   }
 
   type Location {

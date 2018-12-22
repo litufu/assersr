@@ -547,7 +547,21 @@ input CollegeEntranceExamCreateInput {
   proscore: Float
   candidatenum: String!
   times: Int
-  student: UserCreateOneInput!
+  student: UserCreateOneWithoutExamInput!
+}
+
+input CollegeEntranceExamCreateOneWithoutStudentInput {
+  create: CollegeEntranceExamCreateWithoutStudentInput
+  connect: CollegeEntranceExamWhereUniqueInput
+}
+
+input CollegeEntranceExamCreateWithoutStudentInput {
+  province: ProvinceCreateOneInput!
+  subject: String!
+  culscore: Float!
+  proscore: Float
+  candidatenum: String!
+  times: Int
 }
 
 type CollegeEntranceExamEdge {
@@ -608,7 +622,7 @@ input CollegeEntranceExamUpdateInput {
   proscore: Float
   candidatenum: String
   times: Int
-  student: UserUpdateOneRequiredInput
+  student: UserUpdateOneRequiredWithoutExamInput
 }
 
 input CollegeEntranceExamUpdateManyMutationInput {
@@ -617,6 +631,29 @@ input CollegeEntranceExamUpdateManyMutationInput {
   proscore: Float
   candidatenum: String
   times: Int
+}
+
+input CollegeEntranceExamUpdateOneWithoutStudentInput {
+  create: CollegeEntranceExamCreateWithoutStudentInput
+  update: CollegeEntranceExamUpdateWithoutStudentDataInput
+  upsert: CollegeEntranceExamUpsertWithoutStudentInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: CollegeEntranceExamWhereUniqueInput
+}
+
+input CollegeEntranceExamUpdateWithoutStudentDataInput {
+  province: ProvinceUpdateOneRequiredInput
+  subject: String
+  culscore: Float
+  proscore: Float
+  candidatenum: String
+  times: Int
+}
+
+input CollegeEntranceExamUpsertWithoutStudentInput {
+  update: CollegeEntranceExamUpdateWithoutStudentDataInput!
+  create: CollegeEntranceExamCreateWithoutStudentInput!
 }
 
 input CollegeEntranceExamWhereInput {
@@ -695,6 +732,7 @@ input CollegeEntranceExamWhereInput {
 
 input CollegeEntranceExamWhereUniqueInput {
   id: ID
+  candidatenum: String
 }
 
 type Company {
@@ -1251,7 +1289,7 @@ input LocationCreateInput {
   village: VillageCreateOneInput
   schools: SchoolCreateManyWithoutLocationInput
   companies: CompanyCreateManyWithoutLocationInput
-  universities: UniversityCreateManyWithoutLocationInput
+  universities: UniversityCreateManyInput
   people: UserCreateManyWithoutBirthplaceInput
 }
 
@@ -1270,11 +1308,6 @@ input LocationCreateOneWithoutSchoolsInput {
   connect: LocationWhereUniqueInput
 }
 
-input LocationCreateOneWithoutUniversitiesInput {
-  create: LocationCreateWithoutUniversitiesInput
-  connect: LocationWhereUniqueInput
-}
-
 input LocationCreateWithoutCompaniesInput {
   name: String
   province: ProvinceCreateOneInput
@@ -1283,7 +1316,7 @@ input LocationCreateWithoutCompaniesInput {
   street: StreetCreateOneInput
   village: VillageCreateOneInput
   schools: SchoolCreateManyWithoutLocationInput
-  universities: UniversityCreateManyWithoutLocationInput
+  universities: UniversityCreateManyInput
   people: UserCreateManyWithoutBirthplaceInput
 }
 
@@ -1296,7 +1329,7 @@ input LocationCreateWithoutPeopleInput {
   village: VillageCreateOneInput
   schools: SchoolCreateManyWithoutLocationInput
   companies: CompanyCreateManyWithoutLocationInput
-  universities: UniversityCreateManyWithoutLocationInput
+  universities: UniversityCreateManyInput
 }
 
 input LocationCreateWithoutSchoolsInput {
@@ -1307,19 +1340,7 @@ input LocationCreateWithoutSchoolsInput {
   street: StreetCreateOneInput
   village: VillageCreateOneInput
   companies: CompanyCreateManyWithoutLocationInput
-  universities: UniversityCreateManyWithoutLocationInput
-  people: UserCreateManyWithoutBirthplaceInput
-}
-
-input LocationCreateWithoutUniversitiesInput {
-  name: String
-  province: ProvinceCreateOneInput
-  city: CityCreateOneInput
-  area: AreaCreateOneInput
-  street: StreetCreateOneInput
-  village: VillageCreateOneInput
-  schools: SchoolCreateManyWithoutLocationInput
-  companies: CompanyCreateManyWithoutLocationInput
+  universities: UniversityCreateManyInput
   people: UserCreateManyWithoutBirthplaceInput
 }
 
@@ -1371,7 +1392,7 @@ input LocationUpdateInput {
   village: VillageUpdateOneInput
   schools: SchoolUpdateManyWithoutLocationInput
   companies: CompanyUpdateManyWithoutLocationInput
-  universities: UniversityUpdateManyWithoutLocationInput
+  universities: UniversityUpdateManyInput
   people: UserUpdateManyWithoutBirthplaceInput
 }
 
@@ -1406,15 +1427,6 @@ input LocationUpdateOneWithoutSchoolsInput {
   connect: LocationWhereUniqueInput
 }
 
-input LocationUpdateOneWithoutUniversitiesInput {
-  create: LocationCreateWithoutUniversitiesInput
-  update: LocationUpdateWithoutUniversitiesDataInput
-  upsert: LocationUpsertWithoutUniversitiesInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: LocationWhereUniqueInput
-}
-
 input LocationUpdateWithoutCompaniesDataInput {
   name: String
   province: ProvinceUpdateOneInput
@@ -1423,7 +1435,7 @@ input LocationUpdateWithoutCompaniesDataInput {
   street: StreetUpdateOneInput
   village: VillageUpdateOneInput
   schools: SchoolUpdateManyWithoutLocationInput
-  universities: UniversityUpdateManyWithoutLocationInput
+  universities: UniversityUpdateManyInput
   people: UserUpdateManyWithoutBirthplaceInput
 }
 
@@ -1436,7 +1448,7 @@ input LocationUpdateWithoutPeopleDataInput {
   village: VillageUpdateOneInput
   schools: SchoolUpdateManyWithoutLocationInput
   companies: CompanyUpdateManyWithoutLocationInput
-  universities: UniversityUpdateManyWithoutLocationInput
+  universities: UniversityUpdateManyInput
 }
 
 input LocationUpdateWithoutSchoolsDataInput {
@@ -1447,19 +1459,7 @@ input LocationUpdateWithoutSchoolsDataInput {
   street: StreetUpdateOneInput
   village: VillageUpdateOneInput
   companies: CompanyUpdateManyWithoutLocationInput
-  universities: UniversityUpdateManyWithoutLocationInput
-  people: UserUpdateManyWithoutBirthplaceInput
-}
-
-input LocationUpdateWithoutUniversitiesDataInput {
-  name: String
-  province: ProvinceUpdateOneInput
-  city: CityUpdateOneInput
-  area: AreaUpdateOneInput
-  street: StreetUpdateOneInput
-  village: VillageUpdateOneInput
-  schools: SchoolUpdateManyWithoutLocationInput
-  companies: CompanyUpdateManyWithoutLocationInput
+  universities: UniversityUpdateManyInput
   people: UserUpdateManyWithoutBirthplaceInput
 }
 
@@ -1476,11 +1476,6 @@ input LocationUpsertWithoutPeopleInput {
 input LocationUpsertWithoutSchoolsInput {
   update: LocationUpdateWithoutSchoolsDataInput!
   create: LocationCreateWithoutSchoolsInput!
-}
-
-input LocationUpsertWithoutUniversitiesInput {
-  update: LocationUpdateWithoutUniversitiesDataInput!
-  create: LocationCreateWithoutUniversitiesInput!
 }
 
 input LocationWhereInput {
@@ -1546,7 +1541,6 @@ type Major {
   name: String!
   category: String!
   education: Educationkind!
-  universities(where: UniversityWhereInput, orderBy: UniversityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [University!]
 }
 
 type MajorConnection {
@@ -1559,23 +1553,11 @@ input MajorCreateInput {
   name: String!
   category: String!
   education: Educationkind!
-  universities: UniversityCreateManyWithoutMajorInput
-}
-
-input MajorCreateManyWithoutUniversitiesInput {
-  create: [MajorCreateWithoutUniversitiesInput!]
-  connect: [MajorWhereUniqueInput!]
 }
 
 input MajorCreateOneInput {
   create: MajorCreateInput
   connect: MajorWhereUniqueInput
-}
-
-input MajorCreateWithoutUniversitiesInput {
-  name: String!
-  category: String!
-  education: Educationkind!
 }
 
 type MajorEdge {
@@ -1627,29 +1609,18 @@ input MajorUpdateDataInput {
   name: String
   category: String
   education: Educationkind
-  universities: UniversityUpdateManyWithoutMajorInput
 }
 
 input MajorUpdateInput {
   name: String
   category: String
   education: Educationkind
-  universities: UniversityUpdateManyWithoutMajorInput
 }
 
 input MajorUpdateManyMutationInput {
   name: String
   category: String
   education: Educationkind
-}
-
-input MajorUpdateManyWithoutUniversitiesInput {
-  create: [MajorCreateWithoutUniversitiesInput!]
-  delete: [MajorWhereUniqueInput!]
-  connect: [MajorWhereUniqueInput!]
-  disconnect: [MajorWhereUniqueInput!]
-  update: [MajorUpdateWithWhereUniqueWithoutUniversitiesInput!]
-  upsert: [MajorUpsertWithWhereUniqueWithoutUniversitiesInput!]
 }
 
 input MajorUpdateOneInput {
@@ -1668,26 +1639,9 @@ input MajorUpdateOneRequiredInput {
   connect: MajorWhereUniqueInput
 }
 
-input MajorUpdateWithoutUniversitiesDataInput {
-  name: String
-  category: String
-  education: Educationkind
-}
-
-input MajorUpdateWithWhereUniqueWithoutUniversitiesInput {
-  where: MajorWhereUniqueInput!
-  data: MajorUpdateWithoutUniversitiesDataInput!
-}
-
 input MajorUpsertNestedInput {
   update: MajorUpdateDataInput!
   create: MajorCreateInput!
-}
-
-input MajorUpsertWithWhereUniqueWithoutUniversitiesInput {
-  where: MajorWhereUniqueInput!
-  update: MajorUpdateWithoutUniversitiesDataInput!
-  create: MajorCreateWithoutUniversitiesInput!
 }
 
 input MajorWhereInput {
@@ -1737,9 +1691,6 @@ input MajorWhereInput {
   education_not: Educationkind
   education_in: [Educationkind!]
   education_not_in: [Educationkind!]
-  universities_every: UniversityWhereInput
-  universities_some: UniversityWhereInput
-  universities_none: UniversityWhereInput
   AND: [MajorWhereInput!]
   OR: [MajorWhereInput!]
   NOT: [MajorWhereInput!]
@@ -1812,6 +1763,7 @@ type Mutation {
   deleteManyProvinces(where: ProvinceWhereInput): BatchPayload!
   createRegStatus(data: RegStatusCreateInput!): RegStatus!
   updateRegStatus(data: RegStatusUpdateInput!, where: RegStatusWhereUniqueInput!): RegStatus
+  updateManyRegStatuses(data: RegStatusUpdateManyMutationInput!, where: RegStatusWhereInput): BatchPayload!
   upsertRegStatus(where: RegStatusWhereUniqueInput!, create: RegStatusCreateInput!, update: RegStatusUpdateInput!): RegStatus!
   deleteRegStatus(where: RegStatusWhereUniqueInput!): RegStatus
   deleteManyRegStatuses(where: RegStatusWhereInput): BatchPayload!
@@ -2452,6 +2404,7 @@ type Query {
 
 type RegStatus {
   id: ID!
+  education: Educationkind!
   university: University
   major: Major!
   applicants(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
@@ -2464,6 +2417,7 @@ type RegStatusConnection {
 }
 
 input RegStatusCreateInput {
+  education: Educationkind!
   university: UniversityCreateOneInput
   major: MajorCreateOneInput!
   applicants: UserCreateManyWithoutRegStatusInput
@@ -2475,6 +2429,7 @@ input RegStatusCreateOneWithoutApplicantsInput {
 }
 
 input RegStatusCreateWithoutApplicantsInput {
+  education: Educationkind!
   university: UniversityCreateOneInput
   major: MajorCreateOneInput!
 }
@@ -2487,6 +2442,8 @@ type RegStatusEdge {
 enum RegStatusOrderByInput {
   id_ASC
   id_DESC
+  education_ASC
+  education_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2495,6 +2452,7 @@ enum RegStatusOrderByInput {
 
 type RegStatusPreviousValues {
   id: ID!
+  education: Educationkind!
 }
 
 type RegStatusSubscriptionPayload {
@@ -2516,9 +2474,14 @@ input RegStatusSubscriptionWhereInput {
 }
 
 input RegStatusUpdateInput {
+  education: Educationkind
   university: UniversityUpdateOneInput
   major: MajorUpdateOneRequiredInput
   applicants: UserUpdateManyWithoutRegStatusInput
+}
+
+input RegStatusUpdateManyMutationInput {
+  education: Educationkind
 }
 
 input RegStatusUpdateOneWithoutApplicantsInput {
@@ -2531,6 +2494,7 @@ input RegStatusUpdateOneWithoutApplicantsInput {
 }
 
 input RegStatusUpdateWithoutApplicantsDataInput {
+  education: Educationkind
   university: UniversityUpdateOneInput
   major: MajorUpdateOneRequiredInput
 }
@@ -2555,6 +2519,10 @@ input RegStatusWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  education: Educationkind
+  education_not: Educationkind
+  education_in: [Educationkind!]
+  education_not_in: [Educationkind!]
   university: UniversityWhereInput
   major: MajorWhereInput
   applicants_every: UserWhereInput
@@ -3177,8 +3145,10 @@ type Subscription {
 type University {
   id: ID!
   name: String!
-  location: Location
-  major(where: MajorWhereInput, orderBy: MajorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Major!]
+  education: Educationkind!
+  department: String
+  location: String
+  desc: String
 }
 
 type UniversityConnection {
@@ -3189,33 +3159,20 @@ type UniversityConnection {
 
 input UniversityCreateInput {
   name: String!
-  location: LocationCreateOneWithoutUniversitiesInput
-  major: MajorCreateManyWithoutUniversitiesInput
+  education: Educationkind!
+  department: String
+  location: String
+  desc: String
 }
 
-input UniversityCreateManyWithoutLocationInput {
-  create: [UniversityCreateWithoutLocationInput!]
-  connect: [UniversityWhereUniqueInput!]
-}
-
-input UniversityCreateManyWithoutMajorInput {
-  create: [UniversityCreateWithoutMajorInput!]
+input UniversityCreateManyInput {
+  create: [UniversityCreateInput!]
   connect: [UniversityWhereUniqueInput!]
 }
 
 input UniversityCreateOneInput {
   create: UniversityCreateInput
   connect: UniversityWhereUniqueInput
-}
-
-input UniversityCreateWithoutLocationInput {
-  name: String!
-  major: MajorCreateManyWithoutUniversitiesInput
-}
-
-input UniversityCreateWithoutMajorInput {
-  name: String!
-  location: LocationCreateOneWithoutUniversitiesInput
 }
 
 type UniversityEdge {
@@ -3228,6 +3185,14 @@ enum UniversityOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  education_ASC
+  education_DESC
+  department_ASC
+  department_DESC
+  location_ASC
+  location_DESC
+  desc_ASC
+  desc_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -3237,6 +3202,10 @@ enum UniversityOrderByInput {
 type UniversityPreviousValues {
   id: ID!
   name: String!
+  education: Educationkind!
+  department: String
+  location: String
+  desc: String
 }
 
 type UniversitySubscriptionPayload {
@@ -3259,36 +3228,35 @@ input UniversitySubscriptionWhereInput {
 
 input UniversityUpdateDataInput {
   name: String
-  location: LocationUpdateOneWithoutUniversitiesInput
-  major: MajorUpdateManyWithoutUniversitiesInput
+  education: Educationkind
+  department: String
+  location: String
+  desc: String
 }
 
 input UniversityUpdateInput {
   name: String
-  location: LocationUpdateOneWithoutUniversitiesInput
-  major: MajorUpdateManyWithoutUniversitiesInput
+  education: Educationkind
+  department: String
+  location: String
+  desc: String
+}
+
+input UniversityUpdateManyInput {
+  create: [UniversityCreateInput!]
+  update: [UniversityUpdateWithWhereUniqueNestedInput!]
+  upsert: [UniversityUpsertWithWhereUniqueNestedInput!]
+  delete: [UniversityWhereUniqueInput!]
+  connect: [UniversityWhereUniqueInput!]
+  disconnect: [UniversityWhereUniqueInput!]
 }
 
 input UniversityUpdateManyMutationInput {
   name: String
-}
-
-input UniversityUpdateManyWithoutLocationInput {
-  create: [UniversityCreateWithoutLocationInput!]
-  delete: [UniversityWhereUniqueInput!]
-  connect: [UniversityWhereUniqueInput!]
-  disconnect: [UniversityWhereUniqueInput!]
-  update: [UniversityUpdateWithWhereUniqueWithoutLocationInput!]
-  upsert: [UniversityUpsertWithWhereUniqueWithoutLocationInput!]
-}
-
-input UniversityUpdateManyWithoutMajorInput {
-  create: [UniversityCreateWithoutMajorInput!]
-  delete: [UniversityWhereUniqueInput!]
-  connect: [UniversityWhereUniqueInput!]
-  disconnect: [UniversityWhereUniqueInput!]
-  update: [UniversityUpdateWithWhereUniqueWithoutMajorInput!]
-  upsert: [UniversityUpsertWithWhereUniqueWithoutMajorInput!]
+  education: Educationkind
+  department: String
+  location: String
+  desc: String
 }
 
 input UniversityUpdateOneInput {
@@ -3300,24 +3268,9 @@ input UniversityUpdateOneInput {
   connect: UniversityWhereUniqueInput
 }
 
-input UniversityUpdateWithoutLocationDataInput {
-  name: String
-  major: MajorUpdateManyWithoutUniversitiesInput
-}
-
-input UniversityUpdateWithoutMajorDataInput {
-  name: String
-  location: LocationUpdateOneWithoutUniversitiesInput
-}
-
-input UniversityUpdateWithWhereUniqueWithoutLocationInput {
+input UniversityUpdateWithWhereUniqueNestedInput {
   where: UniversityWhereUniqueInput!
-  data: UniversityUpdateWithoutLocationDataInput!
-}
-
-input UniversityUpdateWithWhereUniqueWithoutMajorInput {
-  where: UniversityWhereUniqueInput!
-  data: UniversityUpdateWithoutMajorDataInput!
+  data: UniversityUpdateDataInput!
 }
 
 input UniversityUpsertNestedInput {
@@ -3325,16 +3278,10 @@ input UniversityUpsertNestedInput {
   create: UniversityCreateInput!
 }
 
-input UniversityUpsertWithWhereUniqueWithoutLocationInput {
+input UniversityUpsertWithWhereUniqueNestedInput {
   where: UniversityWhereUniqueInput!
-  update: UniversityUpdateWithoutLocationDataInput!
-  create: UniversityCreateWithoutLocationInput!
-}
-
-input UniversityUpsertWithWhereUniqueWithoutMajorInput {
-  where: UniversityWhereUniqueInput!
-  update: UniversityUpdateWithoutMajorDataInput!
-  create: UniversityCreateWithoutMajorInput!
+  update: UniversityUpdateDataInput!
+  create: UniversityCreateInput!
 }
 
 input UniversityWhereInput {
@@ -3366,10 +3313,52 @@ input UniversityWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-  location: LocationWhereInput
-  major_every: MajorWhereInput
-  major_some: MajorWhereInput
-  major_none: MajorWhereInput
+  education: Educationkind
+  education_not: Educationkind
+  education_in: [Educationkind!]
+  education_not_in: [Educationkind!]
+  department: String
+  department_not: String
+  department_in: [String!]
+  department_not_in: [String!]
+  department_lt: String
+  department_lte: String
+  department_gt: String
+  department_gte: String
+  department_contains: String
+  department_not_contains: String
+  department_starts_with: String
+  department_not_starts_with: String
+  department_ends_with: String
+  department_not_ends_with: String
+  location: String
+  location_not: String
+  location_in: [String!]
+  location_not_in: [String!]
+  location_lt: String
+  location_lte: String
+  location_gt: String
+  location_gte: String
+  location_contains: String
+  location_not_contains: String
+  location_starts_with: String
+  location_not_starts_with: String
+  location_ends_with: String
+  location_not_ends_with: String
+  desc: String
+  desc_not: String
+  desc_in: [String!]
+  desc_not_in: [String!]
+  desc_lt: String
+  desc_lte: String
+  desc_gt: String
+  desc_gte: String
+  desc_contains: String
+  desc_not_contains: String
+  desc_starts_with: String
+  desc_not_starts_with: String
+  desc_ends_with: String
+  desc_not_ends_with: String
   AND: [UniversityWhereInput!]
   OR: [UniversityWhereInput!]
   NOT: [UniversityWhereInput!]
@@ -3396,9 +3385,12 @@ type User {
   createdAt: DateTime!
   updatedAt: DateTime!
   regStatus: RegStatus
+  regTimes: Int
+  maxRegTimes: Int
   families(where: FamilyWhereInput, orderBy: FamilyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Family!]
   studies(where: SchoolEduWhereInput, orderBy: SchoolEduOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SchoolEdu!]
   works(where: WorkWhereInput, orderBy: WorkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Work!]
+  exam: CollegeEntranceExam
 }
 
 type UserConnection {
@@ -3420,9 +3412,12 @@ input UserCreateInput {
   token: String!
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
 }
 
 input UserCreateManyWithoutBirthplaceInput {
@@ -3442,6 +3437,11 @@ input UserCreateManyWithoutStudiesInput {
 
 input UserCreateOneInput {
   create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutExamInput {
+  create: UserCreateWithoutExamInput
   connect: UserWhereUniqueInput
 }
 
@@ -3472,6 +3472,29 @@ input UserCreateWithoutBirthplaceInput {
   token: String!
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+}
+
+input UserCreateWithoutExamInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneWithoutPeopleInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: WorkCreateManyWithoutWorkerInput
@@ -3490,8 +3513,11 @@ input UserCreateWithoutFamiliesInput {
   token: String!
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
 }
 
 input UserCreateWithoutPostsInput {
@@ -3506,9 +3532,12 @@ input UserCreateWithoutPostsInput {
   uid: String!
   token: String!
   regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
 }
 
 input UserCreateWithoutRegStatusInput {
@@ -3523,9 +3552,12 @@ input UserCreateWithoutRegStatusInput {
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
+  regTimes: Int
+  maxRegTimes: Int
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
 }
 
 input UserCreateWithoutStudiesInput {
@@ -3541,8 +3573,11 @@ input UserCreateWithoutStudiesInput {
   token: String!
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
   families: FamilyCreateManyWithoutFromInput
   works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
 }
 
 input UserCreateWithoutWorksInput {
@@ -3558,8 +3593,11 @@ input UserCreateWithoutWorksInput {
   token: String!
   posts: PostCreateManyWithoutAuthorInput
   regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
 }
 
 type UserEdge {
@@ -3592,6 +3630,10 @@ enum UserOrderByInput {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  regTimes_ASC
+  regTimes_DESC
+  maxRegTimes_ASC
+  maxRegTimes_DESC
 }
 
 type UserPreviousValues {
@@ -3607,6 +3649,8 @@ type UserPreviousValues {
   token: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  regTimes: Int
+  maxRegTimes: Int
 }
 
 type UserSubscriptionPayload {
@@ -3640,9 +3684,12 @@ input UserUpdateDataInput {
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
 }
 
 input UserUpdateInput {
@@ -3658,9 +3705,12 @@ input UserUpdateInput {
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
 }
 
 input UserUpdateManyMutationInput {
@@ -3673,6 +3723,8 @@ input UserUpdateManyMutationInput {
   birthday: DateTime
   uid: String
   token: String
+  regTimes: Int
+  maxRegTimes: Int
 }
 
 input UserUpdateManyWithoutBirthplaceInput {
@@ -3711,10 +3763,10 @@ input UserUpdateOneInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneRequiredInput {
-  create: UserCreateInput
-  update: UserUpdateDataInput
-  upsert: UserUpsertNestedInput
+input UserUpdateOneRequiredWithoutExamInput {
+  create: UserCreateWithoutExamInput
+  update: UserUpdateWithoutExamDataInput
+  upsert: UserUpsertWithoutExamInput
   connect: UserWhereUniqueInput
 }
 
@@ -3753,6 +3805,29 @@ input UserUpdateWithoutBirthplaceDataInput {
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+}
+
+input UserUpdateWithoutExamDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneWithoutPeopleInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: WorkUpdateManyWithoutWorkerInput
@@ -3771,8 +3846,11 @@ input UserUpdateWithoutFamiliesDataInput {
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -3787,9 +3865,12 @@ input UserUpdateWithoutPostsDataInput {
   uid: String
   token: String
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
 }
 
 input UserUpdateWithoutRegStatusDataInput {
@@ -3804,9 +3885,12 @@ input UserUpdateWithoutRegStatusDataInput {
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
+  regTimes: Int
+  maxRegTimes: Int
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
 }
 
 input UserUpdateWithoutStudiesDataInput {
@@ -3822,8 +3906,11 @@ input UserUpdateWithoutStudiesDataInput {
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
   families: FamilyUpdateManyWithoutFromInput
   works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
 }
 
 input UserUpdateWithoutWorksDataInput {
@@ -3839,8 +3926,11 @@ input UserUpdateWithoutWorksDataInput {
   token: String
   posts: PostUpdateManyWithoutAuthorInput
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
 }
 
 input UserUpdateWithWhereUniqueWithoutBirthplaceInput {
@@ -3861,6 +3951,11 @@ input UserUpdateWithWhereUniqueWithoutStudiesInput {
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutExamInput {
+  update: UserUpdateWithoutExamDataInput!
+  create: UserCreateWithoutExamInput!
 }
 
 input UserUpsertWithoutFamiliesInput {
@@ -4052,6 +4147,22 @@ input UserWhereInput {
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
   regStatus: RegStatusWhereInput
+  regTimes: Int
+  regTimes_not: Int
+  regTimes_in: [Int!]
+  regTimes_not_in: [Int!]
+  regTimes_lt: Int
+  regTimes_lte: Int
+  regTimes_gt: Int
+  regTimes_gte: Int
+  maxRegTimes: Int
+  maxRegTimes_not: Int
+  maxRegTimes_in: [Int!]
+  maxRegTimes_not_in: [Int!]
+  maxRegTimes_lt: Int
+  maxRegTimes_lte: Int
+  maxRegTimes_gt: Int
+  maxRegTimes_gte: Int
   families_every: FamilyWhereInput
   families_some: FamilyWhereInput
   families_none: FamilyWhereInput
@@ -4061,6 +4172,7 @@ input UserWhereInput {
   works_every: WorkWhereInput
   works_some: WorkWhereInput
   works_none: WorkWhereInput
+  exam: CollegeEntranceExamWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
