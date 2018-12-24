@@ -32,11 +32,16 @@ const server = new ApolloServer({
         }
         const user = await prisma.user({ uid: userId })
         if(user){
+          console.log('开始订阅',user)
           return {user}
+          
         }
         throw new Error("用户不存在")
       }
       throw new Error('Missing auth token!');
+    },
+    onDisconnect: (webSocket, context) => {
+      console.log('结束订阅')
     },
   },
   validationRules: [ depthLimit(10) ],// 最大深度查询限制。

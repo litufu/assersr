@@ -355,6 +355,8 @@ export const Mutation = {
         })
     }
     // 此处发送向relative发送订阅
+    console.log('relativeId',relativeId)
+    console.log('发送订阅1')
     pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: {"text":relativeId} })
     // 更新自己的家庭成员状态为“等待确认”,更新to中的user
     // 检查person中是否已经存在relative
@@ -440,6 +442,7 @@ export const Mutation = {
 
     const myRelationship = myUpdateFamily.relationship
     const relativeRelationship = relativeFamily[0].relationship
+    const isHusbandOrWife = ~["husband", "wife"].indexOf(myRelationship)
     const myFamilies = await ctx.db.user({ uid: userId }).families()
     const relativeFamilies = await ctx.db.user({ id: relative.id }).families()
     // 获取共同的亲人
@@ -477,6 +480,7 @@ export const Mutation = {
             await updateCommonUserFamily(user, myRelationship, myCommonFamily, relative, relativeRelationship, ctx)
           }
           // 向relative推送familyChanged
+          console.log('发送订阅2')
           pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: {"text":relative.id}  })
         }
         else {
@@ -495,7 +499,8 @@ export const Mutation = {
             await updateCommonUserFamily(relative, relativeRelationship, relativeToCommonUserFamily[0], user, myRelationship, ctx)
           }
           // 像我推送“familyChanged"
-          pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: user.id })
+          // console.log('发送订阅3')
+          pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: {"text":user.id} })
         }
       }
     }
@@ -503,7 +508,7 @@ export const Mutation = {
     // 第二部分：遍历relative共同成员差集
     for (const relativeCommonFamily of relativeDifferentFamilies) {
       const relativeCommonFamilyTo = await ctx.db.family({ id: relativeCommonFamily.id }).to()
-      const isHusbandOrWife = ~["husband", "wife"].indexOf(myUpdateFamily.relationshp)
+      
       const meRelationship = (relationshipGenderMap[relationshipTOGender[relativeCommonFamily.relationship]]
       [relationIntersectionNew[relationshipGenderMap[relative.gender][relativeCommonFamily.relationship]][relativeFamily[0].relationship]]
       )
@@ -532,6 +537,7 @@ export const Mutation = {
         // 如果等于0,则还没有共同的user,无需更新,如果大于0，则要更新CommonUser
         await updateCommonUserFamily(relative, relativeRelationship, relativeCommonFamily, user, myRelationship, ctx)
       }
+      // console.log('发送订阅4')
       pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: {"text":user.id} })
     }
 
@@ -557,7 +563,7 @@ export const Mutation = {
           }
         }
       }
-      const isHusbandOrWife = ~["husband", "wife"].indexOf(relativeFamily[0].relationshp)
+      
       // 如果是自己的话，不要增加
       if (myCommonFamilyTo.name !== relative.name ) {
         // 如果relative和me是夫妻的话，则spouse直接为relativeFamily。
@@ -565,7 +571,7 @@ export const Mutation = {
           await ctx.db.createFamily({
             from: { connect: { id: relative.id } },
             status: myCommonFamily.status,
-            to: { where: { id: myCommonFamilyTo.id } },
+            to: { connect: { id: myCommonFamilyTo.id } },
             spouse: { connect: { id: relativeFamily[0].id } },
             relationship: relRelationship
           })
@@ -587,6 +593,7 @@ export const Mutation = {
         await updateCommonUserFamily(user, myRelationship, myCommonFamily, relative, relativeRelationship, ctx)
       }
       // 向relative推送familychanged
+      console.log('发送订阅6')
       pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: {"text":relative.id} })
     }
 
@@ -902,8 +909,6 @@ export const Mutation = {
   }
   // -----------------------------------------------
   // 输入数据验证
-  console.log(education)
-  console.log(['Undergraduate','JuniorCollege'].indexOf(education))
   if(!~(['Undergraduate','JuniorCollege'].indexOf(education))){
     throw new Error('请选择本科或者专科')
   }
@@ -951,7 +956,7 @@ export const Mutation = {
     if(user.regTimes>=user.maxRegTimes){
       throw new Error('你的报名次数已用完,请充值后再继续报名')
     }
-    await ctx.db.user({
+    await ctx.db.updateUser({
       where:{uid:userId},
       data:{regTimes:user.regTimes+1}
     })

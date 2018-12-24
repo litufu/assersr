@@ -21,7 +21,9 @@ export const Subscription = {
     // Additional event labels can be passed to asyncIterator creation
     subscribe: withFilter(
         () => pubsub.asyncIterator(FAMILY_CHANGED),
-        (payload, variables,ctx) => Boolean(ctx.user.id === payload.text)
+        (payload, variables,ctx) => {
+          return Boolean(ctx.user.id === payload.familyChanged.text)
+        }
     )
   },
 }
