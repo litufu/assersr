@@ -27,6 +27,7 @@ export const typeDefs = gql`
     drafts: [Post!]!
     post(id: ID!): Post
     family:[Family!]!
+    getFamiliesById(id:String):[Family!]!
     getSchools(locationName:String,kind:String):[School]
     getMajors(majorName:String):[Major]
     getUniversities(universityName:String):[University]
@@ -56,6 +57,7 @@ export const typeDefs = gql`
     addExamBasicInfo(province:String, section:String, score:String, specialScore:String, examineeCardNumber:String):CollegeEntranceExam
     updateExamBasicInfo(province:String, section:String, score:String, specialScore:String, examineeCardNumber:String):CollegeEntranceExam
     addRegStatus(education:String,universityId:String,majorId:String):RegStatus
+    cancelRegStatus(id:String):RegStatus
   }
 
   type Subscription {

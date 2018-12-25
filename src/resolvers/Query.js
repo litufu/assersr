@@ -25,6 +25,24 @@ export const Query = {
     }
   })
   },
+  getFamiliesById:(parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    if(!args.id){
+      return ctx.db.families({
+        where: {
+          from: {uid:userId}
+        }
+      })
+    }
+    return ctx.db.families({
+      where: {
+        from: {id:args.id}
+      }
+    })
+  },
   getSchools:(parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {

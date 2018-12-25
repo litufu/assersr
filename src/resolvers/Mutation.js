@@ -618,6 +618,7 @@ export const Mutation = {
     // 获取学校地址
     let place
     place = await ctx.db.location({name:locationName})
+    console.log(place)
     if(!place){
       if(location.village!==""){
         place = await ctx.db.createLocation({
@@ -963,6 +964,26 @@ export const Mutation = {
   }
 
   return userReg
+},
+cancelRegStatus: async (parent, { id }, ctx) => {
+  // 权限验证
+  const userId = getUserId(ctx)
+  if (!userId) {
+    throw new Error("用户不存在")
+  }
+  const user = await ctx.db.user({ uid: userId })
+  if (!user) {
+    throw new Error("用户不存在")
+  }
+  // -----------------------------------------------
+  // 输入数据验证
+  checkId(id)
+ 
+  // -----------------------------------------------
+  return ctx.db.updateRegStatus({
+    where:{id},
+    data:{applicants:{disconnect:{uid:userId}}}
+  })
 },
 
 
