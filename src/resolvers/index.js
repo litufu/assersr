@@ -12,6 +12,9 @@ import { Work } from './Work'
 import { CollegeEntranceExam } from './CollegeEntranceExam'
 import {University} from './University'
 import {RegStatus} from './RegStatus'
+import {Group} from './Group'
+import {Message} from './Message'
+import {FamilyGroup} from './FamilyGroup'
 
 export const resolvers = {
   Query,
@@ -27,5 +30,8 @@ export const resolvers = {
   Work,
   CollegeEntranceExam,
   University,
-  RegStatus
+  RegStatus,
+  Group,
+  Message,
+  FamilyGroup
 }

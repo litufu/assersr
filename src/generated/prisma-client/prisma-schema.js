@@ -19,11 +19,27 @@ type AggregateFamily {
   count: Int!
 }
 
+type AggregateFamilyGroup {
+  count: Int!
+}
+
+type AggregateGroup {
+  count: Int!
+}
+
 type AggregateLocation {
   count: Int!
 }
 
+type AggregateLogs {
+  count: Int!
+}
+
 type AggregateMajor {
+  count: Int!
+}
+
+type AggregateMessage {
   count: Int!
 }
 
@@ -1045,6 +1061,11 @@ input FamilyCreateInput {
   status: String!
 }
 
+input FamilyCreateManyInput {
+  create: [FamilyCreateInput!]
+  connect: [FamilyWhereUniqueInput!]
+}
+
 input FamilyCreateManyWithoutFromInput {
   create: [FamilyCreateWithoutFromInput!]
   connect: [FamilyWhereUniqueInput!]
@@ -1077,6 +1098,296 @@ input FamilyCreateWithoutToInput {
 type FamilyEdge {
   node: Family!
   cursor: String!
+}
+
+type FamilyGroup {
+  id: ID!
+  father: Person
+  mother: Person
+  creater: User
+  name: String
+  families(where: FamilyWhereInput, orderBy: FamilyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Family!]
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+}
+
+type FamilyGroupConnection {
+  pageInfo: PageInfo!
+  edges: [FamilyGroupEdge]!
+  aggregate: AggregateFamilyGroup!
+}
+
+input FamilyGroupCreateInput {
+  father: PersonCreateOneWithoutAsFatherInput
+  mother: PersonCreateOneWithoutAsMotherInput
+  creater: UserCreateOneWithoutCreaterInput
+  name: String
+  families: FamilyCreateManyInput
+  messages: MessageCreateManyInput
+  users: UserCreateManyWithoutFamilyGroupInput
+}
+
+input FamilyGroupCreateManyWithoutFatherInput {
+  create: [FamilyGroupCreateWithoutFatherInput!]
+  connect: [FamilyGroupWhereUniqueInput!]
+}
+
+input FamilyGroupCreateManyWithoutMotherInput {
+  create: [FamilyGroupCreateWithoutMotherInput!]
+  connect: [FamilyGroupWhereUniqueInput!]
+}
+
+input FamilyGroupCreateOneWithoutCreaterInput {
+  create: FamilyGroupCreateWithoutCreaterInput
+  connect: FamilyGroupWhereUniqueInput
+}
+
+input FamilyGroupCreateOneWithoutUsersInput {
+  create: FamilyGroupCreateWithoutUsersInput
+  connect: FamilyGroupWhereUniqueInput
+}
+
+input FamilyGroupCreateWithoutCreaterInput {
+  father: PersonCreateOneWithoutAsFatherInput
+  mother: PersonCreateOneWithoutAsMotherInput
+  name: String
+  families: FamilyCreateManyInput
+  messages: MessageCreateManyInput
+  users: UserCreateManyWithoutFamilyGroupInput
+}
+
+input FamilyGroupCreateWithoutFatherInput {
+  mother: PersonCreateOneWithoutAsMotherInput
+  creater: UserCreateOneWithoutCreaterInput
+  name: String
+  families: FamilyCreateManyInput
+  messages: MessageCreateManyInput
+  users: UserCreateManyWithoutFamilyGroupInput
+}
+
+input FamilyGroupCreateWithoutMotherInput {
+  father: PersonCreateOneWithoutAsFatherInput
+  creater: UserCreateOneWithoutCreaterInput
+  name: String
+  families: FamilyCreateManyInput
+  messages: MessageCreateManyInput
+  users: UserCreateManyWithoutFamilyGroupInput
+}
+
+input FamilyGroupCreateWithoutUsersInput {
+  father: PersonCreateOneWithoutAsFatherInput
+  mother: PersonCreateOneWithoutAsMotherInput
+  creater: UserCreateOneWithoutCreaterInput
+  name: String
+  families: FamilyCreateManyInput
+  messages: MessageCreateManyInput
+}
+
+type FamilyGroupEdge {
+  node: FamilyGroup!
+  cursor: String!
+}
+
+enum FamilyGroupOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type FamilyGroupPreviousValues {
+  id: ID!
+  name: String
+}
+
+type FamilyGroupSubscriptionPayload {
+  mutation: MutationType!
+  node: FamilyGroup
+  updatedFields: [String!]
+  previousValues: FamilyGroupPreviousValues
+}
+
+input FamilyGroupSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: FamilyGroupWhereInput
+  AND: [FamilyGroupSubscriptionWhereInput!]
+  OR: [FamilyGroupSubscriptionWhereInput!]
+  NOT: [FamilyGroupSubscriptionWhereInput!]
+}
+
+input FamilyGroupUpdateInput {
+  father: PersonUpdateOneWithoutAsFatherInput
+  mother: PersonUpdateOneWithoutAsMotherInput
+  creater: UserUpdateOneWithoutCreaterInput
+  name: String
+  families: FamilyUpdateManyInput
+  messages: MessageUpdateManyInput
+  users: UserUpdateManyWithoutFamilyGroupInput
+}
+
+input FamilyGroupUpdateManyMutationInput {
+  name: String
+}
+
+input FamilyGroupUpdateManyWithoutFatherInput {
+  create: [FamilyGroupCreateWithoutFatherInput!]
+  delete: [FamilyGroupWhereUniqueInput!]
+  connect: [FamilyGroupWhereUniqueInput!]
+  disconnect: [FamilyGroupWhereUniqueInput!]
+  update: [FamilyGroupUpdateWithWhereUniqueWithoutFatherInput!]
+  upsert: [FamilyGroupUpsertWithWhereUniqueWithoutFatherInput!]
+}
+
+input FamilyGroupUpdateManyWithoutMotherInput {
+  create: [FamilyGroupCreateWithoutMotherInput!]
+  delete: [FamilyGroupWhereUniqueInput!]
+  connect: [FamilyGroupWhereUniqueInput!]
+  disconnect: [FamilyGroupWhereUniqueInput!]
+  update: [FamilyGroupUpdateWithWhereUniqueWithoutMotherInput!]
+  upsert: [FamilyGroupUpsertWithWhereUniqueWithoutMotherInput!]
+}
+
+input FamilyGroupUpdateOneWithoutCreaterInput {
+  create: FamilyGroupCreateWithoutCreaterInput
+  update: FamilyGroupUpdateWithoutCreaterDataInput
+  upsert: FamilyGroupUpsertWithoutCreaterInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: FamilyGroupWhereUniqueInput
+}
+
+input FamilyGroupUpdateOneWithoutUsersInput {
+  create: FamilyGroupCreateWithoutUsersInput
+  update: FamilyGroupUpdateWithoutUsersDataInput
+  upsert: FamilyGroupUpsertWithoutUsersInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: FamilyGroupWhereUniqueInput
+}
+
+input FamilyGroupUpdateWithoutCreaterDataInput {
+  father: PersonUpdateOneWithoutAsFatherInput
+  mother: PersonUpdateOneWithoutAsMotherInput
+  name: String
+  families: FamilyUpdateManyInput
+  messages: MessageUpdateManyInput
+  users: UserUpdateManyWithoutFamilyGroupInput
+}
+
+input FamilyGroupUpdateWithoutFatherDataInput {
+  mother: PersonUpdateOneWithoutAsMotherInput
+  creater: UserUpdateOneWithoutCreaterInput
+  name: String
+  families: FamilyUpdateManyInput
+  messages: MessageUpdateManyInput
+  users: UserUpdateManyWithoutFamilyGroupInput
+}
+
+input FamilyGroupUpdateWithoutMotherDataInput {
+  father: PersonUpdateOneWithoutAsFatherInput
+  creater: UserUpdateOneWithoutCreaterInput
+  name: String
+  families: FamilyUpdateManyInput
+  messages: MessageUpdateManyInput
+  users: UserUpdateManyWithoutFamilyGroupInput
+}
+
+input FamilyGroupUpdateWithoutUsersDataInput {
+  father: PersonUpdateOneWithoutAsFatherInput
+  mother: PersonUpdateOneWithoutAsMotherInput
+  creater: UserUpdateOneWithoutCreaterInput
+  name: String
+  families: FamilyUpdateManyInput
+  messages: MessageUpdateManyInput
+}
+
+input FamilyGroupUpdateWithWhereUniqueWithoutFatherInput {
+  where: FamilyGroupWhereUniqueInput!
+  data: FamilyGroupUpdateWithoutFatherDataInput!
+}
+
+input FamilyGroupUpdateWithWhereUniqueWithoutMotherInput {
+  where: FamilyGroupWhereUniqueInput!
+  data: FamilyGroupUpdateWithoutMotherDataInput!
+}
+
+input FamilyGroupUpsertWithoutCreaterInput {
+  update: FamilyGroupUpdateWithoutCreaterDataInput!
+  create: FamilyGroupCreateWithoutCreaterInput!
+}
+
+input FamilyGroupUpsertWithoutUsersInput {
+  update: FamilyGroupUpdateWithoutUsersDataInput!
+  create: FamilyGroupCreateWithoutUsersInput!
+}
+
+input FamilyGroupUpsertWithWhereUniqueWithoutFatherInput {
+  where: FamilyGroupWhereUniqueInput!
+  update: FamilyGroupUpdateWithoutFatherDataInput!
+  create: FamilyGroupCreateWithoutFatherInput!
+}
+
+input FamilyGroupUpsertWithWhereUniqueWithoutMotherInput {
+  where: FamilyGroupWhereUniqueInput!
+  update: FamilyGroupUpdateWithoutMotherDataInput!
+  create: FamilyGroupCreateWithoutMotherInput!
+}
+
+input FamilyGroupWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  father: PersonWhereInput
+  mother: PersonWhereInput
+  creater: UserWhereInput
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  families_every: FamilyWhereInput
+  families_some: FamilyWhereInput
+  families_none: FamilyWhereInput
+  messages_every: MessageWhereInput
+  messages_some: MessageWhereInput
+  messages_none: MessageWhereInput
+  users_every: UserWhereInput
+  users_some: UserWhereInput
+  users_none: UserWhereInput
+  AND: [FamilyGroupWhereInput!]
+  OR: [FamilyGroupWhereInput!]
+  NOT: [FamilyGroupWhereInput!]
+}
+
+input FamilyGroupWhereUniqueInput {
+  id: ID
 }
 
 enum FamilyOrderByInput {
@@ -1132,6 +1443,15 @@ input FamilyUpdateInput {
   status: String
 }
 
+input FamilyUpdateManyInput {
+  create: [FamilyCreateInput!]
+  update: [FamilyUpdateWithWhereUniqueNestedInput!]
+  upsert: [FamilyUpsertWithWhereUniqueNestedInput!]
+  delete: [FamilyWhereUniqueInput!]
+  connect: [FamilyWhereUniqueInput!]
+  disconnect: [FamilyWhereUniqueInput!]
+}
+
 input FamilyUpdateManyMutationInput {
   relationship: String
   status: String
@@ -1178,6 +1498,11 @@ input FamilyUpdateWithoutToDataInput {
   status: String
 }
 
+input FamilyUpdateWithWhereUniqueNestedInput {
+  where: FamilyWhereUniqueInput!
+  data: FamilyUpdateDataInput!
+}
+
 input FamilyUpdateWithWhereUniqueWithoutFromInput {
   where: FamilyWhereUniqueInput!
   data: FamilyUpdateWithoutFromDataInput!
@@ -1189,6 +1514,12 @@ input FamilyUpdateWithWhereUniqueWithoutToInput {
 }
 
 input FamilyUpsertNestedInput {
+  update: FamilyUpdateDataInput!
+  create: FamilyCreateInput!
+}
+
+input FamilyUpsertWithWhereUniqueNestedInput {
+  where: FamilyWhereUniqueInput!
   update: FamilyUpdateDataInput!
   create: FamilyCreateInput!
 }
@@ -1260,6 +1591,226 @@ input FamilyWhereUniqueInput {
   id: ID
 }
 
+type Group {
+  id: ID!
+  type: GroupKind
+  typeId: String
+  name: String
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
+}
+
+type GroupConnection {
+  pageInfo: PageInfo!
+  edges: [GroupEdge]!
+  aggregate: AggregateGroup!
+}
+
+input GroupCreateInput {
+  type: GroupKind
+  typeId: String
+  name: String
+  users: UserCreateManyWithoutGroupsInput
+  messages: MessageCreateManyWithoutToInput
+}
+
+input GroupCreateManyWithoutUsersInput {
+  create: [GroupCreateWithoutUsersInput!]
+  connect: [GroupWhereUniqueInput!]
+}
+
+input GroupCreateOneWithoutMessagesInput {
+  create: GroupCreateWithoutMessagesInput
+  connect: GroupWhereUniqueInput
+}
+
+input GroupCreateWithoutMessagesInput {
+  type: GroupKind
+  typeId: String
+  name: String
+  users: UserCreateManyWithoutGroupsInput
+}
+
+input GroupCreateWithoutUsersInput {
+  type: GroupKind
+  typeId: String
+  name: String
+  messages: MessageCreateManyWithoutToInput
+}
+
+type GroupEdge {
+  node: Group!
+  cursor: String!
+}
+
+enum GroupKind {
+  Location
+  Student
+  Work
+}
+
+enum GroupOrderByInput {
+  id_ASC
+  id_DESC
+  type_ASC
+  type_DESC
+  typeId_ASC
+  typeId_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type GroupPreviousValues {
+  id: ID!
+  type: GroupKind
+  typeId: String
+  name: String
+}
+
+type GroupSubscriptionPayload {
+  mutation: MutationType!
+  node: Group
+  updatedFields: [String!]
+  previousValues: GroupPreviousValues
+}
+
+input GroupSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: GroupWhereInput
+  AND: [GroupSubscriptionWhereInput!]
+  OR: [GroupSubscriptionWhereInput!]
+  NOT: [GroupSubscriptionWhereInput!]
+}
+
+input GroupUpdateInput {
+  type: GroupKind
+  typeId: String
+  name: String
+  users: UserUpdateManyWithoutGroupsInput
+  messages: MessageUpdateManyWithoutToInput
+}
+
+input GroupUpdateManyMutationInput {
+  type: GroupKind
+  typeId: String
+  name: String
+}
+
+input GroupUpdateManyWithoutUsersInput {
+  create: [GroupCreateWithoutUsersInput!]
+  delete: [GroupWhereUniqueInput!]
+  connect: [GroupWhereUniqueInput!]
+  disconnect: [GroupWhereUniqueInput!]
+  update: [GroupUpdateWithWhereUniqueWithoutUsersInput!]
+  upsert: [GroupUpsertWithWhereUniqueWithoutUsersInput!]
+}
+
+input GroupUpdateOneRequiredWithoutMessagesInput {
+  create: GroupCreateWithoutMessagesInput
+  update: GroupUpdateWithoutMessagesDataInput
+  upsert: GroupUpsertWithoutMessagesInput
+  connect: GroupWhereUniqueInput
+}
+
+input GroupUpdateWithoutMessagesDataInput {
+  type: GroupKind
+  typeId: String
+  name: String
+  users: UserUpdateManyWithoutGroupsInput
+}
+
+input GroupUpdateWithoutUsersDataInput {
+  type: GroupKind
+  typeId: String
+  name: String
+  messages: MessageUpdateManyWithoutToInput
+}
+
+input GroupUpdateWithWhereUniqueWithoutUsersInput {
+  where: GroupWhereUniqueInput!
+  data: GroupUpdateWithoutUsersDataInput!
+}
+
+input GroupUpsertWithoutMessagesInput {
+  update: GroupUpdateWithoutMessagesDataInput!
+  create: GroupCreateWithoutMessagesInput!
+}
+
+input GroupUpsertWithWhereUniqueWithoutUsersInput {
+  where: GroupWhereUniqueInput!
+  update: GroupUpdateWithoutUsersDataInput!
+  create: GroupCreateWithoutUsersInput!
+}
+
+input GroupWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  type: GroupKind
+  type_not: GroupKind
+  type_in: [GroupKind!]
+  type_not_in: [GroupKind!]
+  typeId: String
+  typeId_not: String
+  typeId_in: [String!]
+  typeId_not_in: [String!]
+  typeId_lt: String
+  typeId_lte: String
+  typeId_gt: String
+  typeId_gte: String
+  typeId_contains: String
+  typeId_not_contains: String
+  typeId_starts_with: String
+  typeId_not_starts_with: String
+  typeId_ends_with: String
+  typeId_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  users_every: UserWhereInput
+  users_some: UserWhereInput
+  users_none: UserWhereInput
+  messages_every: MessageWhereInput
+  messages_some: MessageWhereInput
+  messages_none: MessageWhereInput
+  AND: [GroupWhereInput!]
+  OR: [GroupWhereInput!]
+  NOT: [GroupWhereInput!]
+}
+
+input GroupWhereUniqueInput {
+  id: ID
+}
+
 type Location {
   id: ID!
   name: String
@@ -1271,7 +1822,6 @@ type Location {
   schools(where: SchoolWhereInput, orderBy: SchoolOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [School!]
   companies(where: CompanyWhereInput, orderBy: CompanyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Company!]
   universities(where: UniversityWhereInput, orderBy: UniversityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [University!]
-  people(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
 
 type LocationConnection {
@@ -1290,16 +1840,15 @@ input LocationCreateInput {
   schools: SchoolCreateManyWithoutLocationInput
   companies: CompanyCreateManyWithoutLocationInput
   universities: UniversityCreateManyInput
-  people: UserCreateManyWithoutBirthplaceInput
+}
+
+input LocationCreateOneInput {
+  create: LocationCreateInput
+  connect: LocationWhereUniqueInput
 }
 
 input LocationCreateOneWithoutCompaniesInput {
   create: LocationCreateWithoutCompaniesInput
-  connect: LocationWhereUniqueInput
-}
-
-input LocationCreateOneWithoutPeopleInput {
-  create: LocationCreateWithoutPeopleInput
   connect: LocationWhereUniqueInput
 }
 
@@ -1317,19 +1866,6 @@ input LocationCreateWithoutCompaniesInput {
   village: VillageCreateOneInput
   schools: SchoolCreateManyWithoutLocationInput
   universities: UniversityCreateManyInput
-  people: UserCreateManyWithoutBirthplaceInput
-}
-
-input LocationCreateWithoutPeopleInput {
-  name: String
-  province: ProvinceCreateOneInput
-  city: CityCreateOneInput
-  area: AreaCreateOneInput
-  street: StreetCreateOneInput
-  village: VillageCreateOneInput
-  schools: SchoolCreateManyWithoutLocationInput
-  companies: CompanyCreateManyWithoutLocationInput
-  universities: UniversityCreateManyInput
 }
 
 input LocationCreateWithoutSchoolsInput {
@@ -1341,7 +1877,6 @@ input LocationCreateWithoutSchoolsInput {
   village: VillageCreateOneInput
   companies: CompanyCreateManyWithoutLocationInput
   universities: UniversityCreateManyInput
-  people: UserCreateManyWithoutBirthplaceInput
 }
 
 type LocationEdge {
@@ -1383,6 +1918,18 @@ input LocationSubscriptionWhereInput {
   NOT: [LocationSubscriptionWhereInput!]
 }
 
+input LocationUpdateDataInput {
+  name: String
+  province: ProvinceUpdateOneInput
+  city: CityUpdateOneInput
+  area: AreaUpdateOneInput
+  street: StreetUpdateOneInput
+  village: VillageUpdateOneInput
+  schools: SchoolUpdateManyWithoutLocationInput
+  companies: CompanyUpdateManyWithoutLocationInput
+  universities: UniversityUpdateManyInput
+}
+
 input LocationUpdateInput {
   name: String
   province: ProvinceUpdateOneInput
@@ -1393,26 +1940,25 @@ input LocationUpdateInput {
   schools: SchoolUpdateManyWithoutLocationInput
   companies: CompanyUpdateManyWithoutLocationInput
   universities: UniversityUpdateManyInput
-  people: UserUpdateManyWithoutBirthplaceInput
 }
 
 input LocationUpdateManyMutationInput {
   name: String
 }
 
-input LocationUpdateOneWithoutCompaniesInput {
-  create: LocationCreateWithoutCompaniesInput
-  update: LocationUpdateWithoutCompaniesDataInput
-  upsert: LocationUpsertWithoutCompaniesInput
+input LocationUpdateOneInput {
+  create: LocationCreateInput
+  update: LocationUpdateDataInput
+  upsert: LocationUpsertNestedInput
   delete: Boolean
   disconnect: Boolean
   connect: LocationWhereUniqueInput
 }
 
-input LocationUpdateOneWithoutPeopleInput {
-  create: LocationCreateWithoutPeopleInput
-  update: LocationUpdateWithoutPeopleDataInput
-  upsert: LocationUpsertWithoutPeopleInput
+input LocationUpdateOneWithoutCompaniesInput {
+  create: LocationCreateWithoutCompaniesInput
+  update: LocationUpdateWithoutCompaniesDataInput
+  upsert: LocationUpsertWithoutCompaniesInput
   delete: Boolean
   disconnect: Boolean
   connect: LocationWhereUniqueInput
@@ -1436,19 +1982,6 @@ input LocationUpdateWithoutCompaniesDataInput {
   village: VillageUpdateOneInput
   schools: SchoolUpdateManyWithoutLocationInput
   universities: UniversityUpdateManyInput
-  people: UserUpdateManyWithoutBirthplaceInput
-}
-
-input LocationUpdateWithoutPeopleDataInput {
-  name: String
-  province: ProvinceUpdateOneInput
-  city: CityUpdateOneInput
-  area: AreaUpdateOneInput
-  street: StreetUpdateOneInput
-  village: VillageUpdateOneInput
-  schools: SchoolUpdateManyWithoutLocationInput
-  companies: CompanyUpdateManyWithoutLocationInput
-  universities: UniversityUpdateManyInput
 }
 
 input LocationUpdateWithoutSchoolsDataInput {
@@ -1460,17 +1993,16 @@ input LocationUpdateWithoutSchoolsDataInput {
   village: VillageUpdateOneInput
   companies: CompanyUpdateManyWithoutLocationInput
   universities: UniversityUpdateManyInput
-  people: UserUpdateManyWithoutBirthplaceInput
+}
+
+input LocationUpsertNestedInput {
+  update: LocationUpdateDataInput!
+  create: LocationCreateInput!
 }
 
 input LocationUpsertWithoutCompaniesInput {
   update: LocationUpdateWithoutCompaniesDataInput!
   create: LocationCreateWithoutCompaniesInput!
-}
-
-input LocationUpsertWithoutPeopleInput {
-  update: LocationUpdateWithoutPeopleDataInput!
-  create: LocationCreateWithoutPeopleInput!
 }
 
 input LocationUpsertWithoutSchoolsInput {
@@ -1521,9 +2053,6 @@ input LocationWhereInput {
   universities_every: UniversityWhereInput
   universities_some: UniversityWhereInput
   universities_none: UniversityWhereInput
-  people_every: UserWhereInput
-  people_some: UserWhereInput
-  people_none: UserWhereInput
   AND: [LocationWhereInput!]
   OR: [LocationWhereInput!]
   NOT: [LocationWhereInput!]
@@ -1532,6 +2061,79 @@ input LocationWhereInput {
 input LocationWhereUniqueInput {
   id: ID
   name: String
+}
+
+type Logs {
+  user: User
+  createFamilyGroupTime: DateTime
+}
+
+type LogsConnection {
+  pageInfo: PageInfo!
+  edges: [LogsEdge]!
+  aggregate: AggregateLogs!
+}
+
+input LogsCreateInput {
+  user: UserCreateOneInput
+  createFamilyGroupTime: DateTime
+}
+
+type LogsEdge {
+  node: Logs!
+  cursor: String!
+}
+
+enum LogsOrderByInput {
+  createFamilyGroupTime_ASC
+  createFamilyGroupTime_DESC
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type LogsPreviousValues {
+  createFamilyGroupTime: DateTime
+}
+
+type LogsSubscriptionPayload {
+  mutation: MutationType!
+  node: Logs
+  updatedFields: [String!]
+  previousValues: LogsPreviousValues
+}
+
+input LogsSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: LogsWhereInput
+  AND: [LogsSubscriptionWhereInput!]
+  OR: [LogsSubscriptionWhereInput!]
+  NOT: [LogsSubscriptionWhereInput!]
+}
+
+input LogsUpdateManyMutationInput {
+  createFamilyGroupTime: DateTime
+}
+
+input LogsWhereInput {
+  user: UserWhereInput
+  createFamilyGroupTime: DateTime
+  createFamilyGroupTime_not: DateTime
+  createFamilyGroupTime_in: [DateTime!]
+  createFamilyGroupTime_not_in: [DateTime!]
+  createFamilyGroupTime_lt: DateTime
+  createFamilyGroupTime_lte: DateTime
+  createFamilyGroupTime_gt: DateTime
+  createFamilyGroupTime_gte: DateTime
+  AND: [LogsWhereInput!]
+  OR: [LogsWhereInput!]
+  NOT: [LogsWhereInput!]
 }
 
 scalar Long
@@ -1700,6 +2302,225 @@ input MajorWhereUniqueInput {
   id: ID
 }
 
+type Message {
+  id: ID!
+  to: Group!
+  from: User!
+  text: String!
+  createdAt: DateTime!
+}
+
+type MessageConnection {
+  pageInfo: PageInfo!
+  edges: [MessageEdge]!
+  aggregate: AggregateMessage!
+}
+
+input MessageCreateInput {
+  to: GroupCreateOneWithoutMessagesInput!
+  from: UserCreateOneWithoutMessagesInput!
+  text: String!
+}
+
+input MessageCreateManyInput {
+  create: [MessageCreateInput!]
+  connect: [MessageWhereUniqueInput!]
+}
+
+input MessageCreateManyWithoutFromInput {
+  create: [MessageCreateWithoutFromInput!]
+  connect: [MessageWhereUniqueInput!]
+}
+
+input MessageCreateManyWithoutToInput {
+  create: [MessageCreateWithoutToInput!]
+  connect: [MessageWhereUniqueInput!]
+}
+
+input MessageCreateWithoutFromInput {
+  to: GroupCreateOneWithoutMessagesInput!
+  text: String!
+}
+
+input MessageCreateWithoutToInput {
+  from: UserCreateOneWithoutMessagesInput!
+  text: String!
+}
+
+type MessageEdge {
+  node: Message!
+  cursor: String!
+}
+
+enum MessageOrderByInput {
+  id_ASC
+  id_DESC
+  text_ASC
+  text_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type MessagePreviousValues {
+  id: ID!
+  text: String!
+  createdAt: DateTime!
+}
+
+type MessageSubscriptionPayload {
+  mutation: MutationType!
+  node: Message
+  updatedFields: [String!]
+  previousValues: MessagePreviousValues
+}
+
+input MessageSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: MessageWhereInput
+  AND: [MessageSubscriptionWhereInput!]
+  OR: [MessageSubscriptionWhereInput!]
+  NOT: [MessageSubscriptionWhereInput!]
+}
+
+input MessageUpdateDataInput {
+  to: GroupUpdateOneRequiredWithoutMessagesInput
+  from: UserUpdateOneRequiredWithoutMessagesInput
+  text: String
+}
+
+input MessageUpdateInput {
+  to: GroupUpdateOneRequiredWithoutMessagesInput
+  from: UserUpdateOneRequiredWithoutMessagesInput
+  text: String
+}
+
+input MessageUpdateManyInput {
+  create: [MessageCreateInput!]
+  update: [MessageUpdateWithWhereUniqueNestedInput!]
+  upsert: [MessageUpsertWithWhereUniqueNestedInput!]
+  delete: [MessageWhereUniqueInput!]
+  connect: [MessageWhereUniqueInput!]
+  disconnect: [MessageWhereUniqueInput!]
+}
+
+input MessageUpdateManyMutationInput {
+  text: String
+}
+
+input MessageUpdateManyWithoutFromInput {
+  create: [MessageCreateWithoutFromInput!]
+  delete: [MessageWhereUniqueInput!]
+  connect: [MessageWhereUniqueInput!]
+  disconnect: [MessageWhereUniqueInput!]
+  update: [MessageUpdateWithWhereUniqueWithoutFromInput!]
+  upsert: [MessageUpsertWithWhereUniqueWithoutFromInput!]
+}
+
+input MessageUpdateManyWithoutToInput {
+  create: [MessageCreateWithoutToInput!]
+  delete: [MessageWhereUniqueInput!]
+  connect: [MessageWhereUniqueInput!]
+  disconnect: [MessageWhereUniqueInput!]
+  update: [MessageUpdateWithWhereUniqueWithoutToInput!]
+  upsert: [MessageUpsertWithWhereUniqueWithoutToInput!]
+}
+
+input MessageUpdateWithoutFromDataInput {
+  to: GroupUpdateOneRequiredWithoutMessagesInput
+  text: String
+}
+
+input MessageUpdateWithoutToDataInput {
+  from: UserUpdateOneRequiredWithoutMessagesInput
+  text: String
+}
+
+input MessageUpdateWithWhereUniqueNestedInput {
+  where: MessageWhereUniqueInput!
+  data: MessageUpdateDataInput!
+}
+
+input MessageUpdateWithWhereUniqueWithoutFromInput {
+  where: MessageWhereUniqueInput!
+  data: MessageUpdateWithoutFromDataInput!
+}
+
+input MessageUpdateWithWhereUniqueWithoutToInput {
+  where: MessageWhereUniqueInput!
+  data: MessageUpdateWithoutToDataInput!
+}
+
+input MessageUpsertWithWhereUniqueNestedInput {
+  where: MessageWhereUniqueInput!
+  update: MessageUpdateDataInput!
+  create: MessageCreateInput!
+}
+
+input MessageUpsertWithWhereUniqueWithoutFromInput {
+  where: MessageWhereUniqueInput!
+  update: MessageUpdateWithoutFromDataInput!
+  create: MessageCreateWithoutFromInput!
+}
+
+input MessageUpsertWithWhereUniqueWithoutToInput {
+  where: MessageWhereUniqueInput!
+  update: MessageUpdateWithoutToDataInput!
+  create: MessageCreateWithoutToInput!
+}
+
+input MessageWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  to: GroupWhereInput
+  from: UserWhereInput
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [MessageWhereInput!]
+  OR: [MessageWhereInput!]
+  NOT: [MessageWhereInput!]
+}
+
+input MessageWhereUniqueInput {
+  id: ID
+}
+
 type Mutation {
   createArea(data: AreaCreateInput!): Area!
   updateArea(data: AreaUpdateInput!, where: AreaWhereUniqueInput!): Area
@@ -1731,18 +2552,39 @@ type Mutation {
   upsertFamily(where: FamilyWhereUniqueInput!, create: FamilyCreateInput!, update: FamilyUpdateInput!): Family!
   deleteFamily(where: FamilyWhereUniqueInput!): Family
   deleteManyFamilies(where: FamilyWhereInput): BatchPayload!
+  createFamilyGroup(data: FamilyGroupCreateInput!): FamilyGroup!
+  updateFamilyGroup(data: FamilyGroupUpdateInput!, where: FamilyGroupWhereUniqueInput!): FamilyGroup
+  updateManyFamilyGroups(data: FamilyGroupUpdateManyMutationInput!, where: FamilyGroupWhereInput): BatchPayload!
+  upsertFamilyGroup(where: FamilyGroupWhereUniqueInput!, create: FamilyGroupCreateInput!, update: FamilyGroupUpdateInput!): FamilyGroup!
+  deleteFamilyGroup(where: FamilyGroupWhereUniqueInput!): FamilyGroup
+  deleteManyFamilyGroups(where: FamilyGroupWhereInput): BatchPayload!
+  createGroup(data: GroupCreateInput!): Group!
+  updateGroup(data: GroupUpdateInput!, where: GroupWhereUniqueInput!): Group
+  updateManyGroups(data: GroupUpdateManyMutationInput!, where: GroupWhereInput): BatchPayload!
+  upsertGroup(where: GroupWhereUniqueInput!, create: GroupCreateInput!, update: GroupUpdateInput!): Group!
+  deleteGroup(where: GroupWhereUniqueInput!): Group
+  deleteManyGroups(where: GroupWhereInput): BatchPayload!
   createLocation(data: LocationCreateInput!): Location!
   updateLocation(data: LocationUpdateInput!, where: LocationWhereUniqueInput!): Location
   updateManyLocations(data: LocationUpdateManyMutationInput!, where: LocationWhereInput): BatchPayload!
   upsertLocation(where: LocationWhereUniqueInput!, create: LocationCreateInput!, update: LocationUpdateInput!): Location!
   deleteLocation(where: LocationWhereUniqueInput!): Location
   deleteManyLocations(where: LocationWhereInput): BatchPayload!
+  createLogs(data: LogsCreateInput!): Logs!
+  updateManyLogses(data: LogsUpdateManyMutationInput!, where: LogsWhereInput): BatchPayload!
+  deleteManyLogses(where: LogsWhereInput): BatchPayload!
   createMajor(data: MajorCreateInput!): Major!
   updateMajor(data: MajorUpdateInput!, where: MajorWhereUniqueInput!): Major
   updateManyMajors(data: MajorUpdateManyMutationInput!, where: MajorWhereInput): BatchPayload!
   upsertMajor(where: MajorWhereUniqueInput!, create: MajorCreateInput!, update: MajorUpdateInput!): Major!
   deleteMajor(where: MajorWhereUniqueInput!): Major
   deleteManyMajors(where: MajorWhereInput): BatchPayload!
+  createMessage(data: MessageCreateInput!): Message!
+  updateMessage(data: MessageUpdateInput!, where: MessageWhereUniqueInput!): Message
+  updateManyMessages(data: MessageUpdateManyMutationInput!, where: MessageWhereInput): BatchPayload!
+  upsertMessage(where: MessageWhereUniqueInput!, create: MessageCreateInput!, update: MessageUpdateInput!): Message!
+  deleteMessage(where: MessageWhereUniqueInput!): Message
+  deleteManyMessages(where: MessageWhereInput): BatchPayload!
   createPerson(data: PersonCreateInput!): Person!
   updatePerson(data: PersonUpdateInput!, where: PersonWhereUniqueInput!): Person
   updateManyPersons(data: PersonUpdateManyMutationInput!, where: PersonWhereInput): BatchPayload!
@@ -1833,6 +2675,8 @@ type Person {
   name: String!
   user: User
   families(where: FamilyWhereInput, orderBy: FamilyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Family!]
+  asFather(where: FamilyGroupWhereInput, orderBy: FamilyGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FamilyGroup!]
+  asMother(where: FamilyGroupWhereInput, orderBy: FamilyGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FamilyGroup!]
 }
 
 type PersonConnection {
@@ -1845,6 +2689,18 @@ input PersonCreateInput {
   name: String!
   user: UserCreateOneInput
   families: FamilyCreateManyWithoutToInput
+  asFather: FamilyGroupCreateManyWithoutFatherInput
+  asMother: FamilyGroupCreateManyWithoutMotherInput
+}
+
+input PersonCreateOneWithoutAsFatherInput {
+  create: PersonCreateWithoutAsFatherInput
+  connect: PersonWhereUniqueInput
+}
+
+input PersonCreateOneWithoutAsMotherInput {
+  create: PersonCreateWithoutAsMotherInput
+  connect: PersonWhereUniqueInput
 }
 
 input PersonCreateOneWithoutFamiliesInput {
@@ -1852,9 +2708,25 @@ input PersonCreateOneWithoutFamiliesInput {
   connect: PersonWhereUniqueInput
 }
 
+input PersonCreateWithoutAsFatherInput {
+  name: String!
+  user: UserCreateOneInput
+  families: FamilyCreateManyWithoutToInput
+  asMother: FamilyGroupCreateManyWithoutMotherInput
+}
+
+input PersonCreateWithoutAsMotherInput {
+  name: String!
+  user: UserCreateOneInput
+  families: FamilyCreateManyWithoutToInput
+  asFather: FamilyGroupCreateManyWithoutFatherInput
+}
+
 input PersonCreateWithoutFamiliesInput {
   name: String!
   user: UserCreateOneInput
+  asFather: FamilyGroupCreateManyWithoutFatherInput
+  asMother: FamilyGroupCreateManyWithoutMotherInput
 }
 
 type PersonEdge {
@@ -1900,6 +2772,8 @@ input PersonUpdateInput {
   name: String
   user: UserUpdateOneInput
   families: FamilyUpdateManyWithoutToInput
+  asFather: FamilyGroupUpdateManyWithoutFatherInput
+  asMother: FamilyGroupUpdateManyWithoutMotherInput
 }
 
 input PersonUpdateManyMutationInput {
@@ -1913,9 +2787,53 @@ input PersonUpdateOneRequiredWithoutFamiliesInput {
   connect: PersonWhereUniqueInput
 }
 
+input PersonUpdateOneWithoutAsFatherInput {
+  create: PersonCreateWithoutAsFatherInput
+  update: PersonUpdateWithoutAsFatherDataInput
+  upsert: PersonUpsertWithoutAsFatherInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: PersonWhereUniqueInput
+}
+
+input PersonUpdateOneWithoutAsMotherInput {
+  create: PersonCreateWithoutAsMotherInput
+  update: PersonUpdateWithoutAsMotherDataInput
+  upsert: PersonUpsertWithoutAsMotherInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: PersonWhereUniqueInput
+}
+
+input PersonUpdateWithoutAsFatherDataInput {
+  name: String
+  user: UserUpdateOneInput
+  families: FamilyUpdateManyWithoutToInput
+  asMother: FamilyGroupUpdateManyWithoutMotherInput
+}
+
+input PersonUpdateWithoutAsMotherDataInput {
+  name: String
+  user: UserUpdateOneInput
+  families: FamilyUpdateManyWithoutToInput
+  asFather: FamilyGroupUpdateManyWithoutFatherInput
+}
+
 input PersonUpdateWithoutFamiliesDataInput {
   name: String
   user: UserUpdateOneInput
+  asFather: FamilyGroupUpdateManyWithoutFatherInput
+  asMother: FamilyGroupUpdateManyWithoutMotherInput
+}
+
+input PersonUpsertWithoutAsFatherInput {
+  update: PersonUpdateWithoutAsFatherDataInput!
+  create: PersonCreateWithoutAsFatherInput!
+}
+
+input PersonUpsertWithoutAsMotherInput {
+  update: PersonUpdateWithoutAsMotherDataInput!
+  create: PersonCreateWithoutAsMotherInput!
 }
 
 input PersonUpsertWithoutFamiliesInput {
@@ -1956,6 +2874,12 @@ input PersonWhereInput {
   families_every: FamilyWhereInput
   families_some: FamilyWhereInput
   families_none: FamilyWhereInput
+  asFather_every: FamilyGroupWhereInput
+  asFather_some: FamilyGroupWhereInput
+  asFather_none: FamilyGroupWhereInput
+  asMother_every: FamilyGroupWhereInput
+  asMother_some: FamilyGroupWhereInput
+  asMother_none: FamilyGroupWhereInput
   AND: [PersonWhereInput!]
   OR: [PersonWhereInput!]
   NOT: [PersonWhereInput!]
@@ -2360,12 +3284,23 @@ type Query {
   family(where: FamilyWhereUniqueInput!): Family
   families(where: FamilyWhereInput, orderBy: FamilyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Family]!
   familiesConnection(where: FamilyWhereInput, orderBy: FamilyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FamilyConnection!
+  familyGroup(where: FamilyGroupWhereUniqueInput!): FamilyGroup
+  familyGroups(where: FamilyGroupWhereInput, orderBy: FamilyGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FamilyGroup]!
+  familyGroupsConnection(where: FamilyGroupWhereInput, orderBy: FamilyGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FamilyGroupConnection!
+  group(where: GroupWhereUniqueInput!): Group
+  groups(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group]!
+  groupsConnection(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GroupConnection!
   location(where: LocationWhereUniqueInput!): Location
   locations(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Location]!
   locationsConnection(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LocationConnection!
+  logses(where: LogsWhereInput, orderBy: LogsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Logs]!
+  logsesConnection(where: LogsWhereInput, orderBy: LogsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LogsConnection!
   major(where: MajorWhereUniqueInput!): Major
   majors(where: MajorWhereInput, orderBy: MajorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Major]!
   majorsConnection(where: MajorWhereInput, orderBy: MajorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MajorConnection!
+  message(where: MessageWhereUniqueInput!): Message
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message]!
+  messagesConnection(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MessageConnection!
   person(where: PersonWhereUniqueInput!): Person
   persons(where: PersonWhereInput, orderBy: PersonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Person]!
   personsConnection(where: PersonWhereInput, orderBy: PersonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PersonConnection!
@@ -3127,8 +4062,12 @@ type Subscription {
   collegeEntranceExam(where: CollegeEntranceExamSubscriptionWhereInput): CollegeEntranceExamSubscriptionPayload
   company(where: CompanySubscriptionWhereInput): CompanySubscriptionPayload
   family(where: FamilySubscriptionWhereInput): FamilySubscriptionPayload
+  familyGroup(where: FamilyGroupSubscriptionWhereInput): FamilyGroupSubscriptionPayload
+  group(where: GroupSubscriptionWhereInput): GroupSubscriptionPayload
   location(where: LocationSubscriptionWhereInput): LocationSubscriptionPayload
+  logs(where: LogsSubscriptionWhereInput): LogsSubscriptionPayload
   major(where: MajorSubscriptionWhereInput): MajorSubscriptionPayload
+  message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
   person(where: PersonSubscriptionWhereInput): PersonSubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   province(where: ProvinceSubscriptionWhereInput): ProvinceSubscriptionPayload
@@ -3391,6 +4330,11 @@ type User {
   studies(where: SchoolEduWhereInput, orderBy: SchoolEduOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SchoolEdu!]
   works(where: WorkWhereInput, orderBy: WorkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Work!]
   exam: CollegeEntranceExam
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
+  groups(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group!]
+  friends(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  familyGroup: FamilyGroup
+  creater: FamilyGroup
 }
 
 type UserConnection {
@@ -3407,7 +4351,7 @@ input UserCreateInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneWithoutPeopleInput
+  birthplace: LocationCreateOneInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -3418,10 +4362,25 @@ input UserCreateInput {
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: WorkCreateManyWithoutWorkerInput
   exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  messages: MessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
 }
 
-input UserCreateManyWithoutBirthplaceInput {
-  create: [UserCreateWithoutBirthplaceInput!]
+input UserCreateManyInput {
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutFamilyGroupInput {
+  create: [UserCreateWithoutFamilyGroupInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutGroupsInput {
+  create: [UserCreateWithoutGroupsInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -3440,6 +4399,11 @@ input UserCreateOneInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutCreaterInput {
+  create: UserCreateWithoutCreaterInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutExamInput {
   create: UserCreateWithoutExamInput
   connect: UserWhereUniqueInput
@@ -3447,6 +4411,11 @@ input UserCreateOneWithoutExamInput {
 
 input UserCreateOneWithoutFamiliesInput {
   create: UserCreateWithoutFamiliesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutMessagesInput {
+  create: UserCreateWithoutMessagesInput
   connect: UserWhereUniqueInput
 }
 
@@ -3460,7 +4429,7 @@ input UserCreateOneWithoutWorksInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateWithoutBirthplaceInput {
+input UserCreateWithoutCreaterInput {
   username: String!
   password: String!
   name: String
@@ -3468,6 +4437,7 @@ input UserCreateWithoutBirthplaceInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
+  birthplace: LocationCreateOneInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -3478,6 +4448,10 @@ input UserCreateWithoutBirthplaceInput {
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: WorkCreateManyWithoutWorkerInput
   exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  messages: MessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
 }
 
 input UserCreateWithoutExamInput {
@@ -3488,7 +4462,7 @@ input UserCreateWithoutExamInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneWithoutPeopleInput
+  birthplace: LocationCreateOneInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -3498,6 +4472,11 @@ input UserCreateWithoutExamInput {
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: WorkCreateManyWithoutWorkerInput
+  messages: MessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
 }
 
 input UserCreateWithoutFamiliesInput {
@@ -3508,7 +4487,7 @@ input UserCreateWithoutFamiliesInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneWithoutPeopleInput
+  birthplace: LocationCreateOneInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -3518,6 +4497,86 @@ input UserCreateWithoutFamiliesInput {
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: WorkCreateManyWithoutWorkerInput
   exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  messages: MessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+}
+
+input UserCreateWithoutFamilyGroupInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  messages: MessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+}
+
+input UserCreateWithoutGroupsInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  messages: MessageCreateManyWithoutFromInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+}
+
+input UserCreateWithoutMessagesInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
 }
 
 input UserCreateWithoutPostsInput {
@@ -3528,7 +4587,7 @@ input UserCreateWithoutPostsInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneWithoutPeopleInput
+  birthplace: LocationCreateOneInput
   uid: String!
   token: String!
   regStatus: RegStatusCreateOneWithoutApplicantsInput
@@ -3538,6 +4597,11 @@ input UserCreateWithoutPostsInput {
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: WorkCreateManyWithoutWorkerInput
   exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  messages: MessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
 }
 
 input UserCreateWithoutRegStatusInput {
@@ -3548,7 +4612,7 @@ input UserCreateWithoutRegStatusInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneWithoutPeopleInput
+  birthplace: LocationCreateOneInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -3558,6 +4622,11 @@ input UserCreateWithoutRegStatusInput {
   studies: SchoolEduCreateManyWithoutStudentsInput
   works: WorkCreateManyWithoutWorkerInput
   exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  messages: MessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
 }
 
 input UserCreateWithoutStudiesInput {
@@ -3568,7 +4637,7 @@ input UserCreateWithoutStudiesInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneWithoutPeopleInput
+  birthplace: LocationCreateOneInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -3578,6 +4647,11 @@ input UserCreateWithoutStudiesInput {
   families: FamilyCreateManyWithoutFromInput
   works: WorkCreateManyWithoutWorkerInput
   exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  messages: MessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
 }
 
 input UserCreateWithoutWorksInput {
@@ -3588,7 +4662,7 @@ input UserCreateWithoutWorksInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneWithoutPeopleInput
+  birthplace: LocationCreateOneInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -3598,6 +4672,11 @@ input UserCreateWithoutWorksInput {
   families: FamilyCreateManyWithoutFromInput
   studies: SchoolEduCreateManyWithoutStudentsInput
   exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  messages: MessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
 }
 
 type UserEdge {
@@ -3679,7 +4758,7 @@ input UserUpdateDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneWithoutPeopleInput
+  birthplace: LocationUpdateOneInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -3690,6 +4769,11 @@ input UserUpdateDataInput {
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: WorkUpdateManyWithoutWorkerInput
   exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
 }
 
 input UserUpdateInput {
@@ -3700,7 +4784,7 @@ input UserUpdateInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneWithoutPeopleInput
+  birthplace: LocationUpdateOneInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -3711,6 +4795,20 @@ input UserUpdateInput {
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: WorkUpdateManyWithoutWorkerInput
   exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+}
+
+input UserUpdateManyInput {
+  create: [UserCreateInput!]
+  update: [UserUpdateWithWhereUniqueNestedInput!]
+  upsert: [UserUpsertWithWhereUniqueNestedInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
 }
 
 input UserUpdateManyMutationInput {
@@ -3727,13 +4825,22 @@ input UserUpdateManyMutationInput {
   maxRegTimes: Int
 }
 
-input UserUpdateManyWithoutBirthplaceInput {
-  create: [UserCreateWithoutBirthplaceInput!]
+input UserUpdateManyWithoutFamilyGroupInput {
+  create: [UserCreateWithoutFamilyGroupInput!]
   delete: [UserWhereUniqueInput!]
   connect: [UserWhereUniqueInput!]
   disconnect: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutBirthplaceInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutBirthplaceInput!]
+  update: [UserUpdateWithWhereUniqueWithoutFamilyGroupInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutFamilyGroupInput!]
+}
+
+input UserUpdateManyWithoutGroupsInput {
+  create: [UserCreateWithoutGroupsInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutGroupsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutGroupsInput!]
 }
 
 input UserUpdateManyWithoutRegStatusInput {
@@ -3777,10 +4884,26 @@ input UserUpdateOneRequiredWithoutFamiliesInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutMessagesInput {
+  create: UserCreateWithoutMessagesInput
+  update: UserUpdateWithoutMessagesDataInput
+  upsert: UserUpsertWithoutMessagesInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneRequiredWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   update: UserUpdateWithoutPostsDataInput
   upsert: UserUpsertWithoutPostsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneWithoutCreaterInput {
+  create: UserCreateWithoutCreaterInput
+  update: UserUpdateWithoutCreaterDataInput
+  upsert: UserUpsertWithoutCreaterInput
+  delete: Boolean
+  disconnect: Boolean
   connect: UserWhereUniqueInput
 }
 
@@ -3793,7 +4916,7 @@ input UserUpdateOneWithoutWorksInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateWithoutBirthplaceDataInput {
+input UserUpdateWithoutCreaterDataInput {
   username: String
   password: String
   name: String
@@ -3801,6 +4924,7 @@ input UserUpdateWithoutBirthplaceDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
+  birthplace: LocationUpdateOneInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -3811,6 +4935,10 @@ input UserUpdateWithoutBirthplaceDataInput {
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: WorkUpdateManyWithoutWorkerInput
   exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
 }
 
 input UserUpdateWithoutExamDataInput {
@@ -3821,7 +4949,7 @@ input UserUpdateWithoutExamDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneWithoutPeopleInput
+  birthplace: LocationUpdateOneInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -3831,6 +4959,11 @@ input UserUpdateWithoutExamDataInput {
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: WorkUpdateManyWithoutWorkerInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
 }
 
 input UserUpdateWithoutFamiliesDataInput {
@@ -3841,7 +4974,7 @@ input UserUpdateWithoutFamiliesDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneWithoutPeopleInput
+  birthplace: LocationUpdateOneInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -3851,6 +4984,86 @@ input UserUpdateWithoutFamiliesDataInput {
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: WorkUpdateManyWithoutWorkerInput
   exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+}
+
+input UserUpdateWithoutFamilyGroupDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+}
+
+input UserUpdateWithoutGroupsDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+}
+
+input UserUpdateWithoutMessagesDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -3861,7 +5074,7 @@ input UserUpdateWithoutPostsDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneWithoutPeopleInput
+  birthplace: LocationUpdateOneInput
   uid: String
   token: String
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
@@ -3871,6 +5084,11 @@ input UserUpdateWithoutPostsDataInput {
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: WorkUpdateManyWithoutWorkerInput
   exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
 }
 
 input UserUpdateWithoutRegStatusDataInput {
@@ -3881,7 +5099,7 @@ input UserUpdateWithoutRegStatusDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneWithoutPeopleInput
+  birthplace: LocationUpdateOneInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -3891,6 +5109,11 @@ input UserUpdateWithoutRegStatusDataInput {
   studies: SchoolEduUpdateManyWithoutStudentsInput
   works: WorkUpdateManyWithoutWorkerInput
   exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
 }
 
 input UserUpdateWithoutStudiesDataInput {
@@ -3901,7 +5124,7 @@ input UserUpdateWithoutStudiesDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneWithoutPeopleInput
+  birthplace: LocationUpdateOneInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -3911,6 +5134,11 @@ input UserUpdateWithoutStudiesDataInput {
   families: FamilyUpdateManyWithoutFromInput
   works: WorkUpdateManyWithoutWorkerInput
   exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
 }
 
 input UserUpdateWithoutWorksDataInput {
@@ -3921,7 +5149,7 @@ input UserUpdateWithoutWorksDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneWithoutPeopleInput
+  birthplace: LocationUpdateOneInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -3931,11 +5159,26 @@ input UserUpdateWithoutWorksDataInput {
   families: FamilyUpdateManyWithoutFromInput
   studies: SchoolEduUpdateManyWithoutStudentsInput
   exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
 }
 
-input UserUpdateWithWhereUniqueWithoutBirthplaceInput {
+input UserUpdateWithWhereUniqueNestedInput {
   where: UserWhereUniqueInput!
-  data: UserUpdateWithoutBirthplaceDataInput!
+  data: UserUpdateDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutFamilyGroupInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutFamilyGroupDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutGroupsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutGroupsDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutRegStatusInput {
@@ -3953,6 +5196,11 @@ input UserUpsertNestedInput {
   create: UserCreateInput!
 }
 
+input UserUpsertWithoutCreaterInput {
+  update: UserUpdateWithoutCreaterDataInput!
+  create: UserCreateWithoutCreaterInput!
+}
+
 input UserUpsertWithoutExamInput {
   update: UserUpdateWithoutExamDataInput!
   create: UserCreateWithoutExamInput!
@@ -3961,6 +5209,11 @@ input UserUpsertWithoutExamInput {
 input UserUpsertWithoutFamiliesInput {
   update: UserUpdateWithoutFamiliesDataInput!
   create: UserCreateWithoutFamiliesInput!
+}
+
+input UserUpsertWithoutMessagesInput {
+  update: UserUpdateWithoutMessagesDataInput!
+  create: UserCreateWithoutMessagesInput!
 }
 
 input UserUpsertWithoutPostsInput {
@@ -3973,10 +5226,22 @@ input UserUpsertWithoutWorksInput {
   create: UserCreateWithoutWorksInput!
 }
 
-input UserUpsertWithWhereUniqueWithoutBirthplaceInput {
+input UserUpsertWithWhereUniqueNestedInput {
   where: UserWhereUniqueInput!
-  update: UserUpdateWithoutBirthplaceDataInput!
-  create: UserCreateWithoutBirthplaceInput!
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutFamilyGroupInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutFamilyGroupDataInput!
+  create: UserCreateWithoutFamilyGroupInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutGroupsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutGroupsDataInput!
+  create: UserCreateWithoutGroupsInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutRegStatusInput {
@@ -4173,6 +5438,17 @@ input UserWhereInput {
   works_some: WorkWhereInput
   works_none: WorkWhereInput
   exam: CollegeEntranceExamWhereInput
+  messages_every: MessageWhereInput
+  messages_some: MessageWhereInput
+  messages_none: MessageWhereInput
+  groups_every: GroupWhereInput
+  groups_some: GroupWhereInput
+  groups_none: GroupWhereInput
+  friends_every: UserWhereInput
+  friends_some: UserWhereInput
+  friends_none: UserWhereInput
+  familyGroup: FamilyGroupWhereInput
+  creater: FamilyGroupWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
@@ -4190,6 +5466,7 @@ type Village {
   code: String!
   name: String!
   street: Street!
+  people(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
 
 type VillageConnection {
@@ -4202,6 +5479,7 @@ input VillageCreateInput {
   code: String!
   name: String!
   street: StreetCreateOneWithoutVillagesInput!
+  people: UserCreateManyInput
 }
 
 input VillageCreateManyWithoutStreetInput {
@@ -4217,6 +5495,7 @@ input VillageCreateOneInput {
 input VillageCreateWithoutStreetInput {
   code: String!
   name: String!
+  people: UserCreateManyInput
 }
 
 type VillageEdge {
@@ -4265,12 +5544,14 @@ input VillageUpdateDataInput {
   code: String
   name: String
   street: StreetUpdateOneRequiredWithoutVillagesInput
+  people: UserUpdateManyInput
 }
 
 input VillageUpdateInput {
   code: String
   name: String
   street: StreetUpdateOneRequiredWithoutVillagesInput
+  people: UserUpdateManyInput
 }
 
 input VillageUpdateManyMutationInput {
@@ -4299,6 +5580,7 @@ input VillageUpdateOneInput {
 input VillageUpdateWithoutStreetDataInput {
   code: String
   name: String
+  people: UserUpdateManyInput
 }
 
 input VillageUpdateWithWhereUniqueWithoutStreetInput {
@@ -4361,6 +5643,9 @@ input VillageWhereInput {
   name_ends_with: String
   name_not_ends_with: String
   street: StreetWhereInput
+  people_every: UserWhereInput
+  people_some: UserWhereInput
+  people_none: UserWhereInput
   AND: [VillageWhereInput!]
   OR: [VillageWhereInput!]
   NOT: [VillageWhereInput!]

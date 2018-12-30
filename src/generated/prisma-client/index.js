@@ -29,11 +29,31 @@ var models = [
     embedded: false
   },
   {
+    name: "FamilyGroup",
+    embedded: false
+  },
+  {
+    name: "Group",
+    embedded: false
+  },
+  {
+    name: "GroupKind",
+    embedded: false
+  },
+  {
     name: "Location",
     embedded: false
   },
   {
+    name: "Logs",
+    embedded: false
+  },
+  {
     name: "Major",
+    embedded: false
+  },
+  {
+    name: "Message",
     embedded: false
   },
   {

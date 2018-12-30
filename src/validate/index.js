@@ -5,11 +5,11 @@ export const validateBasicInfo=(name,gender,birthday,birthplace)=>{
   checkGender(gender)
   checkCalendar(birthday.calendar)
   checkDate(birthday.date)
-  checkHasInput(birthplace.province,'所在省')
-  checkHasInput(birthplace.city,'所在市')
-  checkHasInput(birthplace.area,'所在区')
-  checkHasInput(birthplace.street,'所在乡镇')
-  checkHasInput(birthplace.street,'所在村')
+  checkPlaceCode(birthplace.province,'所在省')
+  checkPlaceCode(birthplace.city,'所在市')
+  checkPlaceCode(birthplace.area,'所在区')
+  checkPlaceCode(birthplace.street,'所在乡镇')
+  checkPlaceCode(birthplace.village,'所在村')
 }
 
 export const checkCompanyName = (companyName)=>{
@@ -42,6 +42,12 @@ export const checkDate= (date)=>{
   if(isNaN(Date.parse(date))){
      throw new Error('日期错误')
   }
+}
+
+export const checkPlaceCode=(input,inputName)=>{
+  if(!/^\d+$/.test(input)){
+    throw new Error(`你未输入${inputName}`)
+    }
 }
 
 export const checkHasInput=(input,inputName)=>{

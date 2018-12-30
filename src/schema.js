@@ -35,6 +35,10 @@ export const typeDefs = gql`
     getRegStatus:RegStatus
     getRegStatusApplicants(education:String,universityId:String,majorId:String):[User]
     getRegStatusApplicantsById(regStatusId:String):[User]
+    group(id: String!): Group
+    messages(groupId: String, userId: String): [Message]
+    getFamilyGroups:[FamilyGroup]
+
   }
 
   type Mutation {
@@ -58,11 +62,13 @@ export const typeDefs = gql`
     updateExamBasicInfo(province:String, section:String, score:String, specialScore:String, examineeCardNumber:String):CollegeEntranceExam
     addRegStatus(education:String,universityId:String,majorId:String):RegStatus
     cancelRegStatus(id:String):RegStatus
+    refreshMyFamilyGroups:[FamilyGroup]
   }
 
   type Subscription {
     familyConnected(familyIds:[ID!]): Family,
     familyChanged:Info
+    familyGroupChanged:Info
   }
 
   type Info {
@@ -105,12 +111,18 @@ export const typeDefs = gql`
     exam:CollegeEntranceExam
     regStatus:RegStatus
     regTimes:Int
+    messages: [Message]
+    groups: [Group]
+    friends: [User]
+    familyGroup:FamilyGroup
   }
 
   type Person {
     id: ID!
     name:String!
     user:User
+    asFather: [FamilyGroup]
+    asMother: [FamilyGroup]
   }
 
   type Family {
@@ -279,6 +291,35 @@ export const typeDefs = gql`
     people:[User!]!
   }
 
+  enum GroupKind {
+    Location, 
+    Student,
+    Work,
+  }
+  type Group{
+  id:ID!
+  name: String
+  users: [User]!
+  messages: [Message]
+}
 
+type FamilyGroup{
+  id:ID! 
+  creater:User
+  father:Person 
+  mother:Person
+  name: String
+  families: [Family]
+  messages: [Message]
+  users:[User]
+}
+
+type Message {
+  id:ID!
+  to: Group!
+  from: User!
+  text: String!
+  createdAt: DateTime!
+}
 
 `
