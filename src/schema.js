@@ -72,6 +72,7 @@ export const typeDefs = gql`
     familyConnected(familyIds:[ID!]): Family,
     familyChanged:Info
     familyGroupChanged:Info
+    classGroupChanged:Info
   }
 
   type Info {

@@ -6,6 +6,7 @@ import { pubsub } from '../subscriptions';
 export const FAMILY_CONNECTED = 'familyConnected';
 export const FAMILY_CHANGED = 'familyChanged'
 export const FAMILYGROUP_CHANGED = 'familyGroupChanged'
+export const CLASSGROUP_CHANGED = 'classGroupChanged'
 
 export const Subscription = {
   familyConnected: {
@@ -33,6 +34,15 @@ export const Subscription = {
         () => pubsub.asyncIterator(FAMILYGROUP_CHANGED),
         (payload, variables,ctx) => {
           return Boolean(ctx.user.id === payload.familyGroupChanged.text)
+        }
+    )
+  },
+  classGroupChanged: {
+    // Additional event labels can be passed to asyncIterator creation
+    subscribe: withFilter(
+        () => pubsub.asyncIterator(CLASSGROUP_CHANGED),
+        (payload, variables,ctx) => {
+          return Boolean(ctx.user.id === payload.classGroupChanged.text)
         }
     )
   },

@@ -33,7 +33,7 @@ import {
   relationshipGenderMap,
   relationshipTOGender,
 } from "../services/relationship"
-import { FAMILY_CHANGED, FAMILYGROUP_CHANGED } from './Subscription'
+import { FAMILY_CHANGED, FAMILYGROUP_CHANGED,CLASSGROUP_CHANGED } from './Subscription'
 import { pubsub } from '../subscriptions';
 import { fee } from '../services/settings'
 
@@ -1201,14 +1201,23 @@ export const Mutation = {
       if (studentClassMates.length > 0) {
         throw new Error('你已经提起过申请，无法重复提请')
       }
-      return ctx.db.updateClassGroup({
+      const updated = await ctx.db.updateClassGroup({
         where: { id: classGroups[0].id },
         data: { members: { create: { status: '0', student: { connect: { id: user.id } } } } }
       })
+      const members = await ctx.db.classGroup({id:updated.id}).members()
+      for(const member of members){
+        const student = await ctx.db.classMate({id:member.id}).student()
+        if(student.id!==user.id){
+          pubsub.publish(CLASSGROUP_CHANGED, { [CLASSGROUP_CHANGED]: { "text": student.id } })
+        }
+      }
+      
+      return updated
     }
     // 如果studentId没有组，则studentId新建一个组，并且把user加入到组中
     // -----------------------------------------------
-    return ctx.db.createClassGroup({
+    const created = await ctx.db.createClassGroup({
       name,
       study: { connect: { id: schoolEduId } },
       members: {
@@ -1218,6 +1227,8 @@ export const Mutation = {
         ]
       }
     })
+    pubsub.publish(CLASSGROUP_CHANGED, { [CLASSGROUP_CHANGED]: { "text": studentId } })
+    return created
 
   },
   confirmClassGroup: async (parent, { schoolEduId, studentId }, ctx) => {
@@ -1321,6 +1332,12 @@ export const Mutation = {
           id: myClassGroups[0].id
         })
 
+        const members = await ctx.db.classGroup({id:studentClassGroups[0].id}).members()
+        for(const member of members){
+          const student = await ctx.db.classMate({id:member.id}).student()
+          pubsub.publish(CLASSGROUP_CHANGED, { [CLASSGROUP_CHANGED]: { "text": student.id } })
+        }
+
         return studentClassGroups[0]
       }
       for (const member of studentClassGroupsMembers) {
@@ -1361,6 +1378,12 @@ export const Mutation = {
       await ctx.db.deleteClassGroup({
         id: studentClassGroups[0].id
       })
+
+      const members = await ctx.db.classGroup({id:myClassGroups[0].id}).members()
+      for(const member of members){
+        const student = await ctx.db.classMate({id:member.id}).student()
+        pubsub.publish(CLASSGROUP_CHANGED, { [CLASSGROUP_CHANGED]: { "text": student.id } })
+      }
       return myClassGroups[0]
     }
     // 如果student还没有组，则直接合并到我的组中，并更新状态
@@ -1376,6 +1399,11 @@ export const Mutation = {
       where: { id: studentClassMates[0].id },
       data: { status: '1' }
     })
+    const members = await ctx.db.classGroup({id:myClassGroups[0].id}).members()
+    for(const member of members){
+      const student = await ctx.db.classMate({id:member.id}).student()
+      pubsub.publish(CLASSGROUP_CHANGED, { [CLASSGROUP_CHANGED]: { "text": student.id } })
+    }
     return myClassGroups[0]
   },
 
