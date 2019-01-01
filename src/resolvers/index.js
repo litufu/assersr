@@ -15,6 +15,8 @@ import {RegStatus} from './RegStatus'
 import {Group} from './Group'
 import {Message} from './Message'
 import {FamilyGroup} from './FamilyGroup'
+import {ClassGroup} from './ClassGroup'
+import {ClassMate} from './ClassMate'
 
 export const resolvers = {
   Query,
@@ -33,5 +35,7 @@ export const resolvers = {
   RegStatus,
   Group,
   Message,
-  FamilyGroup
+  FamilyGroup,
+  ClassGroup,
+  ClassMate,
 }

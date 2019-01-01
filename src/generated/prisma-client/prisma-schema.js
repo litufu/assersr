@@ -7,6 +7,14 @@ type AggregateCity {
   count: Int!
 }
 
+type AggregateClassGroup {
+  count: Int!
+}
+
+type AggregateClassMate {
+  count: Int!
+}
+
 type AggregateCollegeEntranceExam {
   count: Int!
 }
@@ -537,6 +545,329 @@ input CityWhereInput {
 input CityWhereUniqueInput {
   id: ID
   code: String
+}
+
+type ClassGroup {
+  id: ID!
+  study: SchoolEdu
+  name: String
+  members(where: ClassMateWhereInput, orderBy: ClassMateOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ClassMate!]
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
+}
+
+type ClassGroupConnection {
+  pageInfo: PageInfo!
+  edges: [ClassGroupEdge]!
+  aggregate: AggregateClassGroup!
+}
+
+input ClassGroupCreateInput {
+  study: SchoolEduCreateOneInput
+  name: String
+  members: ClassMateCreateManyWithoutGroupInput
+  messages: MessageCreateManyInput
+}
+
+input ClassGroupCreateOneWithoutMembersInput {
+  create: ClassGroupCreateWithoutMembersInput
+  connect: ClassGroupWhereUniqueInput
+}
+
+input ClassGroupCreateWithoutMembersInput {
+  study: SchoolEduCreateOneInput
+  name: String
+  messages: MessageCreateManyInput
+}
+
+type ClassGroupEdge {
+  node: ClassGroup!
+  cursor: String!
+}
+
+enum ClassGroupOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ClassGroupPreviousValues {
+  id: ID!
+  name: String
+}
+
+type ClassGroupSubscriptionPayload {
+  mutation: MutationType!
+  node: ClassGroup
+  updatedFields: [String!]
+  previousValues: ClassGroupPreviousValues
+}
+
+input ClassGroupSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ClassGroupWhereInput
+  AND: [ClassGroupSubscriptionWhereInput!]
+  OR: [ClassGroupSubscriptionWhereInput!]
+  NOT: [ClassGroupSubscriptionWhereInput!]
+}
+
+input ClassGroupUpdateInput {
+  study: SchoolEduUpdateOneInput
+  name: String
+  members: ClassMateUpdateManyWithoutGroupInput
+  messages: MessageUpdateManyInput
+}
+
+input ClassGroupUpdateManyMutationInput {
+  name: String
+}
+
+input ClassGroupUpdateOneRequiredWithoutMembersInput {
+  create: ClassGroupCreateWithoutMembersInput
+  update: ClassGroupUpdateWithoutMembersDataInput
+  upsert: ClassGroupUpsertWithoutMembersInput
+  connect: ClassGroupWhereUniqueInput
+}
+
+input ClassGroupUpdateWithoutMembersDataInput {
+  study: SchoolEduUpdateOneInput
+  name: String
+  messages: MessageUpdateManyInput
+}
+
+input ClassGroupUpsertWithoutMembersInput {
+  update: ClassGroupUpdateWithoutMembersDataInput!
+  create: ClassGroupCreateWithoutMembersInput!
+}
+
+input ClassGroupWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  study: SchoolEduWhereInput
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  members_every: ClassMateWhereInput
+  members_some: ClassMateWhereInput
+  members_none: ClassMateWhereInput
+  messages_every: MessageWhereInput
+  messages_some: MessageWhereInput
+  messages_none: MessageWhereInput
+  AND: [ClassGroupWhereInput!]
+  OR: [ClassGroupWhereInput!]
+  NOT: [ClassGroupWhereInput!]
+}
+
+input ClassGroupWhereUniqueInput {
+  id: ID
+}
+
+type ClassMate {
+  id: ID!
+  student: User
+  status: String!
+  group: ClassGroup!
+}
+
+type ClassMateConnection {
+  pageInfo: PageInfo!
+  edges: [ClassMateEdge]!
+  aggregate: AggregateClassMate!
+}
+
+input ClassMateCreateInput {
+  student: UserCreateOneWithoutClassMateInput
+  status: String!
+  group: ClassGroupCreateOneWithoutMembersInput!
+}
+
+input ClassMateCreateManyWithoutGroupInput {
+  create: [ClassMateCreateWithoutGroupInput!]
+  connect: [ClassMateWhereUniqueInput!]
+}
+
+input ClassMateCreateManyWithoutStudentInput {
+  create: [ClassMateCreateWithoutStudentInput!]
+  connect: [ClassMateWhereUniqueInput!]
+}
+
+input ClassMateCreateWithoutGroupInput {
+  student: UserCreateOneWithoutClassMateInput
+  status: String!
+}
+
+input ClassMateCreateWithoutStudentInput {
+  status: String!
+  group: ClassGroupCreateOneWithoutMembersInput!
+}
+
+type ClassMateEdge {
+  node: ClassMate!
+  cursor: String!
+}
+
+enum ClassMateOrderByInput {
+  id_ASC
+  id_DESC
+  status_ASC
+  status_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ClassMatePreviousValues {
+  id: ID!
+  status: String!
+}
+
+type ClassMateSubscriptionPayload {
+  mutation: MutationType!
+  node: ClassMate
+  updatedFields: [String!]
+  previousValues: ClassMatePreviousValues
+}
+
+input ClassMateSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ClassMateWhereInput
+  AND: [ClassMateSubscriptionWhereInput!]
+  OR: [ClassMateSubscriptionWhereInput!]
+  NOT: [ClassMateSubscriptionWhereInput!]
+}
+
+input ClassMateUpdateInput {
+  student: UserUpdateOneWithoutClassMateInput
+  status: String
+  group: ClassGroupUpdateOneRequiredWithoutMembersInput
+}
+
+input ClassMateUpdateManyMutationInput {
+  status: String
+}
+
+input ClassMateUpdateManyWithoutGroupInput {
+  create: [ClassMateCreateWithoutGroupInput!]
+  delete: [ClassMateWhereUniqueInput!]
+  connect: [ClassMateWhereUniqueInput!]
+  disconnect: [ClassMateWhereUniqueInput!]
+  update: [ClassMateUpdateWithWhereUniqueWithoutGroupInput!]
+  upsert: [ClassMateUpsertWithWhereUniqueWithoutGroupInput!]
+}
+
+input ClassMateUpdateManyWithoutStudentInput {
+  create: [ClassMateCreateWithoutStudentInput!]
+  delete: [ClassMateWhereUniqueInput!]
+  connect: [ClassMateWhereUniqueInput!]
+  disconnect: [ClassMateWhereUniqueInput!]
+  update: [ClassMateUpdateWithWhereUniqueWithoutStudentInput!]
+  upsert: [ClassMateUpsertWithWhereUniqueWithoutStudentInput!]
+}
+
+input ClassMateUpdateWithoutGroupDataInput {
+  student: UserUpdateOneWithoutClassMateInput
+  status: String
+}
+
+input ClassMateUpdateWithoutStudentDataInput {
+  status: String
+  group: ClassGroupUpdateOneRequiredWithoutMembersInput
+}
+
+input ClassMateUpdateWithWhereUniqueWithoutGroupInput {
+  where: ClassMateWhereUniqueInput!
+  data: ClassMateUpdateWithoutGroupDataInput!
+}
+
+input ClassMateUpdateWithWhereUniqueWithoutStudentInput {
+  where: ClassMateWhereUniqueInput!
+  data: ClassMateUpdateWithoutStudentDataInput!
+}
+
+input ClassMateUpsertWithWhereUniqueWithoutGroupInput {
+  where: ClassMateWhereUniqueInput!
+  update: ClassMateUpdateWithoutGroupDataInput!
+  create: ClassMateCreateWithoutGroupInput!
+}
+
+input ClassMateUpsertWithWhereUniqueWithoutStudentInput {
+  where: ClassMateWhereUniqueInput!
+  update: ClassMateUpdateWithoutStudentDataInput!
+  create: ClassMateCreateWithoutStudentInput!
+}
+
+input ClassMateWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  student: UserWhereInput
+  status: String
+  status_not: String
+  status_in: [String!]
+  status_not_in: [String!]
+  status_lt: String
+  status_lte: String
+  status_gt: String
+  status_gte: String
+  status_contains: String
+  status_not_contains: String
+  status_starts_with: String
+  status_not_starts_with: String
+  status_ends_with: String
+  status_not_ends_with: String
+  group: ClassGroupWhereInput
+  AND: [ClassMateWhereInput!]
+  OR: [ClassMateWhereInput!]
+  NOT: [ClassMateWhereInput!]
+}
+
+input ClassMateWhereUniqueInput {
+  id: ID
 }
 
 type CollegeEntranceExam {
@@ -2534,6 +2865,18 @@ type Mutation {
   upsertCity(where: CityWhereUniqueInput!, create: CityCreateInput!, update: CityUpdateInput!): City!
   deleteCity(where: CityWhereUniqueInput!): City
   deleteManyCities(where: CityWhereInput): BatchPayload!
+  createClassGroup(data: ClassGroupCreateInput!): ClassGroup!
+  updateClassGroup(data: ClassGroupUpdateInput!, where: ClassGroupWhereUniqueInput!): ClassGroup
+  updateManyClassGroups(data: ClassGroupUpdateManyMutationInput!, where: ClassGroupWhereInput): BatchPayload!
+  upsertClassGroup(where: ClassGroupWhereUniqueInput!, create: ClassGroupCreateInput!, update: ClassGroupUpdateInput!): ClassGroup!
+  deleteClassGroup(where: ClassGroupWhereUniqueInput!): ClassGroup
+  deleteManyClassGroups(where: ClassGroupWhereInput): BatchPayload!
+  createClassMate(data: ClassMateCreateInput!): ClassMate!
+  updateClassMate(data: ClassMateUpdateInput!, where: ClassMateWhereUniqueInput!): ClassMate
+  updateManyClassMates(data: ClassMateUpdateManyMutationInput!, where: ClassMateWhereInput): BatchPayload!
+  upsertClassMate(where: ClassMateWhereUniqueInput!, create: ClassMateCreateInput!, update: ClassMateUpdateInput!): ClassMate!
+  deleteClassMate(where: ClassMateWhereUniqueInput!): ClassMate
+  deleteManyClassMates(where: ClassMateWhereInput): BatchPayload!
   createCollegeEntranceExam(data: CollegeEntranceExamCreateInput!): CollegeEntranceExam!
   updateCollegeEntranceExam(data: CollegeEntranceExamUpdateInput!, where: CollegeEntranceExamWhereUniqueInput!): CollegeEntranceExam
   updateManyCollegeEntranceExams(data: CollegeEntranceExamUpdateManyMutationInput!, where: CollegeEntranceExamWhereInput): BatchPayload!
@@ -3275,6 +3618,12 @@ type Query {
   city(where: CityWhereUniqueInput!): City
   cities(where: CityWhereInput, orderBy: CityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [City]!
   citiesConnection(where: CityWhereInput, orderBy: CityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CityConnection!
+  classGroup(where: ClassGroupWhereUniqueInput!): ClassGroup
+  classGroups(where: ClassGroupWhereInput, orderBy: ClassGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ClassGroup]!
+  classGroupsConnection(where: ClassGroupWhereInput, orderBy: ClassGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClassGroupConnection!
+  classMate(where: ClassMateWhereUniqueInput!): ClassMate
+  classMates(where: ClassMateWhereInput, orderBy: ClassMateOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ClassMate]!
+  classMatesConnection(where: ClassMateWhereInput, orderBy: ClassMateOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClassMateConnection!
   collegeEntranceExam(where: CollegeEntranceExamWhereUniqueInput!): CollegeEntranceExam
   collegeEntranceExams(where: CollegeEntranceExamWhereInput, orderBy: CollegeEntranceExamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CollegeEntranceExam]!
   collegeEntranceExamsConnection(where: CollegeEntranceExamWhereInput, orderBy: CollegeEntranceExamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CollegeEntranceExamConnection!
@@ -3541,6 +3890,11 @@ input SchoolEduCreateManyWithoutStudentsInput {
   connect: [SchoolEduWhereUniqueInput!]
 }
 
+input SchoolEduCreateOneInput {
+  create: SchoolEduCreateInput
+  connect: SchoolEduWhereUniqueInput
+}
+
 input SchoolEduCreateWithoutStudentsInput {
   school: SchoolCreateOneInput
   startTime: DateTime
@@ -3594,6 +3948,15 @@ input SchoolEduSubscriptionWhereInput {
   NOT: [SchoolEduSubscriptionWhereInput!]
 }
 
+input SchoolEduUpdateDataInput {
+  school: SchoolUpdateOneInput
+  startTime: DateTime
+  major: MajorUpdateOneInput
+  grade: Int
+  className: String
+  students: UserUpdateManyWithoutStudiesInput
+}
+
 input SchoolEduUpdateInput {
   school: SchoolUpdateOneInput
   startTime: DateTime
@@ -3618,6 +3981,15 @@ input SchoolEduUpdateManyWithoutStudentsInput {
   upsert: [SchoolEduUpsertWithWhereUniqueWithoutStudentsInput!]
 }
 
+input SchoolEduUpdateOneInput {
+  create: SchoolEduCreateInput
+  update: SchoolEduUpdateDataInput
+  upsert: SchoolEduUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: SchoolEduWhereUniqueInput
+}
+
 input SchoolEduUpdateWithoutStudentsDataInput {
   school: SchoolUpdateOneInput
   startTime: DateTime
@@ -3629,6 +4001,11 @@ input SchoolEduUpdateWithoutStudentsDataInput {
 input SchoolEduUpdateWithWhereUniqueWithoutStudentsInput {
   where: SchoolEduWhereUniqueInput!
   data: SchoolEduUpdateWithoutStudentsDataInput!
+}
+
+input SchoolEduUpsertNestedInput {
+  update: SchoolEduUpdateDataInput!
+  create: SchoolEduCreateInput!
 }
 
 input SchoolEduUpsertWithWhereUniqueWithoutStudentsInput {
@@ -4059,6 +4436,8 @@ input StreetWhereUniqueInput {
 type Subscription {
   area(where: AreaSubscriptionWhereInput): AreaSubscriptionPayload
   city(where: CitySubscriptionWhereInput): CitySubscriptionPayload
+  classGroup(where: ClassGroupSubscriptionWhereInput): ClassGroupSubscriptionPayload
+  classMate(where: ClassMateSubscriptionWhereInput): ClassMateSubscriptionPayload
   collegeEntranceExam(where: CollegeEntranceExamSubscriptionWhereInput): CollegeEntranceExamSubscriptionPayload
   company(where: CompanySubscriptionWhereInput): CompanySubscriptionPayload
   family(where: FamilySubscriptionWhereInput): FamilySubscriptionPayload
@@ -4335,6 +4714,7 @@ type User {
   friends(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   familyGroup: FamilyGroup
   creater: FamilyGroup
+  classMate(where: ClassMateWhereInput, orderBy: ClassMateOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ClassMate!]
 }
 
 type UserConnection {
@@ -4367,6 +4747,7 @@ input UserCreateInput {
   friends: UserCreateManyInput
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
 }
 
 input UserCreateManyInput {
@@ -4396,6 +4777,11 @@ input UserCreateManyWithoutStudiesInput {
 
 input UserCreateOneInput {
   create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutClassMateInput {
+  create: UserCreateWithoutClassMateInput
   connect: UserWhereUniqueInput
 }
 
@@ -4429,6 +4815,32 @@ input UserCreateOneWithoutWorksInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateWithoutClassMateInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  messages: MessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+}
+
 input UserCreateWithoutCreaterInput {
   username: String!
   password: String!
@@ -4452,6 +4864,7 @@ input UserCreateWithoutCreaterInput {
   groups: GroupCreateManyWithoutUsersInput
   friends: UserCreateManyInput
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  classMate: ClassMateCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutExamInput {
@@ -4477,6 +4890,7 @@ input UserCreateWithoutExamInput {
   friends: UserCreateManyInput
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutFamiliesInput {
@@ -4502,6 +4916,7 @@ input UserCreateWithoutFamiliesInput {
   friends: UserCreateManyInput
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutFamilyGroupInput {
@@ -4527,6 +4942,7 @@ input UserCreateWithoutFamilyGroupInput {
   groups: GroupCreateManyWithoutUsersInput
   friends: UserCreateManyInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutGroupsInput {
@@ -4552,6 +4968,7 @@ input UserCreateWithoutGroupsInput {
   friends: UserCreateManyInput
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutMessagesInput {
@@ -4577,6 +4994,7 @@ input UserCreateWithoutMessagesInput {
   friends: UserCreateManyInput
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutPostsInput {
@@ -4602,6 +5020,7 @@ input UserCreateWithoutPostsInput {
   friends: UserCreateManyInput
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutRegStatusInput {
@@ -4627,6 +5046,7 @@ input UserCreateWithoutRegStatusInput {
   friends: UserCreateManyInput
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutStudiesInput {
@@ -4652,6 +5072,7 @@ input UserCreateWithoutStudiesInput {
   friends: UserCreateManyInput
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutWorksInput {
@@ -4677,6 +5098,7 @@ input UserCreateWithoutWorksInput {
   friends: UserCreateManyInput
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
 }
 
 type UserEdge {
@@ -4774,6 +5196,7 @@ input UserUpdateDataInput {
   friends: UserUpdateManyInput
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
 }
 
 input UserUpdateInput {
@@ -4800,6 +5223,7 @@ input UserUpdateInput {
   friends: UserUpdateManyInput
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
 }
 
 input UserUpdateManyInput {
@@ -4898,6 +5322,15 @@ input UserUpdateOneRequiredWithoutPostsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneWithoutClassMateInput {
+  create: UserCreateWithoutClassMateInput
+  update: UserUpdateWithoutClassMateDataInput
+  upsert: UserUpsertWithoutClassMateInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneWithoutCreaterInput {
   create: UserCreateWithoutCreaterInput
   update: UserUpdateWithoutCreaterDataInput
@@ -4914,6 +5347,32 @@ input UserUpdateOneWithoutWorksInput {
   delete: Boolean
   disconnect: Boolean
   connect: UserWhereUniqueInput
+}
+
+input UserUpdateWithoutClassMateDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
 }
 
 input UserUpdateWithoutCreaterDataInput {
@@ -4939,6 +5398,7 @@ input UserUpdateWithoutCreaterDataInput {
   groups: GroupUpdateManyWithoutUsersInput
   friends: UserUpdateManyInput
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutExamDataInput {
@@ -4964,6 +5424,7 @@ input UserUpdateWithoutExamDataInput {
   friends: UserUpdateManyInput
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutFamiliesDataInput {
@@ -4989,6 +5450,7 @@ input UserUpdateWithoutFamiliesDataInput {
   friends: UserUpdateManyInput
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutFamilyGroupDataInput {
@@ -5014,6 +5476,7 @@ input UserUpdateWithoutFamilyGroupDataInput {
   groups: GroupUpdateManyWithoutUsersInput
   friends: UserUpdateManyInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutGroupsDataInput {
@@ -5039,6 +5502,7 @@ input UserUpdateWithoutGroupsDataInput {
   friends: UserUpdateManyInput
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutMessagesDataInput {
@@ -5064,6 +5528,7 @@ input UserUpdateWithoutMessagesDataInput {
   friends: UserUpdateManyInput
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -5089,6 +5554,7 @@ input UserUpdateWithoutPostsDataInput {
   friends: UserUpdateManyInput
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutRegStatusDataInput {
@@ -5114,6 +5580,7 @@ input UserUpdateWithoutRegStatusDataInput {
   friends: UserUpdateManyInput
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutStudiesDataInput {
@@ -5139,6 +5606,7 @@ input UserUpdateWithoutStudiesDataInput {
   friends: UserUpdateManyInput
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutWorksDataInput {
@@ -5164,6 +5632,7 @@ input UserUpdateWithoutWorksDataInput {
   friends: UserUpdateManyInput
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithWhereUniqueNestedInput {
@@ -5194,6 +5663,11 @@ input UserUpdateWithWhereUniqueWithoutStudiesInput {
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutClassMateInput {
+  update: UserUpdateWithoutClassMateDataInput!
+  create: UserCreateWithoutClassMateInput!
 }
 
 input UserUpsertWithoutCreaterInput {
@@ -5449,6 +5923,9 @@ input UserWhereInput {
   friends_none: UserWhereInput
   familyGroup: FamilyGroupWhereInput
   creater: FamilyGroupWhereInput
+  classMate_every: ClassMateWhereInput
+  classMate_some: ClassMateWhereInput
+  classMate_none: ClassMateWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

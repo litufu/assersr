@@ -66,6 +66,7 @@ type User {
   friends: [User!]!
   familyGroup:FamilyGroup @relation(name: "SonAndDaughter")
   creater:FamilyGroup @relation(name: "Creater")
+  classMate:[ClassMate!]! 
 }
 # 地理位置
 type Location {
@@ -228,6 +229,21 @@ type FamilyGroup{
   families: [Family!]!
   messages: [Message!]!
   users:[User!]! @relation(name: "SonAndDaughter")
+}
+
+type ClassMate{
+  id: ID! @unique
+  student:User
+  status:String!
+  group:ClassGroup!
+}
+
+type ClassGroup{
+  id:ID! @unique
+  study:SchoolEdu
+  name:String
+  members:[ClassMate!]! 
+  messages: [Message!]!
 }
 
 type Message {

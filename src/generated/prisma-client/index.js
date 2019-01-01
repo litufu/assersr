@@ -13,6 +13,14 @@ var models = [
     embedded: false
   },
   {
+    name: "ClassGroup",
+    embedded: false
+  },
+  {
+    name: "ClassMate",
+    embedded: false
+  },
+  {
     name: "CollegeEntranceExam",
     embedded: false
   },

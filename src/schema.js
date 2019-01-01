@@ -38,6 +38,7 @@ export const typeDefs = gql`
     group(id: String!): Group
     messages(groupId: String, userId: String): [Message]
     getFamilyGroups:[FamilyGroup]
+    classGroups(schoolEduId:String):[ClassGroup]
 
   }
 
@@ -63,6 +64,8 @@ export const typeDefs = gql`
     addRegStatus(education:String,universityId:String,majorId:String):RegStatus
     cancelRegStatus(id:String):RegStatus
     refreshMyFamilyGroups:[FamilyGroup]
+    addClassGroup(name:String,schoolEduId:String,studentId:String):ClassGroup
+    confirmClassGroup(schoolEduId:String,studentId:String):ClassGroup
   }
 
   type Subscription {
@@ -115,6 +118,7 @@ export const typeDefs = gql`
     groups: [Group]
     friends: [User]
     familyGroup:FamilyGroup
+    classMate:[ClassMate]
   }
 
   type Person {
@@ -312,6 +316,21 @@ type FamilyGroup{
   families: [Family]
   messages: [Message]
   users:[User]
+}
+
+type ClassMate{
+  id: ID!
+  student:User
+  status:String!
+  group:ClassGroup!
+}
+
+type ClassGroup{
+  id:ID!
+  study:SchoolEdu
+  name:String
+  members:[ClassMate]
+  messages: [Message]
 }
 
 type Message {

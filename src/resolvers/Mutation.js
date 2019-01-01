@@ -33,16 +33,16 @@ import {
   relationshipGenderMap,
   relationshipTOGender,
 } from "../services/relationship"
-import { FAMILY_CHANGED,FAMILYGROUP_CHANGED } from './Subscription'
+import { FAMILY_CHANGED, FAMILYGROUP_CHANGED } from './Subscription'
 import { pubsub } from '../subscriptions';
-import {fee} from '../services/settings'
+import { fee } from '../services/settings'
 
-const pubGroupFamily= async (familyGroup,ctx)=>{
-  const groupFamilies = await ctx.db.familyGroup({id:familyGroup.id}).families()
-  for(const family of groupFamilies){
-    const user = await ctx.db.family({id:family.id}).to().user()
-    if(user){
-      pubsub.publish(FAMILYGROUP_CHANGED, { [FAMILYGROUP_CHANGED]: {"text":user.id} })
+const pubGroupFamily = async (familyGroup, ctx) => {
+  const groupFamilies = await ctx.db.familyGroup({ id: familyGroup.id }).families()
+  for (const family of groupFamilies) {
+    const user = await ctx.db.family({ id: family.id }).to().user()
+    if (user) {
+      pubsub.publish(FAMILYGROUP_CHANGED, { [FAMILYGROUP_CHANGED]: { "text": user.id } })
     }
   }
 }
@@ -67,7 +67,7 @@ export const Mutation = {
       uid,
       token,
     })
-   
+
     return {
       token,
       user
@@ -155,24 +155,24 @@ export const Mutation = {
       where: { uid: userId },
       data
     })
-   // 添加location group
+    // 添加location group
 
-    const villages = await ctx.db.villages({where:{code:birthplace.village}})
-    const groups = await ctx.db.groups({where:{type:'Location',typeId:villages[0].id}})
-    if(groups.length>0){
+    const villages = await ctx.db.villages({ where: { code: birthplace.village } })
+    const groups = await ctx.db.groups({ where: { type: 'Location', typeId: villages[0].id } })
+    if (groups.length > 0) {
       await ctx.db.updateGroup({
-        where:{id:groups[0].id},
-        data:{users:{connect:{uid:userId}}}
+        where: { id: groups[0].id },
+        data: { users: { connect: { uid: userId } } }
       })
-    }else{
+    } else {
       await ctx.db.createGroup({
-        type:'Location',
-        typeId:villages[0].id,
-        name:villages[0].name,
-        users:{connect:{uid:userId}}
+        type: 'Location',
+        typeId: villages[0].id,
+        name: villages[0].name,
+        users: { connect: { uid: userId } }
       })
     }
-    
+
     return updateUser
   },
 
@@ -384,9 +384,9 @@ export const Mutation = {
         })
     }
     // 此处发送向relative发送订阅
-    console.log('relativeId',relativeId)
+    console.log('relativeId', relativeId)
     console.log('发送订阅1')
-    pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: {"text":relativeId} })
+    pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": relativeId } })
     // 更新自己的家庭成员状态为“等待确认”,更新to中的user
     // 检查person中是否已经存在relative
     const persons2 = await ctx.db.persons({ where: { user: { id: relativeId } } })
@@ -449,21 +449,21 @@ export const Mutation = {
       where: { id: familyId },
       data: { status: "3" }
     })
-    
+
 
     // 获取relative famliy
     // 获取relative
     const relative = await ctx.db.family(
-       { id: familyId },
+      { id: familyId },
     ).to().user()
     // 获取relative Family
     const relativeFamily = await ctx.db.user({ id: relative.id }).families({ where: { to: { user: { uid: userId } } } })
     // 更新relative family  status
-      await ctx.db.updateFamily({
+    await ctx.db.updateFamily({
       where: { id: relativeFamily[0].id },
       data: { status: "3" }
     })
-    pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: {"text":relative.id} })
+    pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": relative.id } })
     // 删除多余的person 见deletePersons
     // 没有必要每个删除，可以定时的删除所有family为[],并且user 为null的person.
 
@@ -478,8 +478,8 @@ export const Mutation = {
     const myFamilies = await ctx.db.user({ uid: userId }).families()
     const relativeFamilies = await ctx.db.user({ id: relative.id }).families()
     // 获取共同的亲人
-    const myCommonFamilies = await getCommonFamilies(relativeRelationship, myFamilies, myUpdateFamily.id,ctx)
-    const relativeCommonFamilies = await getCommonFamilies(myRelationship, relativeFamilies, relativeFamily[0].id,ctx)
+    const myCommonFamilies = await getCommonFamilies(relativeRelationship, myFamilies, myUpdateFamily.id, ctx)
+    const relativeCommonFamilies = await getCommonFamilies(myRelationship, relativeFamilies, relativeFamily[0].id, ctx)
     // 获取共同家庭成员的交集
     const { myIntersectionFamilies, relativeIntersectionFamilies } = await getIntersectionFamiles(myCommonFamilies, relativeCommonFamilies, ctx)
     // 获取me共同成员的差集
@@ -496,7 +496,7 @@ export const Mutation = {
       // 如果已经同步了，就不要在同步了
       if (myCommonFamilyTo.id !== relativeToCommonUserFamilyTo.id ||
         myCommonFamily.status !== relativeToCommonUserFamily[0].status
-        ) {
+      ) {
         if (myCommonFamily.status >= relativeToCommonUserFamily[0].status) {
           // 如果我的家庭成员status大于relative的status,则更新relative的family
           // 更新relative的family
@@ -513,7 +513,7 @@ export const Mutation = {
           }
           // 向relative推送familyChanged
           console.log('发送订阅2')
-          pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: {"text":relative.id}  })
+          pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": relative.id } })
         }
         else {
           // 如果relative的status大于我的家庭成员的status，则更新我的family
@@ -532,7 +532,7 @@ export const Mutation = {
           }
           // 像我推送“familyChanged"
           // console.log('发送订阅3')
-          pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: {"text":user.id} })
+          pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": user.id } })
         }
       }
     }
@@ -540,7 +540,7 @@ export const Mutation = {
     // 第二部分：遍历relative共同成员差集
     for (const relativeCommonFamily of relativeDifferentFamilies) {
       const relativeCommonFamilyTo = await ctx.db.family({ id: relativeCommonFamily.id }).to()
-      
+
       const meRelationship = (relationshipGenderMap[relationshipTOGender[relativeCommonFamily.relationship]]
       [relationIntersectionNew[relationshipGenderMap[relative.gender][relativeCommonFamily.relationship]][relativeFamily[0].relationship]]
       )
@@ -570,7 +570,7 @@ export const Mutation = {
         await updateCommonUserFamily(relative, relativeRelationship, relativeCommonFamily, user, myRelationship, ctx)
       }
       // console.log('发送订阅4')
-      pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: {"text":user.id} })
+      pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": user.id } })
     }
 
     // 第三部分：遍历me共同成员的差集
@@ -595,9 +595,9 @@ export const Mutation = {
           }
         }
       }
-      
+
       // 如果是自己的话，不要增加
-      if (myCommonFamilyTo.name !== relative.name ) {
+      if (myCommonFamilyTo.name !== relative.name) {
         // 如果relative和me是夫妻的话，则spouse直接为relativeFamily。
         if (isHusbandOrWife) {
           await ctx.db.createFamily({
@@ -626,13 +626,13 @@ export const Mutation = {
       }
       // 向relative推送familychanged
       console.log('发送订阅6')
-      pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: {"text":relative.id} })
+      pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": relative.id } })
     }
 
     return myUpdateFamily
   },
 
-  addLocation : async (parent,{location,locationName},ctx)=>{
+  addLocation: async (parent, { location, locationName }, ctx) => {
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -649,79 +649,80 @@ export const Mutation = {
     // 获取要输入的数据。 
     // 获取学校地址
     let place
-    place = await ctx.db.location({name:locationName})
+    place = await ctx.db.location({ name: locationName })
     console.log(place)
-    if(!place){
-      if(location.village!==""){
+    if (!place) {
+      if (location.village !== "") {
         place = await ctx.db.createLocation({
-          name:locationName,
-          province:{connect:{code:location.province}},
-          city:{connect:{code:location.city}},
-          area:{connect:{code:location.area}},
-          street:{connect:{code:location.street}},
-          village:{connect:{code:location.village}},
+          name: locationName,
+          province: { connect: { code: location.province } },
+          city: { connect: { code: location.city } },
+          area: { connect: { code: location.area } },
+          street: { connect: { code: location.street } },
+          village: { connect: { code: location.village } },
         })
-      }else if(location.street!==""){
+      } else if (location.street !== "") {
         place = await ctx.db.createLocation({
-          name:locationName,
-          province:{connect:{code:location.province}},
-          city:{connect:{code:location.city}},
-          area:{connect:{code:location.area}},
-          street:{connect:{code:location.street}},
+          name: locationName,
+          province: { connect: { code: location.province } },
+          city: { connect: { code: location.city } },
+          area: { connect: { code: location.area } },
+          street: { connect: { code: location.street } },
         })
-      }else if(location.area!==""){
+      } else if (location.area !== "") {
         place = await ctx.db.createLocation({
-          name:locationName,
-          province:{connect:{code:location.province}},
-          city:{connect:{code:location.city}},
-          area:{connect:{code:location.area}},
+          name: locationName,
+          province: { connect: { code: location.province } },
+          city: { connect: { code: location.city } },
+          area: { connect: { code: location.area } },
         })
-      }else if(location.city!==""){
+      } else if (location.city !== "") {
         place = await ctx.db.createLocation({
-          name:locationName,
-          province:{connect:{code:location.province}},
-          city:{connect:{code:location.city}},
+          name: locationName,
+          province: { connect: { code: location.province } },
+          city: { connect: { code: location.city } },
         })
-      }else if(location.province!==""){
+      } else if (location.province !== "") {
         place = await ctx.db.createLocation({
-          name:locationName,
-          province:{connect:{code:location.province}},
+          name: locationName,
+          province: { connect: { code: location.province } },
         })
-      }else{
+      } else {
         place = await ctx.db.createLocation({
-          name:locationName,
+          name: locationName,
         })
       }
     }
 
     return place
-  } ,
+  },
 
-  addSchool: async (parent,{name,kind,locationName},ctx)=>{
+  addSchool: async (parent, { name, kind, locationName }, ctx) => {
     const schools = await ctx.db.schools(
       {
-        where:{
+        where: {
           AND: [
-            {name},
-            {kind},
-            {location:{name:locationName}}
+            { name },
+            { kind },
+            { location: { name: locationName } }
           ]
-      }}
+        }
+      }
     )
 
-    if(schools.length===0){
+    if (schools.length === 0) {
       return ctx.db.createSchool({
         name,
         kind,
-        location:{connect:{name:locationName}}
+        location: { connect: { name: locationName } }
       })
     }
 
     throw new Error('学校已存在')
-    
+
   },
 
-  addStudy:async (parent, { year,schoolId,grade,className,majorId="" }, ctx) => {
+  addStudy: async (parent, { year, schoolId, grade, className, majorId = "" }, ctx) => {
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -737,7 +738,7 @@ export const Mutation = {
     checkId(schoolId)
     checkNum(grade)
     checkCnEnNum(className)
-    if(majorId!==""){
+    if (majorId !== "") {
       checkId(majorId)
     }
     // -----------------------------------------------
@@ -745,72 +746,72 @@ export const Mutation = {
     // 获取学校地址
     const startTime = `${year}-9-1`
     let schoolEdus
-    if(majorId===""){
+    if (majorId === "") {
       schoolEdus = await ctx.db.schoolEdus({
-        where:{
-          AND:[
-            {startTime},
-            {grade},
-            {className},
-            {school:{id:schoolId}},
+        where: {
+          AND: [
+            { startTime },
+            { grade },
+            { className },
+            { school: { id: schoolId } },
           ]
         }
       })
 
-      if(schoolEdus.length===0){
+      if (schoolEdus.length === 0) {
         const res0 = await ctx.db.createSchoolEdu({
           startTime,
           grade,
           className,
-          school:{connect:{id:schoolId}},
-          students:{connect:{uid:userId}}
+          school: { connect: { id: schoolId } },
+          students: { connect: { uid: userId } }
         })
         return res0
       }
 
       const res1 = await ctx.db.updateSchoolEdu(
         {
-          where:{id:schoolEdus[0].id},
-          data:{students:{connect:{uid:userId}}}
+          where: { id: schoolEdus[0].id },
+          data: { students: { connect: { uid: userId } } }
         }
       )
       return res1
     }
-    
+
     schoolEdus = await ctx.db.schoolEdus({
-      where:{
-        AND:[
-          {startTime},
-          {grade},
-          {className},
-          {school:{id:schoolId}},
-          {major:{id:majorId}}
+      where: {
+        AND: [
+          { startTime },
+          { grade },
+          { className },
+          { school: { id: schoolId } },
+          { major: { id: majorId } }
         ]
       }
     })
 
-    if(schoolEdus.length===0){
-      const res2 = await  ctx.db.createSchoolEdu({
+    if (schoolEdus.length === 0) {
+      const res2 = await ctx.db.createSchoolEdu({
         startTime,
         grade,
         className,
-        school:{connect:{id:schoolId}},
-        major:{connect:{id:majorId}},
-        students:{connect:{uid:userId}}
+        school: { connect: { id: schoolId } },
+        major: { connect: { id: majorId } },
+        students: { connect: { uid: userId } }
       })
       return res2
     }
 
     const res3 = await ctx.db.updateSchoolEdu(
       {
-        where:{id:schoolEdus[0].id},
-        data:{students:{connect:{uid:userId}}}
+        where: { id: schoolEdus[0].id },
+        data: { students: { connect: { uid: userId } } }
       }
     )
-    return res3      
+    return res3
   },
 
-  addWork:async (parent, { companyName,startTime,endTime,department,post }, ctx) => {
+  addWork: async (parent, { companyName, startTime, endTime, department, post }, ctx) => {
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -829,15 +830,15 @@ export const Mutation = {
     checkName(post)
     // -----------------------------------------------
     // 获取要输入的数据。 
-    const companies = ctx.db.companies({where:{name:companyName}})
-    if(companies.length>0){
+    const companies = ctx.db.companies({ where: { name: companyName } })
+    if (companies.length > 0) {
       return ctx.db.createWork({
         startTime,
         endTime,
         department,
         post,
-        company:{connect:{id:companies[0].id}},
-        worker:{connect:{uid:userId}}
+        company: { connect: { id: companies[0].id } },
+        worker: { connect: { uid: userId } }
       })
     }
     return ctx.db.createWork({
@@ -845,49 +846,12 @@ export const Mutation = {
       endTime,
       department,
       post,
-      company:{create:{name:companyName}},
-      worker:{connect:{uid:userId}}
+      company: { create: { name: companyName } },
+      worker: { connect: { uid: userId } }
     })
   },
 
-  addExamBasicInfo: async (parent, {  province, section, score, specialScore, examineeCardNumber }, ctx) => {
-     // 权限验证
-     const userId = getUserId(ctx)
-     if (!userId) {
-       throw new Error("用户不存在")
-     }
-     const user = await ctx.db.user({ uid: userId })
-     if (!user) {
-       throw new Error("用户不存在")
-     }
-     // -----------------------------------------------
-     // 输入数据验证
-      checkNum(province)
-      if(!~["none","arts","science"].indexOf(section)){
-        throw new Error('选择的文理科不正确')
-      }
-      checkScore(score)
-      checkScore(specialScore)
-      checkNum(examineeCardNumber)
-      const isExistcandidatenum = await ctx.db.collegeEntranceExam({
-        candidatenum:examineeCardNumber,
-      })
-      if(isExistcandidatenum){
-        throw new Error('准考证号已被人注册，请检查准考证号是否正确，如存在被人盗用情况请联系客服。')
-      }
-     // -----------------------------------------------
-     return ctx.db.createCollegeEntranceExam({
-       province:{connect:{code:province}},
-       subject:section,
-       culscore:parseFloat(score),
-       proscore:parseFloat(specialScore),
-       candidatenum:examineeCardNumber,
-       times:1,
-       student:{connect:{uid:userId}}
-     })
-  },
-
-  updateExamBasicInfo: async (parent, {  province, section, score, specialScore, examineeCardNumber }, ctx) => {
+  addExamBasicInfo: async (parent, { province, section, score, specialScore, examineeCardNumber }, ctx) => {
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -900,7 +864,44 @@ export const Mutation = {
     // -----------------------------------------------
     // 输入数据验证
     checkNum(province)
-    if(!~["none","arts","science"].indexOf(section)){
+    if (!~["none", "arts", "science"].indexOf(section)) {
+      throw new Error('选择的文理科不正确')
+    }
+    checkScore(score)
+    checkScore(specialScore)
+    checkNum(examineeCardNumber)
+    const isExistcandidatenum = await ctx.db.collegeEntranceExam({
+      candidatenum: examineeCardNumber,
+    })
+    if (isExistcandidatenum) {
+      throw new Error('准考证号已被人注册，请检查准考证号是否正确，如存在被人盗用情况请联系客服。')
+    }
+    // -----------------------------------------------
+    return ctx.db.createCollegeEntranceExam({
+      province: { connect: { code: province } },
+      subject: section,
+      culscore: parseFloat(score),
+      proscore: parseFloat(specialScore),
+      candidatenum: examineeCardNumber,
+      times: 1,
+      student: { connect: { uid: userId } }
+    })
+  },
+
+  updateExamBasicInfo: async (parent, { province, section, score, specialScore, examineeCardNumber }, ctx) => {
+    // 权限验证
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    // -----------------------------------------------
+    // 输入数据验证
+    checkNum(province)
+    if (!~["none", "arts", "science"].indexOf(section)) {
       throw new Error('选择的文理科不正确')
     }
     checkScore(score)
@@ -908,117 +909,117 @@ export const Mutation = {
     checkNum(examineeCardNumber)
     // -----------------------------------------------
     const oldExamBasicInfo = await ctx.db.collegeEntranceExams({
-      where:{student:{uid:userId}}
+      where: { student: { uid: userId } }
     })
-    if(oldExamBasicInfo.length===0){
+    if (oldExamBasicInfo.length === 0) {
       throw new Error('尚未创建高考信息')
     }
-    if(oldExamBasicInfo[0].times>=3){
+    if (oldExamBasicInfo[0].times >= 3) {
       throw new Error('你修改的次数已达到上限')
     }
 
     return ctx.db.updateCollegeEntranceExam({
-      where:{id:oldExamBasicInfo[0].id},
-      data:{
-        province:{connect:{code:province}},
-        subject:section,
-        culscore:parseFloat(score),
-        proscore:parseFloat(specialScore),
-        candidatenum:examineeCardNumber,
-        times:oldExamBasicInfo[0].times + 1,
+      where: { id: oldExamBasicInfo[0].id },
+      data: {
+        province: { connect: { code: province } },
+        subject: section,
+        culscore: parseFloat(score),
+        proscore: parseFloat(specialScore),
+        candidatenum: examineeCardNumber,
+        times: oldExamBasicInfo[0].times + 1,
       }
     })
- },
+  },
 
- addRegStatus: async (parent, {  education, universityId, majorId}, ctx) => {
-  // 权限验证
-  const userId = getUserId(ctx)
-  if (!userId) {
-    throw new Error("用户不存在")
-  }
-  const user = await ctx.db.user({ uid: userId })
-  if (!user) {
-    throw new Error("用户不存在")
-  }
-  // -----------------------------------------------
-  // 输入数据验证
-  if(!~(['Undergraduate','JuniorCollege'].indexOf(education))){
-    throw new Error('请选择本科或者专科')
-  }
-  checkId(universityId)
-  checkId(majorId)
- 
-  // -----------------------------------------------
-  // 检查该用户是否已经注册
-  const userRegStatus = await ctx.db.user({
-    uid:userId
-  }).regStatus()
-  if(userRegStatus && userRegStatus.id){
-    throw new Error('只能进行一次报名，如需重新报名，请先退出当前报名')
-  }
-
-
-  // 检查是否已经存在相关学校和专业的注册记录
-  const regStatuses = await ctx.db.regStatuses({
-    where: {
-      education,
-      university:{id:universityId},
-      major:{id:majorId}
+  addRegStatus: async (parent, { education, universityId, majorId }, ctx) => {
+    // 权限验证
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
     }
-  })
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    // -----------------------------------------------
+    // 输入数据验证
+    if (!~(['Undergraduate', 'JuniorCollege'].indexOf(education))) {
+      throw new Error('请选择本科或者专科')
+    }
+    checkId(universityId)
+    checkId(majorId)
 
-  // 如果存在
-  let userReg
-  if(regStatuses.length>0){
+    // -----------------------------------------------
+    // 检查该用户是否已经注册
+    const userRegStatus = await ctx.db.user({
+      uid: userId
+    }).regStatus()
+    if (userRegStatus && userRegStatus.id) {
+      throw new Error('只能进行一次报名，如需重新报名，请先退出当前报名')
+    }
+
+
+    // 检查是否已经存在相关学校和专业的注册记录
+    const regStatuses = await ctx.db.regStatuses({
+      where: {
+        education,
+        university: { id: universityId },
+        major: { id: majorId }
+      }
+    })
+
+    // 如果存在
+    let userReg
+    if (regStatuses.length > 0) {
       userReg = await ctx.db.updateRegStatus({
-      where:{id:regStatuses[0].id},
-      data:{
-        applicants:{connect:{uid:userId}}
-      }
-    })
-  }else{
-    userReg = await ctx.db.createRegStatus({
-      education,
-      university:{connect:{id:universityId}},
-      major:{connect:{id:majorId}},
-      applicants:{connect:{uid:userId}}
-    })
-  }
-
-  if(fee){
-    if(user.regTimes>=user.maxRegTimes){
-      throw new Error('你的报名次数已用完,请充值后再继续报名')
+        where: { id: regStatuses[0].id },
+        data: {
+          applicants: { connect: { uid: userId } }
+        }
+      })
+    } else {
+      userReg = await ctx.db.createRegStatus({
+        education,
+        university: { connect: { id: universityId } },
+        major: { connect: { id: majorId } },
+        applicants: { connect: { uid: userId } }
+      })
     }
-    await ctx.db.updateUser({
-      where:{uid:userId},
-      data:{regTimes:user.regTimes+1}
+
+    if (fee) {
+      if (user.regTimes >= user.maxRegTimes) {
+        throw new Error('你的报名次数已用完,请充值后再继续报名')
+      }
+      await ctx.db.updateUser({
+        where: { uid: userId },
+        data: { regTimes: user.regTimes + 1 }
+      })
+    }
+
+    return userReg
+  },
+  cancelRegStatus: async (parent, { id }, ctx) => {
+    // 权限验证
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    // -----------------------------------------------
+    // 输入数据验证
+    checkId(id)
+
+    // -----------------------------------------------
+    return ctx.db.updateRegStatus({
+      where: { id },
+      data: { applicants: { disconnect: { uid: userId } } }
     })
-  }
+  },
 
-  return userReg
-},
-cancelRegStatus: async (parent, { id }, ctx) => {
-  // 权限验证
-  const userId = getUserId(ctx)
-  if (!userId) {
-    throw new Error("用户不存在")
-  }
-  const user = await ctx.db.user({ uid: userId })
-  if (!user) {
-    throw new Error("用户不存在")
-  }
-  // -----------------------------------------------
-  // 输入数据验证
-  checkId(id)
- 
-  // -----------------------------------------------
-  return ctx.db.updateRegStatus({
-    where:{id},
-    data:{applicants:{disconnect:{uid:userId}}}
-  })
-},
-
-  refreshMyFamilyGroups:async (parent, args, ctx) => {
+  refreshMyFamilyGroups: async (parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -1028,7 +1029,7 @@ cancelRegStatus: async (parent, { id }, ctx) => {
       throw new Error("用户不存在")
     }
     // father's parents
-    let fp  
+    let fp
     // father's father's parents
     let ffp
     // father's mother's parents
@@ -1044,118 +1045,338 @@ cancelRegStatus: async (parent, { id }, ctx) => {
     // 如果有father pa或者其上面的父母
     let fpast
     const groupUsersId = []
-    groupUsersId.push({id:user.id})
+    groupUsersId.push({ id: user.id })
     console.log('start')
     // 创建父母群
-    const p = await createFamilyGroupById(user.id,ctx)
-    console.log('p',p)
+    const p = await createFamilyGroupById(user.id, ctx)
+    console.log('p', p)
     // 创建父母的父母群
-    const myFamilies = await ctx.db.user({id:user.id}).families()
-    const familyFather = myFamilies.filter(family=>family.relationship==='father')
-    const father = await ctx.db.family({id:familyFather[0].id}).to().user()
-    console.log('father',father)
-    if(father){
+    const myFamilies = await ctx.db.user({ id: user.id }).families()
+    const familyFather = myFamilies.filter(family => family.relationship === 'father')
+    const father = await ctx.db.family({ id: familyFather[0].id }).to().user()
+    console.log('father', father)
+    if (father) {
       // 创建祖父母群
-      try{
-        groupUsersId.push({id:father.id})
-        fp = await createFamilyGroupById(father.id,ctx)
-        console.log('fp',fp)
+      try {
+        groupUsersId.push({ id: father.id })
+        fp = await createFamilyGroupById(father.id, ctx)
+        console.log('fp', fp)
         // 创建爷爷和奶奶的父母
-        const fatherFamilies = await ctx.db.user({id:father.id}).families()
-        const fatherFamilyFather = fatherFamilies.filter(family=>family.relationship==='father')
-        const grandpa = await ctx.db.family({id:fatherFamilyFather[0].id}).to().user()
-        console.log('grandpa',grandpa)
-        if(grandpa){
+        const fatherFamilies = await ctx.db.user({ id: father.id }).families()
+        const fatherFamilyFather = fatherFamilies.filter(family => family.relationship === 'father')
+        const grandpa = await ctx.db.family({ id: fatherFamilyFather[0].id }).to().user()
+        console.log('grandpa', grandpa)
+        if (grandpa) {
           // 创建曾祖父母
-          groupUsersId.push({id:grandpa.id})
-          ffp = await createFamilyGroupById(grandpa.id,ctx)
-          console.log('ffp',ffp)
+          groupUsersId.push({ id: grandpa.id })
+          ffp = await createFamilyGroupById(grandpa.id, ctx)
+          console.log('ffp', ffp)
         }
-        const motherFamilyFather = fatherFamilies.filter(family=>family.relationship==='mother')
-        const grandma =  await ctx.db.family({id:motherFamilyFather[0].id}).to().user()
-        console.log('grandma',grandma)
-        if(grandma){
+        const motherFamilyFather = fatherFamilies.filter(family => family.relationship === 'mother')
+        const grandma = await ctx.db.family({ id: motherFamilyFather[0].id }).to().user()
+        console.log('grandma', grandma)
+        if (grandma) {
           // 创建曾外祖父
-        groupUsersId.push({id:grandma.id})
-        fmp = await createFamilyGroupById(grandma.id,ctx)
-        console.log('fmp',fmp)
+          groupUsersId.push({ id: grandma.id })
+          fmp = await createFamilyGroupById(grandma.id, ctx)
+          console.log('fmp', fmp)
         }
-      }catch(error){
+      } catch (error) {
         console.log(error.message)
       }
     }
-    const familyMother = myFamilies.filter(family=>family.relationship==='mother')
-    const mother = await ctx.db.family({id:familyMother[0].id}).to().user()
-    console.log('mother',mother)
-    if(mother){
-      try{
+    const familyMother = myFamilies.filter(family => family.relationship === 'mother')
+    const mother = await ctx.db.family({ id: familyMother[0].id }).to().user()
+    console.log('mother', mother)
+    if (mother) {
+      try {
         // 创建外祖父母群
-        groupUsersId.push({id:mother.id})
-        mp = await createFamilyGroupById(mother.id,ctx)
-        console.log('mp',mp)
+        groupUsersId.push({ id: mother.id })
+        mp = await createFamilyGroupById(mother.id, ctx)
+        console.log('mp', mp)
         // 创建姥姥和姥爷的父母
-        const motherFamilies = await ctx.db.user({id:mother.id}).families()
-        const fatherFamilyMother = motherFamilies.filter(family=>family.relationship==='father')
-        const grandpa = await ctx.db.family({id:fatherFamilyMother[0].id}).to().user()
-        console.log('grandpa',grandpa)
-        if(grandpa){
+        const motherFamilies = await ctx.db.user({ id: mother.id }).families()
+        const fatherFamilyMother = motherFamilies.filter(family => family.relationship === 'father')
+        const grandpa = await ctx.db.family({ id: fatherFamilyMother[0].id }).to().user()
+        console.log('grandpa', grandpa)
+        if (grandpa) {
           // 创建外曾祖父母
-          groupUsersId.push({id:grandpa.id})
-          mfp = await createFamilyGroupById(grandpa.id,ctx)
-          console.log('mfp',mfp)
+          groupUsersId.push({ id: grandpa.id })
+          mfp = await createFamilyGroupById(grandpa.id, ctx)
+          console.log('mfp', mfp)
         }
-        const motherFamilyMother = motherFamilies.filter(family=>family.relationship==='mother')
-        const grandma =  await ctx.db.family({id:motherFamilyMother[0].id}).to().user()
-        console.log('grandma',grandma)
-        if(grandma){
+        const motherFamilyMother = motherFamilies.filter(family => family.relationship === 'mother')
+        const grandma = await ctx.db.family({ id: motherFamilyMother[0].id }).to().user()
+        console.log('grandma', grandma)
+        if (grandma) {
           // 创建外曾外祖父母
-          groupUsersId.push({id:grandma.id})
-          mmp = await createFamilyGroupById(grandma.id,ctx)
-          console.log('mmp',mmp)
+          groupUsersId.push({ id: grandma.id })
+          mmp = await createFamilyGroupById(grandma.id, ctx)
+          console.log('mmp', mmp)
         }
-      }catch(error){
+      } catch (error) {
         console.log(error.message)
       }
     }
     // 向所有的成员推送通知
-    if(mmp || mfp){
+    if (mmp || mfp) {
       // 分别推送到mmp中的所有family.user和mfp的所有family.user
-      if(mmp){
-        pubGroupFamily(mmp,ctx)
+      if (mmp) {
+        pubGroupFamily(mmp, ctx)
       }
-      if(mfp){
-        pubGroupFamily(mfp,ctx)
+      if (mfp) {
+        pubGroupFamily(mfp, ctx)
       }
       mpast = true
-    }else if(mp){
+    } else if (mp) {
       // 推送到mp的所有family.user
-      pubGroupFamily(mp,ctx)
+      pubGroupFamily(mp, ctx)
       mpast = true
     }
 
-    if(ffp || fmp){
-      if(ffp){
-        pubGroupFamily(ffp,ctx)
+    if (ffp || fmp) {
+      if (ffp) {
+        pubGroupFamily(ffp, ctx)
       }
-      if(fmp){
-        pubGroupFamily(ffp,ctx)
+      if (fmp) {
+        pubGroupFamily(ffp, ctx)
       }
       fpast = true
-    }else if(fp){
-      pubGroupFamily(fp,ctx)
+    } else if (fp) {
+      pubGroupFamily(fp, ctx)
       fpast = true
     }
 
-    if(!fpast && !mpast){
+    if (!fpast && !mpast) {
       // 推送到p的所有family.user
-      pubGroupFamily(p,ctx)
+      pubGroupFamily(p, ctx)
     }
-    
+
     return ctx.db.familyGroups({
-      where:{
-        OR:groupUsersId.map(usersId=>({users_some:usersId}))
+      where: {
+        OR: groupUsersId.map(usersId => ({ users_some: usersId }))
       }
     })
+  },
+  addClassGroup: async (parent, { name, schoolEduId, studentId }, ctx) => {
+    // 权限验证
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    // -----------------------------------------------
+    // 输入数据验证
+
+    // 检查studentId是否已经有组,如果有组则把请求者加入得到已有的组中
+    const classGroups = await ctx.db.classGroups({
+      where: {
+        AND: [
+          { study: { id: schoolEduId } },
+          {
+            members_some: {
+              AND: [
+                { student: { id: studentId } },
+                { status: '1' }
+              ]
+            }
+          }
+        ]
+      }
+    })
+
+    if (classGroups.length > 0) {
+      // 检查我是否已经在组里了，如果在了，不能重复添加
+      const studentClassMates = await ctx.db.classMates({
+        where: {
+          AND: [
+            { student: { id: user.id } },
+            { group: { id: classGroups[0].id } }
+          ]
+        }
+      })
+      if (studentClassMates.length > 0) {
+        throw new Error('你已经提起过申请，无法重复提请')
+      }
+      return ctx.db.updateClassGroup({
+        where: { id: classGroups[0].id },
+        data: { members: { create: { status: '0', student: { connect: { id: user.id } } } } }
+      })
+    }
+    // 如果studentId没有组，则studentId新建一个组，并且把user加入到组中
+    // -----------------------------------------------
+    return ctx.db.createClassGroup({
+      name,
+      study: { connect: { id: schoolEduId } },
+      members: {
+        create: [
+          { status: "1", student: { connect: { id: studentId } } },
+          { status: "0", student: { connect: { id: user.id } } },
+        ]
+      }
+    })
+
+  },
+  confirmClassGroup: async (parent, { schoolEduId, studentId }, ctx) => {
+    // 权限验证
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    // -----------------------------------------------
+    // 输入数据验证
+
+    // 检查studentId是否已经有组,如果有组则把请求者加入得到已有的组中
+    const studentClassGroups = await ctx.db.classGroups({
+      where: {
+        AND: [
+          { study: { id: schoolEduId } },
+          {
+            members_some: {
+              AND: [
+                { student: { id: studentId } },
+                { status: '1' }
+              ]
+            }
+          }
+        ]
+      }
+    })
+    const myClassGroups = await ctx.db.classGroups({
+      where: {
+        AND: [
+          { study: { id: schoolEduId } },
+          {
+            members_some: {
+              AND: [
+                { student: { id: user.id } },
+                { status: '1' }
+              ]
+            }
+          }
+        ]
+      }
+    })
+    // 检查student是否是我的组成员
+    const InMyGroupstudents = await ctx.db.classGroup(
+      { id: myClassGroups[0].id }
+    ).members({ where: { student: { id: studentId } } })
+    if (InMyGroupstudents.length === 0) {
+      throw new Error('搞错了，你还不在这个组里')
+    }
+    const myClassGroupMembers = await ctx.db.classGroup(
+      { id: myClassGroups[0].id }
+    ).members()
+
+    // 如果student也有组,且和我不是一个组，则合并我和stuent的组。
+    if (studentClassGroups.length > 0 && studentClassGroups[0].id!==myClassGroups[0].id) {
+      const studentClassGroupsMembers = await ctx.db.classGroup({
+        id: studentClassGroups[0].id
+      }).members()
+      // 合并到成员多的组中
+      if (studentClassGroupsMembers.length >= myClassGroupMembers.length) {
+        for (const member of myClassGroupMembers) {
+          // 检查member是否已经在studentClassGroup中
+          const memeberStudent = await ctx.db.classMate({
+            id: member.id
+          }).student()
+          const inStudentClassGroupStudents = await ctx.db.classMates({
+            where: {
+              AND: [
+                { student: { id: memeberStudent.id } },
+                { group: { id: studentClassGroups[0].id } }
+              ]
+            }
+          })
+          if (inStudentClassGroupStudents.length > 0) {
+            if (member.status !== inStudentClassGroupStudents[0].status) {
+              await ctx.db.updateClassMate({
+                where: { id: inStudentClassGroupStudents[0].id },
+                data: {
+                  status: '1',
+                  group: { connect: { id: studentClassGroups[0].id } }
+                }
+              })
+            }
+            await ctx.db.deleteClassMate({
+              id: member.id
+            })
+          } else {
+            await ctx.db.updateClassMate({
+              where: { id: member.id },
+              data: { group: { connect: { id: studentClassGroups[0].id } } }
+            })
+          }
+
+        }
+        // 删除成员少的组
+        await ctx.db.deleteClassGroup({
+          id: myClassGroups[0].id
+        })
+
+        return studentClassGroups[0]
+      }
+      for (const member of studentClassGroupsMembers) {
+        // 检查member是否已经在MyClassGroup中
+        const memeberStudent = await ctx.db.classMate({
+          id: member.id
+        }).student()
+        const inMyClassGroupStudents = await ctx.db.classMates({
+          where: {
+            AND: [
+              { student: { id: memeberStudent.id } },
+              { group: { id: myClassGroups[0].id } }
+            ]
+          }
+        })
+        if (inMyClassGroupStudents.length > 0) {
+          if (member.status !== inMyClassGroupStudents[0].status) {
+            await ctx.db.updateClassMate({
+              where: { id: inMyClassGroupStudents[0].id },
+              data: {
+                status: '1',
+                group: { connect: { id: myClassGroups[0].id } }
+              }
+            })
+          }
+          await ctx.db.deleteClassMate({
+            id: member.id
+          })
+        } else {
+          await ctx.db.updateClassMate({
+            where: { id: member.id },
+            data: { group: { connect: { id: myClassGroups[0].id } } }
+          })
+        }
+      }
+
+      // 删除成员少的组
+      await ctx.db.deleteClassGroup({
+        id: studentClassGroups[0].id
+      })
+      return myClassGroups[0]
+    }
+    // 如果student还没有组，则直接合并到我的组中，并更新状态
+    const studentClassMates = await ctx.db.classMates({
+      where: {
+        AND: [
+          { student: { id: studentId } },
+          { group: { id: myClassGroups[0].id } }
+        ]
+      }
+    })
+    await ctx.db.updateClassMate({
+      where: { id: studentClassMates[0].id },
+      data: { status: '1' }
+    })
+    return myClassGroups[0]
   },
 
 

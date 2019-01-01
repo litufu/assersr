@@ -272,6 +272,18 @@ export const Query = {
       }
     })
   },
+  classGroups: (parent, {schoolEduId}, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    return ctx.db.classGroups({
+      where:{AND:[
+        {study:{id:schoolEduId}},
+        {members_some:{student:{uid:userId}}}
+      ]}
+    })
+  },
   group: (parent, {id}, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
