@@ -67,6 +67,7 @@ type User {
   familyGroup:FamilyGroup @relation(name: "SonAndDaughter")
   creater:FamilyGroup @relation(name: "Creater")
   classMate:[ClassMate!]! 
+  workGroup:WorkGroup
 }
 # 地理位置
 type Location {
@@ -97,7 +98,7 @@ type Work{
   endTime:DateTime
   company:Company
   department:String
-  post:String
+  post:Station
   jobContent:String
   worker:User
 }
@@ -112,6 +113,7 @@ type Company{
   location:Location
   BusinessScope:String
   works:[Work!]!
+  workGroup:WorkGroup
 }
 
 enum Educationkind {
@@ -246,12 +248,25 @@ type ClassGroup{
   messages: [Message!]!
 }
 
+type WorkGroup{
+  id:ID! @unique
+  company:Company  @unique
+  wokers:[User!]!
+  messages: [Message!]!
+}
+
 type Message {
   id:ID! @unique
   to: Group!
   from: User!
   text: String!
   createdAt: DateTime!
+}
+
+type Station {
+  id:ID! @unique
+  code:String  @unique
+  name:String  @unique
 }
 
 type Logs {

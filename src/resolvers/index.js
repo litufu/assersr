@@ -17,6 +17,8 @@ import {Message} from './Message'
 import {FamilyGroup} from './FamilyGroup'
 import {ClassGroup} from './ClassGroup'
 import {ClassMate} from './ClassMate'
+import {WorkGroup} from './WorkGroup'
+import {Company} from './Company'
 
 export const resolvers = {
   Query,
@@ -38,4 +40,6 @@ export const resolvers = {
   FamilyGroup,
   ClassGroup,
   ClassMate,
+  WorkGroup,
+  Company
 }

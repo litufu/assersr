@@ -284,6 +284,22 @@ export const Query = {
       ]}
     })
   },
+  stations: async (parent, {text}, ctx) => {
+    console.log(text)
+  
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const stations =   await ctx.db.stations({
+      where:{name_contains:text}
+    })
+    if(stations.length===0){
+      return [{id:'000',code:"000",name:"未找到相关职位,请更换关键字试一下"}]
+    }
+    console.log(stations)
+    return stations
+  },
   group: (parent, {id}, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {

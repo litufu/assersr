@@ -89,6 +89,10 @@ var models = [
     embedded: false
   },
   {
+    name: "Station",
+    embedded: false
+  },
+  {
     name: "Street",
     embedded: false
   },
@@ -106,6 +110,10 @@ var models = [
   },
   {
     name: "Work",
+    embedded: false
+  },
+  {
+    name: "WorkGroup",
     embedded: false
   }
 ];

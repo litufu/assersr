@@ -39,6 +39,7 @@ export const typeDefs = gql`
     messages(groupId: String, userId: String): [Message]
     getFamilyGroups:[FamilyGroup]
     classGroups(schoolEduId:String):[ClassGroup]
+    stations(text:String):[Station]
 
   }
 
@@ -58,7 +59,7 @@ export const typeDefs = gql`
     addLocation(location:PlaceInput,locationName:String):Location
     addSchool(name:String,kind:String,locationName:String):School
     addStudy(year:String,schoolId:String,majorId:String,grade:Int,className:String):SchoolEdu
-    addWork(companyName:String,startTime:String,endTime:String,department:String,post:String):Work
+    addOrUpdateWork(companyName:String,startTime:String,endTime:String,department:String,stationId:String,updateId:String):Work
     addExamBasicInfo(province:String, section:String, score:String, specialScore:String, examineeCardNumber:String):CollegeEntranceExam
     updateExamBasicInfo(province:String, section:String, score:String, specialScore:String, examineeCardNumber:String):CollegeEntranceExam
     addRegStatus(education:String,universityId:String,majorId:String):RegStatus
@@ -120,6 +121,7 @@ export const typeDefs = gql`
     friends: [User]
     familyGroup:FamilyGroup
     classMate:[ClassMate]
+    workGroup:WorkGroup
   }
 
   type Person {
@@ -150,7 +152,7 @@ export const typeDefs = gql`
     endTime:String
     company:Company
     department:String
-    post:String
+    post:Station
     jobContent:String
     worker:User
   }
@@ -164,6 +166,7 @@ export const typeDefs = gql`
     location:Location
     BusinessScope:String
     works:[Work!]!
+    workGroup:WorkGroup
   }
 
   
@@ -334,6 +337,13 @@ type ClassGroup{
   messages: [Message]
 }
 
+type WorkGroup{
+  id:ID!
+  company:Company 
+  wokers:[User!]!
+  messages: [Message!]!
+}
+
 type Message {
   id:ID!
   to: Group!
@@ -341,5 +351,13 @@ type Message {
   text: String!
   createdAt: DateTime!
 }
+
+
+type Station {
+  id:ID!
+  code:String
+  name:String
+}
+
 
 `

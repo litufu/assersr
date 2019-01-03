@@ -13,6 +13,8 @@ const streetFile = 'H:/projectNew/data/street.csv'
 const villageFile = 'H:/projectNew/data/village.csv'
 const majorFile = 'H:/projectNew/data/major.csv'
 const universityFile = 'H:/projectNew/data/university.csv'
+const stationFile = 'H:/projectNew/data/station.csv'
+
 
 
 const readFile = function (fileName,encode) {
@@ -32,6 +34,30 @@ const parseCsv = function (data) {
   });
 };
 
+// 添加职位信息
+
+async function addStation(){
+  try {
+    const file = await readFile(stationFile, 'utf8')
+    const results = await parseCsv(file)
+    for(const value of results.data) {
+      try{
+      const newStation = await prisma
+        .createStation({
+          code: value[0],
+          name:value[1],
+        })
+      console.log(newStation);
+    }catch(err){
+      console.log(err)
+      continue
+    }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+addStation()
 // 添加大学信息
 async function addUniversity(){
   try {
@@ -57,7 +83,6 @@ async function addUniversity(){
     console.log(err);
   }
 }
-addUniversity()
 // 添加专业信息
 async function addMajor(){
   try {

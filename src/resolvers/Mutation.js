@@ -811,7 +811,7 @@ export const Mutation = {
     return res3
   },
 
-  addWork: async (parent, { companyName, startTime, endTime, department, post }, ctx) => {
+  addOrUpdateWork: async (parent, { companyName, startTime, endTime, department, stationId,updateId }, ctx) => {
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -827,16 +827,39 @@ export const Mutation = {
     checkDate(endTime)
     checkCompanyName(companyName)
     checkName(department)
-    checkName(post)
+    checkId(stationId)
     // -----------------------------------------------
+    const companies = await ctx.db.companies({ where: { name: companyName } })
+    // 如果要是更新的话
+    if(updateId){
+      const work = await ctx.db.work({id:updateId})
+      if(work){
+        const worker = await ctx.db.work({id:updateId}).worker()
+        if(worker.id!==user.id){
+          throw new Error('你没有权利修改')
+        }
+        if(companies.length===0){
+          throw new Error('无法修改公司名称')
+        }
+        return ctx.db.updateWork({
+          where:{id:updateId},
+          data:{
+            startTime,
+            endTime,
+            department,
+            post:{connect:{id:stationId}},
+          }
+        })
+      }
+      throw new Error('未找到对应要更新的工作')
+    }
     // 获取要输入的数据。 
-    const companies = ctx.db.companies({ where: { name: companyName } })
     if (companies.length > 0) {
       return ctx.db.createWork({
         startTime,
         endTime,
         department,
-        post,
+        post:{connect:{id:stationId}},
         company: { connect: { id: companies[0].id } },
         worker: { connect: { uid: userId } }
       })
@@ -845,7 +868,7 @@ export const Mutation = {
       startTime,
       endTime,
       department,
-      post,
+      post:{connect:{id:stationId}},
       company: { create: { name: companyName } },
       worker: { connect: { uid: userId } }
     })
@@ -1028,128 +1051,169 @@ export const Mutation = {
     if (!user) {
       throw new Error("用户不存在")
     }
-    // father's parents
-    let fp
-    // father's father's parents
-    let ffp
-    // father's mother's parents
-    let fmp
-    // mother's parents
-    let mp
-    // mother's father's parents
-    let mfp
-    // mother's mother's parents
-    let mmp
-    // 如果有mother pa或者其上面的父母
-    let mpast
-    // 如果有father pa或者其上面的父母
-    let fpast
+   
     const groupUsersId = []
-    groupUsersId.push({ id: user.id })
-    console.log('start')
-    // 创建父母群
-    const p = await createFamilyGroupById(user.id, ctx)
-    console.log('p', p)
-    // 创建父母的父母群
-    const myFamilies = await ctx.db.user({ id: user.id }).families()
-    const familyFather = myFamilies.filter(family => family.relationship === 'father')
-    const father = await ctx.db.family({ id: familyFather[0].id }).to().user()
-    console.log('father', father)
-    if (father) {
-      // 创建祖父母群
-      try {
-        groupUsersId.push({ id: father.id })
-        fp = await createFamilyGroupById(father.id, ctx)
-        console.log('fp', fp)
-        // 创建爷爷和奶奶的父母
-        const fatherFamilies = await ctx.db.user({ id: father.id }).families()
-        const fatherFamilyFather = fatherFamilies.filter(family => family.relationship === 'father')
-        const grandpa = await ctx.db.family({ id: fatherFamilyFather[0].id }).to().user()
-        console.log('grandpa', grandpa)
-        if (grandpa) {
-          // 创建曾祖父母
-          groupUsersId.push({ id: grandpa.id })
-          ffp = await createFamilyGroupById(grandpa.id, ctx)
-          console.log('ffp', ffp)
-        }
-        const motherFamilyFather = fatherFamilies.filter(family => family.relationship === 'mother')
-        const grandma = await ctx.db.family({ id: motherFamilyFather[0].id }).to().user()
-        console.log('grandma', grandma)
-        if (grandma) {
-          // 创建曾外祖父
-          groupUsersId.push({ id: grandma.id })
-          fmp = await createFamilyGroupById(grandma.id, ctx)
-          console.log('fmp', fmp)
-        }
-      } catch (error) {
-        console.log(error.message)
+    const meAndSpousesfamilies = []
+    groupUsersId.push({id:user.id})
+    const meFamilies = await ctx.db.user({ id: user.id }).families()
+    meAndSpousesfamilies.push(meFamilies)
+    // 配偶
+    const mySpouseFamilies = meFamilies.filter(family=>!!~['wife','husband'].indexOf(family.relationship))
+    console.log(mySpouseFamilies)
+    for (const mySpouseFamily of mySpouseFamilies ){
+      const mySpouse = await ctx.db.family({id:mySpouseFamily.id}).to().user()
+      if(mySpouse){
+        groupUsersId.push({id:mySpouse.id})
+        const spouseFamilies = await ctx.db.user({id:mySpouse.id}).families()
+        console.log('spouseFamilies',spouseFamilies)
+        meAndSpousesfamilies.push(spouseFamilies)
       }
     }
-    const familyMother = myFamilies.filter(family => family.relationship === 'mother')
-    const mother = await ctx.db.family({ id: familyMother[0].id }).to().user()
-    console.log('mother', mother)
-    if (mother) {
-      try {
-        // 创建外祖父母群
-        groupUsersId.push({ id: mother.id })
-        mp = await createFamilyGroupById(mother.id, ctx)
-        console.log('mp', mp)
-        // 创建姥姥和姥爷的父母
-        const motherFamilies = await ctx.db.user({ id: mother.id }).families()
-        const fatherFamilyMother = motherFamilies.filter(family => family.relationship === 'father')
-        const grandpa = await ctx.db.family({ id: fatherFamilyMother[0].id }).to().user()
-        console.log('grandpa', grandpa)
-        if (grandpa) {
-          // 创建外曾祖父母
-          groupUsersId.push({ id: grandpa.id })
-          mfp = await createFamilyGroupById(grandpa.id, ctx)
-          console.log('mfp', mfp)
+    console.log(meAndSpousesfamilies)
+    for(const myFamilies of meAndSpousesfamilies){
+      // 我和配偶的家庭组全部创建
+      // parents
+      let p
+        // father's parents
+      let fp
+      // father's father's parents
+      let ffp
+      // father's mother's parents
+      let fmp
+      // mother's parents
+      let mp
+      // mother's father's parents
+      let mfp
+      // mother's mother's parents
+      let mmp
+      // 如果有mother pa或者其上面的父母
+      let mpast
+      // 如果有father pa或者其上面的父母
+      let fpast
+      console.log('start')
+      // 创建父母群
+      const me = await ctx.db.family({id:myFamilies[0].id}).from()
+      if(me.id===user.id){
+        p = await createFamilyGroupById(me.id, ctx)
+      }else{
+        try{
+          p = await createFamilyGroupById(me.id, ctx)
+        }catch(error){
+          console.log(error)
         }
-        const motherFamilyMother = motherFamilies.filter(family => family.relationship === 'mother')
-        const grandma = await ctx.db.family({ id: motherFamilyMother[0].id }).to().user()
-        console.log('grandma', grandma)
-        if (grandma) {
-          // 创建外曾外祖父母
-          groupUsersId.push({ id: grandma.id })
-          mmp = await createFamilyGroupById(grandma.id, ctx)
-          console.log('mmp', mmp)
+      }
+      console.log('p', p)
+      // 创建父母的父母群
+      
+      const familyFather = myFamilies.filter(family => family.relationship === 'father')
+      const father = await ctx.db.family({ id: familyFather[0].id }).to().user()
+      console.log('father', father)
+      if (father) {
+        // 创建祖父母群
+        try {
+          groupUsersId.push({ id: father.id })
+          fp = await createFamilyGroupById(father.id, ctx)
+          console.log('fp', fp)
+          // 创建爷爷和奶奶的父母
+          const fatherFamilies = await ctx.db.user({ id: father.id }).families()
+          const fatherFamilyFather = fatherFamilies.filter(family => family.relationship === 'father')
+          const grandpa = await ctx.db.family({ id: fatherFamilyFather[0].id }).to().user()
+          console.log('grandpa', grandpa)
+          if (grandpa) {
+            // 创建曾祖父母
+            groupUsersId.push({ id: grandpa.id })
+            ffp = await createFamilyGroupById(grandpa.id, ctx)
+            console.log('ffp', ffp)
+          }
+          const motherFamilyFather = fatherFamilies.filter(family => family.relationship === 'mother')
+          const grandma = await ctx.db.family({ id: motherFamilyFather[0].id }).to().user()
+          console.log('grandma', grandma)
+          if (grandma) {
+            // 创建曾外祖父
+            groupUsersId.push({ id: grandma.id })
+            fmp = await createFamilyGroupById(grandma.id, ctx)
+            console.log('fmp', fmp)
+          }
+        } catch (error) {
+          console.log(error.message)
         }
-      } catch (error) {
-        console.log(error.message)
       }
-    }
-    // 向所有的成员推送通知
-    if (mmp || mfp) {
-      // 分别推送到mmp中的所有family.user和mfp的所有family.user
-      if (mmp) {
-        pubGroupFamily(mmp, ctx)
+      const familyMother = myFamilies.filter(family => family.relationship === 'mother')
+      const mother = await ctx.db.family({ id: familyMother[0].id }).to().user()
+      console.log('mother', mother)
+      if (mother) {
+        try {
+          // 创建外祖父母群
+          groupUsersId.push({ id: mother.id })
+          mp = await createFamilyGroupById(mother.id, ctx)
+          console.log('mp', mp)
+          // 创建姥姥和姥爷的父母
+          const motherFamilies = await ctx.db.user({ id: mother.id }).families()
+          const fatherFamilyMother = motherFamilies.filter(family => family.relationship === 'father')
+          const grandpa = await ctx.db.family({ id: fatherFamilyMother[0].id }).to().user()
+          console.log('grandpa', grandpa)
+          if (grandpa) {
+            // 创建外曾祖父母
+            groupUsersId.push({ id: grandpa.id })
+            mfp = await createFamilyGroupById(grandpa.id, ctx)
+            console.log('mfp', mfp)
+          }
+          const motherFamilyMother = motherFamilies.filter(family => family.relationship === 'mother')
+          const grandma = await ctx.db.family({ id: motherFamilyMother[0].id }).to().user()
+          console.log('grandma', grandma)
+          if (grandma) {
+            // 创建外曾外祖父母
+            groupUsersId.push({ id: grandma.id })
+            mmp = await createFamilyGroupById(grandma.id, ctx)
+            console.log('mmp', mmp)
+          }
+        } catch (error) {
+          console.log(error.message)
+        }
       }
-      if (mfp) {
-        pubGroupFamily(mfp, ctx)
+
+      // 向所有的成员推送通知
+      if (mmp || mfp) {
+        // 分别推送到mmp中的所有family.user和mfp的所有family.user
+        if (mmp) {
+          pubGroupFamily(mmp, ctx)
+        }
+        if (mfp) {
+          pubGroupFamily(mfp, ctx)
+        }
+        mpast = true
+      } else if (mp) {
+        // 推送到mp的所有family.user
+        pubGroupFamily(mp, ctx)
+        mpast = true
       }
-      mpast = true
-    } else if (mp) {
-      // 推送到mp的所有family.user
-      pubGroupFamily(mp, ctx)
-      mpast = true
+
+      if (ffp || fmp) {
+        if (ffp) {
+          pubGroupFamily(ffp, ctx)
+        }
+        if (fmp) {
+          pubGroupFamily(ffp, ctx)
+        }
+        fpast = true
+      } else if (fp) {
+        pubGroupFamily(fp, ctx)
+        fpast = true
+      }
+
+      if (!fpast && !mpast) {
+        // 推送到p的所有family.user
+        pubGroupFamily(p, ctx)
+      }
     }
 
-    if (ffp || fmp) {
-      if (ffp) {
-        pubGroupFamily(ffp, ctx)
+    // 我的群由子女负责创建
+    const sonAndDaughters = meFamilies.filter(family=>!!~['son','daughter'].indexOf(family.relationship))
+    for(const sonAndDaughter of sonAndDaughters){
+      const sd = await ctx.db.family({id:sonAndDaughter.id}).to().user()
+      if(sd){
+        groupUsersId.push({id:sd.id})
       }
-      if (fmp) {
-        pubGroupFamily(ffp, ctx)
-      }
-      fpast = true
-    } else if (fp) {
-      pubGroupFamily(fp, ctx)
-      fpast = true
-    }
-
-    if (!fpast && !mpast) {
-      // 推送到p的所有family.user
-      pubGroupFamily(p, ctx)
     }
 
     return ctx.db.familyGroups({
