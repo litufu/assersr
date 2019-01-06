@@ -10,9 +10,9 @@ import {
   getIntersectionFamiles,
   getDifferentFamilies,
   createFamilyGroupById,
+  getPlaceName
 } from '../services/utils'
 
-import getBasicInfoData from '../services/displayBasicInfoData'
 import {
   checkUsername,
   checkPassword,
@@ -144,7 +144,7 @@ export const Mutation = {
 
   },
 
-  addBasicInfo: async (parent, { name, gender, birthday, birthplace }, ctx) => {
+  addBasicInfo: async (parent, { name, gender, birthday, birthplace,residence }, ctx) => {
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -156,13 +156,68 @@ export const Mutation = {
     }
     // -----------------------------------------------
     // 输入数据验证
-    validateBasicInfo(name, gender, birthday, birthplace)
+    validateBasicInfo(name, gender, birthday, birthplace,residence)
+    // 检查是或否已经存在location
+    let birthLocation
+    let residenceLocation
+    const existBirthplaces = await ctx.db.locations({
+      where:{
+        province:{code:birthplace.province},
+        city:{code:birthplace.city},
+        area:{code:birthplace.area},
+        village:{code:birthplace.village},
+        street:{code:birthplace.street},
+      }
+    })
+    
+    if(existBirthplaces.length===0){
+      const birthplaceName = await getPlaceName(birthplace,ctx)
+      console.log(birthplaceName)
+      birthLocation = await ctx.db.createLocation({
+        name:birthplaceName,
+        province:{connect:{code:birthplace.province}},
+        city:{connect:{code:birthplace.city}},
+        area:{connect:{code:birthplace.area}},
+        street:{connect:{code:birthplace.street}},
+        village:{connect:{code:birthplace.village}},
+      })
+    }else{
+      birthLocation = existBirthplaces[0]
+    }
+    const existResidences = await ctx.db.locations({
+      where:{
+        province:{code:residence.province},
+        city:{code:residence.city},
+        area:{code:residence.area},
+        village:{code:residence.village},
+        street:{code:residence.street},
+      }
+    })
+    if(existResidences.length===0){
+      const residenceplaceName = await getPlaceName(residence,ctx)
+      console.log(residenceplaceName)
+      residenceLocation = await ctx.db.createLocation({
+        name:residenceplaceName,
+        province:{connect:{code:residence.province}},
+        city:{connect:{code:residence.city}},
+        area:{connect:{code:residence.area}},
+        street:{connect:{code:residence.street}},
+        village:{connect:{code:residence.village}},
+      })
+    }else{
+      residenceLocation = existResidences[0]
+    }
     // -----------------------------------------------
-    // 获取要输入的数据。
-    const data = getBasicInfoData(name, gender, birthday, birthplace)
     const updateUser = ctx.db.updateUser({
       where: { uid: userId },
-      data
+      data:{
+        name,
+        gender,
+        birthdaycalendar:birthday.calendar,
+        birthday:birthday.date,
+        birthplace:{connect:{id:birthLocation.id}},
+        residence:{connect:{id:residenceLocation.id}},
+      }
     })
     // 添加location group
 

@@ -54,7 +54,7 @@ export const typeDefs = gql`
     signup(username: String!, password: String!): AuthPayload!
     login(username: String!, password: String!): AuthPayload!
     changePassword(currentPassword:String!,newPassword: String!):User!
-    addBasicInfo(name:String!,gender:String!,birthday:BirthdayInput!,birthplace:PlaceInput!):User!
+    addBasicInfo(name:String!,gender:String!,birthday:BirthdayInput!,birthplace:PlaceInput!,residence:PlaceInput!):User!
     createFamily(name:String!,relationship:String!,spouseId:String):Family
     updateFamily(id:ID!, name:String,relationship:String,spouseId:String,status:String):Family
     deleteFamily(familyId:ID!,toId:ID!):Family
@@ -122,6 +122,7 @@ export const typeDefs = gql`
     birthdaycalendar:String
     birthday:String
     birthplace:Location
+    residence:Location
     posts: [Post!]!
     createdAt: String!
     families:[Family]

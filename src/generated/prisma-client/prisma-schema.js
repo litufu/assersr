@@ -2403,6 +2403,8 @@ type Location {
   schools(where: SchoolWhereInput, orderBy: SchoolOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [School!]
   companies(where: CompanyWhereInput, orderBy: CompanyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Company!]
   universities(where: UniversityWhereInput, orderBy: UniversityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [University!]
+  born(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  live(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
 
 type LocationConnection {
@@ -2421,10 +2423,12 @@ input LocationCreateInput {
   schools: SchoolCreateManyWithoutLocationInput
   companies: CompanyCreateManyWithoutLocationInput
   universities: UniversityCreateManyInput
+  born: UserCreateManyWithoutBirthplaceInput
+  live: UserCreateManyWithoutResidenceInput
 }
 
-input LocationCreateOneInput {
-  create: LocationCreateInput
+input LocationCreateOneWithoutBornInput {
+  create: LocationCreateWithoutBornInput
   connect: LocationWhereUniqueInput
 }
 
@@ -2433,9 +2437,27 @@ input LocationCreateOneWithoutCompaniesInput {
   connect: LocationWhereUniqueInput
 }
 
+input LocationCreateOneWithoutLiveInput {
+  create: LocationCreateWithoutLiveInput
+  connect: LocationWhereUniqueInput
+}
+
 input LocationCreateOneWithoutSchoolsInput {
   create: LocationCreateWithoutSchoolsInput
   connect: LocationWhereUniqueInput
+}
+
+input LocationCreateWithoutBornInput {
+  name: String
+  province: ProvinceCreateOneInput
+  city: CityCreateOneInput
+  area: AreaCreateOneInput
+  street: StreetCreateOneInput
+  village: VillageCreateOneInput
+  schools: SchoolCreateManyWithoutLocationInput
+  companies: CompanyCreateManyWithoutLocationInput
+  universities: UniversityCreateManyInput
+  live: UserCreateManyWithoutResidenceInput
 }
 
 input LocationCreateWithoutCompaniesInput {
@@ -2447,6 +2469,21 @@ input LocationCreateWithoutCompaniesInput {
   village: VillageCreateOneInput
   schools: SchoolCreateManyWithoutLocationInput
   universities: UniversityCreateManyInput
+  born: UserCreateManyWithoutBirthplaceInput
+  live: UserCreateManyWithoutResidenceInput
+}
+
+input LocationCreateWithoutLiveInput {
+  name: String
+  province: ProvinceCreateOneInput
+  city: CityCreateOneInput
+  area: AreaCreateOneInput
+  street: StreetCreateOneInput
+  village: VillageCreateOneInput
+  schools: SchoolCreateManyWithoutLocationInput
+  companies: CompanyCreateManyWithoutLocationInput
+  universities: UniversityCreateManyInput
+  born: UserCreateManyWithoutBirthplaceInput
 }
 
 input LocationCreateWithoutSchoolsInput {
@@ -2458,6 +2495,8 @@ input LocationCreateWithoutSchoolsInput {
   village: VillageCreateOneInput
   companies: CompanyCreateManyWithoutLocationInput
   universities: UniversityCreateManyInput
+  born: UserCreateManyWithoutBirthplaceInput
+  live: UserCreateManyWithoutResidenceInput
 }
 
 type LocationEdge {
@@ -2499,18 +2538,6 @@ input LocationSubscriptionWhereInput {
   NOT: [LocationSubscriptionWhereInput!]
 }
 
-input LocationUpdateDataInput {
-  name: String
-  province: ProvinceUpdateOneInput
-  city: CityUpdateOneInput
-  area: AreaUpdateOneInput
-  street: StreetUpdateOneInput
-  village: VillageUpdateOneInput
-  schools: SchoolUpdateManyWithoutLocationInput
-  companies: CompanyUpdateManyWithoutLocationInput
-  universities: UniversityUpdateManyInput
-}
-
 input LocationUpdateInput {
   name: String
   province: ProvinceUpdateOneInput
@@ -2521,16 +2548,18 @@ input LocationUpdateInput {
   schools: SchoolUpdateManyWithoutLocationInput
   companies: CompanyUpdateManyWithoutLocationInput
   universities: UniversityUpdateManyInput
+  born: UserUpdateManyWithoutBirthplaceInput
+  live: UserUpdateManyWithoutResidenceInput
 }
 
 input LocationUpdateManyMutationInput {
   name: String
 }
 
-input LocationUpdateOneInput {
-  create: LocationCreateInput
-  update: LocationUpdateDataInput
-  upsert: LocationUpsertNestedInput
+input LocationUpdateOneWithoutBornInput {
+  create: LocationCreateWithoutBornInput
+  update: LocationUpdateWithoutBornDataInput
+  upsert: LocationUpsertWithoutBornInput
   delete: Boolean
   disconnect: Boolean
   connect: LocationWhereUniqueInput
@@ -2545,6 +2574,15 @@ input LocationUpdateOneWithoutCompaniesInput {
   connect: LocationWhereUniqueInput
 }
 
+input LocationUpdateOneWithoutLiveInput {
+  create: LocationCreateWithoutLiveInput
+  update: LocationUpdateWithoutLiveDataInput
+  upsert: LocationUpsertWithoutLiveInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: LocationWhereUniqueInput
+}
+
 input LocationUpdateOneWithoutSchoolsInput {
   create: LocationCreateWithoutSchoolsInput
   update: LocationUpdateWithoutSchoolsDataInput
@@ -2552,6 +2590,19 @@ input LocationUpdateOneWithoutSchoolsInput {
   delete: Boolean
   disconnect: Boolean
   connect: LocationWhereUniqueInput
+}
+
+input LocationUpdateWithoutBornDataInput {
+  name: String
+  province: ProvinceUpdateOneInput
+  city: CityUpdateOneInput
+  area: AreaUpdateOneInput
+  street: StreetUpdateOneInput
+  village: VillageUpdateOneInput
+  schools: SchoolUpdateManyWithoutLocationInput
+  companies: CompanyUpdateManyWithoutLocationInput
+  universities: UniversityUpdateManyInput
+  live: UserUpdateManyWithoutResidenceInput
 }
 
 input LocationUpdateWithoutCompaniesDataInput {
@@ -2563,6 +2614,21 @@ input LocationUpdateWithoutCompaniesDataInput {
   village: VillageUpdateOneInput
   schools: SchoolUpdateManyWithoutLocationInput
   universities: UniversityUpdateManyInput
+  born: UserUpdateManyWithoutBirthplaceInput
+  live: UserUpdateManyWithoutResidenceInput
+}
+
+input LocationUpdateWithoutLiveDataInput {
+  name: String
+  province: ProvinceUpdateOneInput
+  city: CityUpdateOneInput
+  area: AreaUpdateOneInput
+  street: StreetUpdateOneInput
+  village: VillageUpdateOneInput
+  schools: SchoolUpdateManyWithoutLocationInput
+  companies: CompanyUpdateManyWithoutLocationInput
+  universities: UniversityUpdateManyInput
+  born: UserUpdateManyWithoutBirthplaceInput
 }
 
 input LocationUpdateWithoutSchoolsDataInput {
@@ -2574,16 +2640,23 @@ input LocationUpdateWithoutSchoolsDataInput {
   village: VillageUpdateOneInput
   companies: CompanyUpdateManyWithoutLocationInput
   universities: UniversityUpdateManyInput
+  born: UserUpdateManyWithoutBirthplaceInput
+  live: UserUpdateManyWithoutResidenceInput
 }
 
-input LocationUpsertNestedInput {
-  update: LocationUpdateDataInput!
-  create: LocationCreateInput!
+input LocationUpsertWithoutBornInput {
+  update: LocationUpdateWithoutBornDataInput!
+  create: LocationCreateWithoutBornInput!
 }
 
 input LocationUpsertWithoutCompaniesInput {
   update: LocationUpdateWithoutCompaniesDataInput!
   create: LocationCreateWithoutCompaniesInput!
+}
+
+input LocationUpsertWithoutLiveInput {
+  update: LocationUpdateWithoutLiveDataInput!
+  create: LocationCreateWithoutLiveInput!
 }
 
 input LocationUpsertWithoutSchoolsInput {
@@ -2634,6 +2707,12 @@ input LocationWhereInput {
   universities_every: UniversityWhereInput
   universities_some: UniversityWhereInput
   universities_none: UniversityWhereInput
+  born_every: UserWhereInput
+  born_some: UserWhereInput
+  born_none: UserWhereInput
+  live_every: UserWhereInput
+  live_some: UserWhereInput
+  live_none: UserWhereInput
   AND: [LocationWhereInput!]
   OR: [LocationWhereInput!]
   NOT: [LocationWhereInput!]
@@ -5319,6 +5398,7 @@ type User {
   birthdaycalendar: String
   birthday: DateTime
   birthplace: Location
+  residence: Location
   uid: String!
   token: String!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
@@ -5357,7 +5437,8 @@ input UserCreateInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneInput
+  birthplace: LocationCreateOneWithoutBornInput
+  residence: LocationCreateOneWithoutLiveInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -5385,6 +5466,11 @@ input UserCreateManyInput {
   connect: [UserWhereUniqueInput!]
 }
 
+input UserCreateManyWithoutBirthplaceInput {
+  create: [UserCreateWithoutBirthplaceInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
 input UserCreateManyWithoutFamilyGroupInput {
   create: [UserCreateWithoutFamilyGroupInput!]
   connect: [UserWhereUniqueInput!]
@@ -5397,6 +5483,11 @@ input UserCreateManyWithoutGroupsInput {
 
 input UserCreateManyWithoutRegStatusInput {
   create: [UserCreateWithoutRegStatusInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutResidenceInput {
+  create: [UserCreateWithoutResidenceInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -5460,6 +5551,37 @@ input UserCreateOneWithoutWorksInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateWithoutBirthplaceInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  residence: LocationCreateOneWithoutLiveInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  messages: MessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+}
+
 input UserCreateWithoutClassMateInput {
   username: String!
   password: String!
@@ -5468,7 +5590,8 @@ input UserCreateWithoutClassMateInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneInput
+  birthplace: LocationCreateOneWithoutBornInput
+  residence: LocationCreateOneWithoutLiveInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -5498,7 +5621,8 @@ input UserCreateWithoutColleaguesInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneInput
+  birthplace: LocationCreateOneWithoutBornInput
+  residence: LocationCreateOneWithoutLiveInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -5528,7 +5652,8 @@ input UserCreateWithoutCreaterInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneInput
+  birthplace: LocationCreateOneWithoutBornInput
+  residence: LocationCreateOneWithoutLiveInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -5558,7 +5683,8 @@ input UserCreateWithoutExamInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneInput
+  birthplace: LocationCreateOneWithoutBornInput
+  residence: LocationCreateOneWithoutLiveInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -5588,7 +5714,8 @@ input UserCreateWithoutFamiliesInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneInput
+  birthplace: LocationCreateOneWithoutBornInput
+  residence: LocationCreateOneWithoutLiveInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -5618,7 +5745,8 @@ input UserCreateWithoutFamilyGroupInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneInput
+  birthplace: LocationCreateOneWithoutBornInput
+  residence: LocationCreateOneWithoutLiveInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -5648,7 +5776,8 @@ input UserCreateWithoutFromOldColleaguesInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneInput
+  birthplace: LocationCreateOneWithoutBornInput
+  residence: LocationCreateOneWithoutLiveInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -5678,7 +5807,8 @@ input UserCreateWithoutGroupsInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneInput
+  birthplace: LocationCreateOneWithoutBornInput
+  residence: LocationCreateOneWithoutLiveInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -5708,7 +5838,8 @@ input UserCreateWithoutMessagesInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneInput
+  birthplace: LocationCreateOneWithoutBornInput
+  residence: LocationCreateOneWithoutLiveInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -5738,7 +5869,8 @@ input UserCreateWithoutPostsInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneInput
+  birthplace: LocationCreateOneWithoutBornInput
+  residence: LocationCreateOneWithoutLiveInput
   uid: String!
   token: String!
   regStatus: RegStatusCreateOneWithoutApplicantsInput
@@ -5768,10 +5900,42 @@ input UserCreateWithoutRegStatusInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneInput
+  birthplace: LocationCreateOneWithoutBornInput
+  residence: LocationCreateOneWithoutLiveInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  messages: MessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+}
+
+input UserCreateWithoutResidenceInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneWithoutBornInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
   regTimes: Int
   maxRegTimes: Int
   families: FamilyCreateManyWithoutFromInput
@@ -5798,7 +5962,8 @@ input UserCreateWithoutStudiesInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneInput
+  birthplace: LocationCreateOneWithoutBornInput
+  residence: LocationCreateOneWithoutLiveInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -5828,7 +5993,8 @@ input UserCreateWithoutToOldColleaguesInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneInput
+  birthplace: LocationCreateOneWithoutBornInput
+  residence: LocationCreateOneWithoutLiveInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -5858,7 +6024,8 @@ input UserCreateWithoutWorksInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationCreateOneInput
+  birthplace: LocationCreateOneWithoutBornInput
+  residence: LocationCreateOneWithoutLiveInput
   uid: String!
   token: String!
   posts: PostCreateManyWithoutAuthorInput
@@ -5959,7 +6126,8 @@ input UserUpdateDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -5990,7 +6158,8 @@ input UserUpdateInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -6036,6 +6205,15 @@ input UserUpdateManyMutationInput {
   maxRegTimes: Int
 }
 
+input UserUpdateManyWithoutBirthplaceInput {
+  create: [UserCreateWithoutBirthplaceInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutBirthplaceInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutBirthplaceInput!]
+}
+
 input UserUpdateManyWithoutFamilyGroupInput {
   create: [UserCreateWithoutFamilyGroupInput!]
   delete: [UserWhereUniqueInput!]
@@ -6061,6 +6239,15 @@ input UserUpdateManyWithoutRegStatusInput {
   disconnect: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutRegStatusInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutRegStatusInput!]
+}
+
+input UserUpdateManyWithoutResidenceInput {
+  create: [UserCreateWithoutResidenceInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutResidenceInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutResidenceInput!]
 }
 
 input UserUpdateManyWithoutStudiesInput {
@@ -6163,6 +6350,37 @@ input UserUpdateOneWithoutWorksInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateWithoutBirthplaceDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  residence: LocationUpdateOneWithoutLiveInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+}
+
 input UserUpdateWithoutClassMateDataInput {
   username: String
   password: String
@@ -6171,7 +6389,8 @@ input UserUpdateWithoutClassMateDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -6201,7 +6420,8 @@ input UserUpdateWithoutColleaguesDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -6231,7 +6451,8 @@ input UserUpdateWithoutCreaterDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -6261,7 +6482,8 @@ input UserUpdateWithoutExamDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -6291,7 +6513,8 @@ input UserUpdateWithoutFamiliesDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -6321,7 +6544,8 @@ input UserUpdateWithoutFamilyGroupDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -6351,7 +6575,8 @@ input UserUpdateWithoutFromOldColleaguesDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -6381,7 +6606,8 @@ input UserUpdateWithoutGroupsDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -6411,7 +6637,8 @@ input UserUpdateWithoutMessagesDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -6441,7 +6668,8 @@ input UserUpdateWithoutPostsDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   regStatus: RegStatusUpdateOneWithoutApplicantsInput
@@ -6471,10 +6699,42 @@ input UserUpdateWithoutRegStatusDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+}
+
+input UserUpdateWithoutResidenceDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneWithoutBornInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
   regTimes: Int
   maxRegTimes: Int
   families: FamilyUpdateManyWithoutFromInput
@@ -6501,7 +6761,8 @@ input UserUpdateWithoutStudiesDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -6531,7 +6792,8 @@ input UserUpdateWithoutToOldColleaguesDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -6561,7 +6823,8 @@ input UserUpdateWithoutWorksDataInput {
   avatar: String
   birthdaycalendar: String
   birthday: DateTime
-  birthplace: LocationUpdateOneInput
+  birthplace: LocationUpdateOneWithoutBornInput
+  residence: LocationUpdateOneWithoutLiveInput
   uid: String
   token: String
   posts: PostUpdateManyWithoutAuthorInput
@@ -6588,6 +6851,11 @@ input UserUpdateWithWhereUniqueNestedInput {
   data: UserUpdateDataInput!
 }
 
+input UserUpdateWithWhereUniqueWithoutBirthplaceInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutBirthplaceDataInput!
+}
+
 input UserUpdateWithWhereUniqueWithoutFamilyGroupInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutFamilyGroupDataInput!
@@ -6601,6 +6869,11 @@ input UserUpdateWithWhereUniqueWithoutGroupsInput {
 input UserUpdateWithWhereUniqueWithoutRegStatusInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutRegStatusDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutResidenceInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutResidenceDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutStudiesInput {
@@ -6669,6 +6942,12 @@ input UserUpsertWithWhereUniqueNestedInput {
   create: UserCreateInput!
 }
 
+input UserUpsertWithWhereUniqueWithoutBirthplaceInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutBirthplaceDataInput!
+  create: UserCreateWithoutBirthplaceInput!
+}
+
 input UserUpsertWithWhereUniqueWithoutFamilyGroupInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutFamilyGroupDataInput!
@@ -6685,6 +6964,12 @@ input UserUpsertWithWhereUniqueWithoutRegStatusInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutRegStatusDataInput!
   create: UserCreateWithoutRegStatusInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutResidenceInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutResidenceDataInput!
+  create: UserCreateWithoutResidenceInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutStudiesInput {
@@ -6801,6 +7086,7 @@ input UserWhereInput {
   birthday_gt: DateTime
   birthday_gte: DateTime
   birthplace: LocationWhereInput
+  residence: LocationWhereInput
   uid: String
   uid_not: String
   uid_in: [String!]

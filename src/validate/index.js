@@ -1,6 +1,6 @@
 
 
-export const validateBasicInfo=(name,gender,birthday,birthplace)=>{
+export const validateBasicInfo=(name,gender,birthday,birthplace,residence)=>{
   checkName(name)
   checkGender(gender)
   checkCalendar(birthday.calendar)
@@ -10,6 +10,11 @@ export const validateBasicInfo=(name,gender,birthday,birthplace)=>{
   checkPlaceCode(birthplace.area,'所在区')
   checkPlaceCode(birthplace.street,'所在乡镇')
   checkPlaceCode(birthplace.village,'所在村')
+  checkPlaceCode(residence.province,'所在省')
+  checkPlaceCode(residence.city,'所在市')
+  checkPlaceCode(residence.area,'所在区')
+  checkPlaceCode(residence.street,'所在乡镇')
+  checkPlaceCode(residence.village,'所在村')
 }
 
 export const checkCompanyName = (companyName)=>{

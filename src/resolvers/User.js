@@ -8,6 +8,7 @@ export const User = {
   posts: (parent, args, ctx) => ctx.db.user({ id: parent.id }).posts(),
   birthday: (parent, args, ctx) => ctx.db.user({ id: parent.id }).birthday(),
   birthplace: (parent, args, ctx) => ctx.db.user({ id: parent.id }).birthplace(),
+  residence: (parent, args, ctx) => ctx.db.user({ id: parent.id }).residence(),
   families: async (parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {

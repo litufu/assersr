@@ -48,7 +48,8 @@ type User {
   avatar:String
   birthdaycalendar:String
   birthday:DateTime
-  birthplace:Location
+  birthplace:Location  @relation(name: "Birth")
+  residence:Location @relation(name: "Live")
   uid:String! @unique
   token:String! @unique
   posts: [Post!]!
@@ -85,6 +86,8 @@ type Location {
   schools:[School!]!
   companies:[Company!]!
   universities:[University!]!
+  born:[User!]!  @relation(name: "Birth")
+  live:[User!]!  @relation(name: "Live")
 }
 # family to person
 type Person {
