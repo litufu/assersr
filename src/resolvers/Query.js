@@ -272,6 +272,13 @@ export const Query = {
       }
     })
   },
+  students: (parent, {schoolEduId}, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    return ctx.db.schoolEdu({id:schoolEduId}).students()
+  },
   classGroups: (parent, {schoolEduId}, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
@@ -281,6 +288,18 @@ export const Query = {
       where:{AND:[
         {study:{id:schoolEduId}},
         {members_some:{student:{uid:userId}}}
+      ]}
+    })
+  },
+  workGroups:(parent, {companyId}, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    return ctx.db.workGroups({
+      where:{AND:[
+        {company:{id:companyId}},
+        {colleagues_some:{worker:{uid:userId}}}
       ]}
     })
   },
@@ -297,8 +316,91 @@ export const Query = {
     if(stations.length===0){
       return [{id:'000',code:"000",name:"未找到相关职位,请更换关键字试一下"}]
     }
-    console.log(stations)
     return stations
+  },
+  colleagues: async (parent, {companyId}, ctx) => {
+  
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const workers = []
+    const works = await ctx.db.works({
+      where:{
+        AND:[
+          {endTime_gt:(new Date('9999-1-1'))},
+          {company:{id:companyId}},
+        ]
+      }
+    })
+    
+    for(const work of works){
+      const worker = await ctx.db.work({id:work.id}).worker()
+      workers.push(worker)
+    }
+    
+    return workers
+  },
+  oldColleagues: async (parent, {startTime,endTime,companyId}, ctx) => {
+  
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const workers = []
+    let works
+    if(new Date(endTime).getFullYear()===9999){
+      works = await ctx.db.works({
+        where:{
+          AND:[
+            {startTime_gte:(new Date(startTime))},
+            {endTime_lt:(new Date(endTime))},
+            {company:{id:companyId}},
+          ]
+        }
+      })
+    }else{
+      works = await ctx.db.works({
+        where:{
+          AND:[
+            {OR:[
+            {startTime_gte:(new Date(startTime))},
+            {endTime_lte:(new Date(endTime))},
+          ]},
+            {company:{id:companyId}},
+          ]
+        }
+      })
+    }
+   
+    
+    for(const work of works){
+      const worker = await ctx.db.work({id:work.id}).worker()
+      workers.push(worker)
+    }
+    
+    return workers
+  },
+  myOldColleagues:async (parent, {companyId}, ctx) => {
+  
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+
+    console.log(userId)
+    console.log(companyId)
+
+    const myOldColleagues = await ctx.db.oldColleagues({
+      where:{
+        AND:[
+          {from:{uid:userId}},
+          {company:{id:companyId}},
+        ]
+      }
+    })
+    console.log(myOldColleagues)
+    return myOldColleagues
   },
   group: (parent, {id}, ctx) => {
     const userId = getUserId(ctx)

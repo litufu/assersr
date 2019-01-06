@@ -38,9 +38,13 @@ export const typeDefs = gql`
     group(id: String!): Group
     messages(groupId: String, userId: String): [Message]
     getFamilyGroups:[FamilyGroup]
+    students(schoolEduId:String):[User]
     classGroups(schoolEduId:String):[ClassGroup]
+    workGroups(companyId:String):[WorkGroup]
     stations(text:String):[Station]
-
+    colleagues(companyId:String):[User]
+    oldColleagues(startTime:String,endTime:String,companyId:String):[User]
+    myOldColleagues(companyId:String):[OldColleague]
   }
 
   type Mutation {
@@ -67,6 +71,12 @@ export const typeDefs = gql`
     refreshMyFamilyGroups:[FamilyGroup]
     addClassGroup(name:String,schoolEduId:String,studentId:String):ClassGroup
     confirmClassGroup(schoolEduId:String,studentId:String):ClassGroup
+    addWorkGroup(companyId:String,workerId:String):WorkGroup
+    confirmWorkGroup(companyId:String,workerId:String):WorkGroup
+    addColleague(companyId:String,workerId:String):Colleague
+    confirmColleague(colleagueId:String):Colleague
+    addOldColleague(companyId:String,workerId:String):OldColleague
+    confirmOldColleague(companyId:String,workerId:String):OldColleague
   }
 
   type Subscription {
@@ -74,6 +84,10 @@ export const typeDefs = gql`
     familyChanged:Info
     familyGroupChanged:Info
     classGroupChanged:Info
+    studentsAdded:Info
+    workGroupChanged:Info
+    colleaguesAdded:Info
+    myOldcolleaguesChanged:Info
   }
 
   type Info {
@@ -122,6 +136,7 @@ export const typeDefs = gql`
     familyGroup:FamilyGroup
     classMate:[ClassMate]
     workGroup:WorkGroup
+    colleagues:[Colleague]
   }
 
   type Person {
@@ -337,10 +352,25 @@ type ClassGroup{
   messages: [Message]
 }
 
+type Colleague{
+  id: ID! 
+  worker:User
+  status:String!
+  group:WorkGroup
+}
+
+type OldColleague{
+  id: ID!
+  from:User
+  to:User
+  company:Company
+  status:String!
+}
+
 type WorkGroup{
-  id:ID!
-  company:Company 
-  wokers:[User!]!
+  id:ID! 
+  company:Company
+  colleagues:[Colleague!]!
   messages: [Message!]!
 }
 

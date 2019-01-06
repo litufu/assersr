@@ -19,6 +19,8 @@ import {ClassGroup} from './ClassGroup'
 import {ClassMate} from './ClassMate'
 import {WorkGroup} from './WorkGroup'
 import {Company} from './Company'
+import {Colleague} from './Colleague'
+import {OldColleague} from './OldColleague'
 
 export const resolvers = {
   Query,
@@ -41,5 +43,7 @@ export const resolvers = {
   ClassGroup,
   ClassMate,
   WorkGroup,
-  Company
+  Company,
+  Colleague,
+  OldColleague
 }

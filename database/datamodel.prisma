@@ -68,7 +68,11 @@ type User {
   creater:FamilyGroup @relation(name: "Creater")
   classMate:[ClassMate!]! 
   workGroup:WorkGroup
+  colleagues:[Colleague!]!
+  fromOldColleagues:[OldColleague!]!  @relation(name: "FromOldColleagues")
+  toOldColleagues:[OldColleague!]! @relation(name: "ToOldColleagues")
 }
+
 # 地理位置
 type Location {
   id: ID! @unique
@@ -208,15 +212,18 @@ type Village {
 }
 
 enum GroupKind {
-  Location, #老乡群
-  Student,#同学群
-  Work, #同事群
+  Family, #家人
+  ClassMate,#同学
+  Colleague, #同事
+  FellowTownsman, #同乡
+  SameCity, #同城
+  SameOccupation, #同行
+  SameDisease,#同病
 }
 
 type Group{
   id:ID! @unique
   type:GroupKind
-  typeId:String
   name: String
   users: [User!]!
   messages: [Message!]!
@@ -248,10 +255,25 @@ type ClassGroup{
   messages: [Message!]!
 }
 
+type OldColleague{
+  id: ID! @unique
+  from:User  @relation(name: "FromOldColleagues")
+  to:User @relation(name: "ToOldColleagues")
+  company:Company
+  status:String!
+}
+
+type Colleague{
+  id: ID! @unique
+  worker:User
+  status:String!
+  group:WorkGroup
+}
+
 type WorkGroup{
   id:ID! @unique
-  company:Company  @unique
-  wokers:[User!]!
+  company:Company
+  colleagues:[Colleague!]!
   messages: [Message!]!
 }
 

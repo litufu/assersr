@@ -14,6 +14,7 @@ export interface Exists {
   city: (where?: CityWhereInput) => Promise<boolean>;
   classGroup: (where?: ClassGroupWhereInput) => Promise<boolean>;
   classMate: (where?: ClassMateWhereInput) => Promise<boolean>;
+  colleague: (where?: ColleagueWhereInput) => Promise<boolean>;
   collegeEntranceExam: (
     where?: CollegeEntranceExamWhereInput
   ) => Promise<boolean>;
@@ -25,6 +26,7 @@ export interface Exists {
   logs: (where?: LogsWhereInput) => Promise<boolean>;
   major: (where?: MajorWhereInput) => Promise<boolean>;
   message: (where?: MessageWhereInput) => Promise<boolean>;
+  oldColleague: (where?: OldColleagueWhereInput) => Promise<boolean>;
   person: (where?: PersonWhereInput) => Promise<boolean>;
   post: (where?: PostWhereInput) => Promise<boolean>;
   province: (where?: ProvinceWhereInput) => Promise<boolean>;
@@ -151,6 +153,29 @@ export interface Prisma {
       last?: Int;
     }
   ) => ClassMateConnectionPromise;
+  colleague: (where: ColleagueWhereUniqueInput) => ColleaguePromise;
+  colleagues: (
+    args?: {
+      where?: ColleagueWhereInput;
+      orderBy?: ColleagueOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Colleague>;
+  colleaguesConnection: (
+    args?: {
+      where?: ColleagueWhereInput;
+      orderBy?: ColleagueOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => ColleagueConnectionPromise;
   collegeEntranceExam: (
     where: CollegeEntranceExamWhereUniqueInput
   ) => CollegeEntranceExamPromise;
@@ -359,6 +384,29 @@ export interface Prisma {
       last?: Int;
     }
   ) => MessageConnectionPromise;
+  oldColleague: (where: OldColleagueWhereUniqueInput) => OldColleaguePromise;
+  oldColleagues: (
+    args?: {
+      where?: OldColleagueWhereInput;
+      orderBy?: OldColleagueOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<OldColleague>;
+  oldColleaguesConnection: (
+    args?: {
+      where?: OldColleagueWhereInput;
+      orderBy?: OldColleagueOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => OldColleagueConnectionPromise;
   person: (where: PersonWhereUniqueInput) => PersonPromise;
   persons: (
     args?: {
@@ -734,6 +782,25 @@ export interface Prisma {
   ) => ClassMatePromise;
   deleteClassMate: (where: ClassMateWhereUniqueInput) => ClassMatePromise;
   deleteManyClassMates: (where?: ClassMateWhereInput) => BatchPayloadPromise;
+  createColleague: (data: ColleagueCreateInput) => ColleaguePromise;
+  updateColleague: (
+    args: { data: ColleagueUpdateInput; where: ColleagueWhereUniqueInput }
+  ) => ColleaguePromise;
+  updateManyColleagues: (
+    args: {
+      data: ColleagueUpdateManyMutationInput;
+      where?: ColleagueWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  upsertColleague: (
+    args: {
+      where: ColleagueWhereUniqueInput;
+      create: ColleagueCreateInput;
+      update: ColleagueUpdateInput;
+    }
+  ) => ColleaguePromise;
+  deleteColleague: (where: ColleagueWhereUniqueInput) => ColleaguePromise;
+  deleteManyColleagues: (where?: ColleagueWhereInput) => BatchPayloadPromise;
   createCollegeEntranceExam: (
     data: CollegeEntranceExamCreateInput
   ) => CollegeEntranceExamPromise;
@@ -884,6 +951,29 @@ export interface Prisma {
   ) => MessagePromise;
   deleteMessage: (where: MessageWhereUniqueInput) => MessagePromise;
   deleteManyMessages: (where?: MessageWhereInput) => BatchPayloadPromise;
+  createOldColleague: (data: OldColleagueCreateInput) => OldColleaguePromise;
+  updateOldColleague: (
+    args: { data: OldColleagueUpdateInput; where: OldColleagueWhereUniqueInput }
+  ) => OldColleaguePromise;
+  updateManyOldColleagues: (
+    args: {
+      data: OldColleagueUpdateManyMutationInput;
+      where?: OldColleagueWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  upsertOldColleague: (
+    args: {
+      where: OldColleagueWhereUniqueInput;
+      create: OldColleagueCreateInput;
+      update: OldColleagueUpdateInput;
+    }
+  ) => OldColleaguePromise;
+  deleteOldColleague: (
+    where: OldColleagueWhereUniqueInput
+  ) => OldColleaguePromise;
+  deleteManyOldColleagues: (
+    where?: OldColleagueWhereInput
+  ) => BatchPayloadPromise;
   createPerson: (data: PersonCreateInput) => PersonPromise;
   updatePerson: (
     args: { data: PersonUpdateInput; where: PersonWhereUniqueInput }
@@ -1119,6 +1209,9 @@ export interface Subscription {
   classMate: (
     where?: ClassMateSubscriptionWhereInput
   ) => ClassMateSubscriptionPayloadSubscription;
+  colleague: (
+    where?: ColleagueSubscriptionWhereInput
+  ) => ColleagueSubscriptionPayloadSubscription;
   collegeEntranceExam: (
     where?: CollegeEntranceExamSubscriptionWhereInput
   ) => CollegeEntranceExamSubscriptionPayloadSubscription;
@@ -1146,6 +1239,9 @@ export interface Subscription {
   message: (
     where?: MessageSubscriptionWhereInput
   ) => MessageSubscriptionPayloadSubscription;
+  oldColleague: (
+    where?: OldColleagueSubscriptionWhereInput
+  ) => OldColleagueSubscriptionPayloadSubscription;
   person: (
     where?: PersonSubscriptionWhereInput
   ) => PersonSubscriptionPayloadSubscription;
@@ -1341,9 +1437,16 @@ export type CollegeEntranceExamOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type GroupKind = "Location" | "Student" | "Work";
+export type GroupKind =
+  | "Family"
+  | "ClassMate"
+  | "Colleague"
+  | "FellowTownsman"
+  | "SameCity"
+  | "SameOccupation"
+  | "SameDisease";
 
-export type ClassMateOrderByInput =
+export type OldColleagueOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "status_ASC"
@@ -1353,17 +1456,11 @@ export type ClassMateOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type WorkOrderByInput =
+export type ColleagueOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "startTime_ASC"
-  | "startTime_DESC"
-  | "endTime_ASC"
-  | "endTime_DESC"
-  | "department_ASC"
-  | "department_DESC"
-  | "jobContent_ASC"
-  | "jobContent_DESC"
+  | "status_ASC"
+  | "status_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -1384,6 +1481,24 @@ export type Educationkind =
   | "HighToCollege"
   | "HighToJunior";
 
+export type WorkOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "startTime_ASC"
+  | "startTime_DESC"
+  | "endTime_ASC"
+  | "endTime_DESC"
+  | "department_ASC"
+  | "department_DESC"
+  | "jobContent_ASC"
+  | "jobContent_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type MutationType = "CREATED" | "UPDATED" | "DELETED";
+
 export type CompanyOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -1402,7 +1517,7 @@ export type CompanyOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type StationOrderByInput =
+export type ProvinceOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "code_ASC"
@@ -1426,15 +1541,11 @@ export type SchoolOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type MajorOrderByInput =
+export type LocationOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "name_ASC"
   | "name_DESC"
-  | "category_ASC"
-  | "category_DESC"
-  | "education_ASC"
-  | "education_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -1506,7 +1617,7 @@ export type UserOrderByInput =
   | "maxRegTimes_ASC"
   | "maxRegTimes_DESC";
 
-export type LocationOrderByInput =
+export type ClassGroupOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "name_ASC"
@@ -1516,7 +1627,21 @@ export type LocationOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type ProvinceOrderByInput =
+export type MajorOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "category_ASC"
+  | "category_DESC"
+  | "education_ASC"
+  | "education_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type StationOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "code_ASC"
@@ -1528,15 +1653,11 @@ export type ProvinceOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type MutationType = "CREATED" | "UPDATED" | "DELETED";
-
 export type GroupOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "type_ASC"
   | "type_DESC"
-  | "typeId_ASC"
-  | "typeId_DESC"
   | "name_ASC"
   | "name_DESC"
   | "createdAt_ASC"
@@ -1544,19 +1665,20 @@ export type GroupOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type ClassGroupOrderByInput =
+export type ClassMateOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
+  | "status_ASC"
+  | "status_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export interface AreaUpsertNestedInput {
-  update: AreaUpdateDataInput;
-  create: AreaCreateInput;
+export interface AreaUpdateWithoutTownsDataInput {
+  code?: String;
+  name?: String;
+  city?: CityUpdateOneRequiredWithoutAreasInput;
 }
 
 export type AreaWhereUniqueInput = AtLeastOne<{
@@ -1564,74 +1686,20 @@ export type AreaWhereUniqueInput = AtLeastOne<{
   code?: String;
 }>;
 
-export interface SchoolUpsertWithWhereUniqueWithoutLocationInput {
-  where: SchoolWhereUniqueInput;
-  update: SchoolUpdateWithoutLocationDataInput;
-  create: SchoolCreateWithoutLocationInput;
-}
-
-export interface FamilyGroupWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  father?: PersonWhereInput;
-  mother?: PersonWhereInput;
-  creater?: UserWhereInput;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  families_every?: FamilyWhereInput;
-  families_some?: FamilyWhereInput;
-  families_none?: FamilyWhereInput;
-  messages_every?: MessageWhereInput;
-  messages_some?: MessageWhereInput;
-  messages_none?: MessageWhereInput;
-  users_every?: UserWhereInput;
-  users_some?: UserWhereInput;
-  users_none?: UserWhereInput;
-  AND?: FamilyGroupWhereInput[] | FamilyGroupWhereInput;
-  OR?: FamilyGroupWhereInput[] | FamilyGroupWhereInput;
-  NOT?: FamilyGroupWhereInput[] | FamilyGroupWhereInput;
-}
-
-export interface CompanyUpdateManyWithoutLocationInput {
-  create?:
-    | CompanyCreateWithoutLocationInput[]
-    | CompanyCreateWithoutLocationInput;
-  delete?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
-  connect?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
-  disconnect?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
+export interface WorkUpdateManyWithoutCompanyInput {
+  create?: WorkCreateWithoutCompanyInput[] | WorkCreateWithoutCompanyInput;
+  delete?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
+  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
+  disconnect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
   update?:
-    | CompanyUpdateWithWhereUniqueWithoutLocationInput[]
-    | CompanyUpdateWithWhereUniqueWithoutLocationInput;
+    | WorkUpdateWithWhereUniqueWithoutCompanyInput[]
+    | WorkUpdateWithWhereUniqueWithoutCompanyInput;
   upsert?:
-    | CompanyUpsertWithWhereUniqueWithoutLocationInput[]
-    | CompanyUpsertWithWhereUniqueWithoutLocationInput;
+    | WorkUpsertWithWhereUniqueWithoutCompanyInput[]
+    | WorkUpsertWithWhereUniqueWithoutCompanyInput;
 }
 
-export interface CollegeEntranceExamWhereInput {
+export interface SchoolEduWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -1646,71 +1714,77 @@ export interface CollegeEntranceExamWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  province?: ProvinceWhereInput;
-  subject?: String;
-  subject_not?: String;
-  subject_in?: String[] | String;
-  subject_not_in?: String[] | String;
-  subject_lt?: String;
-  subject_lte?: String;
-  subject_gt?: String;
-  subject_gte?: String;
-  subject_contains?: String;
-  subject_not_contains?: String;
-  subject_starts_with?: String;
-  subject_not_starts_with?: String;
-  subject_ends_with?: String;
-  subject_not_ends_with?: String;
-  culscore?: Float;
-  culscore_not?: Float;
-  culscore_in?: Float[] | Float;
-  culscore_not_in?: Float[] | Float;
-  culscore_lt?: Float;
-  culscore_lte?: Float;
-  culscore_gt?: Float;
-  culscore_gte?: Float;
-  proscore?: Float;
-  proscore_not?: Float;
-  proscore_in?: Float[] | Float;
-  proscore_not_in?: Float[] | Float;
-  proscore_lt?: Float;
-  proscore_lte?: Float;
-  proscore_gt?: Float;
-  proscore_gte?: Float;
-  candidatenum?: String;
-  candidatenum_not?: String;
-  candidatenum_in?: String[] | String;
-  candidatenum_not_in?: String[] | String;
-  candidatenum_lt?: String;
-  candidatenum_lte?: String;
-  candidatenum_gt?: String;
-  candidatenum_gte?: String;
-  candidatenum_contains?: String;
-  candidatenum_not_contains?: String;
-  candidatenum_starts_with?: String;
-  candidatenum_not_starts_with?: String;
-  candidatenum_ends_with?: String;
-  candidatenum_not_ends_with?: String;
-  times?: Int;
-  times_not?: Int;
-  times_in?: Int[] | Int;
-  times_not_in?: Int[] | Int;
-  times_lt?: Int;
-  times_lte?: Int;
-  times_gt?: Int;
-  times_gte?: Int;
-  student?: UserWhereInput;
-  AND?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
-  OR?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
-  NOT?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
+  school?: SchoolWhereInput;
+  startTime?: DateTimeInput;
+  startTime_not?: DateTimeInput;
+  startTime_in?: DateTimeInput[] | DateTimeInput;
+  startTime_not_in?: DateTimeInput[] | DateTimeInput;
+  startTime_lt?: DateTimeInput;
+  startTime_lte?: DateTimeInput;
+  startTime_gt?: DateTimeInput;
+  startTime_gte?: DateTimeInput;
+  major?: MajorWhereInput;
+  grade?: Int;
+  grade_not?: Int;
+  grade_in?: Int[] | Int;
+  grade_not_in?: Int[] | Int;
+  grade_lt?: Int;
+  grade_lte?: Int;
+  grade_gt?: Int;
+  grade_gte?: Int;
+  className?: String;
+  className_not?: String;
+  className_in?: String[] | String;
+  className_not_in?: String[] | String;
+  className_lt?: String;
+  className_lte?: String;
+  className_gt?: String;
+  className_gte?: String;
+  className_contains?: String;
+  className_not_contains?: String;
+  className_starts_with?: String;
+  className_not_starts_with?: String;
+  className_ends_with?: String;
+  className_not_ends_with?: String;
+  students_every?: UserWhereInput;
+  students_some?: UserWhereInput;
+  students_none?: UserWhereInput;
+  AND?: SchoolEduWhereInput[] | SchoolEduWhereInput;
+  OR?: SchoolEduWhereInput[] | SchoolEduWhereInput;
+  NOT?: SchoolEduWhereInput[] | SchoolEduWhereInput;
 }
 
-export interface CompanyUpdateWithWhereUniqueWithoutLocationInput {
-  where: CompanyWhereUniqueInput;
-  data: CompanyUpdateWithoutLocationDataInput;
+export interface FamilyCreateInput {
+  from: UserCreateOneWithoutFamiliesInput;
+  to: PersonCreateOneWithoutFamiliesInput;
+  relationship: String;
+  spouse?: FamilyCreateOneInput;
+  status: String;
 }
 
-export interface ClassMateWhereInput {
+export interface CityUpdateInput {
+  code?: String;
+  name?: String;
+  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
+  areas?: AreaUpdateManyWithoutCityInput;
+}
+
+export interface FamilyCreateOneInput {
+  create?: FamilyCreateInput;
+  connect?: FamilyWhereUniqueInput;
+}
+
+export interface WorkUpdateWithWhereUniqueWithoutCompanyInput {
+  where: WorkWhereUniqueInput;
+  data: WorkUpdateWithoutCompanyDataInput;
+}
+
+export interface MessageCreateManyInput {
+  create?: MessageCreateInput[] | MessageCreateInput;
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+}
+
+export interface OldColleagueWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -1725,7 +1799,9 @@ export interface ClassMateWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  student?: UserWhereInput;
+  from?: UserWhereInput;
+  to?: UserWhereInput;
+  company?: CompanyWhereInput;
   status?: String;
   status_not?: String;
   status_in?: String[] | String;
@@ -1740,20 +1816,15 @@ export interface ClassMateWhereInput {
   status_not_starts_with?: String;
   status_ends_with?: String;
   status_not_ends_with?: String;
-  group?: ClassGroupWhereInput;
-  AND?: ClassMateWhereInput[] | ClassMateWhereInput;
-  OR?: ClassMateWhereInput[] | ClassMateWhereInput;
-  NOT?: ClassMateWhereInput[] | ClassMateWhereInput;
+  AND?: OldColleagueWhereInput[] | OldColleagueWhereInput;
+  OR?: OldColleagueWhereInput[] | OldColleagueWhereInput;
+  NOT?: OldColleagueWhereInput[] | OldColleagueWhereInput;
 }
 
-export interface CompanyUpdateWithoutLocationDataInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  BusinessScope?: String;
-  works?: WorkUpdateManyWithoutCompanyInput;
-  workGroup?: WorkGroupUpdateOneWithoutCompanyInput;
+export interface MessageCreateInput {
+  to: GroupCreateOneWithoutMessagesInput;
+  from: UserCreateOneWithoutMessagesInput;
+  text: String;
 }
 
 export interface PersonWhereInput {
@@ -1800,7 +1871,25 @@ export interface PersonWhereInput {
   NOT?: PersonWhereInput[] | PersonWhereInput;
 }
 
-export interface UserCreateWithoutCreaterInput {
+export interface UserCreateManyWithoutFamilyGroupInput {
+  create?:
+    | UserCreateWithoutFamilyGroupInput[]
+    | UserCreateWithoutFamilyGroupInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface WorkGroupSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: WorkGroupWhereInput;
+  AND?: WorkGroupSubscriptionWhereInput[] | WorkGroupSubscriptionWhereInput;
+  OR?: WorkGroupSubscriptionWhereInput[] | WorkGroupSubscriptionWhereInput;
+  NOT?: WorkGroupSubscriptionWhereInput[] | WorkGroupSubscriptionWhereInput;
+}
+
+export interface UserCreateWithoutFamilyGroupInput {
   username: String;
   password: String;
   name?: String;
@@ -1822,71 +1911,30 @@ export interface UserCreateWithoutCreaterInput {
   messages?: MessageCreateManyWithoutFromInput;
   groups?: GroupCreateManyWithoutUsersInput;
   friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
   classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneWithoutWokersInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
 }
 
-export interface CityUpdateManyMutationInput {
-  code?: String;
-  name?: String;
-}
-
-export interface GroupCreateManyWithoutUsersInput {
-  create?: GroupCreateWithoutUsersInput[] | GroupCreateWithoutUsersInput;
-  connect?: GroupWhereUniqueInput[] | GroupWhereUniqueInput;
-}
-
-export interface WorkUpdateManyWithoutCompanyInput {
-  create?: WorkCreateWithoutCompanyInput[] | WorkCreateWithoutCompanyInput;
-  delete?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
-  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
-  disconnect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
-  update?:
-    | WorkUpdateWithWhereUniqueWithoutCompanyInput[]
-    | WorkUpdateWithWhereUniqueWithoutCompanyInput;
-  upsert?:
-    | WorkUpsertWithWhereUniqueWithoutCompanyInput[]
-    | WorkUpsertWithWhereUniqueWithoutCompanyInput;
-}
-
-export interface GroupCreateWithoutUsersInput {
-  type?: GroupKind;
-  typeId?: String;
-  name?: String;
-  messages?: MessageCreateManyWithoutToInput;
-}
-
-export interface WorkGroupSubscriptionWhereInput {
+export interface VillageSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: WorkGroupWhereInput;
-  AND?: WorkGroupSubscriptionWhereInput[] | WorkGroupSubscriptionWhereInput;
-  OR?: WorkGroupSubscriptionWhereInput[] | WorkGroupSubscriptionWhereInput;
-  NOT?: WorkGroupSubscriptionWhereInput[] | WorkGroupSubscriptionWhereInput;
+  node?: VillageWhereInput;
+  AND?: VillageSubscriptionWhereInput[] | VillageSubscriptionWhereInput;
+  OR?: VillageSubscriptionWhereInput[] | VillageSubscriptionWhereInput;
+  NOT?: VillageSubscriptionWhereInput[] | VillageSubscriptionWhereInput;
 }
 
-export interface MessageCreateManyWithoutToInput {
-  create?: MessageCreateWithoutToInput[] | MessageCreateWithoutToInput;
-  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
-}
-
-export interface WorkSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: WorkWhereInput;
-  AND?: WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput;
-  OR?: WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput;
-  NOT?: WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput;
-}
-
-export interface MessageCreateWithoutToInput {
-  from: UserCreateOneWithoutMessagesInput;
-  text: String;
+export interface ClassMateCreateManyWithoutStudentInput {
+  create?:
+    | ClassMateCreateWithoutStudentInput[]
+    | ClassMateCreateWithoutStudentInput;
+  connect?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -1900,9 +1948,60 @@ export interface UserSubscriptionWhereInput {
   NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
 }
 
-export interface UserCreateOneWithoutMessagesInput {
-  create?: UserCreateWithoutMessagesInput;
-  connect?: UserWhereUniqueInput;
+export interface ClassMateCreateWithoutStudentInput {
+  status: String;
+  group: ClassGroupCreateOneWithoutMembersInput;
+}
+
+export interface RegStatusWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  education?: Educationkind;
+  education_not?: Educationkind;
+  education_in?: Educationkind[] | Educationkind;
+  education_not_in?: Educationkind[] | Educationkind;
+  university?: UniversityWhereInput;
+  major?: MajorWhereInput;
+  applicants_every?: UserWhereInput;
+  applicants_some?: UserWhereInput;
+  applicants_none?: UserWhereInput;
+  AND?: RegStatusWhereInput[] | RegStatusWhereInput;
+  OR?: RegStatusWhereInput[] | RegStatusWhereInput;
+  NOT?: RegStatusWhereInput[] | RegStatusWhereInput;
+}
+
+export interface ClassGroupCreateOneWithoutMembersInput {
+  create?: ClassGroupCreateWithoutMembersInput;
+  connect?: ClassGroupWhereUniqueInput;
+}
+
+export interface StationSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: StationWhereInput;
+  AND?: StationSubscriptionWhereInput[] | StationSubscriptionWhereInput;
+  OR?: StationSubscriptionWhereInput[] | StationSubscriptionWhereInput;
+  NOT?: StationSubscriptionWhereInput[] | StationSubscriptionWhereInput;
+}
+
+export interface ClassGroupCreateWithoutMembersInput {
+  study?: SchoolEduCreateOneInput;
+  name?: String;
+  messages?: MessageCreateManyInput;
 }
 
 export interface PostWhereInput {
@@ -1972,31 +2071,29 @@ export interface PostWhereInput {
   NOT?: PostWhereInput[] | PostWhereInput;
 }
 
-export interface UserCreateWithoutMessagesInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneWithoutWokersInput;
+export interface SchoolEduCreateOneInput {
+  create?: SchoolEduCreateInput;
+  connect?: SchoolEduWhereUniqueInput;
+}
+
+export interface RegStatusSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: RegStatusWhereInput;
+  AND?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
+  OR?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
+  NOT?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
+}
+
+export interface SchoolEduCreateInput {
+  school?: SchoolCreateOneInput;
+  startTime?: DateTimeInput;
+  major?: MajorCreateOneInput;
+  grade?: Int;
+  className?: String;
+  students?: UserCreateManyWithoutStudiesInput;
 }
 
 export interface UniversityWhereInput {
@@ -2079,29 +2176,9 @@ export interface UniversityWhereInput {
   NOT?: UniversityWhereInput[] | UniversityWhereInput;
 }
 
-export interface FamilyGroupCreateOneWithoutCreaterInput {
-  create?: FamilyGroupCreateWithoutCreaterInput;
-  connect?: FamilyGroupWhereUniqueInput;
-}
-
-export interface SchoolEduSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: SchoolEduWhereInput;
-  AND?: SchoolEduSubscriptionWhereInput[] | SchoolEduSubscriptionWhereInput;
-  OR?: SchoolEduSubscriptionWhereInput[] | SchoolEduSubscriptionWhereInput;
-  NOT?: SchoolEduSubscriptionWhereInput[] | SchoolEduSubscriptionWhereInput;
-}
-
-export interface FamilyGroupCreateWithoutCreaterInput {
-  father?: PersonCreateOneWithoutAsFatherInput;
-  mother?: PersonCreateOneWithoutAsMotherInput;
-  name?: String;
-  families?: FamilyCreateManyInput;
-  messages?: MessageCreateManyInput;
-  users?: UserCreateManyWithoutFamilyGroupInput;
+export interface UserCreateManyWithoutStudiesInput {
+  create?: UserCreateWithoutStudiesInput[] | UserCreateWithoutStudiesInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
 export interface GroupWhereInput {
@@ -2123,20 +2200,6 @@ export interface GroupWhereInput {
   type_not?: GroupKind;
   type_in?: GroupKind[] | GroupKind;
   type_not_in?: GroupKind[] | GroupKind;
-  typeId?: String;
-  typeId_not?: String;
-  typeId_in?: String[] | String;
-  typeId_not_in?: String[] | String;
-  typeId_lt?: String;
-  typeId_lte?: String;
-  typeId_gt?: String;
-  typeId_gte?: String;
-  typeId_contains?: String;
-  typeId_not_contains?: String;
-  typeId_starts_with?: String;
-  typeId_not_starts_with?: String;
-  typeId_ends_with?: String;
-  typeId_not_ends_with?: String;
   name?: String;
   name_not?: String;
   name_in?: String[] | String;
@@ -2162,60 +2225,73 @@ export interface GroupWhereInput {
   NOT?: GroupWhereInput[] | GroupWhereInput;
 }
 
-export interface FamilyCreateManyInput {
-  create?: FamilyCreateInput[] | FamilyCreateInput;
-  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+export interface UserCreateWithoutStudiesInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  messages?: MessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
 }
 
-export interface ProvinceSubscriptionWhereInput {
+export interface OldColleagueSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: ProvinceWhereInput;
-  AND?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
-  OR?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
-  NOT?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
+  node?: OldColleagueWhereInput;
+  AND?:
+    | OldColleagueSubscriptionWhereInput[]
+    | OldColleagueSubscriptionWhereInput;
+  OR?:
+    | OldColleagueSubscriptionWhereInput[]
+    | OldColleagueSubscriptionWhereInput;
+  NOT?:
+    | OldColleagueSubscriptionWhereInput[]
+    | OldColleagueSubscriptionWhereInput;
 }
 
-export interface FamilyCreateInput {
-  from: UserCreateOneWithoutFamiliesInput;
-  to: PersonCreateOneWithoutFamiliesInput;
-  relationship: String;
-  spouse?: FamilyCreateOneInput;
-  status: String;
+export interface WorkGroupCreateOneInput {
+  create?: WorkGroupCreateInput;
+  connect?: WorkGroupWhereUniqueInput;
 }
 
-export interface PostSubscriptionWhereInput {
+export interface MessageSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: PostWhereInput;
-  AND?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
-  OR?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
-  NOT?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
+  node?: MessageWhereInput;
+  AND?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput;
+  OR?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput;
+  NOT?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput;
 }
 
-export interface FamilyCreateOneInput {
-  create?: FamilyCreateInput;
-  connect?: FamilyWhereUniqueInput;
-}
-
-export interface PersonSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: PersonWhereInput;
-  AND?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
-  OR?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
-  NOT?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
-}
-
-export interface MessageCreateManyInput {
-  create?: MessageCreateInput[] | MessageCreateInput;
-  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+export interface WorkGroupCreateInput {
+  company?: CompanyCreateOneWithoutWorkGroupInput;
+  colleagues?: ColleagueCreateManyWithoutGroupInput;
+  messages?: MessageCreateManyInput;
 }
 
 export interface MajorSubscriptionWhereInput {
@@ -2229,28 +2305,101 @@ export interface MajorSubscriptionWhereInput {
   NOT?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
 }
 
-export interface MessageCreateInput {
-  to: GroupCreateOneWithoutMessagesInput;
-  from: UserCreateOneWithoutMessagesInput;
-  text: String;
+export interface CompanyCreateOneWithoutWorkGroupInput {
+  create?: CompanyCreateWithoutWorkGroupInput;
+  connect?: CompanyWhereUniqueInput;
 }
 
-export interface LogsSubscriptionWhereInput {
+export interface LocationSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: LogsWhereInput;
-  AND?: LogsSubscriptionWhereInput[] | LogsSubscriptionWhereInput;
-  OR?: LogsSubscriptionWhereInput[] | LogsSubscriptionWhereInput;
-  NOT?: LogsSubscriptionWhereInput[] | LogsSubscriptionWhereInput;
+  node?: LocationWhereInput;
+  AND?: LocationSubscriptionWhereInput[] | LocationSubscriptionWhereInput;
+  OR?: LocationSubscriptionWhereInput[] | LocationSubscriptionWhereInput;
+  NOT?: LocationSubscriptionWhereInput[] | LocationSubscriptionWhereInput;
 }
 
-export interface UserCreateManyWithoutFamilyGroupInput {
+export interface CompanyCreateWithoutWorkGroupInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  location?: LocationCreateOneWithoutCompaniesInput;
+  BusinessScope?: String;
+  works?: WorkCreateManyWithoutCompanyInput;
+}
+
+export interface GroupSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GroupWhereInput;
+  AND?: GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput;
+  OR?: GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput;
+  NOT?: GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput;
+}
+
+export interface ColleagueCreateManyWithoutWorkerInput {
   create?:
-    | UserCreateWithoutFamilyGroupInput[]
-    | UserCreateWithoutFamilyGroupInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+    | ColleagueCreateWithoutWorkerInput[]
+    | ColleagueCreateWithoutWorkerInput;
+  connect?: ColleagueWhereUniqueInput[] | ColleagueWhereUniqueInput;
+}
+
+export interface StationWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  code?: String;
+  code_not?: String;
+  code_in?: String[] | String;
+  code_not_in?: String[] | String;
+  code_lt?: String;
+  code_lte?: String;
+  code_gt?: String;
+  code_gte?: String;
+  code_contains?: String;
+  code_not_contains?: String;
+  code_starts_with?: String;
+  code_not_starts_with?: String;
+  code_ends_with?: String;
+  code_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  AND?: StationWhereInput[] | StationWhereInput;
+  OR?: StationWhereInput[] | StationWhereInput;
+  NOT?: StationWhereInput[] | StationWhereInput;
+}
+
+export interface ColleagueCreateWithoutWorkerInput {
+  status: String;
+  group?: WorkGroupCreateOneWithoutColleaguesInput;
 }
 
 export interface WorkWhereInput {
@@ -2320,7 +2469,124 @@ export interface WorkWhereInput {
   NOT?: WorkWhereInput[] | WorkWhereInput;
 }
 
-export interface UserCreateWithoutFamilyGroupInput {
+export interface WorkGroupCreateOneWithoutColleaguesInput {
+  create?: WorkGroupCreateWithoutColleaguesInput;
+  connect?: WorkGroupWhereUniqueInput;
+}
+
+export interface CollegeEntranceExamSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: CollegeEntranceExamWhereInput;
+  AND?:
+    | CollegeEntranceExamSubscriptionWhereInput[]
+    | CollegeEntranceExamSubscriptionWhereInput;
+  OR?:
+    | CollegeEntranceExamSubscriptionWhereInput[]
+    | CollegeEntranceExamSubscriptionWhereInput;
+  NOT?:
+    | CollegeEntranceExamSubscriptionWhereInput[]
+    | CollegeEntranceExamSubscriptionWhereInput;
+}
+
+export interface WorkGroupCreateWithoutColleaguesInput {
+  company?: CompanyCreateOneWithoutWorkGroupInput;
+  messages?: MessageCreateManyInput;
+}
+
+export interface SchoolWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  kind?: Educationkind;
+  kind_not?: Educationkind;
+  kind_in?: Educationkind[] | Educationkind;
+  kind_not_in?: Educationkind[] | Educationkind;
+  location?: LocationWhereInput;
+  AND?: SchoolWhereInput[] | SchoolWhereInput;
+  OR?: SchoolWhereInput[] | SchoolWhereInput;
+  NOT?: SchoolWhereInput[] | SchoolWhereInput;
+}
+
+export interface OldColleagueCreateManyWithoutFromInput {
+  create?:
+    | OldColleagueCreateWithoutFromInput[]
+    | OldColleagueCreateWithoutFromInput;
+  connect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+}
+
+export interface ClassMateSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ClassMateWhereInput;
+  AND?: ClassMateSubscriptionWhereInput[] | ClassMateSubscriptionWhereInput;
+  OR?: ClassMateSubscriptionWhereInput[] | ClassMateSubscriptionWhereInput;
+  NOT?: ClassMateSubscriptionWhereInput[] | ClassMateSubscriptionWhereInput;
+}
+
+export interface OldColleagueCreateWithoutFromInput {
+  to?: UserCreateOneWithoutToOldColleaguesInput;
+  company?: CompanyCreateOneInput;
+  status: String;
+}
+
+export interface ClassGroupSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ClassGroupWhereInput;
+  AND?: ClassGroupSubscriptionWhereInput[] | ClassGroupSubscriptionWhereInput;
+  OR?: ClassGroupSubscriptionWhereInput[] | ClassGroupSubscriptionWhereInput;
+  NOT?: ClassGroupSubscriptionWhereInput[] | ClassGroupSubscriptionWhereInput;
+}
+
+export interface UserCreateOneWithoutToOldColleaguesInput {
+  create?: UserCreateWithoutToOldColleaguesInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface AreaSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: AreaWhereInput;
+  AND?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
+  OR?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
+  NOT?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
+}
+
+export interface UserCreateWithoutToOldColleaguesInput {
   username: String;
   password: String;
   name?: String;
@@ -2342,9 +2608,3673 @@ export interface UserCreateWithoutFamilyGroupInput {
   messages?: MessageCreateManyWithoutFromInput;
   groups?: GroupCreateManyWithoutUsersInput;
   friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
   creater?: FamilyGroupCreateOneWithoutCreaterInput;
   classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneWithoutWokersInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+}
+
+export interface WorkUpdateManyMutationInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  department?: String;
+  jobContent?: String;
+}
+
+export interface CompanyCreateOneInput {
+  create?: CompanyCreateInput;
+  connect?: CompanyWhereUniqueInput;
+}
+
+export interface WorkUpdateInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  company?: CompanyUpdateOneWithoutWorksInput;
+  department?: String;
+  post?: StationUpdateOneInput;
+  jobContent?: String;
+  worker?: UserUpdateOneWithoutWorksInput;
+}
+
+export interface CompanyCreateInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  location?: LocationCreateOneWithoutCompaniesInput;
+  BusinessScope?: String;
+  works?: WorkCreateManyWithoutCompanyInput;
+  workGroup?: WorkGroupCreateOneWithoutCompanyInput;
+}
+
+export interface VillageUpdateManyMutationInput {
+  code?: String;
+  name?: String;
+}
+
+export interface OldColleagueCreateManyWithoutToInput {
+  create?:
+    | OldColleagueCreateWithoutToInput[]
+    | OldColleagueCreateWithoutToInput;
+  connect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+}
+
+export interface VillageUpdateInput {
+  code?: String;
+  name?: String;
+  street?: StreetUpdateOneRequiredWithoutVillagesInput;
+  people?: UserUpdateManyInput;
+}
+
+export interface OldColleagueCreateWithoutToInput {
+  from?: UserCreateOneWithoutFromOldColleaguesInput;
+  company?: CompanyCreateOneInput;
+  status: String;
+}
+
+export interface UserUpdateInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  messages?: MessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+}
+
+export interface UserCreateOneWithoutFromOldColleaguesInput {
+  create?: UserCreateWithoutFromOldColleaguesInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export type ClassMateWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserCreateWithoutFromOldColleaguesInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  messages?: MessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+}
+
+export interface StreetUpdateManyMutationInput {
+  code?: String;
+  name?: String;
+}
+
+export interface AreaUpdateInput {
+  code?: String;
+  name?: String;
+  city?: CityUpdateOneRequiredWithoutAreasInput;
+  towns?: StreetUpdateManyWithoutAreaInput;
+}
+
+export type ColleagueWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface CityUpdateOneRequiredWithoutAreasInput {
+  create?: CityCreateWithoutAreasInput;
+  update?: CityUpdateWithoutAreasDataInput;
+  upsert?: CityUpsertWithoutAreasInput;
+  connect?: CityWhereUniqueInput;
+}
+
+export interface StationUpdateInput {
+  code?: String;
+  name?: String;
+}
+
+export interface CityUpdateWithoutAreasDataInput {
+  code?: String;
+  name?: String;
+  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
+}
+
+export type CollegeEntranceExamWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  candidatenum?: String;
+}>;
+
+export interface ProvinceUpdateOneRequiredWithoutCitiesInput {
+  create?: ProvinceCreateWithoutCitiesInput;
+  update?: ProvinceUpdateWithoutCitiesDataInput;
+  upsert?: ProvinceUpsertWithoutCitiesInput;
+  connect?: ProvinceWhereUniqueInput;
+}
+
+export interface SchoolEduUpdateInput {
+  school?: SchoolUpdateOneInput;
+  startTime?: DateTimeInput;
+  major?: MajorUpdateOneInput;
+  grade?: Int;
+  className?: String;
+  students?: UserUpdateManyWithoutStudiesInput;
+}
+
+export interface ProvinceUpdateWithoutCitiesDataInput {
+  code?: String;
+  name?: String;
+}
+
+export interface SchoolUpdateInput {
+  name?: String;
+  kind?: Educationkind;
+  location?: LocationUpdateOneWithoutSchoolsInput;
+}
+
+export interface ProvinceUpsertWithoutCitiesInput {
+  update: ProvinceUpdateWithoutCitiesDataInput;
+  create: ProvinceCreateWithoutCitiesInput;
+}
+
+export interface RegStatusUpdateManyMutationInput {
+  education?: Educationkind;
+}
+
+export interface CityUpsertWithoutAreasInput {
+  update: CityUpdateWithoutAreasDataInput;
+  create: CityCreateWithoutAreasInput;
+}
+
+export interface UserUpdateWithoutRegStatusDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  messages?: MessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+}
+
+export interface StreetUpdateManyWithoutAreaInput {
+  create?: StreetCreateWithoutAreaInput[] | StreetCreateWithoutAreaInput;
+  delete?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
+  connect?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
+  disconnect?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
+  update?:
+    | StreetUpdateWithWhereUniqueWithoutAreaInput[]
+    | StreetUpdateWithWhereUniqueWithoutAreaInput;
+  upsert?:
+    | StreetUpsertWithWhereUniqueWithoutAreaInput[]
+    | StreetUpsertWithWhereUniqueWithoutAreaInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutRegStatusInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutRegStatusDataInput;
+}
+
+export interface StreetUpdateWithWhereUniqueWithoutAreaInput {
+  where: StreetWhereUniqueInput;
+  data: StreetUpdateWithoutAreaDataInput;
+}
+
+export interface RegStatusUpdateInput {
+  education?: Educationkind;
+  university?: UniversityUpdateOneInput;
+  major?: MajorUpdateOneRequiredInput;
+  applicants?: UserUpdateManyWithoutRegStatusInput;
+}
+
+export interface StreetUpdateWithoutAreaDataInput {
+  code?: String;
+  name?: String;
+  villages?: VillageUpdateManyWithoutStreetInput;
+}
+
+export interface UserCreateWithoutRegStatusInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  messages?: MessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+}
+
+export interface VillageUpdateManyWithoutStreetInput {
+  create?: VillageCreateWithoutStreetInput[] | VillageCreateWithoutStreetInput;
+  delete?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
+  connect?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
+  disconnect?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
+  update?:
+    | VillageUpdateWithWhereUniqueWithoutStreetInput[]
+    | VillageUpdateWithWhereUniqueWithoutStreetInput;
+  upsert?:
+    | VillageUpsertWithWhereUniqueWithoutStreetInput[]
+    | VillageUpsertWithWhereUniqueWithoutStreetInput;
+}
+
+export interface RegStatusCreateInput {
+  education: Educationkind;
+  university?: UniversityCreateOneInput;
+  major: MajorCreateOneInput;
+  applicants?: UserCreateManyWithoutRegStatusInput;
+}
+
+export interface VillageUpdateWithWhereUniqueWithoutStreetInput {
+  where: VillageWhereUniqueInput;
+  data: VillageUpdateWithoutStreetDataInput;
+}
+
+export interface ProvinceUpdateManyMutationInput {
+  code?: String;
+  name?: String;
+}
+
+export interface VillageUpdateWithoutStreetDataInput {
+  code?: String;
+  name?: String;
+  people?: UserUpdateManyInput;
+}
+
+export interface PostUpdateManyMutationInput {
+  isPublished?: Boolean;
+  title?: String;
+  content?: String;
+}
+
+export interface UserUpdateManyInput {
+  create?: UserCreateInput[] | UserCreateInput;
+  update?:
+    | UserUpdateWithWhereUniqueNestedInput[]
+    | UserUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueNestedInput[]
+    | UserUpsertWithWhereUniqueNestedInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface VillageWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  code?: String;
+  code_not?: String;
+  code_in?: String[] | String;
+  code_not_in?: String[] | String;
+  code_lt?: String;
+  code_lte?: String;
+  code_gt?: String;
+  code_gte?: String;
+  code_contains?: String;
+  code_not_contains?: String;
+  code_starts_with?: String;
+  code_not_starts_with?: String;
+  code_ends_with?: String;
+  code_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  street?: StreetWhereInput;
+  people_every?: UserWhereInput;
+  people_some?: UserWhereInput;
+  people_none?: UserWhereInput;
+  AND?: VillageWhereInput[] | VillageWhereInput;
+  OR?: VillageWhereInput[] | VillageWhereInput;
+  NOT?: VillageWhereInput[] | VillageWhereInput;
+}
+
+export interface UserUpdateWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateDataInput;
+}
+
+export interface UserUpdateWithoutPostsDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  messages?: MessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+}
+
+export interface UserUpdateDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  messages?: MessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+}
+
+export interface LogsWhereInput {
+  user?: UserWhereInput;
+  createFamilyGroupTime?: DateTimeInput;
+  createFamilyGroupTime_not?: DateTimeInput;
+  createFamilyGroupTime_in?: DateTimeInput[] | DateTimeInput;
+  createFamilyGroupTime_not_in?: DateTimeInput[] | DateTimeInput;
+  createFamilyGroupTime_lt?: DateTimeInput;
+  createFamilyGroupTime_lte?: DateTimeInput;
+  createFamilyGroupTime_gt?: DateTimeInput;
+  createFamilyGroupTime_gte?: DateTimeInput;
+  AND?: LogsWhereInput[] | LogsWhereInput;
+  OR?: LogsWhereInput[] | LogsWhereInput;
+  NOT?: LogsWhereInput[] | LogsWhereInput;
+}
+
+export interface LocationUpdateOneInput {
+  create?: LocationCreateInput;
+  update?: LocationUpdateDataInput;
+  upsert?: LocationUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: LocationWhereUniqueInput;
+}
+
+export interface PostUpdateInput {
+  isPublished?: Boolean;
+  title?: String;
+  content?: String;
+  author?: UserUpdateOneRequiredWithoutPostsInput;
+}
+
+export interface LocationUpdateDataInput {
+  name?: String;
+  province?: ProvinceUpdateOneInput;
+  city?: CityUpdateOneInput;
+  area?: AreaUpdateOneInput;
+  street?: StreetUpdateOneInput;
+  village?: VillageUpdateOneInput;
+  schools?: SchoolUpdateManyWithoutLocationInput;
+  companies?: CompanyUpdateManyWithoutLocationInput;
+  universities?: UniversityUpdateManyInput;
+}
+
+export interface UserCreateOneWithoutPostsInput {
+  create?: UserCreateWithoutPostsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface ProvinceUpdateOneInput {
+  create?: ProvinceCreateInput;
+  update?: ProvinceUpdateDataInput;
+  upsert?: ProvinceUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: ProvinceWhereUniqueInput;
+}
+
+export type MajorWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface ProvinceUpdateDataInput {
+  code?: String;
+  name?: String;
+  cities?: CityUpdateManyWithoutProvinceInput;
+}
+
+export interface PersonUpdateManyMutationInput {
+  name?: String;
+}
+
+export interface CityUpdateManyWithoutProvinceInput {
+  create?: CityCreateWithoutProvinceInput[] | CityCreateWithoutProvinceInput;
+  delete?: CityWhereUniqueInput[] | CityWhereUniqueInput;
+  connect?: CityWhereUniqueInput[] | CityWhereUniqueInput;
+  disconnect?: CityWhereUniqueInput[] | CityWhereUniqueInput;
+  update?:
+    | CityUpdateWithWhereUniqueWithoutProvinceInput[]
+    | CityUpdateWithWhereUniqueWithoutProvinceInput;
+  upsert?:
+    | CityUpsertWithWhereUniqueWithoutProvinceInput[]
+    | CityUpsertWithWhereUniqueWithoutProvinceInput;
+}
+
+export interface PersonCreateInput {
+  name: String;
+  user?: UserCreateOneInput;
+  families?: FamilyCreateManyWithoutToInput;
+  asFather?: FamilyGroupCreateManyWithoutFatherInput;
+  asMother?: FamilyGroupCreateManyWithoutMotherInput;
+}
+
+export interface CityUpdateWithWhereUniqueWithoutProvinceInput {
+  where: CityWhereUniqueInput;
+  data: CityUpdateWithoutProvinceDataInput;
+}
+
+export interface OldColleagueUpdateManyMutationInput {
+  status?: String;
+}
+
+export interface CityUpdateWithoutProvinceDataInput {
+  code?: String;
+  name?: String;
+  areas?: AreaUpdateManyWithoutCityInput;
+}
+
+export interface OldColleagueCreateInput {
+  from?: UserCreateOneWithoutFromOldColleaguesInput;
+  to?: UserCreateOneWithoutToOldColleaguesInput;
+  company?: CompanyCreateOneInput;
+  status: String;
+}
+
+export interface AreaUpdateManyWithoutCityInput {
+  create?: AreaCreateWithoutCityInput[] | AreaCreateWithoutCityInput;
+  delete?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
+  connect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
+  disconnect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
+  update?:
+    | AreaUpdateWithWhereUniqueWithoutCityInput[]
+    | AreaUpdateWithWhereUniqueWithoutCityInput;
+  upsert?:
+    | AreaUpsertWithWhereUniqueWithoutCityInput[]
+    | AreaUpsertWithWhereUniqueWithoutCityInput;
+}
+
+export interface MessageUpdateManyMutationInput {
+  text?: String;
+}
+
+export interface AreaUpdateWithWhereUniqueWithoutCityInput {
+  where: AreaWhereUniqueInput;
+  data: AreaUpdateWithoutCityDataInput;
+}
+
+export interface MajorUpdateManyMutationInput {
+  name?: String;
+  category?: String;
+  education?: Educationkind;
+}
+
+export interface AreaUpdateWithoutCityDataInput {
+  code?: String;
+  name?: String;
+  towns?: StreetUpdateManyWithoutAreaInput;
+}
+
+export interface ProvinceWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  code?: String;
+  code_not?: String;
+  code_in?: String[] | String;
+  code_not_in?: String[] | String;
+  code_lt?: String;
+  code_lte?: String;
+  code_gt?: String;
+  code_gte?: String;
+  code_contains?: String;
+  code_not_contains?: String;
+  code_starts_with?: String;
+  code_not_starts_with?: String;
+  code_ends_with?: String;
+  code_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  cities_every?: CityWhereInput;
+  cities_some?: CityWhereInput;
+  cities_none?: CityWhereInput;
+  AND?: ProvinceWhereInput[] | ProvinceWhereInput;
+  OR?: ProvinceWhereInput[] | ProvinceWhereInput;
+  NOT?: ProvinceWhereInput[] | ProvinceWhereInput;
+}
+
+export interface AreaUpsertWithWhereUniqueWithoutCityInput {
+  where: AreaWhereUniqueInput;
+  update: AreaUpdateWithoutCityDataInput;
+  create: AreaCreateWithoutCityInput;
+}
+
+export interface LogsUpdateManyMutationInput {
+  createFamilyGroupTime?: DateTimeInput;
+}
+
+export interface CityUpsertWithWhereUniqueWithoutProvinceInput {
+  where: CityWhereUniqueInput;
+  update: CityUpdateWithoutProvinceDataInput;
+  create: CityCreateWithoutProvinceInput;
+}
+
+export type PostWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface ProvinceUpsertNestedInput {
+  update: ProvinceUpdateDataInput;
+  create: ProvinceCreateInput;
+}
+
+export interface LocationUpdateInput {
+  name?: String;
+  province?: ProvinceUpdateOneInput;
+  city?: CityUpdateOneInput;
+  area?: AreaUpdateOneInput;
+  street?: StreetUpdateOneInput;
+  village?: VillageUpdateOneInput;
+  schools?: SchoolUpdateManyWithoutLocationInput;
+  companies?: CompanyUpdateManyWithoutLocationInput;
+  universities?: UniversityUpdateManyInput;
+}
+
+export interface CityUpdateOneInput {
+  create?: CityCreateInput;
+  update?: CityUpdateDataInput;
+  upsert?: CityUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: CityWhereUniqueInput;
+}
+
+export type ProvinceWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+  name?: String;
+}>;
+
+export interface CityUpdateDataInput {
+  code?: String;
+  name?: String;
+  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
+  areas?: AreaUpdateManyWithoutCityInput;
+}
+
+export interface GroupUpdateInput {
+  type?: GroupKind;
+  name?: String;
+  users?: UserUpdateManyWithoutGroupsInput;
+  messages?: MessageUpdateManyWithoutToInput;
+}
+
+export interface CityUpsertNestedInput {
+  update: CityUpdateDataInput;
+  create: CityCreateInput;
+}
+
+export interface FamilyGroupUpdateManyMutationInput {
+  name?: String;
+}
+
+export interface AreaUpdateOneInput {
+  create?: AreaCreateInput;
+  update?: AreaUpdateDataInput;
+  upsert?: AreaUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: AreaWhereUniqueInput;
+}
+
+export interface FamilyGroupUpdateInput {
+  father?: PersonUpdateOneWithoutAsFatherInput;
+  mother?: PersonUpdateOneWithoutAsMotherInput;
+  creater?: UserUpdateOneWithoutCreaterInput;
+  name?: String;
+  families?: FamilyUpdateManyInput;
+  messages?: MessageUpdateManyInput;
+  users?: UserUpdateManyWithoutFamilyGroupInput;
+}
+
+export interface AreaUpdateDataInput {
+  code?: String;
+  name?: String;
+  city?: CityUpdateOneRequiredWithoutAreasInput;
+  towns?: StreetUpdateManyWithoutAreaInput;
+}
+
+export interface FamilyUpdateManyMutationInput {
+  relationship?: String;
+  status?: String;
+}
+
+export interface AreaUpsertNestedInput {
+  update: AreaUpdateDataInput;
+  create: AreaCreateInput;
+}
+
+export type SchoolWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface StreetUpdateOneInput {
+  create?: StreetCreateInput;
+  update?: StreetUpdateDataInput;
+  upsert?: StreetUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: StreetWhereUniqueInput;
+}
+
+export interface CompanyUpdateInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  location?: LocationUpdateOneWithoutCompaniesInput;
+  BusinessScope?: String;
+  works?: WorkUpdateManyWithoutCompanyInput;
+  workGroup?: WorkGroupUpdateOneWithoutCompanyInput;
+}
+
+export interface StreetUpdateDataInput {
+  code?: String;
+  name?: String;
+  Area?: AreaUpdateOneRequiredWithoutTownsInput;
+  villages?: VillageUpdateManyWithoutStreetInput;
+}
+
+export type SchoolEduWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface AreaUpdateOneRequiredWithoutTownsInput {
+  create?: AreaCreateWithoutTownsInput;
+  update?: AreaUpdateWithoutTownsDataInput;
+  upsert?: AreaUpsertWithoutTownsInput;
+  connect?: AreaWhereUniqueInput;
+}
+
+export interface UserUpdateWithoutExamDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  messages?: MessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+}
+
+export interface ClassGroupCreateInput {
+  study?: SchoolEduCreateOneInput;
+  name?: String;
+  members?: ClassMateCreateManyWithoutGroupInput;
+  messages?: MessageCreateManyInput;
+}
+
+export type StationWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+  name?: String;
+}>;
+
+export interface AreaUpsertWithoutTownsInput {
+  update: AreaUpdateWithoutTownsDataInput;
+  create: AreaCreateWithoutTownsInput;
+}
+
+export interface UserCreateWithoutExamInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  messages?: MessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+}
+
+export interface StreetUpsertNestedInput {
+  update: StreetUpdateDataInput;
+  create: StreetCreateInput;
+}
+
+export interface CollegeEntranceExamCreateInput {
+  province: ProvinceCreateOneInput;
+  subject: String;
+  culscore: Float;
+  proscore?: Float;
+  candidatenum: String;
+  times?: Int;
+  student: UserCreateOneWithoutExamInput;
+}
+
+export interface VillageUpdateOneInput {
+  create?: VillageCreateInput;
+  update?: VillageUpdateDataInput;
+  upsert?: VillageUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: VillageWhereUniqueInput;
+}
+
+export interface ColleagueUpdateManyMutationInput {
+  status?: String;
+}
+
+export interface VillageUpdateDataInput {
+  code?: String;
+  name?: String;
+  street?: StreetUpdateOneRequiredWithoutVillagesInput;
+  people?: UserUpdateManyInput;
+}
+
+export interface ColleagueCreateInput {
+  worker?: UserCreateOneWithoutColleaguesInput;
+  status: String;
+  group?: WorkGroupCreateOneWithoutColleaguesInput;
+}
+
+export interface StreetUpdateOneRequiredWithoutVillagesInput {
+  create?: StreetCreateWithoutVillagesInput;
+  update?: StreetUpdateWithoutVillagesDataInput;
+  upsert?: StreetUpsertWithoutVillagesInput;
+  connect?: StreetWhereUniqueInput;
+}
+
+export interface ClassMateUpdateManyMutationInput {
+  status?: String;
+}
+
+export interface StreetUpdateWithoutVillagesDataInput {
+  code?: String;
+  name?: String;
+  Area?: AreaUpdateOneRequiredWithoutTownsInput;
+}
+
+export interface ClassMateCreateInput {
+  student?: UserCreateOneWithoutClassMateInput;
+  status: String;
+  group: ClassGroupCreateOneWithoutMembersInput;
+}
+
+export interface StreetUpsertWithoutVillagesInput {
+  update: StreetUpdateWithoutVillagesDataInput;
+  create: StreetCreateWithoutVillagesInput;
+}
+
+export interface ClassGroupUpdateManyMutationInput {
+  name?: String;
+}
+
+export interface VillageUpsertNestedInput {
+  update: VillageUpdateDataInput;
+  create: VillageCreateInput;
+}
+
+export interface UserUpsertWithoutClassMateInput {
+  update: UserUpdateWithoutClassMateDataInput;
+  create: UserCreateWithoutClassMateInput;
+}
+
+export interface SchoolUpdateManyWithoutLocationInput {
+  create?:
+    | SchoolCreateWithoutLocationInput[]
+    | SchoolCreateWithoutLocationInput;
+  delete?: SchoolWhereUniqueInput[] | SchoolWhereUniqueInput;
+  connect?: SchoolWhereUniqueInput[] | SchoolWhereUniqueInput;
+  disconnect?: SchoolWhereUniqueInput[] | SchoolWhereUniqueInput;
+  update?:
+    | SchoolUpdateWithWhereUniqueWithoutLocationInput[]
+    | SchoolUpdateWithWhereUniqueWithoutLocationInput;
+  upsert?:
+    | SchoolUpsertWithWhereUniqueWithoutLocationInput[]
+    | SchoolUpsertWithWhereUniqueWithoutLocationInput;
+}
+
+export interface UserUpdateWithoutClassMateDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  messages?: MessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+}
+
+export interface SchoolUpdateWithWhereUniqueWithoutLocationInput {
+  where: SchoolWhereUniqueInput;
+  data: SchoolUpdateWithoutLocationDataInput;
+}
+
+export interface ClassMateUpdateWithoutGroupDataInput {
+  student?: UserUpdateOneWithoutClassMateInput;
+  status?: String;
+}
+
+export interface SchoolUpdateWithoutLocationDataInput {
+  name?: String;
+  kind?: Educationkind;
+}
+
+export interface ClassMateUpdateWithWhereUniqueWithoutGroupInput {
+  where: ClassMateWhereUniqueInput;
+  data: ClassMateUpdateWithoutGroupDataInput;
+}
+
+export interface SchoolUpsertWithWhereUniqueWithoutLocationInput {
+  where: SchoolWhereUniqueInput;
+  update: SchoolUpdateWithoutLocationDataInput;
+  create: SchoolCreateWithoutLocationInput;
+}
+
+export interface ClassGroupUpdateInput {
+  study?: SchoolEduUpdateOneInput;
+  name?: String;
+  members?: ClassMateUpdateManyWithoutGroupInput;
+  messages?: MessageUpdateManyInput;
+}
+
+export interface CompanyUpdateManyWithoutLocationInput {
+  create?:
+    | CompanyCreateWithoutLocationInput[]
+    | CompanyCreateWithoutLocationInput;
+  delete?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
+  connect?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
+  disconnect?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
+  update?:
+    | CompanyUpdateWithWhereUniqueWithoutLocationInput[]
+    | CompanyUpdateWithWhereUniqueWithoutLocationInput;
+  upsert?:
+    | CompanyUpsertWithWhereUniqueWithoutLocationInput[]
+    | CompanyUpsertWithWhereUniqueWithoutLocationInput;
+}
+
+export interface UserCreateWithoutClassMateInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  messages?: MessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+}
+
+export interface CompanyUpdateWithWhereUniqueWithoutLocationInput {
+  where: CompanyWhereUniqueInput;
+  data: CompanyUpdateWithoutLocationDataInput;
+}
+
+export interface ClassMateCreateWithoutGroupInput {
+  student?: UserCreateOneWithoutClassMateInput;
+  status: String;
+}
+
+export interface CompanyUpdateWithoutLocationDataInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  BusinessScope?: String;
+  works?: WorkUpdateManyWithoutCompanyInput;
+  workGroup?: WorkGroupUpdateOneWithoutCompanyInput;
+}
+
+export interface CityCreateOneWithoutAreasInput {
+  create?: CityCreateWithoutAreasInput;
+  connect?: CityWhereUniqueInput;
+}
+
+export interface CollegeEntranceExamWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  province?: ProvinceWhereInput;
+  subject?: String;
+  subject_not?: String;
+  subject_in?: String[] | String;
+  subject_not_in?: String[] | String;
+  subject_lt?: String;
+  subject_lte?: String;
+  subject_gt?: String;
+  subject_gte?: String;
+  subject_contains?: String;
+  subject_not_contains?: String;
+  subject_starts_with?: String;
+  subject_not_starts_with?: String;
+  subject_ends_with?: String;
+  subject_not_ends_with?: String;
+  culscore?: Float;
+  culscore_not?: Float;
+  culscore_in?: Float[] | Float;
+  culscore_not_in?: Float[] | Float;
+  culscore_lt?: Float;
+  culscore_lte?: Float;
+  culscore_gt?: Float;
+  culscore_gte?: Float;
+  proscore?: Float;
+  proscore_not?: Float;
+  proscore_in?: Float[] | Float;
+  proscore_not_in?: Float[] | Float;
+  proscore_lt?: Float;
+  proscore_lte?: Float;
+  proscore_gt?: Float;
+  proscore_gte?: Float;
+  candidatenum?: String;
+  candidatenum_not?: String;
+  candidatenum_in?: String[] | String;
+  candidatenum_not_in?: String[] | String;
+  candidatenum_lt?: String;
+  candidatenum_lte?: String;
+  candidatenum_gt?: String;
+  candidatenum_gte?: String;
+  candidatenum_contains?: String;
+  candidatenum_not_contains?: String;
+  candidatenum_starts_with?: String;
+  candidatenum_not_starts_with?: String;
+  candidatenum_ends_with?: String;
+  candidatenum_not_ends_with?: String;
+  times?: Int;
+  times_not?: Int;
+  times_in?: Int[] | Int;
+  times_not_in?: Int[] | Int;
+  times_lt?: Int;
+  times_lte?: Int;
+  times_gt?: Int;
+  times_gte?: Int;
+  student?: UserWhereInput;
+  AND?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
+  OR?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
+  NOT?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
+}
+
+export interface ProvinceCreateOneWithoutCitiesInput {
+  create?: ProvinceCreateWithoutCitiesInput;
+  connect?: ProvinceWhereUniqueInput;
+}
+
+export interface ClassMateWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  student?: UserWhereInput;
+  status?: String;
+  status_not?: String;
+  status_in?: String[] | String;
+  status_not_in?: String[] | String;
+  status_lt?: String;
+  status_lte?: String;
+  status_gt?: String;
+  status_gte?: String;
+  status_contains?: String;
+  status_not_contains?: String;
+  status_starts_with?: String;
+  status_not_starts_with?: String;
+  status_ends_with?: String;
+  status_not_ends_with?: String;
+  group?: ClassGroupWhereInput;
+  AND?: ClassMateWhereInput[] | ClassMateWhereInput;
+  OR?: ClassMateWhereInput[] | ClassMateWhereInput;
+  NOT?: ClassMateWhereInput[] | ClassMateWhereInput;
+}
+
+export interface StreetCreateManyWithoutAreaInput {
+  create?: StreetCreateWithoutAreaInput[] | StreetCreateWithoutAreaInput;
+  connect?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
+}
+
+export interface WorkUpdateWithoutCompanyDataInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  department?: String;
+  post?: StationUpdateOneInput;
+  jobContent?: String;
+  worker?: UserUpdateOneWithoutWorksInput;
+}
+
+export interface VillageCreateManyWithoutStreetInput {
+  create?: VillageCreateWithoutStreetInput[] | VillageCreateWithoutStreetInput;
+  connect?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
+}
+
+export interface StationUpdateOneInput {
+  create?: StationCreateInput;
+  update?: StationUpdateDataInput;
+  upsert?: StationUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: StationWhereUniqueInput;
+}
+
+export interface UserCreateManyInput {
+  create?: UserCreateInput[] | UserCreateInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface StationUpdateDataInput {
+  code?: String;
+  name?: String;
+}
+
+export interface LocationCreateOneInput {
+  create?: LocationCreateInput;
+  connect?: LocationWhereUniqueInput;
+}
+
+export interface StationUpsertNestedInput {
+  update: StationUpdateDataInput;
+  create: StationCreateInput;
+}
+
+export interface ProvinceCreateOneInput {
+  create?: ProvinceCreateInput;
+  connect?: ProvinceWhereUniqueInput;
+}
+
+export interface UserUpdateOneWithoutWorksInput {
+  create?: UserCreateWithoutWorksInput;
+  update?: UserUpdateWithoutWorksDataInput;
+  upsert?: UserUpsertWithoutWorksInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface CityCreateManyWithoutProvinceInput {
+  create?: CityCreateWithoutProvinceInput[] | CityCreateWithoutProvinceInput;
+  connect?: CityWhereUniqueInput[] | CityWhereUniqueInput;
+}
+
+export interface UserUpdateWithoutWorksDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  messages?: MessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+}
+
+export interface AreaCreateManyWithoutCityInput {
+  create?: AreaCreateWithoutCityInput[] | AreaCreateWithoutCityInput;
+  connect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
+}
+
+export interface PostUpdateManyWithoutAuthorInput {
+  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput;
+  delete?: PostWhereUniqueInput[] | PostWhereUniqueInput;
+  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput;
+  disconnect?: PostWhereUniqueInput[] | PostWhereUniqueInput;
+  update?:
+    | PostUpdateWithWhereUniqueWithoutAuthorInput[]
+    | PostUpdateWithWhereUniqueWithoutAuthorInput;
+  upsert?:
+    | PostUpsertWithWhereUniqueWithoutAuthorInput[]
+    | PostUpsertWithWhereUniqueWithoutAuthorInput;
+}
+
+export interface CityCreateOneInput {
+  create?: CityCreateInput;
+  connect?: CityWhereUniqueInput;
+}
+
+export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
+  where: PostWhereUniqueInput;
+  data: PostUpdateWithoutAuthorDataInput;
+}
+
+export interface AreaCreateOneInput {
+  create?: AreaCreateInput;
+  connect?: AreaWhereUniqueInput;
+}
+
+export interface PostUpdateWithoutAuthorDataInput {
+  isPublished?: Boolean;
+  title?: String;
+  content?: String;
+}
+
+export interface StreetCreateInput {
+  code: String;
+  name: String;
+  Area: AreaCreateOneWithoutTownsInput;
+  villages?: VillageCreateManyWithoutStreetInput;
+}
+
+export interface PostUpsertWithWhereUniqueWithoutAuthorInput {
+  where: PostWhereUniqueInput;
+  update: PostUpdateWithoutAuthorDataInput;
+  create: PostCreateWithoutAuthorInput;
+}
+
+export interface AreaCreateWithoutTownsInput {
+  code: String;
+  name: String;
+  city: CityCreateOneWithoutAreasInput;
+}
+
+export interface RegStatusUpdateOneWithoutApplicantsInput {
+  create?: RegStatusCreateWithoutApplicantsInput;
+  update?: RegStatusUpdateWithoutApplicantsDataInput;
+  upsert?: RegStatusUpsertWithoutApplicantsInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: RegStatusWhereUniqueInput;
+}
+
+export interface VillageCreateInput {
+  code: String;
+  name: String;
+  street: StreetCreateOneWithoutVillagesInput;
+  people?: UserCreateManyInput;
+}
+
+export interface RegStatusUpdateWithoutApplicantsDataInput {
+  education?: Educationkind;
+  university?: UniversityUpdateOneInput;
+  major?: MajorUpdateOneRequiredInput;
+}
+
+export interface StreetCreateWithoutVillagesInput {
+  code: String;
+  name: String;
+  Area: AreaCreateOneWithoutTownsInput;
+}
+
+export interface UniversityUpdateOneInput {
+  create?: UniversityCreateInput;
+  update?: UniversityUpdateDataInput;
+  upsert?: UniversityUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UniversityWhereUniqueInput;
+}
+
+export interface SchoolCreateWithoutLocationInput {
+  name?: String;
+  kind?: Educationkind;
+}
+
+export interface UniversityUpdateDataInput {
+  name?: String;
+  education?: Educationkind;
+  department?: String;
+  location?: String;
+  desc?: String;
+}
+
+export interface CompanyCreateWithoutLocationInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  BusinessScope?: String;
+  works?: WorkCreateManyWithoutCompanyInput;
+  workGroup?: WorkGroupCreateOneWithoutCompanyInput;
+}
+
+export interface UniversityUpsertNestedInput {
+  update: UniversityUpdateDataInput;
+  create: UniversityCreateInput;
+}
+
+export interface WorkCreateWithoutCompanyInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  department?: String;
+  post?: StationCreateOneInput;
+  jobContent?: String;
+  worker?: UserCreateOneWithoutWorksInput;
+}
+
+export interface MajorUpdateOneRequiredInput {
+  create?: MajorCreateInput;
+  update?: MajorUpdateDataInput;
+  upsert?: MajorUpsertNestedInput;
+  connect?: MajorWhereUniqueInput;
+}
+
+export interface StationCreateInput {
+  code?: String;
+  name?: String;
+}
+
+export interface MajorUpdateDataInput {
+  name?: String;
+  category?: String;
+  education?: Educationkind;
+}
+
+export interface UserCreateWithoutWorksInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  messages?: MessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+}
+
+export interface MajorUpsertNestedInput {
+  update: MajorUpdateDataInput;
+  create: MajorCreateInput;
+}
+
+export interface PostCreateWithoutAuthorInput {
+  isPublished?: Boolean;
+  title: String;
+  content: String;
+}
+
+export interface RegStatusUpsertWithoutApplicantsInput {
+  update: RegStatusUpdateWithoutApplicantsDataInput;
+  create: RegStatusCreateWithoutApplicantsInput;
+}
+
+export interface RegStatusCreateWithoutApplicantsInput {
+  education: Educationkind;
+  university?: UniversityCreateOneInput;
+  major: MajorCreateOneInput;
+}
+
+export interface FamilyUpdateManyWithoutFromInput {
+  create?: FamilyCreateWithoutFromInput[] | FamilyCreateWithoutFromInput;
+  delete?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+  disconnect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+  update?:
+    | FamilyUpdateWithWhereUniqueWithoutFromInput[]
+    | FamilyUpdateWithWhereUniqueWithoutFromInput;
+  upsert?:
+    | FamilyUpsertWithWhereUniqueWithoutFromInput[]
+    | FamilyUpsertWithWhereUniqueWithoutFromInput;
+}
+
+export interface UniversityCreateInput {
+  name: String;
+  education: Educationkind;
+  department?: String;
+  location?: String;
+  desc?: String;
+}
+
+export interface FamilyUpdateWithWhereUniqueWithoutFromInput {
+  where: FamilyWhereUniqueInput;
+  data: FamilyUpdateWithoutFromDataInput;
+}
+
+export interface MajorCreateInput {
+  name: String;
+  category: String;
+  education: Educationkind;
+}
+
+export interface FamilyUpdateWithoutFromDataInput {
+  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
+  relationship?: String;
+  spouse?: FamilyUpdateOneInput;
+  status?: String;
+}
+
+export interface FamilyCreateWithoutFromInput {
+  to: PersonCreateOneWithoutFamiliesInput;
+  relationship: String;
+  spouse?: FamilyCreateOneInput;
+  status: String;
+}
+
+export interface PersonUpdateOneRequiredWithoutFamiliesInput {
+  create?: PersonCreateWithoutFamiliesInput;
+  update?: PersonUpdateWithoutFamiliesDataInput;
+  upsert?: PersonUpsertWithoutFamiliesInput;
+  connect?: PersonWhereUniqueInput;
+}
+
+export interface PersonCreateWithoutFamiliesInput {
+  name: String;
+  user?: UserCreateOneInput;
+  asFather?: FamilyGroupCreateManyWithoutFatherInput;
+  asMother?: FamilyGroupCreateManyWithoutMotherInput;
+}
+
+export interface PersonUpdateWithoutFamiliesDataInput {
+  name?: String;
+  user?: UserUpdateOneInput;
+  asFather?: FamilyGroupUpdateManyWithoutFatherInput;
+  asMother?: FamilyGroupUpdateManyWithoutMotherInput;
+}
+
+export interface FamilyGroupCreateManyWithoutFatherInput {
+  create?:
+    | FamilyGroupCreateWithoutFatherInput[]
+    | FamilyGroupCreateWithoutFatherInput;
+  connect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
+}
+
+export interface UserUpdateOneInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface PersonCreateOneWithoutAsMotherInput {
+  create?: PersonCreateWithoutAsMotherInput;
+  connect?: PersonWhereUniqueInput;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface FamilyCreateManyWithoutToInput {
+  create?: FamilyCreateWithoutToInput[] | FamilyCreateWithoutToInput;
+  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+}
+
+export interface FamilyGroupUpdateManyWithoutFatherInput {
+  create?:
+    | FamilyGroupCreateWithoutFatherInput[]
+    | FamilyGroupCreateWithoutFatherInput;
+  delete?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
+  connect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
+  disconnect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
+  update?:
+    | FamilyGroupUpdateWithWhereUniqueWithoutFatherInput[]
+    | FamilyGroupUpdateWithWhereUniqueWithoutFatherInput;
+  upsert?:
+    | FamilyGroupUpsertWithWhereUniqueWithoutFatherInput[]
+    | FamilyGroupUpsertWithWhereUniqueWithoutFatherInput;
+}
+
+export interface UserCreateOneWithoutFamiliesInput {
+  create?: UserCreateWithoutFamiliesInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface FamilyGroupUpdateWithWhereUniqueWithoutFatherInput {
+  where: FamilyGroupWhereUniqueInput;
+  data: FamilyGroupUpdateWithoutFatherDataInput;
+}
+
+export interface SchoolEduCreateManyWithoutStudentsInput {
+  create?:
+    | SchoolEduCreateWithoutStudentsInput[]
+    | SchoolEduCreateWithoutStudentsInput;
+  connect?: SchoolEduWhereUniqueInput[] | SchoolEduWhereUniqueInput;
+}
+
+export interface FamilyGroupUpdateWithoutFatherDataInput {
+  mother?: PersonUpdateOneWithoutAsMotherInput;
+  creater?: UserUpdateOneWithoutCreaterInput;
+  name?: String;
+  families?: FamilyUpdateManyInput;
+  messages?: MessageUpdateManyInput;
+  users?: UserUpdateManyWithoutFamilyGroupInput;
+}
+
+export interface SchoolCreateOneInput {
+  create?: SchoolCreateInput;
+  connect?: SchoolWhereUniqueInput;
+}
+
+export interface PersonUpdateOneWithoutAsMotherInput {
+  create?: PersonCreateWithoutAsMotherInput;
+  update?: PersonUpdateWithoutAsMotherDataInput;
+  upsert?: PersonUpsertWithoutAsMotherInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: PersonWhereUniqueInput;
+}
+
+export interface LocationCreateOneWithoutSchoolsInput {
+  create?: LocationCreateWithoutSchoolsInput;
+  connect?: LocationWhereUniqueInput;
+}
+
+export interface PersonUpdateWithoutAsMotherDataInput {
+  name?: String;
+  user?: UserUpdateOneInput;
+  families?: FamilyUpdateManyWithoutToInput;
+  asFather?: FamilyGroupUpdateManyWithoutFatherInput;
+}
+
+export interface UniversityCreateManyInput {
+  create?: UniversityCreateInput[] | UniversityCreateInput;
+  connect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
+}
+
+export interface FamilyUpdateManyWithoutToInput {
+  create?: FamilyCreateWithoutToInput[] | FamilyCreateWithoutToInput;
+  delete?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+  disconnect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+  update?:
+    | FamilyUpdateWithWhereUniqueWithoutToInput[]
+    | FamilyUpdateWithWhereUniqueWithoutToInput;
+  upsert?:
+    | FamilyUpsertWithWhereUniqueWithoutToInput[]
+    | FamilyUpsertWithWhereUniqueWithoutToInput;
+}
+
+export interface WorkCreateWithoutWorkerInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  company?: CompanyCreateOneWithoutWorksInput;
+  department?: String;
+  post?: StationCreateOneInput;
+  jobContent?: String;
+}
+
+export interface FamilyUpdateWithWhereUniqueWithoutToInput {
+  where: FamilyWhereUniqueInput;
+  data: FamilyUpdateWithoutToDataInput;
+}
+
+export interface CompanyCreateWithoutWorksInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  location?: LocationCreateOneWithoutCompaniesInput;
+  BusinessScope?: String;
+  workGroup?: WorkGroupCreateOneWithoutCompanyInput;
+}
+
+export interface FamilyUpdateWithoutToDataInput {
+  from?: UserUpdateOneRequiredWithoutFamiliesInput;
+  relationship?: String;
+  spouse?: FamilyUpdateOneInput;
+  status?: String;
+}
+
+export interface LocationCreateWithoutCompaniesInput {
+  name?: String;
+  province?: ProvinceCreateOneInput;
+  city?: CityCreateOneInput;
+  area?: AreaCreateOneInput;
+  street?: StreetCreateOneInput;
+  village?: VillageCreateOneInput;
+  schools?: SchoolCreateManyWithoutLocationInput;
+  universities?: UniversityCreateManyInput;
+}
+
+export interface UserUpdateOneRequiredWithoutFamiliesInput {
+  create?: UserCreateWithoutFamiliesInput;
+  update?: UserUpdateWithoutFamiliesDataInput;
+  upsert?: UserUpsertWithoutFamiliesInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface WorkGroupCreateWithoutCompanyInput {
+  colleagues?: ColleagueCreateManyWithoutGroupInput;
+  messages?: MessageCreateManyInput;
+}
+
+export interface UserUpdateWithoutFamiliesDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  messages?: MessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+}
+
+export interface ColleagueCreateWithoutGroupInput {
+  worker?: UserCreateOneWithoutColleaguesInput;
+  status: String;
+}
+
+export interface SchoolEduUpdateManyWithoutStudentsInput {
+  create?:
+    | SchoolEduCreateWithoutStudentsInput[]
+    | SchoolEduCreateWithoutStudentsInput;
+  delete?: SchoolEduWhereUniqueInput[] | SchoolEduWhereUniqueInput;
+  connect?: SchoolEduWhereUniqueInput[] | SchoolEduWhereUniqueInput;
+  disconnect?: SchoolEduWhereUniqueInput[] | SchoolEduWhereUniqueInput;
+  update?:
+    | SchoolEduUpdateWithWhereUniqueWithoutStudentsInput[]
+    | SchoolEduUpdateWithWhereUniqueWithoutStudentsInput;
+  upsert?:
+    | SchoolEduUpsertWithWhereUniqueWithoutStudentsInput[]
+    | SchoolEduUpsertWithWhereUniqueWithoutStudentsInput;
+}
+
+export interface UserCreateWithoutColleaguesInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  messages?: MessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+}
+
+export interface SchoolEduUpdateWithWhereUniqueWithoutStudentsInput {
+  where: SchoolEduWhereUniqueInput;
+  data: SchoolEduUpdateWithoutStudentsDataInput;
+}
+
+export interface CollegeEntranceExamCreateWithoutStudentInput {
+  province: ProvinceCreateOneInput;
+  subject: String;
+  culscore: Float;
+  proscore?: Float;
+  candidatenum: String;
+  times?: Int;
+}
+
+export interface SchoolEduUpdateWithoutStudentsDataInput {
+  school?: SchoolUpdateOneInput;
+  startTime?: DateTimeInput;
+  major?: MajorUpdateOneInput;
+  grade?: Int;
+  className?: String;
+}
+
+export interface MessageCreateWithoutFromInput {
+  to: GroupCreateOneWithoutMessagesInput;
+  text: String;
+}
+
+export interface SchoolUpdateOneInput {
+  create?: SchoolCreateInput;
+  update?: SchoolUpdateDataInput;
+  upsert?: SchoolUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: SchoolWhereUniqueInput;
+}
+
+export interface GroupCreateWithoutMessagesInput {
+  type?: GroupKind;
+  name?: String;
+  users?: UserCreateManyWithoutGroupsInput;
+}
+
+export interface SchoolUpdateDataInput {
+  name?: String;
+  kind?: Educationkind;
+  location?: LocationUpdateOneWithoutSchoolsInput;
+}
+
+export interface UserCreateWithoutGroupsInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  messages?: MessageCreateManyWithoutFromInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+}
+
+export interface LocationUpdateOneWithoutSchoolsInput {
+  create?: LocationCreateWithoutSchoolsInput;
+  update?: LocationUpdateWithoutSchoolsDataInput;
+  upsert?: LocationUpsertWithoutSchoolsInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: LocationWhereUniqueInput;
+}
+
+export interface FamilyGroupCreateWithoutUsersInput {
+  father?: PersonCreateOneWithoutAsFatherInput;
+  mother?: PersonCreateOneWithoutAsMotherInput;
+  creater?: UserCreateOneWithoutCreaterInput;
+  name?: String;
+  families?: FamilyCreateManyInput;
+  messages?: MessageCreateManyInput;
+}
+
+export interface LocationUpdateWithoutSchoolsDataInput {
+  name?: String;
+  province?: ProvinceUpdateOneInput;
+  city?: CityUpdateOneInput;
+  area?: AreaUpdateOneInput;
+  street?: StreetUpdateOneInput;
+  village?: VillageUpdateOneInput;
+  companies?: CompanyUpdateManyWithoutLocationInput;
+  universities?: UniversityUpdateManyInput;
+}
+
+export interface PersonCreateWithoutAsFatherInput {
+  name: String;
+  user?: UserCreateOneInput;
+  families?: FamilyCreateManyWithoutToInput;
+  asMother?: FamilyGroupCreateManyWithoutMotherInput;
+}
+
+export interface UniversityUpdateManyInput {
+  create?: UniversityCreateInput[] | UniversityCreateInput;
+  update?:
+    | UniversityUpdateWithWhereUniqueNestedInput[]
+    | UniversityUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | UniversityUpsertWithWhereUniqueNestedInput[]
+    | UniversityUpsertWithWhereUniqueNestedInput;
+  delete?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
+  connect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
+  disconnect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
+}
+
+export interface FamilyGroupCreateWithoutMotherInput {
+  father?: PersonCreateOneWithoutAsFatherInput;
+  creater?: UserCreateOneWithoutCreaterInput;
+  name?: String;
+  families?: FamilyCreateManyInput;
+  messages?: MessageCreateManyInput;
+  users?: UserCreateManyWithoutFamilyGroupInput;
+}
+
+export interface UniversityUpdateWithWhereUniqueNestedInput {
+  where: UniversityWhereUniqueInput;
+  data: UniversityUpdateDataInput;
+}
+
+export interface UserCreateWithoutCreaterInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  messages?: MessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+}
+
+export interface UniversityUpsertWithWhereUniqueNestedInput {
+  where: UniversityWhereUniqueInput;
+  update: UniversityUpdateDataInput;
+  create: UniversityCreateInput;
+}
+
+export interface GroupCreateWithoutUsersInput {
+  type?: GroupKind;
+  name?: String;
+  messages?: MessageCreateManyWithoutToInput;
+}
+
+export interface LocationUpsertWithoutSchoolsInput {
+  update: LocationUpdateWithoutSchoolsDataInput;
+  create: LocationCreateWithoutSchoolsInput;
+}
+
+export interface MessageCreateWithoutToInput {
+  from: UserCreateOneWithoutMessagesInput;
+  text: String;
+}
+
+export interface SchoolUpsertNestedInput {
+  update: SchoolUpdateDataInput;
+  create: SchoolCreateInput;
+}
+
+export interface UserCreateWithoutMessagesInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+}
+
+export interface MajorUpdateOneInput {
+  create?: MajorCreateInput;
+  update?: MajorUpdateDataInput;
+  upsert?: MajorUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: MajorWhereUniqueInput;
+}
+
+export interface FamilyGroupCreateWithoutCreaterInput {
+  father?: PersonCreateOneWithoutAsFatherInput;
+  mother?: PersonCreateOneWithoutAsMotherInput;
+  name?: String;
+  families?: FamilyCreateManyInput;
+  messages?: MessageCreateManyInput;
+  users?: UserCreateManyWithoutFamilyGroupInput;
+}
+
+export interface SchoolEduUpsertWithWhereUniqueWithoutStudentsInput {
+  where: SchoolEduWhereUniqueInput;
+  update: SchoolEduUpdateWithoutStudentsDataInput;
+  create: SchoolEduCreateWithoutStudentsInput;
+}
+
+export interface ClassGroupWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  study?: SchoolEduWhereInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  members_every?: ClassMateWhereInput;
+  members_some?: ClassMateWhereInput;
+  members_none?: ClassMateWhereInput;
+  messages_every?: MessageWhereInput;
+  messages_some?: MessageWhereInput;
+  messages_none?: MessageWhereInput;
+  AND?: ClassGroupWhereInput[] | ClassGroupWhereInput;
+  OR?: ClassGroupWhereInput[] | ClassGroupWhereInput;
+  NOT?: ClassGroupWhereInput[] | ClassGroupWhereInput;
+}
+
+export interface WorkUpdateManyWithoutWorkerInput {
+  create?: WorkCreateWithoutWorkerInput[] | WorkCreateWithoutWorkerInput;
+  delete?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
+  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
+  disconnect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
+  update?:
+    | WorkUpdateWithWhereUniqueWithoutWorkerInput[]
+    | WorkUpdateWithWhereUniqueWithoutWorkerInput;
+  upsert?:
+    | WorkUpsertWithWhereUniqueWithoutWorkerInput[]
+    | WorkUpsertWithWhereUniqueWithoutWorkerInput;
+}
+
+export interface FamilyWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  from?: UserWhereInput;
+  to?: PersonWhereInput;
+  relationship?: String;
+  relationship_not?: String;
+  relationship_in?: String[] | String;
+  relationship_not_in?: String[] | String;
+  relationship_lt?: String;
+  relationship_lte?: String;
+  relationship_gt?: String;
+  relationship_gte?: String;
+  relationship_contains?: String;
+  relationship_not_contains?: String;
+  relationship_starts_with?: String;
+  relationship_not_starts_with?: String;
+  relationship_ends_with?: String;
+  relationship_not_ends_with?: String;
+  spouse?: FamilyWhereInput;
+  status?: String;
+  status_not?: String;
+  status_in?: String[] | String;
+  status_not_in?: String[] | String;
+  status_lt?: String;
+  status_lte?: String;
+  status_gt?: String;
+  status_gte?: String;
+  status_contains?: String;
+  status_not_contains?: String;
+  status_starts_with?: String;
+  status_not_starts_with?: String;
+  status_ends_with?: String;
+  status_not_ends_with?: String;
+  AND?: FamilyWhereInput[] | FamilyWhereInput;
+  OR?: FamilyWhereInput[] | FamilyWhereInput;
+  NOT?: FamilyWhereInput[] | FamilyWhereInput;
+}
+
+export interface WorkUpdateWithWhereUniqueWithoutWorkerInput {
+  where: WorkWhereUniqueInput;
+  data: WorkUpdateWithoutWorkerDataInput;
+}
+
+export interface MajorWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  category?: String;
+  category_not?: String;
+  category_in?: String[] | String;
+  category_not_in?: String[] | String;
+  category_lt?: String;
+  category_lte?: String;
+  category_gt?: String;
+  category_gte?: String;
+  category_contains?: String;
+  category_not_contains?: String;
+  category_starts_with?: String;
+  category_not_starts_with?: String;
+  category_ends_with?: String;
+  category_not_ends_with?: String;
+  education?: Educationkind;
+  education_not?: Educationkind;
+  education_in?: Educationkind[] | Educationkind;
+  education_not_in?: Educationkind[] | Educationkind;
+  AND?: MajorWhereInput[] | MajorWhereInput;
+  OR?: MajorWhereInput[] | MajorWhereInput;
+  NOT?: MajorWhereInput[] | MajorWhereInput;
+}
+
+export interface WorkUpdateWithoutWorkerDataInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  company?: CompanyUpdateOneWithoutWorksInput;
+  department?: String;
+  post?: StationUpdateOneInput;
+  jobContent?: String;
+}
+
+export interface StreetSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: StreetWhereInput;
+  AND?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
+  OR?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
+  NOT?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
+}
+
+export interface CompanyUpdateOneWithoutWorksInput {
+  create?: CompanyCreateWithoutWorksInput;
+  update?: CompanyUpdateWithoutWorksDataInput;
+  upsert?: CompanyUpsertWithoutWorksInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: CompanyWhereUniqueInput;
+}
+
+export interface SchoolSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: SchoolWhereInput;
+  AND?: SchoolSubscriptionWhereInput[] | SchoolSubscriptionWhereInput;
+  OR?: SchoolSubscriptionWhereInput[] | SchoolSubscriptionWhereInput;
+  NOT?: SchoolSubscriptionWhereInput[] | SchoolSubscriptionWhereInput;
+}
+
+export interface CompanyUpdateWithoutWorksDataInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  location?: LocationUpdateOneWithoutCompaniesInput;
+  BusinessScope?: String;
+  workGroup?: WorkGroupUpdateOneWithoutCompanyInput;
+}
+
+export interface PostSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: PostWhereInput;
+  AND?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
+  OR?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
+  NOT?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
+}
+
+export interface LocationUpdateOneWithoutCompaniesInput {
+  create?: LocationCreateWithoutCompaniesInput;
+  update?: LocationUpdateWithoutCompaniesDataInput;
+  upsert?: LocationUpsertWithoutCompaniesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: LocationWhereUniqueInput;
+}
+
+export interface MessageWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  to?: GroupWhereInput;
+  from?: UserWhereInput;
+  text?: String;
+  text_not?: String;
+  text_in?: String[] | String;
+  text_not_in?: String[] | String;
+  text_lt?: String;
+  text_lte?: String;
+  text_gt?: String;
+  text_gte?: String;
+  text_contains?: String;
+  text_not_contains?: String;
+  text_starts_with?: String;
+  text_not_starts_with?: String;
+  text_ends_with?: String;
+  text_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: MessageWhereInput[] | MessageWhereInput;
+  OR?: MessageWhereInput[] | MessageWhereInput;
+  NOT?: MessageWhereInput[] | MessageWhereInput;
+}
+
+export interface LocationUpdateWithoutCompaniesDataInput {
+  name?: String;
+  province?: ProvinceUpdateOneInput;
+  city?: CityUpdateOneInput;
+  area?: AreaUpdateOneInput;
+  street?: StreetUpdateOneInput;
+  village?: VillageUpdateOneInput;
+  schools?: SchoolUpdateManyWithoutLocationInput;
+  universities?: UniversityUpdateManyInput;
+}
+
+export interface LogsSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: LogsWhereInput;
+  AND?: LogsSubscriptionWhereInput[] | LogsSubscriptionWhereInput;
+  OR?: LogsSubscriptionWhereInput[] | LogsSubscriptionWhereInput;
+  NOT?: LogsSubscriptionWhereInput[] | LogsSubscriptionWhereInput;
+}
+
+export interface LocationUpsertWithoutCompaniesInput {
+  update: LocationUpdateWithoutCompaniesDataInput;
+  create: LocationCreateWithoutCompaniesInput;
+}
+
+export interface FamilyGroupSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: FamilyGroupWhereInput;
+  AND?: FamilyGroupSubscriptionWhereInput[] | FamilyGroupSubscriptionWhereInput;
+  OR?: FamilyGroupSubscriptionWhereInput[] | FamilyGroupSubscriptionWhereInput;
+  NOT?: FamilyGroupSubscriptionWhereInput[] | FamilyGroupSubscriptionWhereInput;
+}
+
+export interface WorkGroupUpdateOneWithoutCompanyInput {
+  create?: WorkGroupCreateWithoutCompanyInput;
+  update?: WorkGroupUpdateWithoutCompanyDataInput;
+  upsert?: WorkGroupUpsertWithoutCompanyInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: WorkGroupWhereUniqueInput;
+}
+
+export interface CompanySubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: CompanyWhereInput;
+  AND?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
+  OR?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
+  NOT?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
+}
+
+export interface WorkGroupUpdateWithoutCompanyDataInput {
+  colleagues?: ColleagueUpdateManyWithoutGroupInput;
+  messages?: MessageUpdateManyInput;
+}
+
+export interface ColleagueSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ColleagueWhereInput;
+  AND?: ColleagueSubscriptionWhereInput[] | ColleagueSubscriptionWhereInput;
+  OR?: ColleagueSubscriptionWhereInput[] | ColleagueSubscriptionWhereInput;
+  NOT?: ColleagueSubscriptionWhereInput[] | ColleagueSubscriptionWhereInput;
+}
+
+export interface ColleagueUpdateManyWithoutGroupInput {
+  create?:
+    | ColleagueCreateWithoutGroupInput[]
+    | ColleagueCreateWithoutGroupInput;
+  delete?: ColleagueWhereUniqueInput[] | ColleagueWhereUniqueInput;
+  connect?: ColleagueWhereUniqueInput[] | ColleagueWhereUniqueInput;
+  disconnect?: ColleagueWhereUniqueInput[] | ColleagueWhereUniqueInput;
+  update?:
+    | ColleagueUpdateWithWhereUniqueWithoutGroupInput[]
+    | ColleagueUpdateWithWhereUniqueWithoutGroupInput;
+  upsert?:
+    | ColleagueUpsertWithWhereUniqueWithoutGroupInput[]
+    | ColleagueUpsertWithWhereUniqueWithoutGroupInput;
+}
+
+export interface CitySubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: CityWhereInput;
+  AND?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
+  OR?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
+  NOT?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
+}
+
+export interface ColleagueUpdateWithWhereUniqueWithoutGroupInput {
+  where: ColleagueWhereUniqueInput;
+  data: ColleagueUpdateWithoutGroupDataInput;
+}
+
+export type CityWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+}>;
+
+export interface ColleagueUpdateWithoutGroupDataInput {
+  worker?: UserUpdateOneWithoutColleaguesInput;
+  status?: String;
+}
+
+export type ClassGroupWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpdateOneWithoutColleaguesInput {
+  create?: UserCreateWithoutColleaguesInput;
+  update?: UserUpdateWithoutColleaguesDataInput;
+  upsert?: UserUpsertWithoutColleaguesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UniversityUpdateManyMutationInput {
+  name?: String;
+  education?: Educationkind;
+  department?: String;
+  location?: String;
+  desc?: String;
+}
+
+export interface UserUpdateWithoutColleaguesDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  messages?: MessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+}
+
+export interface StreetUpdateInput {
+  code?: String;
+  name?: String;
+  Area?: AreaUpdateOneRequiredWithoutTownsInput;
+  villages?: VillageUpdateManyWithoutStreetInput;
+}
+
+export interface CollegeEntranceExamUpdateOneWithoutStudentInput {
+  create?: CollegeEntranceExamCreateWithoutStudentInput;
+  update?: CollegeEntranceExamUpdateWithoutStudentDataInput;
+  upsert?: CollegeEntranceExamUpsertWithoutStudentInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: CollegeEntranceExamWhereUniqueInput;
+}
+
+export interface SchoolEduUpdateManyMutationInput {
+  startTime?: DateTimeInput;
+  grade?: Int;
+  className?: String;
+}
+
+export interface CollegeEntranceExamUpdateWithoutStudentDataInput {
+  province?: ProvinceUpdateOneRequiredInput;
+  subject?: String;
+  culscore?: Float;
+  proscore?: Float;
+  candidatenum?: String;
+  times?: Int;
+}
+
+export interface SchoolUpdateManyMutationInput {
+  name?: String;
+  kind?: Educationkind;
+}
+
+export interface ProvinceUpdateOneRequiredInput {
+  create?: ProvinceCreateInput;
+  update?: ProvinceUpdateDataInput;
+  upsert?: ProvinceUpsertNestedInput;
+  connect?: ProvinceWhereUniqueInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutRegStatusInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutRegStatusDataInput;
+  create: UserCreateWithoutRegStatusInput;
+}
+
+export interface CollegeEntranceExamUpsertWithoutStudentInput {
+  update: CollegeEntranceExamUpdateWithoutStudentDataInput;
+  create: CollegeEntranceExamCreateWithoutStudentInput;
+}
+
+export interface UserUpdateManyWithoutRegStatusInput {
+  create?: UserCreateWithoutRegStatusInput[] | UserCreateWithoutRegStatusInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutRegStatusInput[]
+    | UserUpdateWithWhereUniqueWithoutRegStatusInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutRegStatusInput[]
+    | UserUpsertWithWhereUniqueWithoutRegStatusInput;
+}
+
+export interface MessageUpdateManyWithoutFromInput {
+  create?: MessageCreateWithoutFromInput[] | MessageCreateWithoutFromInput;
+  delete?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+  disconnect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+  update?:
+    | MessageUpdateWithWhereUniqueWithoutFromInput[]
+    | MessageUpdateWithWhereUniqueWithoutFromInput;
+  upsert?:
+    | MessageUpsertWithWhereUniqueWithoutFromInput[]
+    | MessageUpsertWithWhereUniqueWithoutFromInput;
+}
+
+export interface UserCreateManyWithoutRegStatusInput {
+  create?: UserCreateWithoutRegStatusInput[] | UserCreateWithoutRegStatusInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface MessageUpdateWithWhereUniqueWithoutFromInput {
+  where: MessageWhereUniqueInput;
+  data: MessageUpdateWithoutFromDataInput;
+}
+
+export interface ProvinceUpdateInput {
+  code?: String;
+  name?: String;
+  cities?: CityUpdateManyWithoutProvinceInput;
+}
+
+export interface MessageUpdateWithoutFromDataInput {
+  to?: GroupUpdateOneRequiredWithoutMessagesInput;
+  text?: String;
+}
+
+export interface UserUpsertWithoutPostsInput {
+  update: UserUpdateWithoutPostsDataInput;
+  create: UserCreateWithoutPostsInput;
+}
+
+export interface GroupUpdateOneRequiredWithoutMessagesInput {
+  create?: GroupCreateWithoutMessagesInput;
+  update?: GroupUpdateWithoutMessagesDataInput;
+  upsert?: GroupUpsertWithoutMessagesInput;
+  connect?: GroupWhereUniqueInput;
+}
+
+export interface StreetWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  code?: String;
+  code_not?: String;
+  code_in?: String[] | String;
+  code_not_in?: String[] | String;
+  code_lt?: String;
+  code_lte?: String;
+  code_gt?: String;
+  code_gte?: String;
+  code_contains?: String;
+  code_not_contains?: String;
+  code_starts_with?: String;
+  code_not_starts_with?: String;
+  code_ends_with?: String;
+  code_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  Area?: AreaWhereInput;
+  villages_every?: VillageWhereInput;
+  villages_some?: VillageWhereInput;
+  villages_none?: VillageWhereInput;
+  AND?: StreetWhereInput[] | StreetWhereInput;
+  OR?: StreetWhereInput[] | StreetWhereInput;
+  NOT?: StreetWhereInput[] | StreetWhereInput;
+}
+
+export interface GroupUpdateWithoutMessagesDataInput {
+  type?: GroupKind;
+  name?: String;
+  users?: UserUpdateManyWithoutGroupsInput;
+}
+
+export interface PostCreateInput {
+  isPublished?: Boolean;
+  title: String;
+  content: String;
+  author: UserCreateOneWithoutPostsInput;
+}
+
+export interface UserUpdateManyWithoutGroupsInput {
+  create?: UserCreateWithoutGroupsInput[] | UserCreateWithoutGroupsInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutGroupsInput[]
+    | UserUpdateWithWhereUniqueWithoutGroupsInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutGroupsInput[]
+    | UserUpsertWithWhereUniqueWithoutGroupsInput;
+}
+
+export interface PersonUpdateInput {
+  name?: String;
+  user?: UserUpdateOneInput;
+  families?: FamilyUpdateManyWithoutToInput;
+  asFather?: FamilyGroupUpdateManyWithoutFatherInput;
+  asMother?: FamilyGroupUpdateManyWithoutMotherInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutGroupsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutGroupsDataInput;
+}
+
+export interface OldColleagueUpdateInput {
+  from?: UserUpdateOneWithoutFromOldColleaguesInput;
+  to?: UserUpdateOneWithoutToOldColleaguesInput;
+  company?: CompanyUpdateOneInput;
+  status?: String;
+}
+
+export interface UserUpdateWithoutGroupsDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  messages?: MessageUpdateManyWithoutFromInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+}
+
+export interface MessageUpdateInput {
+  to?: GroupUpdateOneRequiredWithoutMessagesInput;
+  from?: UserUpdateOneRequiredWithoutMessagesInput;
+  text?: String;
+}
+
+export interface FamilyGroupUpdateOneWithoutUsersInput {
+  create?: FamilyGroupCreateWithoutUsersInput;
+  update?: FamilyGroupUpdateWithoutUsersDataInput;
+  upsert?: FamilyGroupUpsertWithoutUsersInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: FamilyGroupWhereUniqueInput;
+}
+
+export interface MajorUpdateInput {
+  name?: String;
+  category?: String;
+  education?: Educationkind;
+}
+
+export interface FamilyGroupUpdateWithoutUsersDataInput {
+  father?: PersonUpdateOneWithoutAsFatherInput;
+  mother?: PersonUpdateOneWithoutAsMotherInput;
+  creater?: UserUpdateOneWithoutCreaterInput;
+  name?: String;
+  families?: FamilyUpdateManyInput;
+  messages?: MessageUpdateManyInput;
+}
+
+export interface LocationUpdateManyMutationInput {
+  name?: String;
+}
+
+export interface PersonUpdateOneWithoutAsFatherInput {
+  create?: PersonCreateWithoutAsFatherInput;
+  update?: PersonUpdateWithoutAsFatherDataInput;
+  upsert?: PersonUpsertWithoutAsFatherInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: PersonWhereUniqueInput;
+}
+
+export interface CityWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  code?: String;
+  code_not?: String;
+  code_in?: String[] | String;
+  code_not_in?: String[] | String;
+  code_lt?: String;
+  code_lte?: String;
+  code_gt?: String;
+  code_gte?: String;
+  code_contains?: String;
+  code_not_contains?: String;
+  code_starts_with?: String;
+  code_not_starts_with?: String;
+  code_ends_with?: String;
+  code_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  province?: ProvinceWhereInput;
+  areas_every?: AreaWhereInput;
+  areas_some?: AreaWhereInput;
+  areas_none?: AreaWhereInput;
+  AND?: CityWhereInput[] | CityWhereInput;
+  OR?: CityWhereInput[] | CityWhereInput;
+  NOT?: CityWhereInput[] | CityWhereInput;
+}
+
+export interface PersonUpdateWithoutAsFatherDataInput {
+  name?: String;
+  user?: UserUpdateOneInput;
+  families?: FamilyUpdateManyWithoutToInput;
+  asMother?: FamilyGroupUpdateManyWithoutMotherInput;
+}
+
+export type RegStatusWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface FamilyGroupUpdateManyWithoutMotherInput {
+  create?:
+    | FamilyGroupCreateWithoutMotherInput[]
+    | FamilyGroupCreateWithoutMotherInput;
+  delete?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
+  connect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
+  disconnect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
+  update?:
+    | FamilyGroupUpdateWithWhereUniqueWithoutMotherInput[]
+    | FamilyGroupUpdateWithWhereUniqueWithoutMotherInput;
+  upsert?:
+    | FamilyGroupUpsertWithWhereUniqueWithoutMotherInput[]
+    | FamilyGroupUpsertWithWhereUniqueWithoutMotherInput;
+}
+
+export interface FamilyUpdateInput {
+  from?: UserUpdateOneRequiredWithoutFamiliesInput;
+  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
+  relationship?: String;
+  spouse?: FamilyUpdateOneInput;
+  status?: String;
+}
+
+export interface FamilyGroupUpdateWithWhereUniqueWithoutMotherInput {
+  where: FamilyGroupWhereUniqueInput;
+  data: FamilyGroupUpdateWithoutMotherDataInput;
+}
+
+export interface CollegeEntranceExamUpdateManyMutationInput {
+  subject?: String;
+  culscore?: Float;
+  proscore?: Float;
+  candidatenum?: String;
+  times?: Int;
+}
+
+export interface FamilyGroupUpdateWithoutMotherDataInput {
+  father?: PersonUpdateOneWithoutAsFatherInput;
+  creater?: UserUpdateOneWithoutCreaterInput;
+  name?: String;
+  families?: FamilyUpdateManyInput;
+  messages?: MessageUpdateManyInput;
+  users?: UserUpdateManyWithoutFamilyGroupInput;
+}
+
+export interface UserUpdateOneRequiredWithoutExamInput {
+  create?: UserCreateWithoutExamInput;
+  update?: UserUpdateWithoutExamDataInput;
+  upsert?: UserUpsertWithoutExamInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpdateOneWithoutCreaterInput {
+  create?: UserCreateWithoutCreaterInput;
+  update?: UserUpdateWithoutCreaterDataInput;
+  upsert?: UserUpsertWithoutCreaterInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserCreateOneWithoutExamInput {
+  create?: UserCreateWithoutExamInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpdateWithoutCreaterDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  messages?: MessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+}
+
+export interface ColleagueUpdateInput {
+  worker?: UserUpdateOneWithoutColleaguesInput;
+  status?: String;
+  group?: WorkGroupUpdateOneWithoutColleaguesInput;
+}
+
+export interface GroupUpdateManyWithoutUsersInput {
+  create?: GroupCreateWithoutUsersInput[] | GroupCreateWithoutUsersInput;
+  delete?: GroupWhereUniqueInput[] | GroupWhereUniqueInput;
+  connect?: GroupWhereUniqueInput[] | GroupWhereUniqueInput;
+  disconnect?: GroupWhereUniqueInput[] | GroupWhereUniqueInput;
+  update?:
+    | GroupUpdateWithWhereUniqueWithoutUsersInput[]
+    | GroupUpdateWithWhereUniqueWithoutUsersInput;
+  upsert?:
+    | GroupUpsertWithWhereUniqueWithoutUsersInput[]
+    | GroupUpsertWithWhereUniqueWithoutUsersInput;
+}
+
+export interface ClassMateUpdateInput {
+  student?: UserUpdateOneWithoutClassMateInput;
+  status?: String;
+  group?: ClassGroupUpdateOneRequiredWithoutMembersInput;
+}
+
+export interface GroupUpdateWithWhereUniqueWithoutUsersInput {
+  where: GroupWhereUniqueInput;
+  data: GroupUpdateWithoutUsersDataInput;
+}
+
+export interface ClassMateUpsertWithWhereUniqueWithoutGroupInput {
+  where: ClassMateWhereUniqueInput;
+  update: ClassMateUpdateWithoutGroupDataInput;
+  create: ClassMateCreateWithoutGroupInput;
+}
+
+export interface GroupUpdateWithoutUsersDataInput {
+  type?: GroupKind;
+  name?: String;
+  messages?: MessageUpdateManyWithoutToInput;
+}
+
+export interface UserUpdateOneWithoutClassMateInput {
+  create?: UserCreateWithoutClassMateInput;
+  update?: UserUpdateWithoutClassMateDataInput;
+  upsert?: UserUpsertWithoutClassMateInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface MessageUpdateManyWithoutToInput {
+  create?: MessageCreateWithoutToInput[] | MessageCreateWithoutToInput;
+  delete?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+  disconnect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+  update?:
+    | MessageUpdateWithWhereUniqueWithoutToInput[]
+    | MessageUpdateWithWhereUniqueWithoutToInput;
+  upsert?:
+    | MessageUpsertWithWhereUniqueWithoutToInput[]
+    | MessageUpsertWithWhereUniqueWithoutToInput;
+}
+
+export interface ClassMateUpdateManyWithoutGroupInput {
+  create?:
+    | ClassMateCreateWithoutGroupInput[]
+    | ClassMateCreateWithoutGroupInput;
+  delete?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
+  connect?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
+  disconnect?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
+  update?:
+    | ClassMateUpdateWithWhereUniqueWithoutGroupInput[]
+    | ClassMateUpdateWithWhereUniqueWithoutGroupInput;
+  upsert?:
+    | ClassMateUpsertWithWhereUniqueWithoutGroupInput[]
+    | ClassMateUpsertWithWhereUniqueWithoutGroupInput;
+}
+
+export interface MessageUpdateWithWhereUniqueWithoutToInput {
+  where: MessageWhereUniqueInput;
+  data: MessageUpdateWithoutToDataInput;
+}
+
+export interface UserCreateOneWithoutClassMateInput {
+  create?: UserCreateWithoutClassMateInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface MessageUpdateWithoutToDataInput {
+  from?: UserUpdateOneRequiredWithoutMessagesInput;
+  text?: String;
+}
+
+export interface AreaCreateInput {
+  code: String;
+  name: String;
+  city: CityCreateOneWithoutAreasInput;
+  towns?: StreetCreateManyWithoutAreaInput;
+}
+
+export interface UserUpdateOneRequiredWithoutMessagesInput {
+  create?: UserCreateWithoutMessagesInput;
+  update?: UserUpdateWithoutMessagesDataInput;
+  upsert?: UserUpsertWithoutMessagesInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface ProvinceCreateWithoutCitiesInput {
+  code: String;
+  name: String;
+}
+
+export interface UserUpdateWithoutMessagesDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+}
+
+export interface VillageCreateWithoutStreetInput {
+  code: String;
+  name: String;
+  people?: UserCreateManyInput;
+}
+
+export interface FamilyGroupUpdateOneWithoutCreaterInput {
+  create?: FamilyGroupCreateWithoutCreaterInput;
+  update?: FamilyGroupUpdateWithoutCreaterDataInput;
+  upsert?: FamilyGroupUpsertWithoutCreaterInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: FamilyGroupWhereUniqueInput;
+}
+
+export interface LocationCreateInput {
+  name?: String;
+  province?: ProvinceCreateOneInput;
+  city?: CityCreateOneInput;
+  area?: AreaCreateOneInput;
+  street?: StreetCreateOneInput;
+  village?: VillageCreateOneInput;
+  schools?: SchoolCreateManyWithoutLocationInput;
+  companies?: CompanyCreateManyWithoutLocationInput;
+  universities?: UniversityCreateManyInput;
+}
+
+export interface FamilyGroupUpdateWithoutCreaterDataInput {
+  father?: PersonUpdateOneWithoutAsFatherInput;
+  mother?: PersonUpdateOneWithoutAsMotherInput;
+  name?: String;
+  families?: FamilyUpdateManyInput;
+  messages?: MessageUpdateManyInput;
+  users?: UserUpdateManyWithoutFamilyGroupInput;
+}
+
+export interface CityCreateWithoutProvinceInput {
+  code: String;
+  name: String;
+  areas?: AreaCreateManyWithoutCityInput;
+}
+
+export interface FamilyUpdateManyInput {
+  create?: FamilyCreateInput[] | FamilyCreateInput;
+  update?:
+    | FamilyUpdateWithWhereUniqueNestedInput[]
+    | FamilyUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | FamilyUpsertWithWhereUniqueNestedInput[]
+    | FamilyUpsertWithWhereUniqueNestedInput;
+  delete?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+  disconnect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+}
+
+export interface CityCreateInput {
+  code: String;
+  name: String;
+  province: ProvinceCreateOneWithoutCitiesInput;
+  areas?: AreaCreateManyWithoutCityInput;
+}
+
+export interface FamilyUpdateWithWhereUniqueNestedInput {
+  where: FamilyWhereUniqueInput;
+  data: FamilyUpdateDataInput;
+}
+
+export interface AreaCreateOneWithoutTownsInput {
+  create?: AreaCreateWithoutTownsInput;
+  connect?: AreaWhereUniqueInput;
+}
+
+export interface FamilyUpdateDataInput {
+  from?: UserUpdateOneRequiredWithoutFamiliesInput;
+  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
+  relationship?: String;
+  spouse?: FamilyUpdateOneInput;
+  status?: String;
+}
+
+export interface StreetCreateOneWithoutVillagesInput {
+  create?: StreetCreateWithoutVillagesInput;
+  connect?: StreetWhereUniqueInput;
+}
+
+export interface FamilyUpdateOneInput {
+  create?: FamilyCreateInput;
+  update?: FamilyUpdateDataInput;
+  upsert?: FamilyUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: FamilyWhereUniqueInput;
+}
+
+export interface CompanyCreateManyWithoutLocationInput {
+  create?:
+    | CompanyCreateWithoutLocationInput[]
+    | CompanyCreateWithoutLocationInput;
+  connect?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
+}
+
+export interface FamilyUpsertNestedInput {
+  update: FamilyUpdateDataInput;
+  create: FamilyCreateInput;
+}
+
+export interface StationCreateOneInput {
+  create?: StationCreateInput;
+  connect?: StationWhereUniqueInput;
+}
+
+export interface FamilyUpsertWithWhereUniqueNestedInput {
+  where: FamilyWhereUniqueInput;
+  update: FamilyUpdateDataInput;
+  create: FamilyCreateInput;
+}
+
+export interface PostCreateManyWithoutAuthorInput {
+  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput;
+  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput;
+}
+
+export interface MessageUpdateManyInput {
+  create?: MessageCreateInput[] | MessageCreateInput;
+  update?:
+    | MessageUpdateWithWhereUniqueNestedInput[]
+    | MessageUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | MessageUpsertWithWhereUniqueNestedInput[]
+    | MessageUpsertWithWhereUniqueNestedInput;
+  delete?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+  disconnect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+}
+
+export interface UniversityCreateOneInput {
+  create?: UniversityCreateInput;
+  connect?: UniversityWhereUniqueInput;
+}
+
+export interface MessageUpdateWithWhereUniqueNestedInput {
+  where: MessageWhereUniqueInput;
+  data: MessageUpdateDataInput;
+}
+
+export interface FamilyCreateManyWithoutFromInput {
+  create?: FamilyCreateWithoutFromInput[] | FamilyCreateWithoutFromInput;
+  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+}
+
+export interface MessageUpdateDataInput {
+  to?: GroupUpdateOneRequiredWithoutMessagesInput;
+  from?: UserUpdateOneRequiredWithoutMessagesInput;
+  text?: String;
+}
+
+export interface UserCreateOneInput {
+  create?: UserCreateInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface MessageUpsertWithWhereUniqueNestedInput {
+  where: MessageWhereUniqueInput;
+  update: MessageUpdateDataInput;
+  create: MessageCreateInput;
+}
+
+export interface PersonCreateWithoutAsMotherInput {
+  name: String;
+  user?: UserCreateOneInput;
+  families?: FamilyCreateManyWithoutToInput;
+  asFather?: FamilyGroupCreateManyWithoutFatherInput;
+}
+
+export interface UserUpdateManyWithoutFamilyGroupInput {
+  create?:
+    | UserCreateWithoutFamilyGroupInput[]
+    | UserCreateWithoutFamilyGroupInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutFamilyGroupInput[]
+    | UserUpdateWithWhereUniqueWithoutFamilyGroupInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutFamilyGroupInput[]
+    | UserUpsertWithWhereUniqueWithoutFamilyGroupInput;
+}
+
+export interface UserCreateWithoutFamiliesInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  messages?: MessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutFamilyGroupInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutFamilyGroupDataInput;
+}
+
+export interface SchoolCreateInput {
+  name?: String;
+  kind?: Educationkind;
+  location?: LocationCreateOneWithoutSchoolsInput;
+}
+
+export interface UserUpdateWithoutFamilyGroupDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  messages?: MessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+}
+
+export interface WorkCreateManyWithoutWorkerInput {
+  create?: WorkCreateWithoutWorkerInput[] | WorkCreateWithoutWorkerInput;
+  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
+}
+
+export interface ClassMateUpdateManyWithoutStudentInput {
+  create?:
+    | ClassMateCreateWithoutStudentInput[]
+    | ClassMateCreateWithoutStudentInput;
+  delete?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
+  connect?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
+  disconnect?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
+  update?:
+    | ClassMateUpdateWithWhereUniqueWithoutStudentInput[]
+    | ClassMateUpdateWithWhereUniqueWithoutStudentInput;
+  upsert?:
+    | ClassMateUpsertWithWhereUniqueWithoutStudentInput[]
+    | ClassMateUpsertWithWhereUniqueWithoutStudentInput;
+}
+
+export interface LocationCreateOneWithoutCompaniesInput {
+  create?: LocationCreateWithoutCompaniesInput;
+  connect?: LocationWhereUniqueInput;
+}
+
+export interface ClassMateUpdateWithWhereUniqueWithoutStudentInput {
+  where: ClassMateWhereUniqueInput;
+  data: ClassMateUpdateWithoutStudentDataInput;
+}
+
+export interface ColleagueCreateManyWithoutGroupInput {
+  create?:
+    | ColleagueCreateWithoutGroupInput[]
+    | ColleagueCreateWithoutGroupInput;
+  connect?: ColleagueWhereUniqueInput[] | ColleagueWhereUniqueInput;
+}
+
+export interface ClassMateUpdateWithoutStudentDataInput {
+  status?: String;
+  group?: ClassGroupUpdateOneRequiredWithoutMembersInput;
+}
+
+export interface CollegeEntranceExamCreateOneWithoutStudentInput {
+  create?: CollegeEntranceExamCreateWithoutStudentInput;
+  connect?: CollegeEntranceExamWhereUniqueInput;
+}
+
+export interface ClassGroupUpdateOneRequiredWithoutMembersInput {
+  create?: ClassGroupCreateWithoutMembersInput;
+  update?: ClassGroupUpdateWithoutMembersDataInput;
+  upsert?: ClassGroupUpsertWithoutMembersInput;
+  connect?: ClassGroupWhereUniqueInput;
+}
+
+export interface GroupCreateOneWithoutMessagesInput {
+  create?: GroupCreateWithoutMessagesInput;
+  connect?: GroupWhereUniqueInput;
+}
+
+export interface ClassGroupUpdateWithoutMembersDataInput {
+  study?: SchoolEduUpdateOneInput;
+  name?: String;
+  messages?: MessageUpdateManyInput;
+}
+
+export interface FamilyGroupCreateOneWithoutUsersInput {
+  create?: FamilyGroupCreateWithoutUsersInput;
+  connect?: FamilyGroupWhereUniqueInput;
+}
+
+export interface SchoolEduUpdateOneInput {
+  create?: SchoolEduCreateInput;
+  update?: SchoolEduUpdateDataInput;
+  upsert?: SchoolEduUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: SchoolEduWhereUniqueInput;
+}
+
+export interface FamilyGroupCreateManyWithoutMotherInput {
+  create?:
+    | FamilyGroupCreateWithoutMotherInput[]
+    | FamilyGroupCreateWithoutMotherInput;
+  connect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
+}
+
+export interface SchoolEduUpdateDataInput {
+  school?: SchoolUpdateOneInput;
+  startTime?: DateTimeInput;
+  major?: MajorUpdateOneInput;
+  grade?: Int;
+  className?: String;
+  students?: UserUpdateManyWithoutStudiesInput;
+}
+
+export interface GroupCreateManyWithoutUsersInput {
+  create?: GroupCreateWithoutUsersInput[] | GroupCreateWithoutUsersInput;
+  connect?: GroupWhereUniqueInput[] | GroupWhereUniqueInput;
+}
+
+export interface UserUpdateManyWithoutStudiesInput {
+  create?: UserCreateWithoutStudiesInput[] | UserCreateWithoutStudiesInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutStudiesInput[]
+    | UserUpdateWithWhereUniqueWithoutStudiesInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutStudiesInput[]
+    | UserUpsertWithWhereUniqueWithoutStudiesInput;
+}
+
+export interface UserCreateOneWithoutMessagesInput {
+  create?: UserCreateWithoutMessagesInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutStudiesInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutStudiesDataInput;
+}
+
+export interface FamilyCreateManyInput {
+  create?: FamilyCreateInput[] | FamilyCreateInput;
+  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+}
+
+export interface UserUpdateWithoutStudiesDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  messages?: MessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+}
+
+export interface WorkSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: WorkWhereInput;
+  AND?: WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput;
+  OR?: WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput;
+  NOT?: WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput;
+}
+
+export interface WorkGroupUpdateOneInput {
+  create?: WorkGroupCreateInput;
+  update?: WorkGroupUpdateDataInput;
+  upsert?: WorkGroupUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: WorkGroupWhereUniqueInput;
+}
+
+export interface SchoolEduSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: SchoolEduWhereInput;
+  AND?: SchoolEduSubscriptionWhereInput[] | SchoolEduSubscriptionWhereInput;
+  OR?: SchoolEduSubscriptionWhereInput[] | SchoolEduSubscriptionWhereInput;
+  NOT?: SchoolEduSubscriptionWhereInput[] | SchoolEduSubscriptionWhereInput;
+}
+
+export interface WorkGroupUpdateDataInput {
+  company?: CompanyUpdateOneWithoutWorkGroupInput;
+  colleagues?: ColleagueUpdateManyWithoutGroupInput;
+  messages?: MessageUpdateManyInput;
+}
+
+export interface PersonSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: PersonWhereInput;
+  AND?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
+  OR?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
+  NOT?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
+}
+
+export interface CompanyUpdateOneWithoutWorkGroupInput {
+  create?: CompanyCreateWithoutWorkGroupInput;
+  update?: CompanyUpdateWithoutWorkGroupDataInput;
+  upsert?: CompanyUpsertWithoutWorkGroupInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: CompanyWhereUniqueInput;
+}
+
+export interface WorkGroupWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  company?: CompanyWhereInput;
+  colleagues_every?: ColleagueWhereInput;
+  colleagues_some?: ColleagueWhereInput;
+  colleagues_none?: ColleagueWhereInput;
+  messages_every?: MessageWhereInput;
+  messages_some?: MessageWhereInput;
+  messages_none?: MessageWhereInput;
+  AND?: WorkGroupWhereInput[] | WorkGroupWhereInput;
+  OR?: WorkGroupWhereInput[] | WorkGroupWhereInput;
+  NOT?: WorkGroupWhereInput[] | WorkGroupWhereInput;
+}
+
+export interface CompanyUpdateWithoutWorkGroupDataInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  location?: LocationUpdateOneWithoutCompaniesInput;
+  BusinessScope?: String;
+  works?: WorkUpdateManyWithoutCompanyInput;
 }
 
 export interface CompanyWhereInput {
@@ -2436,27 +6366,517 @@ export interface CompanyWhereInput {
   NOT?: CompanyWhereInput[] | CompanyWhereInput;
 }
 
-export interface ClassMateCreateManyWithoutStudentInput {
+export interface CompanyUpsertWithoutWorkGroupInput {
+  update: CompanyUpdateWithoutWorkGroupDataInput;
+  create: CompanyCreateWithoutWorkGroupInput;
+}
+
+export interface WorkGroupUpdateInput {
+  company?: CompanyUpdateOneWithoutWorkGroupInput;
+  colleagues?: ColleagueUpdateManyWithoutGroupInput;
+  messages?: MessageUpdateManyInput;
+}
+
+export interface WorkGroupUpsertNestedInput {
+  update: WorkGroupUpdateDataInput;
+  create: WorkGroupCreateInput;
+}
+
+export interface UserUpdateManyMutationInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  uid?: String;
+  token?: String;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+}
+
+export interface ColleagueUpdateManyWithoutWorkerInput {
   create?:
-    | ClassMateCreateWithoutStudentInput[]
-    | ClassMateCreateWithoutStudentInput;
+    | ColleagueCreateWithoutWorkerInput[]
+    | ColleagueCreateWithoutWorkerInput;
+  delete?: ColleagueWhereUniqueInput[] | ColleagueWhereUniqueInput;
+  connect?: ColleagueWhereUniqueInput[] | ColleagueWhereUniqueInput;
+  disconnect?: ColleagueWhereUniqueInput[] | ColleagueWhereUniqueInput;
+  update?:
+    | ColleagueUpdateWithWhereUniqueWithoutWorkerInput[]
+    | ColleagueUpdateWithWhereUniqueWithoutWorkerInput;
+  upsert?:
+    | ColleagueUpsertWithWhereUniqueWithoutWorkerInput[]
+    | ColleagueUpsertWithWhereUniqueWithoutWorkerInput;
+}
+
+export interface StationUpdateManyMutationInput {
+  code?: String;
+  name?: String;
+}
+
+export interface ColleagueUpdateWithWhereUniqueWithoutWorkerInput {
+  where: ColleagueWhereUniqueInput;
+  data: ColleagueUpdateWithoutWorkerDataInput;
+}
+
+export type CompanyWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
+
+export interface ColleagueUpdateWithoutWorkerDataInput {
+  status?: String;
+  group?: WorkGroupUpdateOneWithoutColleaguesInput;
+}
+
+export type FamilyGroupWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface WorkGroupUpdateOneWithoutColleaguesInput {
+  create?: WorkGroupCreateWithoutColleaguesInput;
+  update?: WorkGroupUpdateWithoutColleaguesDataInput;
+  upsert?: WorkGroupUpsertWithoutColleaguesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: WorkGroupWhereUniqueInput;
+}
+
+export type LocationWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
+
+export interface WorkGroupUpdateWithoutColleaguesDataInput {
+  company?: CompanyUpdateOneWithoutWorkGroupInput;
+  messages?: MessageUpdateManyInput;
+}
+
+export interface UserCreateWithoutPostsInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneInput;
+  uid: String;
+  token: String;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  messages?: MessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+}
+
+export interface WorkGroupUpsertWithoutColleaguesInput {
+  update: WorkGroupUpdateWithoutColleaguesDataInput;
+  create: WorkGroupCreateWithoutColleaguesInput;
+}
+
+export type MessageWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface ColleagueUpsertWithWhereUniqueWithoutWorkerInput {
+  where: ColleagueWhereUniqueInput;
+  update: ColleagueUpdateWithoutWorkerDataInput;
+  create: ColleagueCreateWithoutWorkerInput;
+}
+
+export type PersonWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface OldColleagueUpdateManyWithoutFromInput {
+  create?:
+    | OldColleagueCreateWithoutFromInput[]
+    | OldColleagueCreateWithoutFromInput;
+  delete?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+  connect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+  disconnect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+  update?:
+    | OldColleagueUpdateWithWhereUniqueWithoutFromInput[]
+    | OldColleagueUpdateWithWhereUniqueWithoutFromInput;
+  upsert?:
+    | OldColleagueUpsertWithWhereUniqueWithoutFromInput[]
+    | OldColleagueUpsertWithWhereUniqueWithoutFromInput;
+}
+
+export interface GroupUpdateManyMutationInput {
+  type?: GroupKind;
+  name?: String;
+}
+
+export interface OldColleagueUpdateWithWhereUniqueWithoutFromInput {
+  where: OldColleagueWhereUniqueInput;
+  data: OldColleagueUpdateWithoutFromDataInput;
+}
+
+export interface FamilyGroupCreateInput {
+  father?: PersonCreateOneWithoutAsFatherInput;
+  mother?: PersonCreateOneWithoutAsMotherInput;
+  creater?: UserCreateOneWithoutCreaterInput;
+  name?: String;
+  families?: FamilyCreateManyInput;
+  messages?: MessageCreateManyInput;
+  users?: UserCreateManyWithoutFamilyGroupInput;
+}
+
+export interface OldColleagueUpdateWithoutFromDataInput {
+  to?: UserUpdateOneWithoutToOldColleaguesInput;
+  company?: CompanyUpdateOneInput;
+  status?: String;
+}
+
+export interface UserUpsertWithoutExamInput {
+  update: UserUpdateWithoutExamDataInput;
+  create: UserCreateWithoutExamInput;
+}
+
+export interface UserUpdateOneWithoutToOldColleaguesInput {
+  create?: UserCreateWithoutToOldColleaguesInput;
+  update?: UserUpdateWithoutToOldColleaguesDataInput;
+  upsert?: UserUpsertWithoutToOldColleaguesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export type StreetWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+}>;
+
+export interface UserUpdateWithoutToOldColleaguesDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  messages?: MessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  username?: String;
+  uid?: String;
+  token?: String;
+}>;
+
+export interface UserUpsertWithoutToOldColleaguesInput {
+  update: UserUpdateWithoutToOldColleaguesDataInput;
+  create: UserCreateWithoutToOldColleaguesInput;
+}
+
+export type WorkWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface CompanyUpdateOneInput {
+  create?: CompanyCreateInput;
+  update?: CompanyUpdateDataInput;
+  upsert?: CompanyUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: CompanyWhereUniqueInput;
+}
+
+export interface ClassMateCreateManyWithoutGroupInput {
+  create?:
+    | ClassMateCreateWithoutGroupInput[]
+    | ClassMateCreateWithoutGroupInput;
   connect?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
 }
 
-export interface FamilySubscriptionWhereInput {
+export interface CompanyUpdateDataInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  location?: LocationUpdateOneWithoutCompaniesInput;
+  BusinessScope?: String;
+  works?: WorkUpdateManyWithoutCompanyInput;
+  workGroup?: WorkGroupUpdateOneWithoutCompanyInput;
+}
+
+export interface StreetCreateWithoutAreaInput {
+  code: String;
+  name: String;
+  villages?: VillageCreateManyWithoutStreetInput;
+}
+
+export interface CompanyUpsertNestedInput {
+  update: CompanyUpdateDataInput;
+  create: CompanyCreateInput;
+}
+
+export interface ProvinceCreateInput {
+  code: String;
+  name: String;
+  cities?: CityCreateManyWithoutProvinceInput;
+}
+
+export interface OldColleagueUpsertWithWhereUniqueWithoutFromInput {
+  where: OldColleagueWhereUniqueInput;
+  update: OldColleagueUpdateWithoutFromDataInput;
+  create: OldColleagueCreateWithoutFromInput;
+}
+
+export interface StreetCreateOneInput {
+  create?: StreetCreateInput;
+  connect?: StreetWhereUniqueInput;
+}
+
+export interface OldColleagueUpdateManyWithoutToInput {
+  create?:
+    | OldColleagueCreateWithoutToInput[]
+    | OldColleagueCreateWithoutToInput;
+  delete?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+  connect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+  disconnect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+  update?:
+    | OldColleagueUpdateWithWhereUniqueWithoutToInput[]
+    | OldColleagueUpdateWithWhereUniqueWithoutToInput;
+  upsert?:
+    | OldColleagueUpsertWithWhereUniqueWithoutToInput[]
+    | OldColleagueUpsertWithWhereUniqueWithoutToInput;
+}
+
+export interface SchoolCreateManyWithoutLocationInput {
+  create?:
+    | SchoolCreateWithoutLocationInput[]
+    | SchoolCreateWithoutLocationInput;
+  connect?: SchoolWhereUniqueInput[] | SchoolWhereUniqueInput;
+}
+
+export interface OldColleagueUpdateWithWhereUniqueWithoutToInput {
+  where: OldColleagueWhereUniqueInput;
+  data: OldColleagueUpdateWithoutToDataInput;
+}
+
+export interface UserCreateOneWithoutWorksInput {
+  create?: UserCreateWithoutWorksInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface OldColleagueUpdateWithoutToDataInput {
+  from?: UserUpdateOneWithoutFromOldColleaguesInput;
+  company?: CompanyUpdateOneInput;
+  status?: String;
+}
+
+export interface MajorCreateOneInput {
+  create?: MajorCreateInput;
+  connect?: MajorWhereUniqueInput;
+}
+
+export interface UserUpdateOneWithoutFromOldColleaguesInput {
+  create?: UserCreateWithoutFromOldColleaguesInput;
+  update?: UserUpdateWithoutFromOldColleaguesDataInput;
+  upsert?: UserUpsertWithoutFromOldColleaguesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface FamilyGroupCreateWithoutFatherInput {
+  mother?: PersonCreateOneWithoutAsMotherInput;
+  creater?: UserCreateOneWithoutCreaterInput;
+  name?: String;
+  families?: FamilyCreateManyInput;
+  messages?: MessageCreateManyInput;
+  users?: UserCreateManyWithoutFamilyGroupInput;
+}
+
+export interface UserUpdateWithoutFromOldColleaguesDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  messages?: MessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+}
+
+export interface SchoolEduCreateWithoutStudentsInput {
+  school?: SchoolCreateOneInput;
+  startTime?: DateTimeInput;
+  major?: MajorCreateOneInput;
+  grade?: Int;
+  className?: String;
+}
+
+export interface UserUpsertWithoutFromOldColleaguesInput {
+  update: UserUpdateWithoutFromOldColleaguesDataInput;
+  create: UserCreateWithoutFromOldColleaguesInput;
+}
+
+export interface CompanyCreateOneWithoutWorksInput {
+  create?: CompanyCreateWithoutWorksInput;
+  connect?: CompanyWhereUniqueInput;
+}
+
+export interface OldColleagueUpsertWithWhereUniqueWithoutToInput {
+  where: OldColleagueWhereUniqueInput;
+  update: OldColleagueUpdateWithoutToDataInput;
+  create: OldColleagueCreateWithoutToInput;
+}
+
+export interface UserCreateOneWithoutColleaguesInput {
+  create?: UserCreateWithoutColleaguesInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutStudiesInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutStudiesDataInput;
+  create: UserCreateWithoutStudiesInput;
+}
+
+export interface UserCreateManyWithoutGroupsInput {
+  create?: UserCreateWithoutGroupsInput[] | UserCreateWithoutGroupsInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface SchoolEduUpsertNestedInput {
+  update: SchoolEduUpdateDataInput;
+  create: SchoolEduCreateInput;
+}
+
+export interface UserCreateOneWithoutCreaterInput {
+  create?: UserCreateWithoutCreaterInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface ClassGroupUpsertWithoutMembersInput {
+  update: ClassGroupUpdateWithoutMembersDataInput;
+  create: ClassGroupCreateWithoutMembersInput;
+}
+
+export interface FamilyGroupCreateOneWithoutCreaterInput {
+  create?: FamilyGroupCreateWithoutCreaterInput;
+  connect?: FamilyGroupWhereUniqueInput;
+}
+
+export interface ClassMateUpsertWithWhereUniqueWithoutStudentInput {
+  where: ClassMateWhereUniqueInput;
+  update: ClassMateUpdateWithoutStudentDataInput;
+  create: ClassMateCreateWithoutStudentInput;
+}
+
+export interface UniversitySubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: FamilyWhereInput;
-  AND?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
-  OR?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
-  NOT?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
+  node?: UniversityWhereInput;
+  AND?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
+  OR?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
+  NOT?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
 }
 
-export interface ClassMateCreateWithoutStudentInput {
-  status: String;
-  group: ClassGroupCreateOneWithoutMembersInput;
+export interface UserUpsertWithWhereUniqueWithoutFamilyGroupInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutFamilyGroupDataInput;
+  create: UserCreateWithoutFamilyGroupInput;
+}
+
+export interface ColleagueWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  worker?: UserWhereInput;
+  status?: String;
+  status_not?: String;
+  status_in?: String[] | String;
+  status_not_in?: String[] | String;
+  status_lt?: String;
+  status_lte?: String;
+  status_gt?: String;
+  status_gte?: String;
+  status_contains?: String;
+  status_not_contains?: String;
+  status_starts_with?: String;
+  status_not_starts_with?: String;
+  status_ends_with?: String;
+  status_not_ends_with?: String;
+  group?: WorkGroupWhereInput;
+  AND?: ColleagueWhereInput[] | ColleagueWhereInput;
+  OR?: ColleagueWhereInput[] | ColleagueWhereInput;
+  NOT?: ColleagueWhereInput[] | ColleagueWhereInput;
+}
+
+export interface FamilyGroupUpsertWithoutCreaterInput {
+  update: FamilyGroupUpdateWithoutCreaterDataInput;
+  create: FamilyGroupCreateWithoutCreaterInput;
 }
 
 export interface LocationWhereInput {
@@ -2507,197 +6927,9 @@ export interface LocationWhereInput {
   NOT?: LocationWhereInput[] | LocationWhereInput;
 }
 
-export interface ClassGroupCreateOneWithoutMembersInput {
-  create?: ClassGroupCreateWithoutMembersInput;
-  connect?: ClassGroupWhereUniqueInput;
-}
-
-export interface CollegeEntranceExamSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: CollegeEntranceExamWhereInput;
-  AND?:
-    | CollegeEntranceExamSubscriptionWhereInput[]
-    | CollegeEntranceExamSubscriptionWhereInput;
-  OR?:
-    | CollegeEntranceExamSubscriptionWhereInput[]
-    | CollegeEntranceExamSubscriptionWhereInput;
-  NOT?:
-    | CollegeEntranceExamSubscriptionWhereInput[]
-    | CollegeEntranceExamSubscriptionWhereInput;
-}
-
-export interface ClassGroupCreateWithoutMembersInput {
-  study?: SchoolEduCreateOneInput;
-  name?: String;
-  messages?: MessageCreateManyInput;
-}
-
-export interface ClassGroupSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: ClassGroupWhereInput;
-  AND?: ClassGroupSubscriptionWhereInput[] | ClassGroupSubscriptionWhereInput;
-  OR?: ClassGroupSubscriptionWhereInput[] | ClassGroupSubscriptionWhereInput;
-  NOT?: ClassGroupSubscriptionWhereInput[] | ClassGroupSubscriptionWhereInput;
-}
-
-export interface SchoolEduCreateOneInput {
-  create?: SchoolEduCreateInput;
-  connect?: SchoolEduWhereUniqueInput;
-}
-
-export interface AreaSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: AreaWhereInput;
-  AND?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
-  OR?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
-  NOT?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
-}
-
-export interface SchoolEduCreateInput {
-  school?: SchoolCreateOneInput;
-  startTime?: DateTimeInput;
-  major?: MajorCreateOneInput;
-  grade?: Int;
-  className?: String;
-  students?: UserCreateManyWithoutStudiesInput;
-}
-
-export interface WorkGroupUpdateInput {
-  company?: CompanyUpdateOneWithoutWorkGroupInput;
-  wokers?: UserUpdateManyWithoutWorkGroupInput;
-  messages?: MessageUpdateManyInput;
-}
-
-export interface UserCreateManyWithoutStudiesInput {
-  create?: UserCreateWithoutStudiesInput[] | UserCreateWithoutStudiesInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface WorkUpdateManyMutationInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  department?: String;
-  jobContent?: String;
-}
-
-export interface UserCreateWithoutStudiesInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  messages?: MessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneWithoutWokersInput;
-}
-
-export interface WorkUpdateInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  company?: CompanyUpdateOneWithoutWorksInput;
-  department?: String;
-  post?: StationUpdateOneInput;
-  jobContent?: String;
-  worker?: UserUpdateOneWithoutWorksInput;
-}
-
-export interface WorkGroupCreateOneWithoutWokersInput {
-  create?: WorkGroupCreateWithoutWokersInput;
-  connect?: WorkGroupWhereUniqueInput;
-}
-
-export interface VillageUpdateManyMutationInput {
-  code?: String;
-  name?: String;
-}
-
-export interface WorkGroupCreateWithoutWokersInput {
-  company?: CompanyCreateOneWithoutWorkGroupInput;
-  messages?: MessageCreateManyInput;
-}
-
-export type ClassMateWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface CompanyCreateOneWithoutWorkGroupInput {
-  create?: CompanyCreateWithoutWorkGroupInput;
-  connect?: CompanyWhereUniqueInput;
-}
-
-export interface UserUpdateInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  messages?: MessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneWithoutWokersInput;
-}
-
-export interface CompanyCreateWithoutWorkGroupInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  location?: LocationCreateOneWithoutCompaniesInput;
-  BusinessScope?: String;
-  works?: WorkCreateManyWithoutCompanyInput;
-}
-
-export type CollegeEntranceExamWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  candidatenum?: String;
-}>;
-
-export interface AreaUpdateInput {
-  code?: String;
-  name?: String;
-  city?: CityUpdateOneRequiredWithoutAreasInput;
-  towns?: StreetUpdateManyWithoutAreaInput;
+export interface UserUpsertWithoutMessagesInput {
+  update: UserUpdateWithoutMessagesDataInput;
+  create: UserCreateWithoutMessagesInput;
 }
 
 export interface UniversityUpdateInput {
@@ -2708,708 +6940,54 @@ export interface UniversityUpdateInput {
   desc?: String;
 }
 
-export interface CityUpdateOneRequiredWithoutAreasInput {
-  create?: CityCreateWithoutAreasInput;
-  update?: CityUpdateWithoutAreasDataInput;
-  upsert?: CityUpsertWithoutAreasInput;
-  connect?: CityWhereUniqueInput;
+export interface MessageUpsertWithWhereUniqueWithoutToInput {
+  where: MessageWhereUniqueInput;
+  update: MessageUpdateWithoutToDataInput;
+  create: MessageCreateWithoutToInput;
 }
 
-export interface StreetUpdateInput {
-  code?: String;
-  name?: String;
-  Area?: AreaUpdateOneRequiredWithoutTownsInput;
-  villages?: VillageUpdateManyWithoutStreetInput;
-}
-
-export interface CityUpdateWithoutAreasDataInput {
-  code?: String;
-  name?: String;
-  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
-}
-
-export interface StationUpdateManyMutationInput {
-  code?: String;
-  name?: String;
-}
-
-export interface ProvinceUpdateOneRequiredWithoutCitiesInput {
-  create?: ProvinceCreateWithoutCitiesInput;
-  update?: ProvinceUpdateWithoutCitiesDataInput;
-  upsert?: ProvinceUpsertWithoutCitiesInput;
-  connect?: ProvinceWhereUniqueInput;
-}
-
-export interface SchoolEduUpdateManyMutationInput {
-  startTime?: DateTimeInput;
-  grade?: Int;
-  className?: String;
-}
-
-export interface ProvinceUpdateWithoutCitiesDataInput {
-  code?: String;
-  name?: String;
-}
-
-export interface SchoolEduUpdateInput {
-  school?: SchoolUpdateOneInput;
-  startTime?: DateTimeInput;
-  major?: MajorUpdateOneInput;
-  grade?: Int;
-  className?: String;
-  students?: UserUpdateManyWithoutStudiesInput;
-}
-
-export interface ProvinceUpsertWithoutCitiesInput {
-  update: ProvinceUpdateWithoutCitiesDataInput;
-  create: ProvinceCreateWithoutCitiesInput;
-}
-
-export interface SchoolUpdateInput {
-  name?: String;
-  kind?: Educationkind;
-  location?: LocationUpdateOneWithoutSchoolsInput;
-}
-
-export interface CityUpsertWithoutAreasInput {
-  update: CityUpdateWithoutAreasDataInput;
-  create: CityCreateWithoutAreasInput;
-}
-
-export interface RegStatusUpdateManyMutationInput {
-  education?: Educationkind;
-}
-
-export interface StreetUpdateManyWithoutAreaInput {
-  create?: StreetCreateWithoutAreaInput[] | StreetCreateWithoutAreaInput;
-  delete?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
-  connect?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
-  disconnect?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
-  update?:
-    | StreetUpdateWithWhereUniqueWithoutAreaInput[]
-    | StreetUpdateWithWhereUniqueWithoutAreaInput;
-  upsert?:
-    | StreetUpsertWithWhereUniqueWithoutAreaInput[]
-    | StreetUpsertWithWhereUniqueWithoutAreaInput;
-}
-
-export interface UserUpdateWithoutRegStatusDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  messages?: MessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneWithoutWokersInput;
-}
-
-export interface StreetUpdateWithWhereUniqueWithoutAreaInput {
-  where: StreetWhereUniqueInput;
-  data: StreetUpdateWithoutAreaDataInput;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutRegStatusInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutRegStatusDataInput;
-}
-
-export interface StreetUpdateWithoutAreaDataInput {
-  code?: String;
-  name?: String;
-  villages?: VillageUpdateManyWithoutStreetInput;
-}
-
-export interface RegStatusUpdateInput {
-  education?: Educationkind;
-  university?: UniversityUpdateOneInput;
-  major?: MajorUpdateOneRequiredInput;
-  applicants?: UserUpdateManyWithoutRegStatusInput;
-}
-
-export interface VillageUpdateManyWithoutStreetInput {
-  create?: VillageCreateWithoutStreetInput[] | VillageCreateWithoutStreetInput;
-  delete?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
-  connect?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
-  disconnect?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
-  update?:
-    | VillageUpdateWithWhereUniqueWithoutStreetInput[]
-    | VillageUpdateWithWhereUniqueWithoutStreetInput;
-  upsert?:
-    | VillageUpsertWithWhereUniqueWithoutStreetInput[]
-    | VillageUpsertWithWhereUniqueWithoutStreetInput;
-}
-
-export interface VillageWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  code?: String;
-  code_not?: String;
-  code_in?: String[] | String;
-  code_not_in?: String[] | String;
-  code_lt?: String;
-  code_lte?: String;
-  code_gt?: String;
-  code_gte?: String;
-  code_contains?: String;
-  code_not_contains?: String;
-  code_starts_with?: String;
-  code_not_starts_with?: String;
-  code_ends_with?: String;
-  code_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  street?: StreetWhereInput;
-  people_every?: UserWhereInput;
-  people_some?: UserWhereInput;
-  people_none?: UserWhereInput;
-  AND?: VillageWhereInput[] | VillageWhereInput;
-  OR?: VillageWhereInput[] | VillageWhereInput;
-  NOT?: VillageWhereInput[] | VillageWhereInput;
-}
-
-export interface VillageUpdateWithWhereUniqueWithoutStreetInput {
-  where: VillageWhereUniqueInput;
-  data: VillageUpdateWithoutStreetDataInput;
-}
-
-export interface UserCreateManyWithoutRegStatusInput {
-  create?: UserCreateWithoutRegStatusInput[] | UserCreateWithoutRegStatusInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface VillageUpdateWithoutStreetDataInput {
-  code?: String;
-  name?: String;
-  people?: UserUpdateManyInput;
-}
-
-export interface LogsWhereInput {
-  user?: UserWhereInput;
-  createFamilyGroupTime?: DateTimeInput;
-  createFamilyGroupTime_not?: DateTimeInput;
-  createFamilyGroupTime_in?: DateTimeInput[] | DateTimeInput;
-  createFamilyGroupTime_not_in?: DateTimeInput[] | DateTimeInput;
-  createFamilyGroupTime_lt?: DateTimeInput;
-  createFamilyGroupTime_lte?: DateTimeInput;
-  createFamilyGroupTime_gt?: DateTimeInput;
-  createFamilyGroupTime_gte?: DateTimeInput;
-  AND?: LogsWhereInput[] | LogsWhereInput;
-  OR?: LogsWhereInput[] | LogsWhereInput;
-  NOT?: LogsWhereInput[] | LogsWhereInput;
-}
-
-export interface UserUpdateManyInput {
-  create?: UserCreateInput[] | UserCreateInput;
-  update?:
-    | UserUpdateWithWhereUniqueNestedInput[]
-    | UserUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueNestedInput[]
-    | UserUpsertWithWhereUniqueNestedInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface ProvinceUpdateManyMutationInput {
-  code?: String;
-  name?: String;
-}
-
-export interface UserUpdateWithWhereUniqueNestedInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateDataInput;
-}
-
-export interface PostUpdateManyMutationInput {
-  isPublished?: Boolean;
-  title?: String;
-  content?: String;
-}
-
-export interface UserUpdateDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  messages?: MessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneWithoutWokersInput;
-}
-
-export type MajorWhereUniqueInput = AtLeastOne<{
+export type FamilyWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface LocationUpdateOneInput {
-  create?: LocationCreateInput;
-  update?: LocationUpdateDataInput;
-  upsert?: LocationUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: LocationWhereUniqueInput;
+export interface GroupUpsertWithWhereUniqueWithoutUsersInput {
+  where: GroupWhereUniqueInput;
+  update: GroupUpdateWithoutUsersDataInput;
+  create: GroupCreateWithoutUsersInput;
 }
 
-export interface UserUpdateWithoutPostsDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneInput;
-  uid?: String;
-  token?: String;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  messages?: MessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneWithoutWokersInput;
-}
-
-export interface LocationUpdateDataInput {
-  name?: String;
-  province?: ProvinceUpdateOneInput;
-  city?: CityUpdateOneInput;
-  area?: AreaUpdateOneInput;
-  street?: StreetUpdateOneInput;
-  village?: VillageUpdateOneInput;
-  schools?: SchoolUpdateManyWithoutLocationInput;
-  companies?: CompanyUpdateManyWithoutLocationInput;
-  universities?: UniversityUpdateManyInput;
-}
-
-export interface PostUpdateInput {
-  isPublished?: Boolean;
-  title?: String;
-  content?: String;
-  author?: UserUpdateOneRequiredWithoutPostsInput;
-}
-
-export interface ProvinceUpdateOneInput {
-  create?: ProvinceCreateInput;
-  update?: ProvinceUpdateDataInput;
-  upsert?: ProvinceUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: ProvinceWhereUniqueInput;
-}
-
-export interface UserCreateWithoutPostsInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneInput;
-  uid: String;
-  token: String;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  messages?: MessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneWithoutWokersInput;
-}
-
-export interface ProvinceUpdateDataInput {
-  code?: String;
-  name?: String;
-  cities?: CityUpdateManyWithoutProvinceInput;
-}
-
-export interface PostCreateInput {
-  isPublished?: Boolean;
-  title: String;
-  content: String;
-  author: UserCreateOneWithoutPostsInput;
-}
-
-export interface CityUpdateManyWithoutProvinceInput {
-  create?: CityCreateWithoutProvinceInput[] | CityCreateWithoutProvinceInput;
-  delete?: CityWhereUniqueInput[] | CityWhereUniqueInput;
-  connect?: CityWhereUniqueInput[] | CityWhereUniqueInput;
-  disconnect?: CityWhereUniqueInput[] | CityWhereUniqueInput;
-  update?:
-    | CityUpdateWithWhereUniqueWithoutProvinceInput[]
-    | CityUpdateWithWhereUniqueWithoutProvinceInput;
-  upsert?:
-    | CityUpsertWithWhereUniqueWithoutProvinceInput[]
-    | CityUpsertWithWhereUniqueWithoutProvinceInput;
-}
-
-export interface ProvinceWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  code?: String;
-  code_not?: String;
-  code_in?: String[] | String;
-  code_not_in?: String[] | String;
-  code_lt?: String;
-  code_lte?: String;
-  code_gt?: String;
-  code_gte?: String;
-  code_contains?: String;
-  code_not_contains?: String;
-  code_starts_with?: String;
-  code_not_starts_with?: String;
-  code_ends_with?: String;
-  code_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  cities_every?: CityWhereInput;
-  cities_some?: CityWhereInput;
-  cities_none?: CityWhereInput;
-  AND?: ProvinceWhereInput[] | ProvinceWhereInput;
-  OR?: ProvinceWhereInput[] | ProvinceWhereInput;
-  NOT?: ProvinceWhereInput[] | ProvinceWhereInput;
-}
-
-export interface CityUpdateWithWhereUniqueWithoutProvinceInput {
-  where: CityWhereUniqueInput;
-  data: CityUpdateWithoutProvinceDataInput;
-}
-
-export interface PersonUpdateInput {
-  name?: String;
-  user?: UserUpdateOneInput;
-  families?: FamilyUpdateManyWithoutToInput;
-  asFather?: FamilyGroupUpdateManyWithoutFatherInput;
-  asMother?: FamilyGroupUpdateManyWithoutMotherInput;
-}
-
-export interface CityUpdateWithoutProvinceDataInput {
-  code?: String;
-  name?: String;
-  areas?: AreaUpdateManyWithoutCityInput;
-}
-
-export type PostWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface AreaUpdateManyWithoutCityInput {
-  create?: AreaCreateWithoutCityInput[] | AreaCreateWithoutCityInput;
-  delete?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
-  connect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
-  disconnect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
-  update?:
-    | AreaUpdateWithWhereUniqueWithoutCityInput[]
-    | AreaUpdateWithWhereUniqueWithoutCityInput;
-  upsert?:
-    | AreaUpsertWithWhereUniqueWithoutCityInput[]
-    | AreaUpsertWithWhereUniqueWithoutCityInput;
-}
-
-export interface MessageUpdateInput {
-  to?: GroupUpdateOneRequiredWithoutMessagesInput;
-  from?: UserUpdateOneRequiredWithoutMessagesInput;
-  text?: String;
-}
-
-export interface AreaUpdateWithWhereUniqueWithoutCityInput {
-  where: AreaWhereUniqueInput;
-  data: AreaUpdateWithoutCityDataInput;
-}
-
-export type ProvinceWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  code?: String;
-  name?: String;
-}>;
-
-export interface AreaUpdateWithoutCityDataInput {
-  code?: String;
-  name?: String;
-  towns?: StreetUpdateManyWithoutAreaInput;
-}
-
-export interface MajorUpdateInput {
-  name?: String;
-  category?: String;
-  education?: Educationkind;
-}
-
-export interface AreaUpsertWithWhereUniqueWithoutCityInput {
-  where: AreaWhereUniqueInput;
-  update: AreaUpdateWithoutCityDataInput;
-  create: AreaCreateWithoutCityInput;
-}
-
-export interface LogsCreateInput {
-  user?: UserCreateOneInput;
-  createFamilyGroupTime?: DateTimeInput;
-}
-
-export interface CityUpsertWithWhereUniqueWithoutProvinceInput {
-  where: CityWhereUniqueInput;
-  update: CityUpdateWithoutProvinceDataInput;
-  create: CityCreateWithoutProvinceInput;
-}
-
-export interface LocationUpdateManyMutationInput {
-  name?: String;
-}
-
-export interface ProvinceUpsertNestedInput {
-  update: ProvinceUpdateDataInput;
-  create: ProvinceCreateInput;
-}
-
-export interface GroupUpdateManyMutationInput {
-  type?: GroupKind;
-  typeId?: String;
-  name?: String;
-}
-
-export interface CityUpdateOneInput {
-  create?: CityCreateInput;
-  update?: CityUpdateDataInput;
-  upsert?: CityUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: CityWhereUniqueInput;
-}
-
-export type SchoolWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface CityUpdateDataInput {
-  code?: String;
-  name?: String;
-  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
-  areas?: AreaUpdateManyWithoutCityInput;
-}
-
-export interface FamilyGroupUpdateManyMutationInput {
-  name?: String;
-}
-
-export interface CityUpsertNestedInput {
-  update: CityUpdateDataInput;
-  create: CityCreateInput;
-}
-
-export type SchoolEduWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface AreaUpdateOneInput {
-  create?: AreaCreateInput;
-  update?: AreaUpdateDataInput;
-  upsert?: AreaUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: AreaWhereUniqueInput;
-}
-
-export interface FamilyUpdateManyMutationInput {
-  relationship?: String;
-  status?: String;
-}
-
-export interface AreaUpdateDataInput {
-  code?: String;
-  name?: String;
-  city?: CityUpdateOneRequiredWithoutAreasInput;
-  towns?: StreetUpdateManyWithoutAreaInput;
-}
-
-export type StationWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  code?: String;
-  name?: String;
-}>;
-
-export interface UserCreateWithoutClassMateInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  messages?: MessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  workGroup?: WorkGroupCreateOneWithoutWokersInput;
-}
-
-export interface CompanyUpdateInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  location?: LocationUpdateOneWithoutCompaniesInput;
-  BusinessScope?: String;
-  works?: WorkUpdateManyWithoutCompanyInput;
-  workGroup?: WorkGroupUpdateOneWithoutCompanyInput;
-}
-
-export interface StreetUpdateOneInput {
-  create?: StreetCreateInput;
-  update?: StreetUpdateDataInput;
-  upsert?: StreetUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: StreetWhereUniqueInput;
-}
-
-export interface CollegeEntranceExamUpdateManyMutationInput {
-  subject?: String;
-  culscore?: Float;
-  proscore?: Float;
-  candidatenum?: String;
-  times?: Int;
-}
-
-export interface StreetUpdateDataInput {
-  code?: String;
-  name?: String;
-  Area?: AreaUpdateOneRequiredWithoutTownsInput;
-  villages?: VillageUpdateManyWithoutStreetInput;
-}
-
-export interface UserUpsertWithoutExamInput {
-  update: UserUpdateWithoutExamDataInput;
-  create: UserCreateWithoutExamInput;
-}
-
-export interface AreaUpdateOneRequiredWithoutTownsInput {
-  create?: AreaCreateWithoutTownsInput;
-  update?: AreaUpdateWithoutTownsDataInput;
-  upsert?: AreaUpsertWithoutTownsInput;
-  connect?: AreaWhereUniqueInput;
-}
-
-export interface UserUpdateOneRequiredWithoutExamInput {
-  create?: UserCreateWithoutExamInput;
-  update?: UserUpdateWithoutExamDataInput;
-  upsert?: UserUpsertWithoutExamInput;
+export interface UserUpdateOneRequiredWithoutPostsInput {
+  create?: UserCreateWithoutPostsInput;
+  update?: UserUpdateWithoutPostsDataInput;
+  upsert?: UserUpsertWithoutPostsInput;
   connect?: UserWhereUniqueInput;
 }
 
-export interface AreaUpdateWithoutTownsDataInput {
-  code?: String;
+export interface UserUpsertWithoutCreaterInput {
+  update: UserUpdateWithoutCreaterDataInput;
+  create: UserCreateWithoutCreaterInput;
+}
+
+export type OldColleagueWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface FamilyGroupUpsertWithWhereUniqueWithoutMotherInput {
+  where: FamilyGroupWhereUniqueInput;
+  update: FamilyGroupUpdateWithoutMotherDataInput;
+  create: FamilyGroupCreateWithoutMotherInput;
+}
+
+export interface GroupCreateInput {
+  type?: GroupKind;
   name?: String;
-  city?: CityUpdateOneRequiredWithoutAreasInput;
+  users?: UserCreateManyWithoutGroupsInput;
+  messages?: MessageCreateManyWithoutToInput;
+}
+
+export interface PersonUpsertWithoutAsFatherInput {
+  update: PersonUpdateWithoutAsFatherDataInput;
+  create: PersonCreateWithoutAsFatherInput;
 }
 
 export interface CollegeEntranceExamUpdateInput {
@@ -3422,1276 +7000,117 @@ export interface CollegeEntranceExamUpdateInput {
   student?: UserUpdateOneRequiredWithoutExamInput;
 }
 
-export interface AreaUpsertWithoutTownsInput {
-  update: AreaUpdateWithoutTownsDataInput;
-  create: AreaCreateWithoutTownsInput;
+export interface FamilyGroupUpsertWithoutUsersInput {
+  update: FamilyGroupUpdateWithoutUsersDataInput;
+  create: FamilyGroupCreateWithoutUsersInput;
 }
 
-export interface UserCreateOneWithoutExamInput {
-  create?: UserCreateWithoutExamInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface StreetUpsertNestedInput {
-  update: StreetUpdateDataInput;
-  create: StreetCreateInput;
-}
-
-export interface CollegeEntranceExamCreateInput {
-  province: ProvinceCreateOneInput;
-  subject: String;
-  culscore: Float;
-  proscore?: Float;
-  candidatenum: String;
-  times?: Int;
-  student: UserCreateOneWithoutExamInput;
-}
-
-export interface VillageUpdateOneInput {
-  create?: VillageCreateInput;
-  update?: VillageUpdateDataInput;
-  upsert?: VillageUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: VillageWhereUniqueInput;
-}
-
-export interface ClassMateUpdateInput {
-  student?: UserUpdateOneWithoutClassMateInput;
-  status?: String;
-  group?: ClassGroupUpdateOneRequiredWithoutMembersInput;
-}
-
-export interface VillageUpdateDataInput {
+export type VillageWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
   code?: String;
-  name?: String;
-  street?: StreetUpdateOneRequiredWithoutVillagesInput;
-  people?: UserUpdateManyInput;
+}>;
+
+export interface UserUpsertWithWhereUniqueWithoutGroupsInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutGroupsDataInput;
+  create: UserCreateWithoutGroupsInput;
 }
 
-export interface ClassMateCreateInput {
-  student?: UserCreateOneWithoutClassMateInput;
-  status: String;
-  group: ClassGroupCreateOneWithoutMembersInput;
-}
-
-export interface StreetUpdateOneRequiredWithoutVillagesInput {
-  create?: StreetCreateWithoutVillagesInput;
-  update?: StreetUpdateWithoutVillagesDataInput;
-  upsert?: StreetUpsertWithoutVillagesInput;
-  connect?: StreetWhereUniqueInput;
-}
-
-export interface ClassMateUpsertWithWhereUniqueWithoutGroupInput {
-  where: ClassMateWhereUniqueInput;
-  update: ClassMateUpdateWithoutGroupDataInput;
-  create: ClassMateCreateWithoutGroupInput;
-}
-
-export interface StreetUpdateWithoutVillagesDataInput {
-  code?: String;
-  name?: String;
-  Area?: AreaUpdateOneRequiredWithoutTownsInput;
-}
-
-export interface UserUpsertWithoutClassMateInput {
-  update: UserUpdateWithoutClassMateDataInput;
-  create: UserCreateWithoutClassMateInput;
-}
-
-export interface StreetUpsertWithoutVillagesInput {
-  update: StreetUpdateWithoutVillagesDataInput;
-  create: StreetCreateWithoutVillagesInput;
-}
-
-export interface UserUpdateOneWithoutClassMateInput {
-  create?: UserCreateWithoutClassMateInput;
-  update?: UserUpdateWithoutClassMateDataInput;
-  upsert?: UserUpsertWithoutClassMateInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface VillageUpsertNestedInput {
-  update: VillageUpdateDataInput;
-  create: VillageCreateInput;
-}
-
-export interface ClassMateUpdateWithoutGroupDataInput {
-  student?: UserUpdateOneWithoutClassMateInput;
-  status?: String;
-}
-
-export interface SchoolUpdateManyWithoutLocationInput {
-  create?:
-    | SchoolCreateWithoutLocationInput[]
-    | SchoolCreateWithoutLocationInput;
-  delete?: SchoolWhereUniqueInput[] | SchoolWhereUniqueInput;
-  connect?: SchoolWhereUniqueInput[] | SchoolWhereUniqueInput;
-  disconnect?: SchoolWhereUniqueInput[] | SchoolWhereUniqueInput;
-  update?:
-    | SchoolUpdateWithWhereUniqueWithoutLocationInput[]
-    | SchoolUpdateWithWhereUniqueWithoutLocationInput;
-  upsert?:
-    | SchoolUpsertWithWhereUniqueWithoutLocationInput[]
-    | SchoolUpsertWithWhereUniqueWithoutLocationInput;
-}
-
-export interface ClassMateUpdateManyWithoutGroupInput {
-  create?:
-    | ClassMateCreateWithoutGroupInput[]
-    | ClassMateCreateWithoutGroupInput;
-  delete?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
-  connect?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
-  disconnect?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
-  update?:
-    | ClassMateUpdateWithWhereUniqueWithoutGroupInput[]
-    | ClassMateUpdateWithWhereUniqueWithoutGroupInput;
-  upsert?:
-    | ClassMateUpsertWithWhereUniqueWithoutGroupInput[]
-    | ClassMateUpsertWithWhereUniqueWithoutGroupInput;
-}
-
-export interface SchoolUpdateWithWhereUniqueWithoutLocationInput {
-  where: SchoolWhereUniqueInput;
-  data: SchoolUpdateWithoutLocationDataInput;
-}
-
-export interface CityCreateOneWithoutAreasInput {
-  create?: CityCreateWithoutAreasInput;
-  connect?: CityWhereUniqueInput;
-}
-
-export interface SchoolUpdateWithoutLocationDataInput {
-  name?: String;
-  kind?: Educationkind;
-}
-
-export interface ProvinceCreateOneWithoutCitiesInput {
-  create?: ProvinceCreateWithoutCitiesInput;
-  connect?: ProvinceWhereUniqueInput;
-}
-
-export interface SchoolEduWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  school?: SchoolWhereInput;
-  startTime?: DateTimeInput;
-  startTime_not?: DateTimeInput;
-  startTime_in?: DateTimeInput[] | DateTimeInput;
-  startTime_not_in?: DateTimeInput[] | DateTimeInput;
-  startTime_lt?: DateTimeInput;
-  startTime_lte?: DateTimeInput;
-  startTime_gt?: DateTimeInput;
-  startTime_gte?: DateTimeInput;
-  major?: MajorWhereInput;
-  grade?: Int;
-  grade_not?: Int;
-  grade_in?: Int[] | Int;
-  grade_not_in?: Int[] | Int;
-  grade_lt?: Int;
-  grade_lte?: Int;
-  grade_gt?: Int;
-  grade_gte?: Int;
-  className?: String;
-  className_not?: String;
-  className_in?: String[] | String;
-  className_not_in?: String[] | String;
-  className_lt?: String;
-  className_lte?: String;
-  className_gt?: String;
-  className_gte?: String;
-  className_contains?: String;
-  className_not_contains?: String;
-  className_starts_with?: String;
-  className_not_starts_with?: String;
-  className_ends_with?: String;
-  className_not_ends_with?: String;
-  students_every?: UserWhereInput;
-  students_some?: UserWhereInput;
-  students_none?: UserWhereInput;
-  AND?: SchoolEduWhereInput[] | SchoolEduWhereInput;
-  OR?: SchoolEduWhereInput[] | SchoolEduWhereInput;
-  NOT?: SchoolEduWhereInput[] | SchoolEduWhereInput;
-}
-
-export interface StreetCreateManyWithoutAreaInput {
-  create?: StreetCreateWithoutAreaInput[] | StreetCreateWithoutAreaInput;
-  connect?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
-}
-
-export interface UserCreateOneWithoutClassMateInput {
-  create?: UserCreateWithoutClassMateInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface VillageCreateManyWithoutStreetInput {
-  create?: VillageCreateWithoutStreetInput[] | VillageCreateWithoutStreetInput;
-  connect?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
-}
-
-export interface ClassGroupWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  study?: SchoolEduWhereInput;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  members_every?: ClassMateWhereInput;
-  members_some?: ClassMateWhereInput;
-  members_none?: ClassMateWhereInput;
-  messages_every?: MessageWhereInput;
-  messages_some?: MessageWhereInput;
-  messages_none?: MessageWhereInput;
-  AND?: ClassGroupWhereInput[] | ClassGroupWhereInput;
-  OR?: ClassGroupWhereInput[] | ClassGroupWhereInput;
-  NOT?: ClassGroupWhereInput[] | ClassGroupWhereInput;
-}
-
-export interface UserCreateManyInput {
-  create?: UserCreateInput[] | UserCreateInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface FamilyWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  from?: UserWhereInput;
-  to?: PersonWhereInput;
-  relationship?: String;
-  relationship_not?: String;
-  relationship_in?: String[] | String;
-  relationship_not_in?: String[] | String;
-  relationship_lt?: String;
-  relationship_lte?: String;
-  relationship_gt?: String;
-  relationship_gte?: String;
-  relationship_contains?: String;
-  relationship_not_contains?: String;
-  relationship_starts_with?: String;
-  relationship_not_starts_with?: String;
-  relationship_ends_with?: String;
-  relationship_not_ends_with?: String;
-  spouse?: FamilyWhereInput;
-  status?: String;
-  status_not?: String;
-  status_in?: String[] | String;
-  status_not_in?: String[] | String;
-  status_lt?: String;
-  status_lte?: String;
-  status_gt?: String;
-  status_gte?: String;
-  status_contains?: String;
-  status_not_contains?: String;
-  status_starts_with?: String;
-  status_not_starts_with?: String;
-  status_ends_with?: String;
-  status_not_ends_with?: String;
-  AND?: FamilyWhereInput[] | FamilyWhereInput;
-  OR?: FamilyWhereInput[] | FamilyWhereInput;
-  NOT?: FamilyWhereInput[] | FamilyWhereInput;
-}
-
-export interface LocationCreateOneInput {
-  create?: LocationCreateInput;
-  connect?: LocationWhereUniqueInput;
-}
-
-export interface ClassMateCreateWithoutGroupInput {
-  student?: UserCreateOneWithoutClassMateInput;
-  status: String;
-}
-
-export interface ProvinceCreateOneInput {
-  create?: ProvinceCreateInput;
-  connect?: ProvinceWhereUniqueInput;
-}
-
-export interface WorkUpdateWithWhereUniqueWithoutCompanyInput {
-  where: WorkWhereUniqueInput;
-  data: WorkUpdateWithoutCompanyDataInput;
-}
-
-export interface CityCreateManyWithoutProvinceInput {
-  create?: CityCreateWithoutProvinceInput[] | CityCreateWithoutProvinceInput;
-  connect?: CityWhereUniqueInput[] | CityWhereUniqueInput;
-}
-
-export interface WorkUpdateWithoutCompanyDataInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  department?: String;
-  post?: StationUpdateOneInput;
-  jobContent?: String;
-  worker?: UserUpdateOneWithoutWorksInput;
-}
-
-export interface AreaCreateManyWithoutCityInput {
-  create?: AreaCreateWithoutCityInput[] | AreaCreateWithoutCityInput;
-  connect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
-}
-
-export interface StationUpdateOneInput {
-  create?: StationCreateInput;
-  update?: StationUpdateDataInput;
-  upsert?: StationUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: StationWhereUniqueInput;
-}
-
-export interface CityCreateOneInput {
-  create?: CityCreateInput;
-  connect?: CityWhereUniqueInput;
-}
-
-export interface StationUpdateDataInput {
-  code?: String;
-  name?: String;
-}
-
-export interface AreaCreateOneInput {
-  create?: AreaCreateInput;
-  connect?: AreaWhereUniqueInput;
-}
-
-export interface StationUpsertNestedInput {
-  update: StationUpdateDataInput;
-  create: StationCreateInput;
-}
-
-export interface StreetCreateInput {
+export interface CityCreateWithoutAreasInput {
   code: String;
   name: String;
-  Area: AreaCreateOneWithoutTownsInput;
-  villages?: VillageCreateManyWithoutStreetInput;
+  province: ProvinceCreateOneWithoutCitiesInput;
 }
 
-export interface UserUpdateOneWithoutWorksInput {
-  create?: UserCreateWithoutWorksInput;
-  update?: UserUpdateWithoutWorksDataInput;
-  upsert?: UserUpsertWithoutWorksInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
+export interface GroupUpsertWithoutMessagesInput {
+  update: GroupUpdateWithoutMessagesDataInput;
+  create: GroupCreateWithoutMessagesInput;
 }
 
-export interface AreaCreateWithoutTownsInput {
+export interface AreaCreateWithoutCityInput {
   code: String;
   name: String;
-  city: CityCreateOneWithoutAreasInput;
+  towns?: StreetCreateManyWithoutAreaInput;
 }
 
-export interface UserUpdateWithoutWorksDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  messages?: MessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneWithoutWokersInput;
+export interface MessageUpsertWithWhereUniqueWithoutFromInput {
+  where: MessageWhereUniqueInput;
+  update: MessageUpdateWithoutFromDataInput;
+  create: MessageCreateWithoutFromInput;
 }
 
-export interface VillageCreateInput {
-  code: String;
-  name: String;
-  street: StreetCreateOneWithoutVillagesInput;
-  people?: UserCreateManyInput;
+export interface WorkCreateManyWithoutCompanyInput {
+  create?: WorkCreateWithoutCompanyInput[] | WorkCreateWithoutCompanyInput;
+  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
 }
 
-export interface PostUpdateManyWithoutAuthorInput {
-  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput;
-  delete?: PostWhereUniqueInput[] | PostWhereUniqueInput;
-  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput;
-  disconnect?: PostWhereUniqueInput[] | PostWhereUniqueInput;
-  update?:
-    | PostUpdateWithWhereUniqueWithoutAuthorInput[]
-    | PostUpdateWithWhereUniqueWithoutAuthorInput;
-  upsert?:
-    | PostUpsertWithWhereUniqueWithoutAuthorInput[]
-    | PostUpsertWithWhereUniqueWithoutAuthorInput;
+export interface UserUpsertWithoutColleaguesInput {
+  update: UserUpdateWithoutColleaguesDataInput;
+  create: UserCreateWithoutColleaguesInput;
 }
 
-export interface StreetCreateWithoutVillagesInput {
-  code: String;
-  name: String;
-  Area: AreaCreateOneWithoutTownsInput;
-}
-
-export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput;
-  data: PostUpdateWithoutAuthorDataInput;
-}
-
-export interface SchoolCreateWithoutLocationInput {
-  name?: String;
-  kind?: Educationkind;
-}
-
-export interface PostUpdateWithoutAuthorDataInput {
-  isPublished?: Boolean;
-  title?: String;
-  content?: String;
-}
-
-export interface CompanyCreateWithoutLocationInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  BusinessScope?: String;
-  works?: WorkCreateManyWithoutCompanyInput;
-  workGroup?: WorkGroupCreateOneWithoutCompanyInput;
-}
-
-export interface PostUpsertWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput;
-  update: PostUpdateWithoutAuthorDataInput;
-  create: PostCreateWithoutAuthorInput;
-}
-
-export interface WorkCreateWithoutCompanyInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  department?: String;
-  post?: StationCreateOneInput;
-  jobContent?: String;
-  worker?: UserCreateOneWithoutWorksInput;
-}
-
-export interface RegStatusUpdateOneWithoutApplicantsInput {
-  create?: RegStatusCreateWithoutApplicantsInput;
-  update?: RegStatusUpdateWithoutApplicantsDataInput;
-  upsert?: RegStatusUpsertWithoutApplicantsInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: RegStatusWhereUniqueInput;
-}
-
-export interface StationCreateInput {
-  code?: String;
-  name?: String;
-}
-
-export interface RegStatusUpdateWithoutApplicantsDataInput {
-  education?: Educationkind;
-  university?: UniversityUpdateOneInput;
-  major?: MajorUpdateOneRequiredInput;
-}
-
-export interface UserCreateWithoutWorksInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  messages?: MessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneWithoutWokersInput;
-}
-
-export interface UniversityUpdateOneInput {
-  create?: UniversityCreateInput;
-  update?: UniversityUpdateDataInput;
-  upsert?: UniversityUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UniversityWhereUniqueInput;
-}
-
-export interface PostCreateWithoutAuthorInput {
-  isPublished?: Boolean;
-  title: String;
-  content: String;
-}
-
-export interface UniversityUpdateDataInput {
-  name?: String;
-  education?: Educationkind;
-  department?: String;
-  location?: String;
-  desc?: String;
-}
-
-export interface RegStatusCreateWithoutApplicantsInput {
-  education: Educationkind;
-  university?: UniversityCreateOneInput;
-  major: MajorCreateOneInput;
-}
-
-export interface UniversityUpsertNestedInput {
-  update: UniversityUpdateDataInput;
-  create: UniversityCreateInput;
-}
-
-export interface UniversityCreateInput {
-  name: String;
-  education: Educationkind;
-  department?: String;
-  location?: String;
-  desc?: String;
-}
-
-export interface MajorUpdateOneRequiredInput {
-  create?: MajorCreateInput;
-  update?: MajorUpdateDataInput;
-  upsert?: MajorUpsertNestedInput;
-  connect?: MajorWhereUniqueInput;
-}
-
-export interface MajorCreateInput {
-  name: String;
-  category: String;
-  education: Educationkind;
-}
-
-export interface MajorUpdateDataInput {
-  name?: String;
-  category?: String;
-  education?: Educationkind;
-}
-
-export interface FamilyCreateWithoutFromInput {
-  to: PersonCreateOneWithoutFamiliesInput;
-  relationship: String;
-  spouse?: FamilyCreateOneInput;
-  status: String;
-}
-
-export interface MajorUpsertNestedInput {
-  update: MajorUpdateDataInput;
-  create: MajorCreateInput;
-}
-
-export interface PersonCreateWithoutFamiliesInput {
-  name: String;
-  user?: UserCreateOneInput;
-  asFather?: FamilyGroupCreateManyWithoutFatherInput;
-  asMother?: FamilyGroupCreateManyWithoutMotherInput;
-}
-
-export interface RegStatusUpsertWithoutApplicantsInput {
-  update: RegStatusUpdateWithoutApplicantsDataInput;
-  create: RegStatusCreateWithoutApplicantsInput;
-}
-
-export interface FamilyGroupCreateManyWithoutFatherInput {
-  create?:
-    | FamilyGroupCreateWithoutFatherInput[]
-    | FamilyGroupCreateWithoutFatherInput;
-  connect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
-}
-
-export interface FamilyUpdateManyWithoutFromInput {
-  create?: FamilyCreateWithoutFromInput[] | FamilyCreateWithoutFromInput;
-  delete?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-  disconnect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-  update?:
-    | FamilyUpdateWithWhereUniqueWithoutFromInput[]
-    | FamilyUpdateWithWhereUniqueWithoutFromInput;
-  upsert?:
-    | FamilyUpsertWithWhereUniqueWithoutFromInput[]
-    | FamilyUpsertWithWhereUniqueWithoutFromInput;
-}
-
-export interface PersonCreateOneWithoutAsMotherInput {
-  create?: PersonCreateWithoutAsMotherInput;
-  connect?: PersonWhereUniqueInput;
-}
-
-export interface FamilyUpdateWithWhereUniqueWithoutFromInput {
-  where: FamilyWhereUniqueInput;
-  data: FamilyUpdateWithoutFromDataInput;
-}
-
-export interface FamilyCreateManyWithoutToInput {
-  create?: FamilyCreateWithoutToInput[] | FamilyCreateWithoutToInput;
-  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-}
-
-export interface FamilyUpdateWithoutFromDataInput {
-  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
-  relationship?: String;
-  spouse?: FamilyUpdateOneInput;
-  status?: String;
-}
-
-export interface UserCreateOneWithoutFamiliesInput {
-  create?: UserCreateWithoutFamiliesInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface PersonUpdateOneRequiredWithoutFamiliesInput {
+export interface PersonCreateOneWithoutFamiliesInput {
   create?: PersonCreateWithoutFamiliesInput;
-  update?: PersonUpdateWithoutFamiliesDataInput;
-  upsert?: PersonUpsertWithoutFamiliesInput;
   connect?: PersonWhereUniqueInput;
 }
 
-export interface SchoolEduCreateManyWithoutStudentsInput {
-  create?:
-    | SchoolEduCreateWithoutStudentsInput[]
-    | SchoolEduCreateWithoutStudentsInput;
-  connect?: SchoolEduWhereUniqueInput[] | SchoolEduWhereUniqueInput;
+export interface ColleagueUpsertWithWhereUniqueWithoutGroupInput {
+  where: ColleagueWhereUniqueInput;
+  update: ColleagueUpdateWithoutGroupDataInput;
+  create: ColleagueCreateWithoutGroupInput;
 }
 
-export interface PersonUpdateWithoutFamiliesDataInput {
-  name?: String;
-  user?: UserUpdateOneInput;
-  asFather?: FamilyGroupUpdateManyWithoutFatherInput;
-  asMother?: FamilyGroupUpdateManyWithoutMotherInput;
-}
-
-export interface SchoolCreateOneInput {
-  create?: SchoolCreateInput;
-  connect?: SchoolWhereUniqueInput;
-}
-
-export interface UserUpdateOneInput {
-  create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface LocationCreateOneWithoutSchoolsInput {
-  create?: LocationCreateWithoutSchoolsInput;
-  connect?: LocationWhereUniqueInput;
-}
-
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
-}
-
-export interface UniversityCreateManyInput {
-  create?: UniversityCreateInput[] | UniversityCreateInput;
-  connect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
-}
-
-export interface FamilyGroupUpdateManyWithoutFatherInput {
-  create?:
-    | FamilyGroupCreateWithoutFatherInput[]
-    | FamilyGroupCreateWithoutFatherInput;
-  delete?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
-  connect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
-  disconnect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
-  update?:
-    | FamilyGroupUpdateWithWhereUniqueWithoutFatherInput[]
-    | FamilyGroupUpdateWithWhereUniqueWithoutFatherInput;
-  upsert?:
-    | FamilyGroupUpsertWithWhereUniqueWithoutFatherInput[]
-    | FamilyGroupUpsertWithWhereUniqueWithoutFatherInput;
-}
-
-export interface WorkCreateWithoutWorkerInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  company?: CompanyCreateOneWithoutWorksInput;
-  department?: String;
-  post?: StationCreateOneInput;
-  jobContent?: String;
-}
-
-export interface FamilyGroupUpdateWithWhereUniqueWithoutFatherInput {
-  where: FamilyGroupWhereUniqueInput;
-  data: FamilyGroupUpdateWithoutFatherDataInput;
-}
-
-export interface CompanyCreateWithoutWorksInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  location?: LocationCreateOneWithoutCompaniesInput;
-  BusinessScope?: String;
-  workGroup?: WorkGroupCreateOneWithoutCompanyInput;
-}
-
-export interface FamilyGroupUpdateWithoutFatherDataInput {
-  mother?: PersonUpdateOneWithoutAsMotherInput;
-  creater?: UserUpdateOneWithoutCreaterInput;
-  name?: String;
-  families?: FamilyUpdateManyInput;
-  messages?: MessageUpdateManyInput;
-  users?: UserUpdateManyWithoutFamilyGroupInput;
-}
-
-export interface LocationCreateWithoutCompaniesInput {
+export interface LocationCreateWithoutSchoolsInput {
   name?: String;
   province?: ProvinceCreateOneInput;
   city?: CityCreateOneInput;
   area?: AreaCreateOneInput;
   street?: StreetCreateOneInput;
   village?: VillageCreateOneInput;
-  schools?: SchoolCreateManyWithoutLocationInput;
+  companies?: CompanyCreateManyWithoutLocationInput;
   universities?: UniversityCreateManyInput;
 }
 
-export interface PersonUpdateOneWithoutAsMotherInput {
-  create?: PersonCreateWithoutAsMotherInput;
-  update?: PersonUpdateWithoutAsMotherDataInput;
-  upsert?: PersonUpsertWithoutAsMotherInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: PersonWhereUniqueInput;
+export interface WorkGroupUpsertWithoutCompanyInput {
+  update: WorkGroupUpdateWithoutCompanyDataInput;
+  create: WorkGroupCreateWithoutCompanyInput;
 }
 
-export interface WorkGroupCreateWithoutCompanyInput {
-  wokers?: UserCreateManyWithoutWorkGroupInput;
-  messages?: MessageCreateManyInput;
+export interface MessageCreateManyWithoutFromInput {
+  create?: MessageCreateWithoutFromInput[] | MessageCreateWithoutFromInput;
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
 }
 
-export interface PersonUpdateWithoutAsMotherDataInput {
-  name?: String;
-  user?: UserUpdateOneInput;
-  families?: FamilyUpdateManyWithoutToInput;
-  asFather?: FamilyGroupUpdateManyWithoutFatherInput;
+export interface CompanyUpsertWithoutWorksInput {
+  update: CompanyUpdateWithoutWorksDataInput;
+  create: CompanyCreateWithoutWorksInput;
 }
 
-export interface UserCreateWithoutWorkGroupInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  messages?: MessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
+export interface MessageCreateManyWithoutToInput {
+  create?: MessageCreateWithoutToInput[] | MessageCreateWithoutToInput;
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
 }
 
-export interface FamilyUpdateManyWithoutToInput {
-  create?: FamilyCreateWithoutToInput[] | FamilyCreateWithoutToInput;
-  delete?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-  disconnect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-  update?:
-    | FamilyUpdateWithWhereUniqueWithoutToInput[]
-    | FamilyUpdateWithWhereUniqueWithoutToInput;
-  upsert?:
-    | FamilyUpsertWithWhereUniqueWithoutToInput[]
-    | FamilyUpsertWithWhereUniqueWithoutToInput;
+export interface WorkUpsertWithWhereUniqueWithoutWorkerInput {
+  where: WorkWhereUniqueInput;
+  update: WorkUpdateWithoutWorkerDataInput;
+  create: WorkCreateWithoutWorkerInput;
 }
 
-export interface CollegeEntranceExamCreateWithoutStudentInput {
-  province: ProvinceCreateOneInput;
-  subject: String;
-  culscore: Float;
-  proscore?: Float;
-  candidatenum: String;
-  times?: Int;
-}
-
-export interface FamilyUpdateWithWhereUniqueWithoutToInput {
-  where: FamilyWhereUniqueInput;
-  data: FamilyUpdateWithoutToDataInput;
-}
-
-export interface MessageCreateWithoutFromInput {
-  to: GroupCreateOneWithoutMessagesInput;
-  text: String;
-}
-
-export interface FamilyUpdateWithoutToDataInput {
-  from?: UserUpdateOneRequiredWithoutFamiliesInput;
-  relationship?: String;
-  spouse?: FamilyUpdateOneInput;
-  status?: String;
-}
-
-export interface GroupCreateWithoutMessagesInput {
-  type?: GroupKind;
-  typeId?: String;
-  name?: String;
-  users?: UserCreateManyWithoutGroupsInput;
-}
-
-export interface UserUpdateOneRequiredWithoutFamiliesInput {
-  create?: UserCreateWithoutFamiliesInput;
-  update?: UserUpdateWithoutFamiliesDataInput;
-  upsert?: UserUpsertWithoutFamiliesInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface UserCreateWithoutGroupsInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  messages?: MessageCreateManyWithoutFromInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneWithoutWokersInput;
-}
-
-export interface UserUpdateWithoutFamiliesDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  messages?: MessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneWithoutWokersInput;
-}
-
-export interface FamilyGroupCreateWithoutUsersInput {
-  father?: PersonCreateOneWithoutAsFatherInput;
-  mother?: PersonCreateOneWithoutAsMotherInput;
-  creater?: UserCreateOneWithoutCreaterInput;
-  name?: String;
-  families?: FamilyCreateManyInput;
-  messages?: MessageCreateManyInput;
-}
-
-export interface SchoolEduUpdateManyWithoutStudentsInput {
-  create?:
-    | SchoolEduCreateWithoutStudentsInput[]
-    | SchoolEduCreateWithoutStudentsInput;
-  delete?: SchoolEduWhereUniqueInput[] | SchoolEduWhereUniqueInput;
-  connect?: SchoolEduWhereUniqueInput[] | SchoolEduWhereUniqueInput;
-  disconnect?: SchoolEduWhereUniqueInput[] | SchoolEduWhereUniqueInput;
-  update?:
-    | SchoolEduUpdateWithWhereUniqueWithoutStudentsInput[]
-    | SchoolEduUpdateWithWhereUniqueWithoutStudentsInput;
-  upsert?:
-    | SchoolEduUpsertWithWhereUniqueWithoutStudentsInput[]
-    | SchoolEduUpsertWithWhereUniqueWithoutStudentsInput;
-}
-
-export interface PersonCreateWithoutAsFatherInput {
-  name: String;
-  user?: UserCreateOneInput;
-  families?: FamilyCreateManyWithoutToInput;
-  asMother?: FamilyGroupCreateManyWithoutMotherInput;
-}
-
-export interface SchoolEduUpdateWithWhereUniqueWithoutStudentsInput {
-  where: SchoolEduWhereUniqueInput;
-  data: SchoolEduUpdateWithoutStudentsDataInput;
-}
-
-export interface FamilyGroupCreateWithoutMotherInput {
-  father?: PersonCreateOneWithoutAsFatherInput;
-  creater?: UserCreateOneWithoutCreaterInput;
-  name?: String;
-  families?: FamilyCreateManyInput;
-  messages?: MessageCreateManyInput;
-  users?: UserCreateManyWithoutFamilyGroupInput;
-}
-
-export interface SchoolEduUpdateWithoutStudentsDataInput {
-  school?: SchoolUpdateOneInput;
-  startTime?: DateTimeInput;
-  major?: MajorUpdateOneInput;
-  grade?: Int;
-  className?: String;
-}
-
-export interface MajorWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  category?: String;
-  category_not?: String;
-  category_in?: String[] | String;
-  category_not_in?: String[] | String;
-  category_lt?: String;
-  category_lte?: String;
-  category_gt?: String;
-  category_gte?: String;
-  category_contains?: String;
-  category_not_contains?: String;
-  category_starts_with?: String;
-  category_not_starts_with?: String;
-  category_ends_with?: String;
-  category_not_ends_with?: String;
-  education?: Educationkind;
-  education_not?: Educationkind;
-  education_in?: Educationkind[] | Educationkind;
-  education_not_in?: Educationkind[] | Educationkind;
-  AND?: MajorWhereInput[] | MajorWhereInput;
-  OR?: MajorWhereInput[] | MajorWhereInput;
-  NOT?: MajorWhereInput[] | MajorWhereInput;
-}
-
-export interface SchoolUpdateOneInput {
-  create?: SchoolCreateInput;
-  update?: SchoolUpdateDataInput;
-  upsert?: SchoolUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: SchoolWhereUniqueInput;
-}
-
-export interface VillageSubscriptionWhereInput {
+export interface ProvinceSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: VillageWhereInput;
-  AND?: VillageSubscriptionWhereInput[] | VillageSubscriptionWhereInput;
-  OR?: VillageSubscriptionWhereInput[] | VillageSubscriptionWhereInput;
-  NOT?: VillageSubscriptionWhereInput[] | VillageSubscriptionWhereInput;
+  node?: ProvinceWhereInput;
+  AND?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
+  OR?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
+  NOT?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
 }
 
-export interface SchoolUpdateDataInput {
-  name?: String;
-  kind?: Educationkind;
-  location?: LocationUpdateOneWithoutSchoolsInput;
-}
-
-export interface StreetSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: StreetWhereInput;
-  AND?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
-  OR?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
-  NOT?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
-}
-
-export interface LocationUpdateOneWithoutSchoolsInput {
-  create?: LocationCreateWithoutSchoolsInput;
-  update?: LocationUpdateWithoutSchoolsDataInput;
-  upsert?: LocationUpsertWithoutSchoolsInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: LocationWhereUniqueInput;
-}
-
-export interface SchoolSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: SchoolWhereInput;
-  AND?: SchoolSubscriptionWhereInput[] | SchoolSubscriptionWhereInput;
-  OR?: SchoolSubscriptionWhereInput[] | SchoolSubscriptionWhereInput;
-  NOT?: SchoolSubscriptionWhereInput[] | SchoolSubscriptionWhereInput;
-}
-
-export interface LocationUpdateWithoutSchoolsDataInput {
-  name?: String;
-  province?: ProvinceUpdateOneInput;
-  city?: CityUpdateOneInput;
-  area?: AreaUpdateOneInput;
-  street?: StreetUpdateOneInput;
-  village?: VillageUpdateOneInput;
-  companies?: CompanyUpdateManyWithoutLocationInput;
-  universities?: UniversityUpdateManyInput;
-}
-
-export interface MessageWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  to?: GroupWhereInput;
-  from?: UserWhereInput;
-  text?: String;
-  text_not?: String;
-  text_in?: String[] | String;
-  text_not_in?: String[] | String;
-  text_lt?: String;
-  text_lte?: String;
-  text_gt?: String;
-  text_gte?: String;
-  text_contains?: String;
-  text_not_contains?: String;
-  text_starts_with?: String;
-  text_not_starts_with?: String;
-  text_ends_with?: String;
-  text_not_ends_with?: String;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  AND?: MessageWhereInput[] | MessageWhereInput;
-  OR?: MessageWhereInput[] | MessageWhereInput;
-  NOT?: MessageWhereInput[] | MessageWhereInput;
-}
-
-export interface UniversityUpdateManyInput {
-  create?: UniversityCreateInput[] | UniversityCreateInput;
-  update?:
-    | UniversityUpdateWithWhereUniqueNestedInput[]
-    | UniversityUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | UniversityUpsertWithWhereUniqueNestedInput[]
-    | UniversityUpsertWithWhereUniqueNestedInput;
-  delete?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
-  connect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
-  disconnect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
-}
-
-export interface MessageSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: MessageWhereInput;
-  AND?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput;
-  OR?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput;
-  NOT?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput;
-}
-
-export interface UniversityUpdateWithWhereUniqueNestedInput {
-  where: UniversityWhereUniqueInput;
-  data: UniversityUpdateDataInput;
-}
-
-export interface LocationSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: LocationWhereInput;
-  AND?: LocationSubscriptionWhereInput[] | LocationSubscriptionWhereInput;
-  OR?: LocationSubscriptionWhereInput[] | LocationSubscriptionWhereInput;
-  NOT?: LocationSubscriptionWhereInput[] | LocationSubscriptionWhereInput;
-}
-
-export interface UniversityUpsertWithWhereUniqueNestedInput {
-  where: UniversityWhereUniqueInput;
-  update: UniversityUpdateDataInput;
-  create: UniversityCreateInput;
-}
-
-export interface FamilyGroupSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: FamilyGroupWhereInput;
-  AND?: FamilyGroupSubscriptionWhereInput[] | FamilyGroupSubscriptionWhereInput;
-  OR?: FamilyGroupSubscriptionWhereInput[] | FamilyGroupSubscriptionWhereInput;
-  NOT?: FamilyGroupSubscriptionWhereInput[] | FamilyGroupSubscriptionWhereInput;
-}
-
-export interface LocationUpsertWithoutSchoolsInput {
-  update: LocationUpdateWithoutSchoolsDataInput;
-  create: LocationCreateWithoutSchoolsInput;
-}
-
-export interface CompanySubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: CompanyWhereInput;
-  AND?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
-  OR?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
-  NOT?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
-}
-
-export interface SchoolUpsertNestedInput {
-  update: SchoolUpdateDataInput;
-  create: SchoolCreateInput;
-}
-
-export interface CitySubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: CityWhereInput;
-  AND?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
-  OR?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
-  NOT?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
-}
-
-export interface MajorUpdateOneInput {
-  create?: MajorCreateInput;
-  update?: MajorUpdateDataInput;
-  upsert?: MajorUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: MajorWhereUniqueInput;
-}
-
-export interface WorkGroupCreateInput {
-  company?: CompanyCreateOneWithoutWorkGroupInput;
-  wokers?: UserCreateManyWithoutWorkGroupInput;
-  messages?: MessageCreateManyInput;
-}
-
-export interface SchoolEduUpsertWithWhereUniqueWithoutStudentsInput {
-  where: SchoolEduWhereUniqueInput;
-  update: SchoolEduUpdateWithoutStudentsDataInput;
-  create: SchoolEduCreateWithoutStudentsInput;
+export interface UserUpsertWithoutFamiliesInput {
+  update: UserUpdateWithoutFamiliesDataInput;
+  create: UserCreateWithoutFamiliesInput;
 }
 
 export interface WorkCreateInput {
@@ -4704,36 +7123,150 @@ export interface WorkCreateInput {
   worker?: UserCreateOneWithoutWorksInput;
 }
 
-export interface WorkUpdateManyWithoutWorkerInput {
-  create?: WorkCreateWithoutWorkerInput[] | WorkCreateWithoutWorkerInput;
-  delete?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
-  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
-  disconnect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
-  update?:
-    | WorkUpdateWithWhereUniqueWithoutWorkerInput[]
-    | WorkUpdateWithWhereUniqueWithoutWorkerInput;
-  upsert?:
-    | WorkUpsertWithWhereUniqueWithoutWorkerInput[]
-    | WorkUpsertWithWhereUniqueWithoutWorkerInput;
+export interface FamilyUpsertWithWhereUniqueWithoutToInput {
+  where: FamilyWhereUniqueInput;
+  update: FamilyUpdateWithoutToDataInput;
+  create: FamilyCreateWithoutToInput;
 }
 
-export interface UserUpdateManyMutationInput {
-  username?: String;
-  password?: String;
+export type GroupWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface PersonUpsertWithoutAsMotherInput {
+  update: PersonUpdateWithoutAsMotherDataInput;
+  create: PersonCreateWithoutAsMotherInput;
+}
+
+export interface LogsCreateInput {
+  user?: UserCreateOneInput;
+  createFamilyGroupTime?: DateTimeInput;
+}
+
+export interface FamilyGroupUpsertWithWhereUniqueWithoutFatherInput {
+  where: FamilyGroupWhereUniqueInput;
+  update: FamilyGroupUpdateWithoutFatherDataInput;
+  create: FamilyGroupCreateWithoutFatherInput;
+}
+
+export type UniversityWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
+
+export interface PersonUpsertWithoutFamiliesInput {
+  update: PersonUpdateWithoutFamiliesDataInput;
+  create: PersonCreateWithoutFamiliesInput;
+}
+
+export interface UserCreateInput {
+  username: String;
+  password: String;
   name?: String;
   gender?: String;
   avatar?: String;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
-  uid?: String;
-  token?: String;
+  birthplace?: LocationCreateOneInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
   regTimes?: Int;
   maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  messages?: MessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
 }
 
-export interface WorkUpdateWithWhereUniqueWithoutWorkerInput {
+export interface FamilyUpsertWithWhereUniqueWithoutFromInput {
+  where: FamilyWhereUniqueInput;
+  update: FamilyUpdateWithoutFromDataInput;
+  create: FamilyCreateWithoutFromInput;
+}
+
+export interface RegStatusCreateOneWithoutApplicantsInput {
+  create?: RegStatusCreateWithoutApplicantsInput;
+  connect?: RegStatusWhereUniqueInput;
+}
+
+export interface UserUpsertWithoutWorksInput {
+  update: UserUpdateWithoutWorksDataInput;
+  create: UserCreateWithoutWorksInput;
+}
+
+export interface WorkGroupCreateOneWithoutCompanyInput {
+  create?: WorkGroupCreateWithoutCompanyInput;
+  connect?: WorkGroupWhereUniqueInput;
+}
+
+export interface WorkUpsertWithWhereUniqueWithoutCompanyInput {
   where: WorkWhereUniqueInput;
-  data: WorkUpdateWithoutWorkerDataInput;
+  update: WorkUpdateWithoutCompanyDataInput;
+  create: WorkCreateWithoutCompanyInput;
+}
+
+export interface FamilyGroupWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  father?: PersonWhereInput;
+  mother?: PersonWhereInput;
+  creater?: UserWhereInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  families_every?: FamilyWhereInput;
+  families_some?: FamilyWhereInput;
+  families_none?: FamilyWhereInput;
+  messages_every?: MessageWhereInput;
+  messages_some?: MessageWhereInput;
+  messages_none?: MessageWhereInput;
+  users_every?: UserWhereInput;
+  users_some?: UserWhereInput;
+  users_none?: UserWhereInput;
+  AND?: FamilyGroupWhereInput[] | FamilyGroupWhereInput;
+  OR?: FamilyGroupWhereInput[] | FamilyGroupWhereInput;
+  NOT?: FamilyGroupWhereInput[] | FamilyGroupWhereInput;
+}
+
+export interface CompanyUpsertWithWhereUniqueWithoutLocationInput {
+  where: CompanyWhereUniqueInput;
+  update: CompanyUpdateWithoutLocationDataInput;
+  create: CompanyCreateWithoutLocationInput;
 }
 
 export interface UserWhereInput {
@@ -4933,112 +7466,76 @@ export interface UserWhereInput {
   classMate_some?: ClassMateWhereInput;
   classMate_none?: ClassMateWhereInput;
   workGroup?: WorkGroupWhereInput;
+  colleagues_every?: ColleagueWhereInput;
+  colleagues_some?: ColleagueWhereInput;
+  colleagues_none?: ColleagueWhereInput;
+  fromOldColleagues_every?: OldColleagueWhereInput;
+  fromOldColleagues_some?: OldColleagueWhereInput;
+  fromOldColleagues_none?: OldColleagueWhereInput;
+  toOldColleagues_every?: OldColleagueWhereInput;
+  toOldColleagues_some?: OldColleagueWhereInput;
+  toOldColleagues_none?: OldColleagueWhereInput;
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface WorkUpdateWithoutWorkerDataInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  company?: CompanyUpdateOneWithoutWorksInput;
-  department?: String;
-  post?: StationUpdateOneInput;
-  jobContent?: String;
+export interface LocationUpsertNestedInput {
+  update: LocationUpdateDataInput;
+  create: LocationCreateInput;
 }
 
-export type CompanyWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  name?: String;
-}>;
-
-export interface CompanyUpdateOneWithoutWorksInput {
-  create?: CompanyCreateWithoutWorksInput;
-  update?: CompanyUpdateWithoutWorksDataInput;
-  upsert?: CompanyUpsertWithoutWorksInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: CompanyWhereUniqueInput;
-}
-
-export type FamilyWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface CompanyUpdateWithoutWorksDataInput {
+export interface CompanyUpdateManyMutationInput {
   name?: String;
   code?: String;
   establishmentDate?: DateTimeInput;
   representative?: String;
-  location?: LocationUpdateOneWithoutCompaniesInput;
   BusinessScope?: String;
-  workGroup?: WorkGroupUpdateOneWithoutCompanyInput;
 }
 
-export type FamilyGroupWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface LocationUpdateOneWithoutCompaniesInput {
-  create?: LocationCreateWithoutCompaniesInput;
-  update?: LocationUpdateWithoutCompaniesDataInput;
-  upsert?: LocationUpsertWithoutCompaniesInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: LocationWhereUniqueInput;
+export interface UserUpsertWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
 }
 
-export type GroupWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface LocationUpdateWithoutCompaniesDataInput {
-  name?: String;
-  province?: ProvinceUpdateOneInput;
-  city?: CityUpdateOneInput;
-  area?: AreaUpdateOneInput;
-  street?: StreetUpdateOneInput;
-  village?: VillageUpdateOneInput;
-  schools?: SchoolUpdateManyWithoutLocationInput;
-  universities?: UniversityUpdateManyInput;
+export interface VillageCreateOneInput {
+  create?: VillageCreateInput;
+  connect?: VillageWhereUniqueInput;
 }
 
-export type LocationWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  name?: String;
-}>;
-
-export interface LocationUpsertWithoutCompaniesInput {
-  update: LocationUpdateWithoutCompaniesDataInput;
-  create: LocationCreateWithoutCompaniesInput;
-}
-
-export interface RegStatusCreateInput {
-  education: Educationkind;
-  university?: UniversityCreateOneInput;
-  major: MajorCreateOneInput;
-  applicants?: UserCreateManyWithoutRegStatusInput;
-}
-
-export interface WorkGroupUpdateOneWithoutCompanyInput {
-  create?: WorkGroupCreateWithoutCompanyInput;
-  update?: WorkGroupUpdateWithoutCompanyDataInput;
-  upsert?: WorkGroupUpsertWithoutCompanyInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: WorkGroupWhereUniqueInput;
-}
-
-export interface ProvinceUpdateInput {
+export interface CityUpdateManyMutationInput {
   code?: String;
   name?: String;
-  cities?: CityUpdateManyWithoutProvinceInput;
 }
 
-export interface WorkGroupUpdateWithoutCompanyDataInput {
-  wokers?: UserUpdateManyWithoutWorkGroupInput;
-  messages?: MessageUpdateManyInput;
+export interface AreaUpdateManyMutationInput {
+  code?: String;
+  name?: String;
 }
+
+export interface StreetUpsertWithWhereUniqueWithoutAreaInput {
+  where: StreetWhereUniqueInput;
+  update: StreetUpdateWithoutAreaDataInput;
+  create: StreetCreateWithoutAreaInput;
+}
+
+export interface VillageUpsertWithWhereUniqueWithoutStreetInput {
+  where: VillageWhereUniqueInput;
+  update: VillageUpdateWithoutStreetDataInput;
+  create: VillageCreateWithoutStreetInput;
+}
+
+export interface FamilyCreateWithoutToInput {
+  from: UserCreateOneWithoutFamiliesInput;
+  relationship: String;
+  spouse?: FamilyCreateOneInput;
+  status: String;
+}
+
+export type WorkGroupWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface AreaWhereInput {
   id?: ID_Input;
@@ -5092,1806 +7589,21 @@ export interface AreaWhereInput {
   NOT?: AreaWhereInput[] | AreaWhereInput;
 }
 
-export interface UserUpdateManyWithoutWorkGroupInput {
-  create?: UserCreateWithoutWorkGroupInput[] | UserCreateWithoutWorkGroupInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutWorkGroupInput[]
-    | UserUpdateWithWhereUniqueWithoutWorkGroupInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutWorkGroupInput[]
-    | UserUpsertWithWhereUniqueWithoutWorkGroupInput;
-}
-
-export type MessageWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface UserUpdateWithWhereUniqueWithoutWorkGroupInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutWorkGroupDataInput;
-}
-
-export type PersonWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface UserUpdateWithoutWorkGroupDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  messages?: MessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-}
-
-export interface PersonCreateInput {
-  name: String;
-  user?: UserCreateOneInput;
-  families?: FamilyCreateManyWithoutToInput;
-  asFather?: FamilyGroupCreateManyWithoutFatherInput;
-  asMother?: FamilyGroupCreateManyWithoutMotherInput;
-}
-
-export interface CollegeEntranceExamUpdateOneWithoutStudentInput {
-  create?: CollegeEntranceExamCreateWithoutStudentInput;
-  update?: CollegeEntranceExamUpdateWithoutStudentDataInput;
-  upsert?: CollegeEntranceExamUpsertWithoutStudentInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: CollegeEntranceExamWhereUniqueInput;
-}
-
-export interface MajorUpdateManyMutationInput {
-  name?: String;
-  category?: String;
-  education?: Educationkind;
-}
-
-export interface CollegeEntranceExamUpdateWithoutStudentDataInput {
-  province?: ProvinceUpdateOneRequiredInput;
-  subject?: String;
-  culscore?: Float;
-  proscore?: Float;
-  candidatenum?: String;
-  times?: Int;
-}
-
-export interface LogsUpdateManyMutationInput {
-  createFamilyGroupTime?: DateTimeInput;
-}
-
-export interface ProvinceUpdateOneRequiredInput {
-  create?: ProvinceCreateInput;
-  update?: ProvinceUpdateDataInput;
-  upsert?: ProvinceUpsertNestedInput;
-  connect?: ProvinceWhereUniqueInput;
-}
-
-export interface LocationUpdateInput {
-  name?: String;
-  province?: ProvinceUpdateOneInput;
-  city?: CityUpdateOneInput;
-  area?: AreaUpdateOneInput;
-  street?: StreetUpdateOneInput;
-  village?: VillageUpdateOneInput;
-  schools?: SchoolUpdateManyWithoutLocationInput;
-  companies?: CompanyUpdateManyWithoutLocationInput;
-  universities?: UniversityUpdateManyInput;
-}
-
-export interface CollegeEntranceExamUpsertWithoutStudentInput {
-  update: CollegeEntranceExamUpdateWithoutStudentDataInput;
-  create: CollegeEntranceExamCreateWithoutStudentInput;
-}
-
-export interface GroupCreateInput {
-  type?: GroupKind;
-  typeId?: String;
-  name?: String;
-  users?: UserCreateManyWithoutGroupsInput;
-  messages?: MessageCreateManyWithoutToInput;
-}
-
-export interface MessageUpdateManyWithoutFromInput {
-  create?: MessageCreateWithoutFromInput[] | MessageCreateWithoutFromInput;
-  delete?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
-  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
-  disconnect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
-  update?:
-    | MessageUpdateWithWhereUniqueWithoutFromInput[]
-    | MessageUpdateWithWhereUniqueWithoutFromInput;
-  upsert?:
-    | MessageUpsertWithWhereUniqueWithoutFromInput[]
-    | MessageUpsertWithWhereUniqueWithoutFromInput;
-}
-
-export interface FamilyGroupCreateInput {
-  father?: PersonCreateOneWithoutAsFatherInput;
-  mother?: PersonCreateOneWithoutAsMotherInput;
-  creater?: UserCreateOneWithoutCreaterInput;
-  name?: String;
-  families?: FamilyCreateManyInput;
-  messages?: MessageCreateManyInput;
-  users?: UserCreateManyWithoutFamilyGroupInput;
-}
-
-export interface MessageUpdateWithWhereUniqueWithoutFromInput {
-  where: MessageWhereUniqueInput;
-  data: MessageUpdateWithoutFromDataInput;
-}
-
-export interface CompanyUpdateManyMutationInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  BusinessScope?: String;
-}
-
-export interface MessageUpdateWithoutFromDataInput {
-  to?: GroupUpdateOneRequiredWithoutMessagesInput;
-  text?: String;
-}
-
-export type StreetWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  code?: String;
-}>;
-
-export interface GroupUpdateOneRequiredWithoutMessagesInput {
-  create?: GroupCreateWithoutMessagesInput;
-  update?: GroupUpdateWithoutMessagesDataInput;
-  upsert?: GroupUpsertWithoutMessagesInput;
-  connect?: GroupWhereUniqueInput;
-}
-
-export type UniversityWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  name?: String;
-}>;
-
-export interface GroupUpdateWithoutMessagesDataInput {
-  type?: GroupKind;
-  typeId?: String;
-  name?: String;
-  users?: UserUpdateManyWithoutGroupsInput;
-}
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  username?: String;
-  uid?: String;
-  token?: String;
-}>;
-
-export interface UserUpdateManyWithoutGroupsInput {
-  create?: UserCreateWithoutGroupsInput[] | UserCreateWithoutGroupsInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutGroupsInput[]
-    | UserUpdateWithWhereUniqueWithoutGroupsInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutGroupsInput[]
-    | UserUpsertWithWhereUniqueWithoutGroupsInput;
-}
-
-export type VillageWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  code?: String;
-}>;
-
-export interface UserUpdateWithWhereUniqueWithoutGroupsInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutGroupsDataInput;
-}
-
-export type WorkWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface UserUpdateWithoutGroupsDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  messages?: MessageUpdateManyWithoutFromInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneWithoutWokersInput;
-}
-
-export type WorkGroupWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface FamilyGroupUpdateOneWithoutUsersInput {
-  create?: FamilyGroupCreateWithoutUsersInput;
-  update?: FamilyGroupUpdateWithoutUsersDataInput;
-  upsert?: FamilyGroupUpsertWithoutUsersInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: FamilyGroupWhereUniqueInput;
-}
-
-export interface ClassGroupUpdateInput {
-  study?: SchoolEduUpdateOneInput;
-  name?: String;
-  members?: ClassMateUpdateManyWithoutGroupInput;
-  messages?: MessageUpdateManyInput;
-}
-
-export interface FamilyGroupUpdateWithoutUsersDataInput {
-  father?: PersonUpdateOneWithoutAsFatherInput;
-  mother?: PersonUpdateOneWithoutAsMotherInput;
-  creater?: UserUpdateOneWithoutCreaterInput;
-  name?: String;
-  families?: FamilyUpdateManyInput;
-  messages?: MessageUpdateManyInput;
-}
-
-export interface CityCreateWithoutAreasInput {
-  code: String;
-  name: String;
-  province: ProvinceCreateOneWithoutCitiesInput;
-}
-
-export interface PersonUpdateOneWithoutAsFatherInput {
-  create?: PersonCreateWithoutAsFatherInput;
-  update?: PersonUpdateWithoutAsFatherDataInput;
-  upsert?: PersonUpsertWithoutAsFatherInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: PersonWhereUniqueInput;
-}
-
-export interface StreetCreateWithoutAreaInput {
-  code: String;
-  name: String;
-  villages?: VillageCreateManyWithoutStreetInput;
-}
-
-export interface PersonUpdateWithoutAsFatherDataInput {
-  name?: String;
-  user?: UserUpdateOneInput;
-  families?: FamilyUpdateManyWithoutToInput;
-  asMother?: FamilyGroupUpdateManyWithoutMotherInput;
-}
-
-export interface UserCreateInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  messages?: MessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneWithoutWokersInput;
-}
-
-export interface FamilyGroupUpdateManyWithoutMotherInput {
-  create?:
-    | FamilyGroupCreateWithoutMotherInput[]
-    | FamilyGroupCreateWithoutMotherInput;
-  delete?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
-  connect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
-  disconnect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
-  update?:
-    | FamilyGroupUpdateWithWhereUniqueWithoutMotherInput[]
-    | FamilyGroupUpdateWithWhereUniqueWithoutMotherInput;
-  upsert?:
-    | FamilyGroupUpsertWithWhereUniqueWithoutMotherInput[]
-    | FamilyGroupUpsertWithWhereUniqueWithoutMotherInput;
-}
-
-export interface ProvinceCreateInput {
-  code: String;
-  name: String;
-  cities?: CityCreateManyWithoutProvinceInput;
-}
-
-export interface FamilyGroupUpdateWithWhereUniqueWithoutMotherInput {
-  where: FamilyGroupWhereUniqueInput;
-  data: FamilyGroupUpdateWithoutMotherDataInput;
-}
-
-export interface AreaCreateWithoutCityInput {
-  code: String;
-  name: String;
-  towns?: StreetCreateManyWithoutAreaInput;
-}
-
-export interface FamilyGroupUpdateWithoutMotherDataInput {
-  father?: PersonUpdateOneWithoutAsFatherInput;
-  creater?: UserUpdateOneWithoutCreaterInput;
-  name?: String;
-  families?: FamilyUpdateManyInput;
-  messages?: MessageUpdateManyInput;
-  users?: UserUpdateManyWithoutFamilyGroupInput;
-}
-
-export interface StreetCreateOneInput {
-  create?: StreetCreateInput;
-  connect?: StreetWhereUniqueInput;
-}
-
-export interface UserUpdateOneWithoutCreaterInput {
-  create?: UserCreateWithoutCreaterInput;
-  update?: UserUpdateWithoutCreaterDataInput;
-  upsert?: UserUpsertWithoutCreaterInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface VillageCreateOneInput {
-  create?: VillageCreateInput;
-  connect?: VillageWhereUniqueInput;
-}
-
-export interface UserUpdateWithoutCreaterDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  messages?: MessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneWithoutWokersInput;
-}
-
-export interface SchoolCreateManyWithoutLocationInput {
-  create?:
-    | SchoolCreateWithoutLocationInput[]
-    | SchoolCreateWithoutLocationInput;
-  connect?: SchoolWhereUniqueInput[] | SchoolWhereUniqueInput;
-}
-
-export interface GroupUpdateManyWithoutUsersInput {
-  create?: GroupCreateWithoutUsersInput[] | GroupCreateWithoutUsersInput;
-  delete?: GroupWhereUniqueInput[] | GroupWhereUniqueInput;
-  connect?: GroupWhereUniqueInput[] | GroupWhereUniqueInput;
-  disconnect?: GroupWhereUniqueInput[] | GroupWhereUniqueInput;
-  update?:
-    | GroupUpdateWithWhereUniqueWithoutUsersInput[]
-    | GroupUpdateWithWhereUniqueWithoutUsersInput;
-  upsert?:
-    | GroupUpsertWithWhereUniqueWithoutUsersInput[]
-    | GroupUpsertWithWhereUniqueWithoutUsersInput;
-}
-
-export interface WorkCreateManyWithoutCompanyInput {
-  create?: WorkCreateWithoutCompanyInput[] | WorkCreateWithoutCompanyInput;
-  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
-}
-
-export interface GroupUpdateWithWhereUniqueWithoutUsersInput {
-  where: GroupWhereUniqueInput;
-  data: GroupUpdateWithoutUsersDataInput;
-}
-
-export interface UserCreateOneWithoutWorksInput {
-  create?: UserCreateWithoutWorksInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface GroupUpdateWithoutUsersDataInput {
-  type?: GroupKind;
-  typeId?: String;
-  name?: String;
-  messages?: MessageUpdateManyWithoutToInput;
-}
-
-export interface RegStatusCreateOneWithoutApplicantsInput {
-  create?: RegStatusCreateWithoutApplicantsInput;
-  connect?: RegStatusWhereUniqueInput;
-}
-
-export interface MessageUpdateManyWithoutToInput {
-  create?: MessageCreateWithoutToInput[] | MessageCreateWithoutToInput;
-  delete?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
-  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
-  disconnect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
-  update?:
-    | MessageUpdateWithWhereUniqueWithoutToInput[]
-    | MessageUpdateWithWhereUniqueWithoutToInput;
-  upsert?:
-    | MessageUpsertWithWhereUniqueWithoutToInput[]
-    | MessageUpsertWithWhereUniqueWithoutToInput;
-}
-
-export interface MajorCreateOneInput {
-  create?: MajorCreateInput;
-  connect?: MajorWhereUniqueInput;
-}
-
-export interface MessageUpdateWithWhereUniqueWithoutToInput {
-  where: MessageWhereUniqueInput;
-  data: MessageUpdateWithoutToDataInput;
-}
-
-export interface PersonCreateOneWithoutFamiliesInput {
-  create?: PersonCreateWithoutFamiliesInput;
-  connect?: PersonWhereUniqueInput;
-}
-
-export interface MessageUpdateWithoutToDataInput {
-  from?: UserUpdateOneRequiredWithoutMessagesInput;
-  text?: String;
-}
-
-export interface FamilyGroupCreateWithoutFatherInput {
-  mother?: PersonCreateOneWithoutAsMotherInput;
-  creater?: UserCreateOneWithoutCreaterInput;
-  name?: String;
-  families?: FamilyCreateManyInput;
-  messages?: MessageCreateManyInput;
-  users?: UserCreateManyWithoutFamilyGroupInput;
-}
-
-export interface UserUpdateOneRequiredWithoutMessagesInput {
-  create?: UserCreateWithoutMessagesInput;
-  update?: UserUpdateWithoutMessagesDataInput;
-  upsert?: UserUpsertWithoutMessagesInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface FamilyCreateWithoutToInput {
-  from: UserCreateOneWithoutFamiliesInput;
-  relationship: String;
-  spouse?: FamilyCreateOneInput;
-  status: String;
-}
-
-export interface UserUpdateWithoutMessagesDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneWithoutWokersInput;
-}
-
-export interface SchoolEduCreateWithoutStudentsInput {
-  school?: SchoolCreateOneInput;
-  startTime?: DateTimeInput;
-  major?: MajorCreateOneInput;
-  grade?: Int;
-  className?: String;
-}
-
-export interface FamilyGroupUpdateOneWithoutCreaterInput {
-  create?: FamilyGroupCreateWithoutCreaterInput;
-  update?: FamilyGroupUpdateWithoutCreaterDataInput;
-  upsert?: FamilyGroupUpsertWithoutCreaterInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: FamilyGroupWhereUniqueInput;
-}
-
-export interface LocationCreateWithoutSchoolsInput {
-  name?: String;
-  province?: ProvinceCreateOneInput;
-  city?: CityCreateOneInput;
-  area?: AreaCreateOneInput;
-  street?: StreetCreateOneInput;
-  village?: VillageCreateOneInput;
-  companies?: CompanyCreateManyWithoutLocationInput;
-  universities?: UniversityCreateManyInput;
-}
-
-export interface FamilyGroupUpdateWithoutCreaterDataInput {
-  father?: PersonUpdateOneWithoutAsFatherInput;
-  mother?: PersonUpdateOneWithoutAsMotherInput;
-  name?: String;
-  families?: FamilyUpdateManyInput;
-  messages?: MessageUpdateManyInput;
-  users?: UserUpdateManyWithoutFamilyGroupInput;
-}
-
-export interface CompanyCreateOneWithoutWorksInput {
-  create?: CompanyCreateWithoutWorksInput;
-  connect?: CompanyWhereUniqueInput;
-}
-
-export interface FamilyUpdateManyInput {
-  create?: FamilyCreateInput[] | FamilyCreateInput;
-  update?:
-    | FamilyUpdateWithWhereUniqueNestedInput[]
-    | FamilyUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | FamilyUpsertWithWhereUniqueNestedInput[]
-    | FamilyUpsertWithWhereUniqueNestedInput;
-  delete?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-  disconnect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-}
-
-export interface WorkGroupCreateOneWithoutCompanyInput {
-  create?: WorkGroupCreateWithoutCompanyInput;
-  connect?: WorkGroupWhereUniqueInput;
-}
-
-export interface FamilyUpdateWithWhereUniqueNestedInput {
-  where: FamilyWhereUniqueInput;
-  data: FamilyUpdateDataInput;
-}
-
-export interface CollegeEntranceExamCreateOneWithoutStudentInput {
-  create?: CollegeEntranceExamCreateWithoutStudentInput;
-  connect?: CollegeEntranceExamWhereUniqueInput;
-}
-
-export interface FamilyUpdateDataInput {
-  from?: UserUpdateOneRequiredWithoutFamiliesInput;
-  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
-  relationship?: String;
-  spouse?: FamilyUpdateOneInput;
-  status?: String;
-}
-
-export interface GroupCreateOneWithoutMessagesInput {
-  create?: GroupCreateWithoutMessagesInput;
-  connect?: GroupWhereUniqueInput;
-}
-
-export interface FamilyUpdateOneInput {
-  create?: FamilyCreateInput;
-  update?: FamilyUpdateDataInput;
-  upsert?: FamilyUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: FamilyWhereUniqueInput;
-}
-
-export interface FamilyGroupCreateOneWithoutUsersInput {
-  create?: FamilyGroupCreateWithoutUsersInput;
-  connect?: FamilyGroupWhereUniqueInput;
-}
-
-export interface FamilyUpsertNestedInput {
-  update: FamilyUpdateDataInput;
-  create: FamilyCreateInput;
-}
-
-export interface FamilyGroupCreateManyWithoutMotherInput {
-  create?:
-    | FamilyGroupCreateWithoutMotherInput[]
-    | FamilyGroupCreateWithoutMotherInput;
-  connect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
-}
-
-export interface FamilyUpsertWithWhereUniqueNestedInput {
-  where: FamilyWhereUniqueInput;
-  update: FamilyUpdateDataInput;
-  create: FamilyCreateInput;
-}
-
-export interface RegStatusWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  education?: Educationkind;
-  education_not?: Educationkind;
-  education_in?: Educationkind[] | Educationkind;
-  education_not_in?: Educationkind[] | Educationkind;
-  university?: UniversityWhereInput;
-  major?: MajorWhereInput;
-  applicants_every?: UserWhereInput;
-  applicants_some?: UserWhereInput;
-  applicants_none?: UserWhereInput;
-  AND?: RegStatusWhereInput[] | RegStatusWhereInput;
-  OR?: RegStatusWhereInput[] | RegStatusWhereInput;
-  NOT?: RegStatusWhereInput[] | RegStatusWhereInput;
-}
-
-export interface MessageUpdateManyInput {
-  create?: MessageCreateInput[] | MessageCreateInput;
-  update?:
-    | MessageUpdateWithWhereUniqueNestedInput[]
-    | MessageUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | MessageUpsertWithWhereUniqueNestedInput[]
-    | MessageUpsertWithWhereUniqueNestedInput;
-  delete?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
-  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
-  disconnect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
-}
-
-export interface StationSubscriptionWhereInput {
+export interface FamilySubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: StationWhereInput;
-  AND?: StationSubscriptionWhereInput[] | StationSubscriptionWhereInput;
-  OR?: StationSubscriptionWhereInput[] | StationSubscriptionWhereInput;
-  NOT?: StationSubscriptionWhereInput[] | StationSubscriptionWhereInput;
-}
-
-export interface MessageUpdateWithWhereUniqueNestedInput {
-  where: MessageWhereUniqueInput;
-  data: MessageUpdateDataInput;
-}
-
-export interface WorkGroupWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  company?: CompanyWhereInput;
-  wokers_every?: UserWhereInput;
-  wokers_some?: UserWhereInput;
-  wokers_none?: UserWhereInput;
-  messages_every?: MessageWhereInput;
-  messages_some?: MessageWhereInput;
-  messages_none?: MessageWhereInput;
-  AND?: WorkGroupWhereInput[] | WorkGroupWhereInput;
-  OR?: WorkGroupWhereInput[] | WorkGroupWhereInput;
-  NOT?: WorkGroupWhereInput[] | WorkGroupWhereInput;
-}
-
-export interface MessageUpdateDataInput {
-  to?: GroupUpdateOneRequiredWithoutMessagesInput;
-  from?: UserUpdateOneRequiredWithoutMessagesInput;
-  text?: String;
-}
-
-export interface GroupSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: GroupWhereInput;
-  AND?: GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput;
-  OR?: GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput;
-  NOT?: GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput;
-}
-
-export interface MessageUpsertWithWhereUniqueNestedInput {
-  where: MessageWhereUniqueInput;
-  update: MessageUpdateDataInput;
-  create: MessageCreateInput;
-}
-
-export interface ClassMateSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: ClassMateWhereInput;
-  AND?: ClassMateSubscriptionWhereInput[] | ClassMateSubscriptionWhereInput;
-  OR?: ClassMateSubscriptionWhereInput[] | ClassMateSubscriptionWhereInput;
-  NOT?: ClassMateSubscriptionWhereInput[] | ClassMateSubscriptionWhereInput;
-}
-
-export interface UserUpdateManyWithoutFamilyGroupInput {
-  create?:
-    | UserCreateWithoutFamilyGroupInput[]
-    | UserCreateWithoutFamilyGroupInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutFamilyGroupInput[]
-    | UserUpdateWithWhereUniqueWithoutFamilyGroupInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutFamilyGroupInput[]
-    | UserUpsertWithWhereUniqueWithoutFamilyGroupInput;
-}
-
-export type ClassGroupWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface UserUpdateWithWhereUniqueWithoutFamilyGroupInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutFamilyGroupDataInput;
-}
-
-export interface UniversityUpdateManyMutationInput {
-  name?: String;
-  education?: Educationkind;
-  department?: String;
-  location?: String;
-  desc?: String;
-}
-
-export interface UserUpdateWithoutFamilyGroupDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  messages?: MessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneWithoutWokersInput;
-}
-
-export interface StationUpdateInput {
-  code?: String;
-  name?: String;
-}
-
-export interface ClassMateUpdateManyWithoutStudentInput {
-  create?:
-    | ClassMateCreateWithoutStudentInput[]
-    | ClassMateCreateWithoutStudentInput;
-  delete?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
-  connect?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
-  disconnect?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
-  update?:
-    | ClassMateUpdateWithWhereUniqueWithoutStudentInput[]
-    | ClassMateUpdateWithWhereUniqueWithoutStudentInput;
-  upsert?:
-    | ClassMateUpsertWithWhereUniqueWithoutStudentInput[]
-    | ClassMateUpsertWithWhereUniqueWithoutStudentInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutRegStatusInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutRegStatusDataInput;
-  create: UserCreateWithoutRegStatusInput;
-}
-
-export interface ClassMateUpdateWithWhereUniqueWithoutStudentInput {
-  where: ClassMateWhereUniqueInput;
-  data: ClassMateUpdateWithoutStudentDataInput;
-}
-
-export interface UserCreateWithoutRegStatusInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  messages?: MessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneWithoutWokersInput;
-}
-
-export interface ClassMateUpdateWithoutStudentDataInput {
-  status?: String;
-  group?: ClassGroupUpdateOneRequiredWithoutMembersInput;
-}
-
-export interface UserUpsertWithoutPostsInput {
-  update: UserUpdateWithoutPostsDataInput;
-  create: UserCreateWithoutPostsInput;
-}
-
-export interface ClassGroupUpdateOneRequiredWithoutMembersInput {
-  create?: ClassGroupCreateWithoutMembersInput;
-  update?: ClassGroupUpdateWithoutMembersDataInput;
-  upsert?: ClassGroupUpsertWithoutMembersInput;
-  connect?: ClassGroupWhereUniqueInput;
-}
-
-export interface UserCreateOneWithoutPostsInput {
-  create?: UserCreateWithoutPostsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface ClassGroupUpdateWithoutMembersDataInput {
-  study?: SchoolEduUpdateOneInput;
-  name?: String;
-  messages?: MessageUpdateManyInput;
-}
-
-export interface MessageUpdateManyMutationInput {
-  text?: String;
-}
-
-export interface SchoolEduUpdateOneInput {
-  create?: SchoolEduCreateInput;
-  update?: SchoolEduUpdateDataInput;
-  upsert?: SchoolEduUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: SchoolEduWhereUniqueInput;
-}
-
-export type RegStatusWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface SchoolEduUpdateDataInput {
-  school?: SchoolUpdateOneInput;
-  startTime?: DateTimeInput;
-  major?: MajorUpdateOneInput;
-  grade?: Int;
-  className?: String;
-  students?: UserUpdateManyWithoutStudiesInput;
-}
-
-export interface FamilyGroupUpdateInput {
-  father?: PersonUpdateOneWithoutAsFatherInput;
-  mother?: PersonUpdateOneWithoutAsMotherInput;
-  creater?: UserUpdateOneWithoutCreaterInput;
-  name?: String;
-  families?: FamilyUpdateManyInput;
-  messages?: MessageUpdateManyInput;
-  users?: UserUpdateManyWithoutFamilyGroupInput;
-}
-
-export interface UserUpdateManyWithoutStudiesInput {
-  create?: UserCreateWithoutStudiesInput[] | UserCreateWithoutStudiesInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutStudiesInput[]
-    | UserUpdateWithWhereUniqueWithoutStudiesInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutStudiesInput[]
-    | UserUpsertWithWhereUniqueWithoutStudiesInput;
-}
-
-export interface CompanyCreateInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  location?: LocationCreateOneWithoutCompaniesInput;
-  BusinessScope?: String;
-  works?: WorkCreateManyWithoutCompanyInput;
-  workGroup?: WorkGroupCreateOneWithoutCompanyInput;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutStudiesInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutStudiesDataInput;
-}
-
-export interface UserCreateWithoutExamInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  messages?: MessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneWithoutWokersInput;
-}
-
-export interface UserUpdateWithoutStudiesDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  messages?: MessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneWithoutWokersInput;
-}
-
-export interface ClassGroupUpdateManyMutationInput {
-  name?: String;
-}
-
-export interface WorkGroupUpdateOneWithoutWokersInput {
-  create?: WorkGroupCreateWithoutWokersInput;
-  update?: WorkGroupUpdateWithoutWokersDataInput;
-  upsert?: WorkGroupUpsertWithoutWokersInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: WorkGroupWhereUniqueInput;
-}
-
-export interface ClassMateUpdateWithWhereUniqueWithoutGroupInput {
-  where: ClassMateWhereUniqueInput;
-  data: ClassMateUpdateWithoutGroupDataInput;
-}
-
-export interface WorkGroupUpdateWithoutWokersDataInput {
-  company?: CompanyUpdateOneWithoutWorkGroupInput;
-  messages?: MessageUpdateManyInput;
-}
-
-export interface ProvinceCreateWithoutCitiesInput {
-  code: String;
-  name: String;
-}
-
-export interface CompanyUpdateOneWithoutWorkGroupInput {
-  create?: CompanyCreateWithoutWorkGroupInput;
-  update?: CompanyUpdateWithoutWorkGroupDataInput;
-  upsert?: CompanyUpsertWithoutWorkGroupInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: CompanyWhereUniqueInput;
-}
-
-export interface LocationCreateInput {
-  name?: String;
-  province?: ProvinceCreateOneInput;
-  city?: CityCreateOneInput;
-  area?: AreaCreateOneInput;
-  street?: StreetCreateOneInput;
-  village?: VillageCreateOneInput;
-  schools?: SchoolCreateManyWithoutLocationInput;
-  companies?: CompanyCreateManyWithoutLocationInput;
-  universities?: UniversityCreateManyInput;
-}
-
-export interface CompanyUpdateWithoutWorkGroupDataInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  location?: LocationUpdateOneWithoutCompaniesInput;
-  BusinessScope?: String;
-  works?: WorkUpdateManyWithoutCompanyInput;
-}
-
-export interface CityCreateInput {
-  code: String;
-  name: String;
-  province: ProvinceCreateOneWithoutCitiesInput;
-  areas?: AreaCreateManyWithoutCityInput;
-}
-
-export interface CompanyUpsertWithoutWorkGroupInput {
-  update: CompanyUpdateWithoutWorkGroupDataInput;
-  create: CompanyCreateWithoutWorkGroupInput;
-}
-
-export interface StreetCreateOneWithoutVillagesInput {
-  create?: StreetCreateWithoutVillagesInput;
-  connect?: StreetWhereUniqueInput;
-}
-
-export interface WorkGroupUpsertWithoutWokersInput {
-  update: WorkGroupUpdateWithoutWokersDataInput;
-  create: WorkGroupCreateWithoutWokersInput;
-}
-
-export interface StationCreateOneInput {
-  create?: StationCreateInput;
-  connect?: StationWhereUniqueInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutStudiesInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutStudiesDataInput;
-  create: UserCreateWithoutStudiesInput;
-}
-
-export interface UniversityCreateOneInput {
-  create?: UniversityCreateInput;
-  connect?: UniversityWhereUniqueInput;
-}
-
-export interface SchoolEduUpsertNestedInput {
-  update: SchoolEduUpdateDataInput;
-  create: SchoolEduCreateInput;
-}
-
-export interface UserCreateOneInput {
-  create?: UserCreateInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface ClassGroupUpsertWithoutMembersInput {
-  update: ClassGroupUpdateWithoutMembersDataInput;
-  create: ClassGroupCreateWithoutMembersInput;
-}
-
-export interface UserCreateWithoutFamiliesInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  messages?: MessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneWithoutWokersInput;
-}
-
-export interface ClassMateUpsertWithWhereUniqueWithoutStudentInput {
-  where: ClassMateWhereUniqueInput;
-  update: ClassMateUpdateWithoutStudentDataInput;
-  create: ClassMateCreateWithoutStudentInput;
-}
-
-export interface WorkCreateManyWithoutWorkerInput {
-  create?: WorkCreateWithoutWorkerInput[] | WorkCreateWithoutWorkerInput;
-  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutFamilyGroupInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutFamilyGroupDataInput;
-  create: UserCreateWithoutFamilyGroupInput;
-}
-
-export interface UserCreateManyWithoutWorkGroupInput {
-  create?: UserCreateWithoutWorkGroupInput[] | UserCreateWithoutWorkGroupInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface FamilyGroupUpsertWithoutCreaterInput {
-  update: FamilyGroupUpdateWithoutCreaterDataInput;
-  create: FamilyGroupCreateWithoutCreaterInput;
-}
-
-export interface UserCreateManyWithoutGroupsInput {
-  create?: UserCreateWithoutGroupsInput[] | UserCreateWithoutGroupsInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface UserUpsertWithoutMessagesInput {
-  update: UserUpdateWithoutMessagesDataInput;
-  create: UserCreateWithoutMessagesInput;
-}
-
-export interface UserCreateOneWithoutCreaterInput {
-  create?: UserCreateWithoutCreaterInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface MessageUpsertWithWhereUniqueWithoutToInput {
-  where: MessageWhereUniqueInput;
-  update: MessageUpdateWithoutToDataInput;
-  create: MessageCreateWithoutToInput;
-}
-
-export interface RegStatusSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: RegStatusWhereInput;
-  AND?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
-  OR?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
-  NOT?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
-}
-
-export interface GroupUpsertWithWhereUniqueWithoutUsersInput {
-  where: GroupWhereUniqueInput;
-  update: GroupUpdateWithoutUsersDataInput;
-  create: GroupCreateWithoutUsersInput;
-}
-
-export interface SchoolWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  kind?: Educationkind;
-  kind_not?: Educationkind;
-  kind_in?: Educationkind[] | Educationkind;
-  kind_not_in?: Educationkind[] | Educationkind;
-  location?: LocationWhereInput;
-  AND?: SchoolWhereInput[] | SchoolWhereInput;
-  OR?: SchoolWhereInput[] | SchoolWhereInput;
-  NOT?: SchoolWhereInput[] | SchoolWhereInput;
-}
-
-export interface UserUpsertWithoutCreaterInput {
-  update: UserUpdateWithoutCreaterDataInput;
-  create: UserCreateWithoutCreaterInput;
-}
-
-export interface VillageUpdateInput {
-  code?: String;
-  name?: String;
-  street?: StreetUpdateOneRequiredWithoutVillagesInput;
-  people?: UserUpdateManyInput;
-}
-
-export interface FamilyGroupUpsertWithWhereUniqueWithoutMotherInput {
-  where: FamilyGroupWhereUniqueInput;
-  update: FamilyGroupUpdateWithoutMotherDataInput;
-  create: FamilyGroupCreateWithoutMotherInput;
-}
-
-export interface SchoolUpdateManyMutationInput {
-  name?: String;
-  kind?: Educationkind;
-}
-
-export interface PersonUpsertWithoutAsFatherInput {
-  update: PersonUpdateWithoutAsFatherDataInput;
-  create: PersonCreateWithoutAsFatherInput;
-}
-
-export interface StreetWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  code?: String;
-  code_not?: String;
-  code_in?: String[] | String;
-  code_not_in?: String[] | String;
-  code_lt?: String;
-  code_lte?: String;
-  code_gt?: String;
-  code_gte?: String;
-  code_contains?: String;
-  code_not_contains?: String;
-  code_starts_with?: String;
-  code_not_starts_with?: String;
-  code_ends_with?: String;
-  code_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  Area?: AreaWhereInput;
-  villages_every?: VillageWhereInput;
-  villages_some?: VillageWhereInput;
-  villages_none?: VillageWhereInput;
-  AND?: StreetWhereInput[] | StreetWhereInput;
-  OR?: StreetWhereInput[] | StreetWhereInput;
-  NOT?: StreetWhereInput[] | StreetWhereInput;
-}
-
-export interface FamilyGroupUpsertWithoutUsersInput {
-  update: FamilyGroupUpdateWithoutUsersDataInput;
-  create: FamilyGroupCreateWithoutUsersInput;
-}
-
-export interface PersonUpdateManyMutationInput {
-  name?: String;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutGroupsInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutGroupsDataInput;
-  create: UserCreateWithoutGroupsInput;
-}
-
-export interface GroupUpdateInput {
-  type?: GroupKind;
-  typeId?: String;
-  name?: String;
-  users?: UserUpdateManyWithoutGroupsInput;
-  messages?: MessageUpdateManyWithoutToInput;
-}
-
-export interface GroupUpsertWithoutMessagesInput {
-  update: GroupUpdateWithoutMessagesDataInput;
-  create: GroupCreateWithoutMessagesInput;
-}
-
-export interface UserUpdateWithoutExamDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  messages?: MessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneWithoutWokersInput;
-}
-
-export interface MessageUpsertWithWhereUniqueWithoutFromInput {
-  where: MessageWhereUniqueInput;
-  update: MessageUpdateWithoutFromDataInput;
-  create: MessageCreateWithoutFromInput;
-}
-
-export interface UserUpdateWithoutClassMateDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  messages?: MessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  workGroup?: WorkGroupUpdateOneWithoutWokersInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutWorkGroupInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutWorkGroupDataInput;
-  create: UserCreateWithoutWorkGroupInput;
-}
-
-export interface VillageCreateWithoutStreetInput {
-  code: String;
-  name: String;
-  people?: UserCreateManyInput;
-}
-
-export interface WorkGroupUpsertWithoutCompanyInput {
-  update: WorkGroupUpdateWithoutCompanyDataInput;
-  create: WorkGroupCreateWithoutCompanyInput;
-}
-
-export interface AreaCreateOneWithoutTownsInput {
-  create?: AreaCreateWithoutTownsInput;
-  connect?: AreaWhereUniqueInput;
-}
-
-export interface CompanyUpsertWithoutWorksInput {
-  update: CompanyUpdateWithoutWorksDataInput;
-  create: CompanyCreateWithoutWorksInput;
-}
-
-export interface PostCreateManyWithoutAuthorInput {
-  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput;
-  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput;
-}
-
-export interface WorkUpsertWithWhereUniqueWithoutWorkerInput {
-  where: WorkWhereUniqueInput;
-  update: WorkUpdateWithoutWorkerDataInput;
-  create: WorkCreateWithoutWorkerInput;
-}
-
-export interface PersonCreateWithoutAsMotherInput {
-  name: String;
-  user?: UserCreateOneInput;
-  families?: FamilyCreateManyWithoutToInput;
-  asFather?: FamilyGroupCreateManyWithoutFatherInput;
-}
-
-export interface UserUpsertWithoutFamiliesInput {
-  update: UserUpdateWithoutFamiliesDataInput;
-  create: UserCreateWithoutFamiliesInput;
-}
-
-export interface LocationCreateOneWithoutCompaniesInput {
-  create?: LocationCreateWithoutCompaniesInput;
-  connect?: LocationWhereUniqueInput;
-}
-
-export interface FamilyUpsertWithWhereUniqueWithoutToInput {
-  where: FamilyWhereUniqueInput;
-  update: FamilyUpdateWithoutToDataInput;
-  create: FamilyCreateWithoutToInput;
+  node?: FamilyWhereInput;
+  AND?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
+  OR?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
+  NOT?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
 }
 
 export interface PersonCreateOneWithoutAsFatherInput {
   create?: PersonCreateWithoutAsFatherInput;
   connect?: PersonWhereUniqueInput;
 }
-
-export interface PersonUpsertWithoutAsMotherInput {
-  update: PersonUpdateWithoutAsMotherDataInput;
-  create: PersonCreateWithoutAsMotherInput;
-}
-
-export interface StationWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  code?: String;
-  code_not?: String;
-  code_in?: String[] | String;
-  code_not_in?: String[] | String;
-  code_lt?: String;
-  code_lte?: String;
-  code_gt?: String;
-  code_gte?: String;
-  code_contains?: String;
-  code_not_contains?: String;
-  code_starts_with?: String;
-  code_not_starts_with?: String;
-  code_ends_with?: String;
-  code_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  AND?: StationWhereInput[] | StationWhereInput;
-  OR?: StationWhereInput[] | StationWhereInput;
-  NOT?: StationWhereInput[] | StationWhereInput;
-}
-
-export interface FamilyGroupUpsertWithWhereUniqueWithoutFatherInput {
-  where: FamilyGroupWhereUniqueInput;
-  update: FamilyGroupUpdateWithoutFatherDataInput;
-  create: FamilyGroupCreateWithoutFatherInput;
-}
-
-export interface StreetUpdateManyMutationInput {
-  code?: String;
-  name?: String;
-}
-
-export interface PersonUpsertWithoutFamiliesInput {
-  update: PersonUpdateWithoutFamiliesDataInput;
-  create: PersonCreateWithoutFamiliesInput;
-}
-
-export interface UserUpdateOneRequiredWithoutPostsInput {
-  create?: UserCreateWithoutPostsInput;
-  update?: UserUpdateWithoutPostsDataInput;
-  upsert?: UserUpsertWithoutPostsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface FamilyUpsertWithWhereUniqueWithoutFromInput {
-  where: FamilyWhereUniqueInput;
-  update: FamilyUpdateWithoutFromDataInput;
-  create: FamilyCreateWithoutFromInput;
-}
-
-export interface FamilyUpdateInput {
-  from?: UserUpdateOneRequiredWithoutFamiliesInput;
-  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
-  relationship?: String;
-  spouse?: FamilyUpdateOneInput;
-  status?: String;
-}
-
-export interface UserUpsertWithoutWorksInput {
-  update: UserUpdateWithoutWorksDataInput;
-  create: UserCreateWithoutWorksInput;
-}
-
-export interface AreaCreateInput {
-  code: String;
-  name: String;
-  city: CityCreateOneWithoutAreasInput;
-  towns?: StreetCreateManyWithoutAreaInput;
-}
-
-export interface WorkUpsertWithWhereUniqueWithoutCompanyInput {
-  where: WorkWhereUniqueInput;
-  update: WorkUpdateWithoutCompanyDataInput;
-  create: WorkCreateWithoutCompanyInput;
-}
-
-export interface CompanyCreateManyWithoutLocationInput {
-  create?:
-    | CompanyCreateWithoutLocationInput[]
-    | CompanyCreateWithoutLocationInput;
-  connect?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
-}
-
-export interface CompanyUpsertWithWhereUniqueWithoutLocationInput {
-  where: CompanyWhereUniqueInput;
-  update: CompanyUpdateWithoutLocationDataInput;
-  create: CompanyCreateWithoutLocationInput;
-}
-
-export interface SchoolCreateInput {
-  name?: String;
-  kind?: Educationkind;
-  location?: LocationCreateOneWithoutSchoolsInput;
-}
-
-export interface LocationUpsertNestedInput {
-  update: LocationUpdateDataInput;
-  create: LocationCreateInput;
-}
-
-export interface UniversitySubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UniversityWhereInput;
-  AND?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
-  OR?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
-  NOT?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
-}
-
-export interface UserUpsertWithWhereUniqueNestedInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
-}
-
-export interface UserUpdateManyWithoutRegStatusInput {
-  create?: UserCreateWithoutRegStatusInput[] | UserCreateWithoutRegStatusInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutRegStatusInput[]
-    | UserUpdateWithWhereUniqueWithoutRegStatusInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutRegStatusInput[]
-    | UserUpsertWithWhereUniqueWithoutRegStatusInput;
-}
-
-export interface VillageUpsertWithWhereUniqueWithoutStreetInput {
-  where: VillageWhereUniqueInput;
-  update: VillageUpdateWithoutStreetDataInput;
-  create: VillageCreateWithoutStreetInput;
-}
-
-export interface ClassMateUpdateManyMutationInput {
-  status?: String;
-}
-
-export interface StreetUpsertWithWhereUniqueWithoutAreaInput {
-  where: StreetWhereUniqueInput;
-  update: StreetUpdateWithoutAreaDataInput;
-  create: StreetCreateWithoutAreaInput;
-}
-
-export interface FamilyCreateManyWithoutFromInput {
-  create?: FamilyCreateWithoutFromInput[] | FamilyCreateWithoutFromInput;
-  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-}
-
-export interface CityUpdateInput {
-  code?: String;
-  name?: String;
-  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
-  areas?: AreaUpdateManyWithoutCityInput;
-}
-
-export interface ClassGroupCreateInput {
-  study?: SchoolEduCreateOneInput;
-  name?: String;
-  members?: ClassMateCreateManyWithoutGroupInput;
-  messages?: MessageCreateManyInput;
-}
-
-export interface ClassMateCreateManyWithoutGroupInput {
-  create?:
-    | ClassMateCreateWithoutGroupInput[]
-    | ClassMateCreateWithoutGroupInput;
-  connect?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
-}
-
-export interface AreaUpdateManyMutationInput {
-  code?: String;
-  name?: String;
-}
-
-export interface MessageCreateManyWithoutFromInput {
-  create?: MessageCreateWithoutFromInput[] | MessageCreateWithoutFromInput;
-  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
-}
-
-export interface CityCreateWithoutProvinceInput {
-  code: String;
-  name: String;
-  areas?: AreaCreateManyWithoutCityInput;
-}
-
-export interface CityWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  code?: String;
-  code_not?: String;
-  code_in?: String[] | String;
-  code_not_in?: String[] | String;
-  code_lt?: String;
-  code_lte?: String;
-  code_gt?: String;
-  code_gte?: String;
-  code_contains?: String;
-  code_not_contains?: String;
-  code_starts_with?: String;
-  code_not_starts_with?: String;
-  code_ends_with?: String;
-  code_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  province?: ProvinceWhereInput;
-  areas_every?: AreaWhereInput;
-  areas_some?: AreaWhereInput;
-  areas_none?: AreaWhereInput;
-  AND?: CityWhereInput[] | CityWhereInput;
-  OR?: CityWhereInput[] | CityWhereInput;
-  NOT?: CityWhereInput[] | CityWhereInput;
-}
-
-export type CityWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  code?: String;
-}>;
 
 export interface NodeNode {
   id: ID_Output;
@@ -6913,22 +7625,48 @@ export interface WorkGroupPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
 }
 
-export interface ClassGroupEdge {
-  cursor: String;
+export interface Street {
+  id: ID_Output;
+  code: String;
+  name: String;
 }
 
-export interface ClassGroupEdgePromise
-  extends Promise<ClassGroupEdge>,
-    Fragmentable {
-  node: <T = ClassGroupPromise>() => T;
-  cursor: () => Promise<String>;
+export interface StreetPromise extends Promise<Street>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  code: () => Promise<String>;
+  name: () => Promise<String>;
+  Area: <T = AreaPromise>() => T;
+  villages: <T = FragmentableArray<Village>>(
+    args?: {
+      where?: VillageWhereInput;
+      orderBy?: VillageOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
-export interface ClassGroupEdgeSubscription
-  extends Promise<AsyncIterator<ClassGroupEdge>>,
+export interface StreetSubscription
+  extends Promise<AsyncIterator<Street>>,
     Fragmentable {
-  node: <T = ClassGroupSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  code: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  Area: <T = AreaSubscription>() => T;
+  villages: <T = Promise<AsyncIterator<VillageSubscription>>>(
+    args?: {
+      where?: VillageWhereInput;
+      orderBy?: VillageOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
 export interface VillagePreviousValues {
@@ -6953,24 +7691,6 @@ export interface VillagePreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface ClassGroupConnection {}
-
-export interface ClassGroupConnectionPromise
-  extends Promise<ClassGroupConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ClassGroupEdge>>() => T;
-  aggregate: <T = AggregateClassGroupPromise>() => T;
-}
-
-export interface ClassGroupConnectionSubscription
-  extends Promise<AsyncIterator<ClassGroupConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ClassGroupEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateClassGroupSubscription>() => T;
-}
-
 export interface AggregateCity {
   count: Int;
 }
@@ -6985,6 +7705,195 @@ export interface AggregateCitySubscription
   extends Promise<AsyncIterator<AggregateCity>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface CityConnection {}
+
+export interface CityConnectionPromise
+  extends Promise<CityConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<CityEdge>>() => T;
+  aggregate: <T = AggregateCityPromise>() => T;
+}
+
+export interface CityConnectionSubscription
+  extends Promise<AsyncIterator<CityConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<CityEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateCitySubscription>() => T;
+}
+
+export interface CityEdge {
+  cursor: String;
+}
+
+export interface CityEdgePromise extends Promise<CityEdge>, Fragmentable {
+  node: <T = CityPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface CityEdgeSubscription
+  extends Promise<AsyncIterator<CityEdge>>,
+    Fragmentable {
+  node: <T = CitySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateWorkGroup {
+  count: Int;
+}
+
+export interface AggregateWorkGroupPromise
+  extends Promise<AggregateWorkGroup>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateWorkGroupSubscription
+  extends Promise<AsyncIterator<AggregateWorkGroup>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface WorkGroupConnection {}
+
+export interface WorkGroupConnectionPromise
+  extends Promise<WorkGroupConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<WorkGroupEdge>>() => T;
+  aggregate: <T = AggregateWorkGroupPromise>() => T;
+}
+
+export interface WorkGroupConnectionSubscription
+  extends Promise<AsyncIterator<WorkGroupConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<WorkGroupEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateWorkGroupSubscription>() => T;
+}
+
+export interface AggregateArea {
+  count: Int;
+}
+
+export interface AggregateAreaPromise
+  extends Promise<AggregateArea>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateAreaSubscription
+  extends Promise<AsyncIterator<AggregateArea>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface AggregateWork {
+  count: Int;
+}
+
+export interface AggregateWorkPromise
+  extends Promise<AggregateWork>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateWorkSubscription
+  extends Promise<AsyncIterator<AggregateWork>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface AreaEdge {
+  cursor: String;
+}
+
+export interface AreaEdgePromise extends Promise<AreaEdge>, Fragmentable {
+  node: <T = AreaPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface AreaEdgeSubscription
+  extends Promise<AsyncIterator<AreaEdge>>,
+    Fragmentable {
+  node: <T = AreaSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface WorkConnection {}
+
+export interface WorkConnectionPromise
+  extends Promise<WorkConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<WorkEdge>>() => T;
+  aggregate: <T = AggregateWorkPromise>() => T;
+}
+
+export interface WorkConnectionSubscription
+  extends Promise<AsyncIterator<WorkConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<WorkEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateWorkSubscription>() => T;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface VillageEdge {
+  cursor: String;
+}
+
+export interface VillageEdgePromise extends Promise<VillageEdge>, Fragmentable {
+  node: <T = VillagePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface VillageEdgeSubscription
+  extends Promise<AsyncIterator<VillageEdge>>,
+    Fragmentable {
+  node: <T = VillageSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface WorkPreviousValues {
@@ -7015,200 +7924,20 @@ export interface WorkPreviousValuesSubscription
   jobContent: () => Promise<AsyncIterator<String>>;
 }
 
-export interface WorkGroupSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface WorkGroupSubscriptionPayloadPromise
-  extends Promise<WorkGroupSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = WorkGroupPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = WorkGroupPreviousValuesPromise>() => T;
-}
-
-export interface WorkGroupSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<WorkGroupSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = WorkGroupSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = WorkGroupPreviousValuesSubscription>() => T;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface AggregateWorkGroup {
+export interface AggregateUser {
   count: Int;
 }
 
-export interface AggregateWorkGroupPromise
-  extends Promise<AggregateWorkGroup>,
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateWorkGroupSubscription
-  extends Promise<AsyncIterator<AggregateWorkGroup>>,
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface CityEdge {
-  cursor: String;
-}
-
-export interface CityEdgePromise extends Promise<CityEdge>, Fragmentable {
-  node: <T = CityPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface CityEdgeSubscription
-  extends Promise<AsyncIterator<CityEdge>>,
-    Fragmentable {
-  node: <T = CitySubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface WorkGroupConnection {}
-
-export interface WorkGroupConnectionPromise
-  extends Promise<WorkGroupConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<WorkGroupEdge>>() => T;
-  aggregate: <T = AggregateWorkGroupPromise>() => T;
-}
-
-export interface WorkGroupConnectionSubscription
-  extends Promise<AsyncIterator<WorkGroupConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<WorkGroupEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateWorkGroupSubscription>() => T;
-}
-
-export interface CityConnection {}
-
-export interface CityConnectionPromise
-  extends Promise<CityConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<CityEdge>>() => T;
-  aggregate: <T = AggregateCityPromise>() => T;
-}
-
-export interface CityConnectionSubscription
-  extends Promise<AsyncIterator<CityConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<CityEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateCitySubscription>() => T;
-}
-
-export interface AggregateWork {
-  count: Int;
-}
-
-export interface AggregateWorkPromise
-  extends Promise<AggregateWork>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateWorkSubscription
-  extends Promise<AsyncIterator<AggregateWork>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface AggregateArea {
-  count: Int;
-}
-
-export interface AggregateAreaPromise
-  extends Promise<AggregateArea>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateAreaSubscription
-  extends Promise<AsyncIterator<AggregateArea>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface WorkConnection {}
-
-export interface WorkConnectionPromise
-  extends Promise<WorkConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<WorkEdge>>() => T;
-  aggregate: <T = AggregateWorkPromise>() => T;
-}
-
-export interface WorkConnectionSubscription
-  extends Promise<AsyncIterator<WorkConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<WorkEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateWorkSubscription>() => T;
-}
-
-export interface WorkSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface WorkSubscriptionPayloadPromise
-  extends Promise<WorkSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = WorkPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = WorkPreviousValuesPromise>() => T;
-}
-
-export interface WorkSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<WorkSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = WorkSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = WorkPreviousValuesSubscription>() => T;
-}
-
-export interface VillageEdge {
-  cursor: String;
-}
-
-export interface VillageEdgePromise extends Promise<VillageEdge>, Fragmentable {
-  node: <T = VillagePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface VillageEdgeSubscription
-  extends Promise<AsyncIterator<VillageEdge>>,
-    Fragmentable {
-  node: <T = VillageSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface AreaSubscriptionPayload {
@@ -7234,20 +7963,22 @@ export interface AreaSubscriptionPayloadSubscription
   previousValues: <T = AreaPreviousValuesSubscription>() => T;
 }
 
-export interface AggregateUser {
-  count: Int;
+export interface UserConnection {}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
 }
 
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
     Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
 }
 
 export interface AreaPreviousValues {
@@ -7272,40 +8003,6 @@ export interface AreaPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface UserConnection {}
-
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
-}
-
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
-}
-
-export interface AreaEdge {
-  cursor: String;
-}
-
-export interface AreaEdgePromise extends Promise<AreaEdge>, Fragmentable {
-  node: <T = AreaPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface AreaEdgeSubscription
-  extends Promise<AsyncIterator<AreaEdge>>,
-    Fragmentable {
-  node: <T = AreaSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
 export interface UniversityEdge {
   cursor: String;
 }
@@ -7322,6 +8019,40 @@ export interface UniversityEdgeSubscription
     Fragmentable {
   node: <T = UniversitySubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AreaConnection {}
+
+export interface AreaConnectionPromise
+  extends Promise<AreaConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<AreaEdge>>() => T;
+  aggregate: <T = AggregateAreaPromise>() => T;
+}
+
+export interface AreaConnectionSubscription
+  extends Promise<AsyncIterator<AreaConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<AreaEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateAreaSubscription>() => T;
+}
+
+export interface AggregateStreet {
+  count: Int;
+}
+
+export interface AggregateStreetPromise
+  extends Promise<AggregateStreet>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateStreetSubscription
+  extends Promise<AsyncIterator<AggregateStreet>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface CitySubscriptionPayload {
@@ -7347,20 +8078,22 @@ export interface CitySubscriptionPayloadSubscription
   previousValues: <T = CityPreviousValuesSubscription>() => T;
 }
 
-export interface AggregateStreet {
-  count: Int;
+export interface StreetConnection {}
+
+export interface StreetConnectionPromise
+  extends Promise<StreetConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<StreetEdge>>() => T;
+  aggregate: <T = AggregateStreetPromise>() => T;
 }
 
-export interface AggregateStreetPromise
-  extends Promise<AggregateStreet>,
+export interface StreetConnectionSubscription
+  extends Promise<AsyncIterator<StreetConnection>>,
     Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateStreetSubscription
-  extends Promise<AsyncIterator<AggregateStreet>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<StreetEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateStreetSubscription>() => T;
 }
 
 export interface CityPreviousValues {
@@ -7385,47 +8118,6 @@ export interface CityPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface StreetConnection {}
-
-export interface StreetConnectionPromise
-  extends Promise<StreetConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<StreetEdge>>() => T;
-  aggregate: <T = AggregateStreetPromise>() => T;
-}
-
-export interface StreetConnectionSubscription
-  extends Promise<AsyncIterator<StreetConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<StreetEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateStreetSubscription>() => T;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
 export interface StationEdge {
   cursor: String;
 }
@@ -7442,27 +8134,29 @@ export interface StationEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface ClassGroupSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
+export interface OldColleague {
+  id: ID_Output;
+  status: String;
 }
 
-export interface ClassGroupSubscriptionPayloadPromise
-  extends Promise<ClassGroupSubscriptionPayload>,
+export interface OldColleaguePromise
+  extends Promise<OldColleague>,
     Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = ClassGroupPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = ClassGroupPreviousValuesPromise>() => T;
+  id: () => Promise<ID_Output>;
+  from: <T = UserPromise>() => T;
+  to: <T = UserPromise>() => T;
+  company: <T = CompanyPromise>() => T;
+  status: () => Promise<String>;
 }
 
-export interface ClassGroupSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<ClassGroupSubscriptionPayload>>,
+export interface OldColleagueSubscription
+  extends Promise<AsyncIterator<OldColleague>>,
     Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = ClassGroupSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = ClassGroupPreviousValuesSubscription>() => T;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  from: <T = UserSubscription>() => T;
+  to: <T = UserSubscription>() => T;
+  company: <T = CompanySubscription>() => T;
+  status: () => Promise<AsyncIterator<String>>;
 }
 
 export interface City {
@@ -7509,23 +8203,27 @@ export interface CitySubscription
   ) => T;
 }
 
-export interface ClassGroupPreviousValues {
-  id: ID_Output;
-  name?: String;
+export interface ClassGroupSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
 }
 
-export interface ClassGroupPreviousValuesPromise
-  extends Promise<ClassGroupPreviousValues>,
+export interface ClassGroupSubscriptionPayloadPromise
+  extends Promise<ClassGroupSubscriptionPayload>,
     Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
+  mutation: () => Promise<MutationType>;
+  node: <T = ClassGroupPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ClassGroupPreviousValuesPromise>() => T;
 }
 
-export interface ClassGroupPreviousValuesSubscription
-  extends Promise<AsyncIterator<ClassGroupPreviousValues>>,
+export interface ClassGroupSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ClassGroupSubscriptionPayload>>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ClassGroupSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ClassGroupPreviousValuesSubscription>() => T;
 }
 
 export interface SchoolEduEdge {
@@ -7546,22 +8244,23 @@ export interface SchoolEduEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AreaConnection {}
-
-export interface AreaConnectionPromise
-  extends Promise<AreaConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<AreaEdge>>() => T;
-  aggregate: <T = AggregateAreaPromise>() => T;
+export interface ClassGroupPreviousValues {
+  id: ID_Output;
+  name?: String;
 }
 
-export interface AreaConnectionSubscription
-  extends Promise<AsyncIterator<AreaConnection>>,
+export interface ClassGroupPreviousValuesPromise
+  extends Promise<ClassGroupPreviousValues>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<AreaEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateAreaSubscription>() => T;
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface ClassGroupPreviousValuesSubscription
+  extends Promise<AsyncIterator<ClassGroupPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
 }
 
 export interface AggregateSchool {
@@ -7578,84 +8277,6 @@ export interface AggregateSchoolSubscription
   extends Promise<AsyncIterator<AggregateSchool>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface ClassMateSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface ClassMateSubscriptionPayloadPromise
-  extends Promise<ClassMateSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = ClassMatePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = ClassMatePreviousValuesPromise>() => T;
-}
-
-export interface ClassMateSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<ClassMateSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = ClassMateSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = ClassMatePreviousValuesSubscription>() => T;
-}
-
-export interface SchoolConnection {}
-
-export interface SchoolConnectionPromise
-  extends Promise<SchoolConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<SchoolEdge>>() => T;
-  aggregate: <T = AggregateSchoolPromise>() => T;
-}
-
-export interface SchoolConnectionSubscription
-  extends Promise<AsyncIterator<SchoolConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<SchoolEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateSchoolSubscription>() => T;
-}
-
-export interface ClassMatePreviousValues {
-  id: ID_Output;
-  status: String;
-}
-
-export interface ClassMatePreviousValuesPromise
-  extends Promise<ClassMatePreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  status: () => Promise<String>;
-}
-
-export interface ClassMatePreviousValuesSubscription
-  extends Promise<AsyncIterator<ClassMatePreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  status: () => Promise<AsyncIterator<String>>;
-}
-
-export interface RegStatusEdge {
-  cursor: String;
-}
-
-export interface RegStatusEdgePromise
-  extends Promise<RegStatusEdge>,
-    Fragmentable {
-  node: <T = RegStatusPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface RegStatusEdgeSubscription
-  extends Promise<AsyncIterator<RegStatusEdge>>,
-    Fragmentable {
-  node: <T = RegStatusSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface ClassGroup {
@@ -7721,6 +8342,84 @@ export interface ClassGroupSubscription
   ) => T;
 }
 
+export interface SchoolConnection {}
+
+export interface SchoolConnectionPromise
+  extends Promise<SchoolConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SchoolEdge>>() => T;
+  aggregate: <T = AggregateSchoolPromise>() => T;
+}
+
+export interface SchoolConnectionSubscription
+  extends Promise<AsyncIterator<SchoolConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<SchoolEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateSchoolSubscription>() => T;
+}
+
+export interface ClassMateSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface ClassMateSubscriptionPayloadPromise
+  extends Promise<ClassMateSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = ClassMatePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ClassMatePreviousValuesPromise>() => T;
+}
+
+export interface ClassMateSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ClassMateSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ClassMateSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ClassMatePreviousValuesSubscription>() => T;
+}
+
+export interface RegStatusEdge {
+  cursor: String;
+}
+
+export interface RegStatusEdgePromise
+  extends Promise<RegStatusEdge>,
+    Fragmentable {
+  node: <T = RegStatusPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface RegStatusEdgeSubscription
+  extends Promise<AsyncIterator<RegStatusEdge>>,
+    Fragmentable {
+  node: <T = RegStatusSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface ClassMatePreviousValues {
+  id: ID_Output;
+  status: String;
+}
+
+export interface ClassMatePreviousValuesPromise
+  extends Promise<ClassMatePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  status: () => Promise<String>;
+}
+
+export interface ClassMatePreviousValuesSubscription
+  extends Promise<AsyncIterator<ClassMatePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  status: () => Promise<AsyncIterator<String>>;
+}
+
 export interface Province {
   id: ID_Output;
   code: String;
@@ -7763,94 +8462,6 @@ export interface ProvinceSubscription
   ) => T;
 }
 
-export interface CollegeEntranceExamSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface CollegeEntranceExamSubscriptionPayloadPromise
-  extends Promise<CollegeEntranceExamSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = CollegeEntranceExamPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = CollegeEntranceExamPreviousValuesPromise>() => T;
-}
-
-export interface CollegeEntranceExamSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<CollegeEntranceExamSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = CollegeEntranceExamSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = CollegeEntranceExamPreviousValuesSubscription>() => T;
-}
-
-export interface ProvinceEdge {
-  cursor: String;
-}
-
-export interface ProvinceEdgePromise
-  extends Promise<ProvinceEdge>,
-    Fragmentable {
-  node: <T = ProvincePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface ProvinceEdgeSubscription
-  extends Promise<AsyncIterator<ProvinceEdge>>,
-    Fragmentable {
-  node: <T = ProvinceSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface CollegeEntranceExamPreviousValues {
-  id: ID_Output;
-  subject: String;
-  culscore: Float;
-  proscore?: Float;
-  candidatenum: String;
-  times?: Int;
-}
-
-export interface CollegeEntranceExamPreviousValuesPromise
-  extends Promise<CollegeEntranceExamPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  subject: () => Promise<String>;
-  culscore: () => Promise<Float>;
-  proscore: () => Promise<Float>;
-  candidatenum: () => Promise<String>;
-  times: () => Promise<Int>;
-}
-
-export interface CollegeEntranceExamPreviousValuesSubscription
-  extends Promise<AsyncIterator<CollegeEntranceExamPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  subject: () => Promise<AsyncIterator<String>>;
-  culscore: () => Promise<AsyncIterator<Float>>;
-  proscore: () => Promise<AsyncIterator<Float>>;
-  candidatenum: () => Promise<AsyncIterator<String>>;
-  times: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface AggregatePost {
-  count: Int;
-}
-
-export interface AggregatePostPromise
-  extends Promise<AggregatePost>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregatePostSubscription
-  extends Promise<AsyncIterator<AggregatePost>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
 export interface ClassMate {
   id: ID_Output;
   status: String;
@@ -7872,6 +8483,82 @@ export interface ClassMateSubscription
   group: <T = ClassGroupSubscription>() => T;
 }
 
+export interface ProvinceEdge {
+  cursor: String;
+}
+
+export interface ProvinceEdgePromise
+  extends Promise<ProvinceEdge>,
+    Fragmentable {
+  node: <T = ProvincePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ProvinceEdgeSubscription
+  extends Promise<AsyncIterator<ProvinceEdge>>,
+    Fragmentable {
+  node: <T = ProvinceSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface ColleagueSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface ColleagueSubscriptionPayloadPromise
+  extends Promise<ColleagueSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = ColleaguePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ColleaguePreviousValuesPromise>() => T;
+}
+
+export interface ColleagueSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ColleagueSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ColleagueSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ColleaguePreviousValuesSubscription>() => T;
+}
+
+export interface AggregatePost {
+  count: Int;
+}
+
+export interface AggregatePostPromise
+  extends Promise<AggregatePost>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregatePostSubscription
+  extends Promise<AsyncIterator<AggregatePost>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface ColleaguePreviousValues {
+  id: ID_Output;
+  status: String;
+}
+
+export interface ColleaguePreviousValuesPromise
+  extends Promise<ColleaguePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  status: () => Promise<String>;
+}
+
+export interface ColleaguePreviousValuesSubscription
+  extends Promise<AsyncIterator<ColleaguePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  status: () => Promise<AsyncIterator<String>>;
+}
+
 export interface PostConnection {}
 
 export interface PostConnectionPromise
@@ -7888,92 +8575,6 @@ export interface PostConnectionSubscription
   pageInfo: <T = PageInfoSubscription>() => T;
   edges: <T = Promise<AsyncIterator<PostEdgeSubscription>>>() => T;
   aggregate: <T = AggregatePostSubscription>() => T;
-}
-
-export interface CompanySubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface CompanySubscriptionPayloadPromise
-  extends Promise<CompanySubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = CompanyPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = CompanyPreviousValuesPromise>() => T;
-}
-
-export interface CompanySubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<CompanySubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = CompanySubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = CompanyPreviousValuesSubscription>() => T;
-}
-
-export interface PersonEdge {
-  cursor: String;
-}
-
-export interface PersonEdgePromise extends Promise<PersonEdge>, Fragmentable {
-  node: <T = PersonPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface PersonEdgeSubscription
-  extends Promise<AsyncIterator<PersonEdge>>,
-    Fragmentable {
-  node: <T = PersonSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface CompanyPreviousValues {
-  id: ID_Output;
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeOutput;
-  representative?: String;
-  BusinessScope?: String;
-}
-
-export interface CompanyPreviousValuesPromise
-  extends Promise<CompanyPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  code: () => Promise<String>;
-  establishmentDate: () => Promise<DateTimeOutput>;
-  representative: () => Promise<String>;
-  BusinessScope: () => Promise<String>;
-}
-
-export interface CompanyPreviousValuesSubscription
-  extends Promise<AsyncIterator<CompanyPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  code: () => Promise<AsyncIterator<String>>;
-  establishmentDate: () => Promise<AsyncIterator<DateTimeOutput>>;
-  representative: () => Promise<AsyncIterator<String>>;
-  BusinessScope: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateMessage {
-  count: Int;
-}
-
-export interface AggregateMessagePromise
-  extends Promise<AggregateMessage>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateMessageSubscription
-  extends Promise<AsyncIterator<AggregateMessage>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface CollegeEntranceExam {
@@ -8011,99 +8612,108 @@ export interface CollegeEntranceExamSubscription
   student: <T = UserSubscription>() => T;
 }
 
-export interface MessageConnection {}
-
-export interface MessageConnectionPromise
-  extends Promise<MessageConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<MessageEdge>>() => T;
-  aggregate: <T = AggregateMessagePromise>() => T;
+export interface PersonEdge {
+  cursor: String;
 }
 
-export interface MessageConnectionSubscription
-  extends Promise<AsyncIterator<MessageConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<MessageEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateMessageSubscription>() => T;
+export interface PersonEdgePromise extends Promise<PersonEdge>, Fragmentable {
+  node: <T = PersonPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface FamilySubscriptionPayload {
+export interface PersonEdgeSubscription
+  extends Promise<AsyncIterator<PersonEdge>>,
+    Fragmentable {
+  node: <T = PersonSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CollegeEntranceExamSubscriptionPayload {
   mutation: MutationType;
   updatedFields?: String[];
 }
 
-export interface FamilySubscriptionPayloadPromise
-  extends Promise<FamilySubscriptionPayload>,
+export interface CollegeEntranceExamSubscriptionPayloadPromise
+  extends Promise<CollegeEntranceExamSubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = FamilyPromise>() => T;
+  node: <T = CollegeEntranceExamPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = FamilyPreviousValuesPromise>() => T;
+  previousValues: <T = CollegeEntranceExamPreviousValuesPromise>() => T;
 }
 
-export interface FamilySubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<FamilySubscriptionPayload>>,
+export interface CollegeEntranceExamSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<CollegeEntranceExamSubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = FamilySubscription>() => T;
+  node: <T = CollegeEntranceExamSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = FamilyPreviousValuesSubscription>() => T;
+  previousValues: <T = CollegeEntranceExamPreviousValuesSubscription>() => T;
 }
 
-export interface MajorEdge {
-  cursor: String;
-}
-
-export interface MajorEdgePromise extends Promise<MajorEdge>, Fragmentable {
-  node: <T = MajorPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface MajorEdgeSubscription
-  extends Promise<AsyncIterator<MajorEdge>>,
-    Fragmentable {
-  node: <T = MajorSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface FamilyPreviousValues {
-  id: ID_Output;
-  relationship: String;
-  status: String;
-}
-
-export interface FamilyPreviousValuesPromise
-  extends Promise<FamilyPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  relationship: () => Promise<String>;
-  status: () => Promise<String>;
-}
-
-export interface FamilyPreviousValuesSubscription
-  extends Promise<AsyncIterator<FamilyPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  relationship: () => Promise<AsyncIterator<String>>;
-  status: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateLogs {
+export interface AggregateOldColleague {
   count: Int;
 }
 
-export interface AggregateLogsPromise
-  extends Promise<AggregateLogs>,
+export interface AggregateOldColleaguePromise
+  extends Promise<AggregateOldColleague>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateLogsSubscription
-  extends Promise<AsyncIterator<AggregateLogs>>,
+export interface AggregateOldColleagueSubscription
+  extends Promise<AsyncIterator<AggregateOldColleague>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface CollegeEntranceExamPreviousValues {
+  id: ID_Output;
+  subject: String;
+  culscore: Float;
+  proscore?: Float;
+  candidatenum: String;
+  times?: Int;
+}
+
+export interface CollegeEntranceExamPreviousValuesPromise
+  extends Promise<CollegeEntranceExamPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  subject: () => Promise<String>;
+  culscore: () => Promise<Float>;
+  proscore: () => Promise<Float>;
+  candidatenum: () => Promise<String>;
+  times: () => Promise<Int>;
+}
+
+export interface CollegeEntranceExamPreviousValuesSubscription
+  extends Promise<AsyncIterator<CollegeEntranceExamPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  subject: () => Promise<AsyncIterator<String>>;
+  culscore: () => Promise<AsyncIterator<Float>>;
+  proscore: () => Promise<AsyncIterator<Float>>;
+  candidatenum: () => Promise<AsyncIterator<String>>;
+  times: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface OldColleagueConnection {}
+
+export interface OldColleagueConnectionPromise
+  extends Promise<OldColleagueConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<OldColleagueEdge>>() => T;
+  aggregate: <T = AggregateOldColleaguePromise>() => T;
+}
+
+export interface OldColleagueConnectionSubscription
+  extends Promise<AsyncIterator<OldColleagueConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<OldColleagueEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateOldColleagueSubscription>() => T;
 }
 
 export interface SchoolEdu {
@@ -8155,98 +8765,108 @@ export interface SchoolEduSubscription
   ) => T;
 }
 
-export interface LogsConnection {}
-
-export interface LogsConnectionPromise
-  extends Promise<LogsConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<LogsEdge>>() => T;
-  aggregate: <T = AggregateLogsPromise>() => T;
+export interface MessageEdge {
+  cursor: String;
 }
 
-export interface LogsConnectionSubscription
-  extends Promise<AsyncIterator<LogsConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<LogsEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateLogsSubscription>() => T;
+export interface MessageEdgePromise extends Promise<MessageEdge>, Fragmentable {
+  node: <T = MessagePromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface FamilyGroupSubscriptionPayload {
+export interface MessageEdgeSubscription
+  extends Promise<AsyncIterator<MessageEdge>>,
+    Fragmentable {
+  node: <T = MessageSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CompanySubscriptionPayload {
   mutation: MutationType;
   updatedFields?: String[];
 }
 
-export interface FamilyGroupSubscriptionPayloadPromise
-  extends Promise<FamilyGroupSubscriptionPayload>,
+export interface CompanySubscriptionPayloadPromise
+  extends Promise<CompanySubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = FamilyGroupPromise>() => T;
+  node: <T = CompanyPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = FamilyGroupPreviousValuesPromise>() => T;
+  previousValues: <T = CompanyPreviousValuesPromise>() => T;
 }
 
-export interface FamilyGroupSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<FamilyGroupSubscriptionPayload>>,
+export interface CompanySubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<CompanySubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = FamilyGroupSubscription>() => T;
+  node: <T = CompanySubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = FamilyGroupPreviousValuesSubscription>() => T;
+  previousValues: <T = CompanyPreviousValuesSubscription>() => T;
 }
 
-export interface AggregateLocation {
+export interface AggregateMajor {
   count: Int;
 }
 
-export interface AggregateLocationPromise
-  extends Promise<AggregateLocation>,
+export interface AggregateMajorPromise
+  extends Promise<AggregateMajor>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateLocationSubscription
-  extends Promise<AsyncIterator<AggregateLocation>>,
+export interface AggregateMajorSubscription
+  extends Promise<AsyncIterator<AggregateMajor>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface FamilyGroupPreviousValues {
+export interface CompanyPreviousValues {
   id: ID_Output;
   name?: String;
+  code?: String;
+  establishmentDate?: DateTimeOutput;
+  representative?: String;
+  BusinessScope?: String;
 }
 
-export interface FamilyGroupPreviousValuesPromise
-  extends Promise<FamilyGroupPreviousValues>,
+export interface CompanyPreviousValuesPromise
+  extends Promise<CompanyPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  code: () => Promise<String>;
+  establishmentDate: () => Promise<DateTimeOutput>;
+  representative: () => Promise<String>;
+  BusinessScope: () => Promise<String>;
 }
 
-export interface FamilyGroupPreviousValuesSubscription
-  extends Promise<AsyncIterator<FamilyGroupPreviousValues>>,
+export interface CompanyPreviousValuesSubscription
+  extends Promise<AsyncIterator<CompanyPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
+  code: () => Promise<AsyncIterator<String>>;
+  establishmentDate: () => Promise<AsyncIterator<DateTimeOutput>>;
+  representative: () => Promise<AsyncIterator<String>>;
+  BusinessScope: () => Promise<AsyncIterator<String>>;
 }
 
-export interface LocationConnection {}
+export interface MajorConnection {}
 
-export interface LocationConnectionPromise
-  extends Promise<LocationConnection>,
+export interface MajorConnectionPromise
+  extends Promise<MajorConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<LocationEdge>>() => T;
-  aggregate: <T = AggregateLocationPromise>() => T;
+  edges: <T = FragmentableArray<MajorEdge>>() => T;
+  aggregate: <T = AggregateMajorPromise>() => T;
 }
 
-export interface LocationConnectionSubscription
-  extends Promise<AsyncIterator<LocationConnection>>,
+export interface MajorConnectionSubscription
+  extends Promise<AsyncIterator<MajorConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<LocationEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateLocationSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<MajorEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateMajorSubscription>() => T;
 }
 
 export interface FamilyGroup {
@@ -8338,102 +8958,99 @@ export interface FamilyGroupSubscription
   ) => T;
 }
 
-export interface GroupEdge {
+export interface LogsEdge {
   cursor: String;
 }
 
-export interface GroupEdgePromise extends Promise<GroupEdge>, Fragmentable {
-  node: <T = GroupPromise>() => T;
+export interface LogsEdgePromise extends Promise<LogsEdge>, Fragmentable {
+  node: <T = LogsPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface GroupEdgeSubscription
-  extends Promise<AsyncIterator<GroupEdge>>,
+export interface LogsEdgeSubscription
+  extends Promise<AsyncIterator<LogsEdge>>,
     Fragmentable {
-  node: <T = GroupSubscription>() => T;
+  node: <T = LogsSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface GroupSubscriptionPayload {
+export interface FamilySubscriptionPayload {
   mutation: MutationType;
   updatedFields?: String[];
 }
 
-export interface GroupSubscriptionPayloadPromise
-  extends Promise<GroupSubscriptionPayload>,
+export interface FamilySubscriptionPayloadPromise
+  extends Promise<FamilySubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = GroupPromise>() => T;
+  node: <T = FamilyPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = GroupPreviousValuesPromise>() => T;
+  previousValues: <T = FamilyPreviousValuesPromise>() => T;
 }
 
-export interface GroupSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<GroupSubscriptionPayload>>,
+export interface FamilySubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<FamilySubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = GroupSubscription>() => T;
+  node: <T = FamilySubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = GroupPreviousValuesSubscription>() => T;
+  previousValues: <T = FamilyPreviousValuesSubscription>() => T;
 }
 
-export interface AggregateFamilyGroup {
-  count: Int;
+export interface Logs {
+  createFamilyGroupTime?: DateTimeOutput;
 }
 
-export interface AggregateFamilyGroupPromise
-  extends Promise<AggregateFamilyGroup>,
+export interface LogsPromise extends Promise<Logs>, Fragmentable {
+  user: <T = UserPromise>() => T;
+  createFamilyGroupTime: () => Promise<DateTimeOutput>;
+}
+
+export interface LogsSubscription
+  extends Promise<AsyncIterator<Logs>>,
     Fragmentable {
-  count: () => Promise<Int>;
+  user: <T = UserSubscription>() => T;
+  createFamilyGroupTime: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface AggregateFamilyGroupSubscription
-  extends Promise<AsyncIterator<AggregateFamilyGroup>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface GroupPreviousValues {
+export interface FamilyPreviousValues {
   id: ID_Output;
-  type?: GroupKind;
-  typeId?: String;
-  name?: String;
+  relationship: String;
+  status: String;
 }
 
-export interface GroupPreviousValuesPromise
-  extends Promise<GroupPreviousValues>,
+export interface FamilyPreviousValuesPromise
+  extends Promise<FamilyPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  type: () => Promise<GroupKind>;
-  typeId: () => Promise<String>;
-  name: () => Promise<String>;
+  relationship: () => Promise<String>;
+  status: () => Promise<String>;
 }
 
-export interface GroupPreviousValuesSubscription
-  extends Promise<AsyncIterator<GroupPreviousValues>>,
+export interface FamilyPreviousValuesSubscription
+  extends Promise<AsyncIterator<FamilyPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  type: () => Promise<AsyncIterator<GroupKind>>;
-  typeId: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
+  relationship: () => Promise<AsyncIterator<String>>;
+  status: () => Promise<AsyncIterator<String>>;
 }
 
-export interface FamilyGroupConnection {}
-
-export interface FamilyGroupConnectionPromise
-  extends Promise<FamilyGroupConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<FamilyGroupEdge>>() => T;
-  aggregate: <T = AggregateFamilyGroupPromise>() => T;
+export interface LocationEdge {
+  cursor: String;
 }
 
-export interface FamilyGroupConnectionSubscription
-  extends Promise<AsyncIterator<FamilyGroupConnection>>,
+export interface LocationEdgePromise
+  extends Promise<LocationEdge>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<FamilyGroupEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateFamilyGroupSubscription>() => T;
+  node: <T = LocationPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface LocationEdgeSubscription
+  extends Promise<AsyncIterator<LocationEdge>>,
+    Fragmentable {
+  node: <T = LocationSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface Person {
@@ -8521,96 +9138,98 @@ export interface PersonSubscription
   ) => T;
 }
 
-export interface FamilyEdge {
-  cursor: String;
-}
-
-export interface FamilyEdgePromise extends Promise<FamilyEdge>, Fragmentable {
-  node: <T = FamilyPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface FamilyEdgeSubscription
-  extends Promise<AsyncIterator<FamilyEdge>>,
-    Fragmentable {
-  node: <T = FamilySubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface LocationSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface LocationSubscriptionPayloadPromise
-  extends Promise<LocationSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = LocationPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = LocationPreviousValuesPromise>() => T;
-}
-
-export interface LocationSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<LocationSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = LocationSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = LocationPreviousValuesSubscription>() => T;
-}
-
-export interface AggregateCompany {
+export interface AggregateGroup {
   count: Int;
 }
 
-export interface AggregateCompanyPromise
-  extends Promise<AggregateCompany>,
+export interface AggregateGroupPromise
+  extends Promise<AggregateGroup>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateCompanySubscription
-  extends Promise<AsyncIterator<AggregateCompany>>,
+export interface AggregateGroupSubscription
+  extends Promise<AsyncIterator<AggregateGroup>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface LocationPreviousValues {
+export interface FamilyGroupSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface FamilyGroupSubscriptionPayloadPromise
+  extends Promise<FamilyGroupSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = FamilyGroupPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = FamilyGroupPreviousValuesPromise>() => T;
+}
+
+export interface FamilyGroupSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<FamilyGroupSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = FamilyGroupSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = FamilyGroupPreviousValuesSubscription>() => T;
+}
+
+export interface GroupConnection {}
+
+export interface GroupConnectionPromise
+  extends Promise<GroupConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<GroupEdge>>() => T;
+  aggregate: <T = AggregateGroupPromise>() => T;
+}
+
+export interface GroupConnectionSubscription
+  extends Promise<AsyncIterator<GroupConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GroupEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGroupSubscription>() => T;
+}
+
+export interface FamilyGroupPreviousValues {
   id: ID_Output;
   name?: String;
 }
 
-export interface LocationPreviousValuesPromise
-  extends Promise<LocationPreviousValues>,
+export interface FamilyGroupPreviousValuesPromise
+  extends Promise<FamilyGroupPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
 }
 
-export interface LocationPreviousValuesSubscription
-  extends Promise<AsyncIterator<LocationPreviousValues>>,
+export interface FamilyGroupPreviousValuesSubscription
+  extends Promise<AsyncIterator<FamilyGroupPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface CompanyConnection {}
-
-export interface CompanyConnectionPromise
-  extends Promise<CompanyConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<CompanyEdge>>() => T;
-  aggregate: <T = AggregateCompanyPromise>() => T;
+export interface FamilyGroupEdge {
+  cursor: String;
 }
 
-export interface CompanyConnectionSubscription
-  extends Promise<AsyncIterator<CompanyConnection>>,
+export interface FamilyGroupEdgePromise
+  extends Promise<FamilyGroupEdge>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<CompanyEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateCompanySubscription>() => T;
+  node: <T = FamilyGroupPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface FamilyGroupEdgeSubscription
+  extends Promise<AsyncIterator<FamilyGroupEdge>>,
+    Fragmentable {
+  node: <T = FamilyGroupSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface Family {
@@ -8639,95 +9258,99 @@ export interface FamilySubscription
   status: () => Promise<AsyncIterator<String>>;
 }
 
-export interface CollegeEntranceExamEdge {
-  cursor: String;
-}
-
-export interface CollegeEntranceExamEdgePromise
-  extends Promise<CollegeEntranceExamEdge>,
-    Fragmentable {
-  node: <T = CollegeEntranceExamPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface CollegeEntranceExamEdgeSubscription
-  extends Promise<AsyncIterator<CollegeEntranceExamEdge>>,
-    Fragmentable {
-  node: <T = CollegeEntranceExamSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface LogsSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface LogsSubscriptionPayloadPromise
-  extends Promise<LogsSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = LogsPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = LogsPreviousValuesPromise>() => T;
-}
-
-export interface LogsSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<LogsSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = LogsSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = LogsPreviousValuesSubscription>() => T;
-}
-
-export interface AggregateClassMate {
+export interface AggregateFamily {
   count: Int;
 }
 
-export interface AggregateClassMatePromise
-  extends Promise<AggregateClassMate>,
+export interface AggregateFamilyPromise
+  extends Promise<AggregateFamily>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateClassMateSubscription
-  extends Promise<AsyncIterator<AggregateClassMate>>,
+export interface AggregateFamilySubscription
+  extends Promise<AsyncIterator<AggregateFamily>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface LogsPreviousValues {
-  createFamilyGroupTime?: DateTimeOutput;
+export interface GroupSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
 }
 
-export interface LogsPreviousValuesPromise
-  extends Promise<LogsPreviousValues>,
+export interface GroupSubscriptionPayloadPromise
+  extends Promise<GroupSubscriptionPayload>,
     Fragmentable {
-  createFamilyGroupTime: () => Promise<DateTimeOutput>;
+  mutation: () => Promise<MutationType>;
+  node: <T = GroupPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = GroupPreviousValuesPromise>() => T;
 }
 
-export interface LogsPreviousValuesSubscription
-  extends Promise<AsyncIterator<LogsPreviousValues>>,
+export interface GroupSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<GroupSubscriptionPayload>>,
     Fragmentable {
-  createFamilyGroupTime: () => Promise<AsyncIterator<DateTimeOutput>>;
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = GroupSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = GroupPreviousValuesSubscription>() => T;
 }
 
-export interface ClassMateConnection {}
+export interface FamilyConnection {}
 
-export interface ClassMateConnectionPromise
-  extends Promise<ClassMateConnection>,
+export interface FamilyConnectionPromise
+  extends Promise<FamilyConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ClassMateEdge>>() => T;
-  aggregate: <T = AggregateClassMatePromise>() => T;
+  edges: <T = FragmentableArray<FamilyEdge>>() => T;
+  aggregate: <T = AggregateFamilyPromise>() => T;
 }
 
-export interface ClassMateConnectionSubscription
-  extends Promise<AsyncIterator<ClassMateConnection>>,
+export interface FamilyConnectionSubscription
+  extends Promise<AsyncIterator<FamilyConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ClassMateEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateClassMateSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<FamilyEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateFamilySubscription>() => T;
+}
+
+export interface GroupPreviousValues {
+  id: ID_Output;
+  type?: GroupKind;
+  name?: String;
+}
+
+export interface GroupPreviousValuesPromise
+  extends Promise<GroupPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  type: () => Promise<GroupKind>;
+  name: () => Promise<String>;
+}
+
+export interface GroupPreviousValuesSubscription
+  extends Promise<AsyncIterator<GroupPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  type: () => Promise<AsyncIterator<GroupKind>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CompanyEdge {
+  cursor: String;
+}
+
+export interface CompanyEdgePromise extends Promise<CompanyEdge>, Fragmentable {
+  node: <T = CompanyPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface CompanyEdgeSubscription
+  extends Promise<AsyncIterator<CompanyEdge>>,
+    Fragmentable {
+  node: <T = CompanySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface Major {
@@ -8753,129 +9376,99 @@ export interface MajorSubscription
   education: () => Promise<AsyncIterator<Educationkind>>;
 }
 
-export interface Street {
-  id: ID_Output;
-  code: String;
-  name: String;
+export interface AggregateCollegeEntranceExam {
+  count: Int;
 }
 
-export interface StreetPromise extends Promise<Street>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  code: () => Promise<String>;
-  name: () => Promise<String>;
-  Area: <T = AreaPromise>() => T;
-  villages: <T = FragmentableArray<Village>>(
-    args?: {
-      where?: VillageWhereInput;
-      orderBy?: VillageOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-}
-
-export interface StreetSubscription
-  extends Promise<AsyncIterator<Street>>,
+export interface AggregateCollegeEntranceExamPromise
+  extends Promise<AggregateCollegeEntranceExam>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  code: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
-  Area: <T = AreaSubscription>() => T;
-  villages: <T = Promise<AsyncIterator<VillageSubscription>>>(
-    args?: {
-      where?: VillageWhereInput;
-      orderBy?: VillageOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  count: () => Promise<Int>;
 }
 
-export interface MajorSubscriptionPayload {
+export interface AggregateCollegeEntranceExamSubscription
+  extends Promise<AsyncIterator<AggregateCollegeEntranceExam>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface LocationSubscriptionPayload {
   mutation: MutationType;
   updatedFields?: String[];
 }
 
-export interface MajorSubscriptionPayloadPromise
-  extends Promise<MajorSubscriptionPayload>,
+export interface LocationSubscriptionPayloadPromise
+  extends Promise<LocationSubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = MajorPromise>() => T;
+  node: <T = LocationPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = MajorPreviousValuesPromise>() => T;
+  previousValues: <T = LocationPreviousValuesPromise>() => T;
 }
 
-export interface MajorSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<MajorSubscriptionPayload>>,
+export interface LocationSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<LocationSubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = MajorSubscription>() => T;
+  node: <T = LocationSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = MajorPreviousValuesSubscription>() => T;
+  previousValues: <T = LocationPreviousValuesSubscription>() => T;
 }
 
-export interface WorkGroupEdge {
-  cursor: String;
-}
+export interface CollegeEntranceExamConnection {}
 
-export interface WorkGroupEdgePromise
-  extends Promise<WorkGroupEdge>,
+export interface CollegeEntranceExamConnectionPromise
+  extends Promise<CollegeEntranceExamConnection>,
     Fragmentable {
-  node: <T = WorkGroupPromise>() => T;
-  cursor: () => Promise<String>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<CollegeEntranceExamEdge>>() => T;
+  aggregate: <T = AggregateCollegeEntranceExamPromise>() => T;
 }
 
-export interface WorkGroupEdgeSubscription
-  extends Promise<AsyncIterator<WorkGroupEdge>>,
+export interface CollegeEntranceExamConnectionSubscription
+  extends Promise<AsyncIterator<CollegeEntranceExamConnection>>,
     Fragmentable {
-  node: <T = WorkGroupSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <
+    T = Promise<AsyncIterator<CollegeEntranceExamEdgeSubscription>>
+  >() => T;
+  aggregate: <T = AggregateCollegeEntranceExamSubscription>() => T;
 }
 
-export interface MajorPreviousValues {
+export interface LocationPreviousValues {
   id: ID_Output;
-  name: String;
-  category: String;
-  education: Educationkind;
+  name?: String;
 }
 
-export interface MajorPreviousValuesPromise
-  extends Promise<MajorPreviousValues>,
+export interface LocationPreviousValuesPromise
+  extends Promise<LocationPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
-  category: () => Promise<String>;
-  education: () => Promise<Educationkind>;
 }
 
-export interface MajorPreviousValuesSubscription
-  extends Promise<AsyncIterator<MajorPreviousValues>>,
+export interface LocationPreviousValuesSubscription
+  extends Promise<AsyncIterator<LocationPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
-  category: () => Promise<AsyncIterator<String>>;
-  education: () => Promise<AsyncIterator<Educationkind>>;
 }
 
-export interface WorkEdge {
+export interface ColleagueEdge {
   cursor: String;
 }
 
-export interface WorkEdgePromise extends Promise<WorkEdge>, Fragmentable {
-  node: <T = WorkPromise>() => T;
+export interface ColleagueEdgePromise
+  extends Promise<ColleagueEdge>,
+    Fragmentable {
+  node: <T = ColleaguePromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface WorkEdgeSubscription
-  extends Promise<AsyncIterator<WorkEdge>>,
+export interface ColleagueEdgeSubscription
+  extends Promise<AsyncIterator<ColleagueEdge>>,
     Fragmentable {
-  node: <T = WorkSubscription>() => T;
+  node: <T = ColleagueSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
@@ -8922,98 +9515,94 @@ export interface RegStatusSubscription
   ) => T;
 }
 
-export interface VillageConnection {}
-
-export interface VillageConnectionPromise
-  extends Promise<VillageConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<VillageEdge>>() => T;
-  aggregate: <T = AggregateVillagePromise>() => T;
-}
-
-export interface VillageConnectionSubscription
-  extends Promise<AsyncIterator<VillageConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<VillageEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateVillageSubscription>() => T;
-}
-
-export interface MessageSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface MessageSubscriptionPayloadPromise
-  extends Promise<MessageSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = MessagePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = MessagePreviousValuesPromise>() => T;
-}
-
-export interface MessageSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<MessageSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = MessageSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = MessagePreviousValuesSubscription>() => T;
-}
-
-export interface AggregateUniversity {
+export interface AggregateClassMate {
   count: Int;
 }
 
-export interface AggregateUniversityPromise
-  extends Promise<AggregateUniversity>,
+export interface AggregateClassMatePromise
+  extends Promise<AggregateClassMate>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateUniversitySubscription
-  extends Promise<AsyncIterator<AggregateUniversity>>,
+export interface AggregateClassMateSubscription
+  extends Promise<AsyncIterator<AggregateClassMate>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface MessagePreviousValues {
-  id: ID_Output;
-  text: String;
-  createdAt: DateTimeOutput;
+export interface LogsSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
 }
 
-export interface MessagePreviousValuesPromise
-  extends Promise<MessagePreviousValues>,
+export interface LogsSubscriptionPayloadPromise
+  extends Promise<LogsSubscriptionPayload>,
     Fragmentable {
-  id: () => Promise<ID_Output>;
-  text: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
+  mutation: () => Promise<MutationType>;
+  node: <T = LogsPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = LogsPreviousValuesPromise>() => T;
 }
 
-export interface MessagePreviousValuesSubscription
-  extends Promise<AsyncIterator<MessagePreviousValues>>,
+export interface LogsSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<LogsSubscriptionPayload>>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  text: () => Promise<AsyncIterator<String>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = LogsSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = LogsPreviousValuesSubscription>() => T;
 }
 
-export interface StreetEdge {
+export interface ClassMateConnection {}
+
+export interface ClassMateConnectionPromise
+  extends Promise<ClassMateConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ClassMateEdge>>() => T;
+  aggregate: <T = AggregateClassMatePromise>() => T;
+}
+
+export interface ClassMateConnectionSubscription
+  extends Promise<AsyncIterator<ClassMateConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ClassMateEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateClassMateSubscription>() => T;
+}
+
+export interface LogsPreviousValues {
+  createFamilyGroupTime?: DateTimeOutput;
+}
+
+export interface LogsPreviousValuesPromise
+  extends Promise<LogsPreviousValues>,
+    Fragmentable {
+  createFamilyGroupTime: () => Promise<DateTimeOutput>;
+}
+
+export interface LogsPreviousValuesSubscription
+  extends Promise<AsyncIterator<LogsPreviousValues>>,
+    Fragmentable {
+  createFamilyGroupTime: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface ClassGroupEdge {
   cursor: String;
 }
 
-export interface StreetEdgePromise extends Promise<StreetEdge>, Fragmentable {
-  node: <T = StreetPromise>() => T;
+export interface ClassGroupEdgePromise
+  extends Promise<ClassGroupEdge>,
+    Fragmentable {
+  node: <T = ClassGroupPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface StreetEdgeSubscription
-  extends Promise<AsyncIterator<StreetEdge>>,
+export interface ClassGroupEdgeSubscription
+  extends Promise<AsyncIterator<ClassGroupEdge>>,
     Fragmentable {
-  node: <T = StreetSubscription>() => T;
+  node: <T = ClassGroupSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
@@ -9048,650 +9637,50 @@ export interface PostSubscription
   author: <T = UserSubscription>() => T;
 }
 
-export interface StationConnection {}
-
-export interface StationConnectionPromise
-  extends Promise<StationConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<StationEdge>>() => T;
-  aggregate: <T = AggregateStationPromise>() => T;
-}
-
-export interface StationConnectionSubscription
-  extends Promise<AsyncIterator<StationConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<StationEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateStationSubscription>() => T;
-}
-
-export interface PersonSubscriptionPayload {
+export interface WorkGroupSubscriptionPayload {
   mutation: MutationType;
   updatedFields?: String[];
 }
 
-export interface PersonSubscriptionPayloadPromise
-  extends Promise<PersonSubscriptionPayload>,
+export interface WorkGroupSubscriptionPayloadPromise
+  extends Promise<WorkGroupSubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = PersonPromise>() => T;
+  node: <T = WorkGroupPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = PersonPreviousValuesPromise>() => T;
+  previousValues: <T = WorkGroupPreviousValuesPromise>() => T;
 }
 
-export interface PersonSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<PersonSubscriptionPayload>>,
+export interface WorkGroupSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<WorkGroupSubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = PersonSubscription>() => T;
+  node: <T = WorkGroupSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = PersonPreviousValuesSubscription>() => T;
+  previousValues: <T = WorkGroupPreviousValuesSubscription>() => T;
 }
 
-export interface SchoolEduConnection {}
-
-export interface SchoolEduConnectionPromise
-  extends Promise<SchoolEduConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<SchoolEduEdge>>() => T;
-  aggregate: <T = AggregateSchoolEduPromise>() => T;
-}
-
-export interface SchoolEduConnectionSubscription
-  extends Promise<AsyncIterator<SchoolEduConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<SchoolEduEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateSchoolEduSubscription>() => T;
-}
-
-export interface PersonPreviousValues {
-  id: ID_Output;
-  name: String;
-}
-
-export interface PersonPreviousValuesPromise
-  extends Promise<PersonPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface PersonPreviousValuesSubscription
-  extends Promise<AsyncIterator<PersonPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateRegStatus {
-  count: Int;
-}
-
-export interface AggregateRegStatusPromise
-  extends Promise<AggregateRegStatus>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateRegStatusSubscription
-  extends Promise<AsyncIterator<AggregateRegStatus>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface University {
-  id: ID_Output;
-  name: String;
-  education: Educationkind;
-  department?: String;
-  location?: String;
-  desc?: String;
-}
-
-export interface UniversityPromise extends Promise<University>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  education: () => Promise<Educationkind>;
-  department: () => Promise<String>;
-  location: () => Promise<String>;
-  desc: () => Promise<String>;
-}
-
-export interface UniversitySubscription
-  extends Promise<AsyncIterator<University>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  education: () => Promise<AsyncIterator<Educationkind>>;
-  department: () => Promise<AsyncIterator<String>>;
-  location: () => Promise<AsyncIterator<String>>;
-  desc: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateProvince {
-  count: Int;
-}
-
-export interface AggregateProvincePromise
-  extends Promise<AggregateProvince>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateProvinceSubscription
-  extends Promise<AsyncIterator<AggregateProvince>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface PostSubscriptionPayload {
+export interface MajorSubscriptionPayload {
   mutation: MutationType;
   updatedFields?: String[];
 }
 
-export interface PostSubscriptionPayloadPromise
-  extends Promise<PostSubscriptionPayload>,
+export interface MajorSubscriptionPayloadPromise
+  extends Promise<MajorSubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = PostPromise>() => T;
+  node: <T = MajorPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = PostPreviousValuesPromise>() => T;
+  previousValues: <T = MajorPreviousValuesPromise>() => T;
 }
 
-export interface PostSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<PostSubscriptionPayload>>,
+export interface MajorSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<MajorSubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = PostSubscription>() => T;
+  node: <T = MajorSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = PostPreviousValuesSubscription>() => T;
-}
-
-export interface PostEdge {
-  cursor: String;
-}
-
-export interface PostEdgePromise extends Promise<PostEdge>, Fragmentable {
-  node: <T = PostPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface PostEdgeSubscription
-  extends Promise<AsyncIterator<PostEdge>>,
-    Fragmentable {
-  node: <T = PostSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface PostPreviousValues {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  isPublished: Boolean;
-  title: String;
-  content: String;
-}
-
-export interface PostPreviousValuesPromise
-  extends Promise<PostPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  isPublished: () => Promise<Boolean>;
-  title: () => Promise<String>;
-  content: () => Promise<String>;
-}
-
-export interface PostPreviousValuesSubscription
-  extends Promise<AsyncIterator<PostPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  isPublished: () => Promise<AsyncIterator<Boolean>>;
-  title: () => Promise<AsyncIterator<String>>;
-  content: () => Promise<AsyncIterator<String>>;
-}
-
-export interface PersonConnection {}
-
-export interface PersonConnectionPromise
-  extends Promise<PersonConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<PersonEdge>>() => T;
-  aggregate: <T = AggregatePersonPromise>() => T;
-}
-
-export interface PersonConnectionSubscription
-  extends Promise<AsyncIterator<PersonConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<PersonEdgeSubscription>>>() => T;
-  aggregate: <T = AggregatePersonSubscription>() => T;
-}
-
-export interface Group {
-  id: ID_Output;
-  type?: GroupKind;
-  typeId?: String;
-  name?: String;
-}
-
-export interface GroupPromise extends Promise<Group>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  type: () => Promise<GroupKind>;
-  typeId: () => Promise<String>;
-  name: () => Promise<String>;
-  users: <T = FragmentableArray<User>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  messages: <T = FragmentableArray<Message>>(
-    args?: {
-      where?: MessageWhereInput;
-      orderBy?: MessageOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-}
-
-export interface GroupSubscription
-  extends Promise<AsyncIterator<Group>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  type: () => Promise<AsyncIterator<GroupKind>>;
-  typeId: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
-  users: <T = Promise<AsyncIterator<UserSubscription>>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  messages: <T = Promise<AsyncIterator<MessageSubscription>>>(
-    args?: {
-      where?: MessageWhereInput;
-      orderBy?: MessageOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-}
-
-export interface AggregateMajor {
-  count: Int;
-}
-
-export interface AggregateMajorPromise
-  extends Promise<AggregateMajor>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateMajorSubscription
-  extends Promise<AsyncIterator<AggregateMajor>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface ProvinceSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface ProvinceSubscriptionPayloadPromise
-  extends Promise<ProvinceSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = ProvincePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = ProvincePreviousValuesPromise>() => T;
-}
-
-export interface ProvinceSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<ProvinceSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = ProvinceSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = ProvincePreviousValuesSubscription>() => T;
-}
-
-export interface LogsEdge {
-  cursor: String;
-}
-
-export interface LogsEdgePromise extends Promise<LogsEdge>, Fragmentable {
-  node: <T = LogsPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface LogsEdgeSubscription
-  extends Promise<AsyncIterator<LogsEdge>>,
-    Fragmentable {
-  node: <T = LogsSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ProvincePreviousValues {
-  id: ID_Output;
-  code: String;
-  name: String;
-}
-
-export interface ProvincePreviousValuesPromise
-  extends Promise<ProvincePreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  code: () => Promise<String>;
-  name: () => Promise<String>;
-}
-
-export interface ProvincePreviousValuesSubscription
-  extends Promise<AsyncIterator<ProvincePreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  code: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface LocationEdge {
-  cursor: String;
-}
-
-export interface LocationEdgePromise
-  extends Promise<LocationEdge>,
-    Fragmentable {
-  node: <T = LocationPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface LocationEdgeSubscription
-  extends Promise<AsyncIterator<LocationEdge>>,
-    Fragmentable {
-  node: <T = LocationSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface Message {
-  id: ID_Output;
-  text: String;
-  createdAt: DateTimeOutput;
-}
-
-export interface MessagePromise extends Promise<Message>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  to: <T = GroupPromise>() => T;
-  from: <T = UserPromise>() => T;
-  text: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
-}
-
-export interface MessageSubscription
-  extends Promise<AsyncIterator<Message>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  to: <T = GroupSubscription>() => T;
-  from: <T = UserSubscription>() => T;
-  text: () => Promise<AsyncIterator<String>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface GroupConnection {}
-
-export interface GroupConnectionPromise
-  extends Promise<GroupConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<GroupEdge>>() => T;
-  aggregate: <T = AggregateGroupPromise>() => T;
-}
-
-export interface GroupConnectionSubscription
-  extends Promise<AsyncIterator<GroupConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<GroupEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateGroupSubscription>() => T;
-}
-
-export interface RegStatusSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface RegStatusSubscriptionPayloadPromise
-  extends Promise<RegStatusSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = RegStatusPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = RegStatusPreviousValuesPromise>() => T;
-}
-
-export interface RegStatusSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<RegStatusSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = RegStatusSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = RegStatusPreviousValuesSubscription>() => T;
-}
-
-export interface AggregateFamily {
-  count: Int;
-}
-
-export interface AggregateFamilyPromise
-  extends Promise<AggregateFamily>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateFamilySubscription
-  extends Promise<AsyncIterator<AggregateFamily>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface RegStatusPreviousValues {
-  id: ID_Output;
-  education: Educationkind;
-}
-
-export interface RegStatusPreviousValuesPromise
-  extends Promise<RegStatusPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  education: () => Promise<Educationkind>;
-}
-
-export interface RegStatusPreviousValuesSubscription
-  extends Promise<AsyncIterator<RegStatusPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  education: () => Promise<AsyncIterator<Educationkind>>;
-}
-
-export interface CompanyEdge {
-  cursor: String;
-}
-
-export interface CompanyEdgePromise extends Promise<CompanyEdge>, Fragmentable {
-  node: <T = CompanyPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface CompanyEdgeSubscription
-  extends Promise<AsyncIterator<CompanyEdge>>,
-    Fragmentable {
-  node: <T = CompanySubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface WorkGroup {
-  id: ID_Output;
-}
-
-export interface WorkGroupPromise extends Promise<WorkGroup>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  company: <T = CompanyPromise>() => T;
-  wokers: <T = FragmentableArray<User>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  messages: <T = FragmentableArray<Message>>(
-    args?: {
-      where?: MessageWhereInput;
-      orderBy?: MessageOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-}
-
-export interface WorkGroupSubscription
-  extends Promise<AsyncIterator<WorkGroup>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  company: <T = CompanySubscription>() => T;
-  wokers: <T = Promise<AsyncIterator<UserSubscription>>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  messages: <T = Promise<AsyncIterator<MessageSubscription>>>(
-    args?: {
-      where?: MessageWhereInput;
-      orderBy?: MessageOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-}
-
-export interface CollegeEntranceExamConnection {}
-
-export interface CollegeEntranceExamConnectionPromise
-  extends Promise<CollegeEntranceExamConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<CollegeEntranceExamEdge>>() => T;
-  aggregate: <T = AggregateCollegeEntranceExamPromise>() => T;
-}
-
-export interface CollegeEntranceExamConnectionSubscription
-  extends Promise<AsyncIterator<CollegeEntranceExamConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <
-    T = Promise<AsyncIterator<CollegeEntranceExamEdgeSubscription>>
-  >() => T;
-  aggregate: <T = AggregateCollegeEntranceExamSubscription>() => T;
-}
-
-export interface SchoolSubscriptionPayload {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface SchoolSubscriptionPayloadPromise
-  extends Promise<SchoolSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = SchoolPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = SchoolPreviousValuesPromise>() => T;
-}
-
-export interface SchoolSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<SchoolSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = SchoolSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = SchoolPreviousValuesSubscription>() => T;
-}
-
-export interface AggregateClassGroup {
-  count: Int;
-}
-
-export interface AggregateClassGroupPromise
-  extends Promise<AggregateClassGroup>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateClassGroupSubscription
-  extends Promise<AsyncIterator<AggregateClassGroup>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface SchoolPreviousValues {
-  id: ID_Output;
-  name?: String;
-  kind?: Educationkind;
-}
-
-export interface SchoolPreviousValuesPromise
-  extends Promise<SchoolPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  kind: () => Promise<Educationkind>;
-}
-
-export interface SchoolPreviousValuesSubscription
-  extends Promise<AsyncIterator<SchoolPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  kind: () => Promise<AsyncIterator<Educationkind>>;
+  previousValues: <T = MajorPreviousValuesSubscription>() => T;
 }
 
 export interface Area {
@@ -9738,6 +9727,725 @@ export interface AreaSubscription
   ) => T;
 }
 
+export interface MajorPreviousValues {
+  id: ID_Output;
+  name: String;
+  category: String;
+  education: Educationkind;
+}
+
+export interface MajorPreviousValuesPromise
+  extends Promise<MajorPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  category: () => Promise<String>;
+  education: () => Promise<Educationkind>;
+}
+
+export interface MajorPreviousValuesSubscription
+  extends Promise<AsyncIterator<MajorPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  category: () => Promise<AsyncIterator<String>>;
+  education: () => Promise<AsyncIterator<Educationkind>>;
+}
+
+export interface AggregateVillage {
+  count: Int;
+}
+
+export interface AggregateVillagePromise
+  extends Promise<AggregateVillage>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateVillageSubscription
+  extends Promise<AsyncIterator<AggregateVillage>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface University {
+  id: ID_Output;
+  name: String;
+  education: Educationkind;
+  department?: String;
+  location?: String;
+  desc?: String;
+}
+
+export interface UniversityPromise extends Promise<University>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  education: () => Promise<Educationkind>;
+  department: () => Promise<String>;
+  location: () => Promise<String>;
+  desc: () => Promise<String>;
+}
+
+export interface UniversitySubscription
+  extends Promise<AsyncIterator<University>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  education: () => Promise<AsyncIterator<Educationkind>>;
+  department: () => Promise<AsyncIterator<String>>;
+  location: () => Promise<AsyncIterator<String>>;
+  desc: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UserEdge {
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface MessageSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface MessageSubscriptionPayloadPromise
+  extends Promise<MessageSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = MessagePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = MessagePreviousValuesPromise>() => T;
+}
+
+export interface MessageSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<MessageSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = MessageSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = MessagePreviousValuesSubscription>() => T;
+}
+
+export interface UniversityConnection {}
+
+export interface UniversityConnectionPromise
+  extends Promise<UniversityConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UniversityEdge>>() => T;
+  aggregate: <T = AggregateUniversityPromise>() => T;
+}
+
+export interface UniversityConnectionSubscription
+  extends Promise<AsyncIterator<UniversityConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UniversityEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUniversitySubscription>() => T;
+}
+
+export interface MessagePreviousValues {
+  id: ID_Output;
+  text: String;
+  createdAt: DateTimeOutput;
+}
+
+export interface MessagePreviousValuesPromise
+  extends Promise<MessagePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  text: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface MessagePreviousValuesSubscription
+  extends Promise<AsyncIterator<MessagePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  text: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface AggregateStation {
+  count: Int;
+}
+
+export interface AggregateStationPromise
+  extends Promise<AggregateStation>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateStationSubscription
+  extends Promise<AsyncIterator<AggregateStation>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface Group {
+  id: ID_Output;
+  type?: GroupKind;
+  name?: String;
+}
+
+export interface GroupPromise extends Promise<Group>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  type: () => Promise<GroupKind>;
+  name: () => Promise<String>;
+  users: <T = FragmentableArray<User>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  messages: <T = FragmentableArray<Message>>(
+    args?: {
+      where?: MessageWhereInput;
+      orderBy?: MessageOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface GroupSubscription
+  extends Promise<AsyncIterator<Group>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  type: () => Promise<AsyncIterator<GroupKind>>;
+  name: () => Promise<AsyncIterator<String>>;
+  users: <T = Promise<AsyncIterator<UserSubscription>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  messages: <T = Promise<AsyncIterator<MessageSubscription>>>(
+    args?: {
+      where?: MessageWhereInput;
+      orderBy?: MessageOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface AggregateSchoolEdu {
+  count: Int;
+}
+
+export interface AggregateSchoolEduPromise
+  extends Promise<AggregateSchoolEdu>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateSchoolEduSubscription
+  extends Promise<AsyncIterator<AggregateSchoolEdu>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface OldColleagueSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface OldColleagueSubscriptionPayloadPromise
+  extends Promise<OldColleagueSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = OldColleaguePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = OldColleaguePreviousValuesPromise>() => T;
+}
+
+export interface OldColleagueSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<OldColleagueSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = OldColleagueSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = OldColleaguePreviousValuesSubscription>() => T;
+}
+
+export interface SchoolEdge {
+  cursor: String;
+}
+
+export interface SchoolEdgePromise extends Promise<SchoolEdge>, Fragmentable {
+  node: <T = SchoolPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface SchoolEdgeSubscription
+  extends Promise<AsyncIterator<SchoolEdge>>,
+    Fragmentable {
+  node: <T = SchoolSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface OldColleaguePreviousValues {
+  id: ID_Output;
+  status: String;
+}
+
+export interface OldColleaguePreviousValuesPromise
+  extends Promise<OldColleaguePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  status: () => Promise<String>;
+}
+
+export interface OldColleaguePreviousValuesSubscription
+  extends Promise<AsyncIterator<OldColleaguePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  status: () => Promise<AsyncIterator<String>>;
+}
+
+export interface RegStatusConnection {}
+
+export interface RegStatusConnectionPromise
+  extends Promise<RegStatusConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<RegStatusEdge>>() => T;
+  aggregate: <T = AggregateRegStatusPromise>() => T;
+}
+
+export interface RegStatusConnectionSubscription
+  extends Promise<AsyncIterator<RegStatusConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<RegStatusEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateRegStatusSubscription>() => T;
+}
+
+export interface Message {
+  id: ID_Output;
+  text: String;
+  createdAt: DateTimeOutput;
+}
+
+export interface MessagePromise extends Promise<Message>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  to: <T = GroupPromise>() => T;
+  from: <T = UserPromise>() => T;
+  text: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface MessageSubscription
+  extends Promise<AsyncIterator<Message>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  to: <T = GroupSubscription>() => T;
+  from: <T = UserSubscription>() => T;
+  text: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface ProvinceConnection {}
+
+export interface ProvinceConnectionPromise
+  extends Promise<ProvinceConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ProvinceEdge>>() => T;
+  aggregate: <T = AggregateProvincePromise>() => T;
+}
+
+export interface ProvinceConnectionSubscription
+  extends Promise<AsyncIterator<ProvinceConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ProvinceEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateProvinceSubscription>() => T;
+}
+
+export interface PersonSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface PersonSubscriptionPayloadPromise
+  extends Promise<PersonSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = PersonPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = PersonPreviousValuesPromise>() => T;
+}
+
+export interface PersonSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<PersonSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = PersonSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = PersonPreviousValuesSubscription>() => T;
+}
+
+export interface AggregatePerson {
+  count: Int;
+}
+
+export interface AggregatePersonPromise
+  extends Promise<AggregatePerson>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregatePersonSubscription
+  extends Promise<AsyncIterator<AggregatePerson>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface PersonPreviousValues {
+  id: ID_Output;
+  name: String;
+}
+
+export interface PersonPreviousValuesPromise
+  extends Promise<PersonPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface PersonPreviousValuesSubscription
+  extends Promise<AsyncIterator<PersonPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface OldColleagueEdge {
+  cursor: String;
+}
+
+export interface OldColleagueEdgePromise
+  extends Promise<OldColleagueEdge>,
+    Fragmentable {
+  node: <T = OldColleaguePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface OldColleagueEdgeSubscription
+  extends Promise<AsyncIterator<OldColleagueEdge>>,
+    Fragmentable {
+  node: <T = OldColleagueSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface Colleague {
+  id: ID_Output;
+  status: String;
+}
+
+export interface ColleaguePromise extends Promise<Colleague>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  worker: <T = UserPromise>() => T;
+  status: () => Promise<String>;
+  group: <T = WorkGroupPromise>() => T;
+}
+
+export interface ColleagueSubscription
+  extends Promise<AsyncIterator<Colleague>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  worker: <T = UserSubscription>() => T;
+  status: () => Promise<AsyncIterator<String>>;
+  group: <T = WorkGroupSubscription>() => T;
+}
+
+export interface MessageConnection {}
+
+export interface MessageConnectionPromise
+  extends Promise<MessageConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<MessageEdge>>() => T;
+  aggregate: <T = AggregateMessagePromise>() => T;
+}
+
+export interface MessageConnectionSubscription
+  extends Promise<AsyncIterator<MessageConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<MessageEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateMessageSubscription>() => T;
+}
+
+export interface PostSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface PostSubscriptionPayloadPromise
+  extends Promise<PostSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = PostPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = PostPreviousValuesPromise>() => T;
+}
+
+export interface PostSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<PostSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = PostSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = PostPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateLogs {
+  count: Int;
+}
+
+export interface AggregateLogsPromise
+  extends Promise<AggregateLogs>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateLogsSubscription
+  extends Promise<AsyncIterator<AggregateLogs>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface PostPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  isPublished: Boolean;
+  title: String;
+  content: String;
+}
+
+export interface PostPreviousValuesPromise
+  extends Promise<PostPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  isPublished: () => Promise<Boolean>;
+  title: () => Promise<String>;
+  content: () => Promise<String>;
+}
+
+export interface PostPreviousValuesSubscription
+  extends Promise<AsyncIterator<PostPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  isPublished: () => Promise<AsyncIterator<Boolean>>;
+  title: () => Promise<AsyncIterator<String>>;
+  content: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateLocation {
+  count: Int;
+}
+
+export interface AggregateLocationPromise
+  extends Promise<AggregateLocation>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateLocationSubscription
+  extends Promise<AsyncIterator<AggregateLocation>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface WorkGroup {
+  id: ID_Output;
+}
+
+export interface WorkGroupPromise extends Promise<WorkGroup>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  company: <T = CompanyPromise>() => T;
+  colleagues: <T = FragmentableArray<Colleague>>(
+    args?: {
+      where?: ColleagueWhereInput;
+      orderBy?: ColleagueOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  messages: <T = FragmentableArray<Message>>(
+    args?: {
+      where?: MessageWhereInput;
+      orderBy?: MessageOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface WorkGroupSubscription
+  extends Promise<AsyncIterator<WorkGroup>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  company: <T = CompanySubscription>() => T;
+  colleagues: <T = Promise<AsyncIterator<ColleagueSubscription>>>(
+    args?: {
+      where?: ColleagueWhereInput;
+      orderBy?: ColleagueOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  messages: <T = Promise<AsyncIterator<MessageSubscription>>>(
+    args?: {
+      where?: MessageWhereInput;
+      orderBy?: MessageOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface GroupEdge {
+  cursor: String;
+}
+
+export interface GroupEdgePromise extends Promise<GroupEdge>, Fragmentable {
+  node: <T = GroupPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface GroupEdgeSubscription
+  extends Promise<AsyncIterator<GroupEdge>>,
+    Fragmentable {
+  node: <T = GroupSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface ProvinceSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface ProvinceSubscriptionPayloadPromise
+  extends Promise<ProvinceSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = ProvincePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ProvincePreviousValuesPromise>() => T;
+}
+
+export interface ProvinceSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ProvinceSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ProvinceSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ProvincePreviousValuesSubscription>() => T;
+}
+
+export interface FamilyGroupConnection {}
+
+export interface FamilyGroupConnectionPromise
+  extends Promise<FamilyGroupConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<FamilyGroupEdge>>() => T;
+  aggregate: <T = AggregateFamilyGroupPromise>() => T;
+}
+
+export interface FamilyGroupConnectionSubscription
+  extends Promise<AsyncIterator<FamilyGroupConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<FamilyGroupEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateFamilyGroupSubscription>() => T;
+}
+
+export interface ProvincePreviousValues {
+  id: ID_Output;
+  code: String;
+  name: String;
+}
+
+export interface ProvincePreviousValuesPromise
+  extends Promise<ProvincePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  code: () => Promise<String>;
+  name: () => Promise<String>;
+}
+
+export interface ProvincePreviousValuesSubscription
+  extends Promise<AsyncIterator<ProvincePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  code: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateCompany {
+  count: Int;
+}
+
+export interface AggregateCompanyPromise
+  extends Promise<AggregateCompany>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCompanySubscription
+  extends Promise<AsyncIterator<AggregateCompany>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface Station {
   id: ID_Output;
   code?: String;
@@ -9758,100 +10466,98 @@ export interface StationSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface UserEdge {
+export interface CollegeEntranceExamEdge {
   cursor: String;
 }
 
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
+export interface CollegeEntranceExamEdgePromise
+  extends Promise<CollegeEntranceExamEdge>,
+    Fragmentable {
+  node: <T = CollegeEntranceExamPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
+export interface CollegeEntranceExamEdgeSubscription
+  extends Promise<AsyncIterator<CollegeEntranceExamEdge>>,
     Fragmentable {
-  node: <T = UserSubscription>() => T;
+  node: <T = CollegeEntranceExamSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface SchoolEduSubscriptionPayload {
+export interface RegStatusSubscriptionPayload {
   mutation: MutationType;
   updatedFields?: String[];
 }
 
-export interface SchoolEduSubscriptionPayloadPromise
-  extends Promise<SchoolEduSubscriptionPayload>,
+export interface RegStatusSubscriptionPayloadPromise
+  extends Promise<RegStatusSubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = SchoolEduPromise>() => T;
+  node: <T = RegStatusPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = SchoolEduPreviousValuesPromise>() => T;
+  previousValues: <T = RegStatusPreviousValuesPromise>() => T;
 }
 
-export interface SchoolEduSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<SchoolEduSubscriptionPayload>>,
+export interface RegStatusSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<RegStatusSubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = SchoolEduSubscription>() => T;
+  node: <T = RegStatusSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = SchoolEduPreviousValuesSubscription>() => T;
+  previousValues: <T = RegStatusPreviousValuesSubscription>() => T;
 }
 
-export interface AggregateStation {
+export interface ColleagueConnection {}
+
+export interface ColleagueConnectionPromise
+  extends Promise<ColleagueConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ColleagueEdge>>() => T;
+  aggregate: <T = AggregateColleaguePromise>() => T;
+}
+
+export interface ColleagueConnectionSubscription
+  extends Promise<AsyncIterator<ColleagueConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ColleagueEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateColleagueSubscription>() => T;
+}
+
+export interface RegStatusPreviousValues {
+  id: ID_Output;
+  education: Educationkind;
+}
+
+export interface RegStatusPreviousValuesPromise
+  extends Promise<RegStatusPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  education: () => Promise<Educationkind>;
+}
+
+export interface RegStatusPreviousValuesSubscription
+  extends Promise<AsyncIterator<RegStatusPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  education: () => Promise<AsyncIterator<Educationkind>>;
+}
+
+export interface AggregateClassGroup {
   count: Int;
 }
 
-export interface AggregateStationPromise
-  extends Promise<AggregateStation>,
+export interface AggregateClassGroupPromise
+  extends Promise<AggregateClassGroup>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateStationSubscription
-  extends Promise<AsyncIterator<AggregateStation>>,
+export interface AggregateClassGroupSubscription
+  extends Promise<AsyncIterator<AggregateClassGroup>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface SchoolEduPreviousValues {
-  id: ID_Output;
-  startTime?: DateTimeOutput;
-  grade?: Int;
-  className?: String;
-}
-
-export interface SchoolEduPreviousValuesPromise
-  extends Promise<SchoolEduPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  startTime: () => Promise<DateTimeOutput>;
-  grade: () => Promise<Int>;
-  className: () => Promise<String>;
-}
-
-export interface SchoolEduPreviousValuesSubscription
-  extends Promise<AsyncIterator<SchoolEduPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  startTime: () => Promise<AsyncIterator<DateTimeOutput>>;
-  grade: () => Promise<AsyncIterator<Int>>;
-  className: () => Promise<AsyncIterator<String>>;
-}
-
-export interface SchoolEdge {
-  cursor: String;
-}
-
-export interface SchoolEdgePromise extends Promise<SchoolEdge>, Fragmentable {
-  node: <T = SchoolPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface SchoolEdgeSubscription
-  extends Promise<AsyncIterator<SchoolEdge>>,
-    Fragmentable {
-  node: <T = SchoolSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface Work {
@@ -9886,99 +10592,101 @@ export interface WorkSubscription
   worker: <T = UserSubscription>() => T;
 }
 
-export interface ProvinceConnection {}
-
-export interface ProvinceConnectionPromise
-  extends Promise<ProvinceConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ProvinceEdge>>() => T;
-  aggregate: <T = AggregateProvincePromise>() => T;
+export interface WorkGroupEdge {
+  cursor: String;
 }
 
-export interface ProvinceConnectionSubscription
-  extends Promise<AsyncIterator<ProvinceConnection>>,
+export interface WorkGroupEdgePromise
+  extends Promise<WorkGroupEdge>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ProvinceEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateProvinceSubscription>() => T;
+  node: <T = WorkGroupPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface StationSubscriptionPayload {
+export interface WorkGroupEdgeSubscription
+  extends Promise<AsyncIterator<WorkGroupEdge>>,
+    Fragmentable {
+  node: <T = WorkGroupSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface SchoolSubscriptionPayload {
   mutation: MutationType;
   updatedFields?: String[];
 }
 
-export interface StationSubscriptionPayloadPromise
-  extends Promise<StationSubscriptionPayload>,
+export interface SchoolSubscriptionPayloadPromise
+  extends Promise<SchoolSubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = StationPromise>() => T;
+  node: <T = SchoolPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = StationPreviousValuesPromise>() => T;
+  previousValues: <T = SchoolPreviousValuesPromise>() => T;
 }
 
-export interface StationSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<StationSubscriptionPayload>>,
+export interface SchoolSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<SchoolSubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = StationSubscription>() => T;
+  node: <T = SchoolSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = StationPreviousValuesSubscription>() => T;
+  previousValues: <T = SchoolPreviousValuesSubscription>() => T;
 }
 
-export interface MessageEdge {
+export interface VillageConnection {}
+
+export interface VillageConnectionPromise
+  extends Promise<VillageConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<VillageEdge>>() => T;
+  aggregate: <T = AggregateVillagePromise>() => T;
+}
+
+export interface VillageConnectionSubscription
+  extends Promise<AsyncIterator<VillageConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<VillageEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateVillageSubscription>() => T;
+}
+
+export interface SchoolPreviousValues {
+  id: ID_Output;
+  name?: String;
+  kind?: Educationkind;
+}
+
+export interface SchoolPreviousValuesPromise
+  extends Promise<SchoolPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  kind: () => Promise<Educationkind>;
+}
+
+export interface SchoolPreviousValuesSubscription
+  extends Promise<AsyncIterator<SchoolPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  kind: () => Promise<AsyncIterator<Educationkind>>;
+}
+
+export interface StreetEdge {
   cursor: String;
 }
 
-export interface MessageEdgePromise extends Promise<MessageEdge>, Fragmentable {
-  node: <T = MessagePromise>() => T;
+export interface StreetEdgePromise extends Promise<StreetEdge>, Fragmentable {
+  node: <T = StreetPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface MessageEdgeSubscription
-  extends Promise<AsyncIterator<MessageEdge>>,
+export interface StreetEdgeSubscription
+  extends Promise<AsyncIterator<StreetEdge>>,
     Fragmentable {
-  node: <T = MessageSubscription>() => T;
+  node: <T = StreetSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface StationPreviousValues {
-  id: ID_Output;
-  code?: String;
-  name?: String;
-}
-
-export interface StationPreviousValuesPromise
-  extends Promise<StationPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  code: () => Promise<String>;
-  name: () => Promise<String>;
-}
-
-export interface StationPreviousValuesSubscription
-  extends Promise<AsyncIterator<StationPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  code: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface Logs {
-  createFamilyGroupTime?: DateTimeOutput;
-}
-
-export interface LogsPromise extends Promise<Logs>, Fragmentable {
-  user: <T = UserPromise>() => T;
-  createFamilyGroupTime: () => Promise<DateTimeOutput>;
-}
-
-export interface LogsSubscription
-  extends Promise<AsyncIterator<Logs>>,
-    Fragmentable {
-  user: <T = UserSubscription>() => T;
-  createFamilyGroupTime: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface Company {
@@ -10036,22 +10744,260 @@ export interface CompanySubscription
   workGroup: <T = WorkGroupSubscription>() => T;
 }
 
-export interface FamilyGroupEdge {
+export interface SchoolEduConnection {}
+
+export interface SchoolEduConnectionPromise
+  extends Promise<SchoolEduConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SchoolEduEdge>>() => T;
+  aggregate: <T = AggregateSchoolEduPromise>() => T;
+}
+
+export interface SchoolEduConnectionSubscription
+  extends Promise<AsyncIterator<SchoolEduConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<SchoolEduEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateSchoolEduSubscription>() => T;
+}
+
+export interface SchoolEduSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface SchoolEduSubscriptionPayloadPromise
+  extends Promise<SchoolEduSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = SchoolEduPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = SchoolEduPreviousValuesPromise>() => T;
+}
+
+export interface SchoolEduSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<SchoolEduSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = SchoolEduSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = SchoolEduPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateProvince {
+  count: Int;
+}
+
+export interface AggregateProvincePromise
+  extends Promise<AggregateProvince>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateProvinceSubscription
+  extends Promise<AsyncIterator<AggregateProvince>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface SchoolEduPreviousValues {
+  id: ID_Output;
+  startTime?: DateTimeOutput;
+  grade?: Int;
+  className?: String;
+}
+
+export interface SchoolEduPreviousValuesPromise
+  extends Promise<SchoolEduPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  startTime: () => Promise<DateTimeOutput>;
+  grade: () => Promise<Int>;
+  className: () => Promise<String>;
+}
+
+export interface SchoolEduPreviousValuesSubscription
+  extends Promise<AsyncIterator<SchoolEduPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  startTime: () => Promise<AsyncIterator<DateTimeOutput>>;
+  grade: () => Promise<AsyncIterator<Int>>;
+  className: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PersonConnection {}
+
+export interface PersonConnectionPromise
+  extends Promise<PersonConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<PersonEdge>>() => T;
+  aggregate: <T = AggregatePersonPromise>() => T;
+}
+
+export interface PersonConnectionSubscription
+  extends Promise<AsyncIterator<PersonConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<PersonEdgeSubscription>>>() => T;
+  aggregate: <T = AggregatePersonSubscription>() => T;
+}
+
+export interface WorkSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface WorkSubscriptionPayloadPromise
+  extends Promise<WorkSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = WorkPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = WorkPreviousValuesPromise>() => T;
+}
+
+export interface WorkSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<WorkSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = WorkSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = WorkPreviousValuesSubscription>() => T;
+}
+
+export interface MajorEdge {
   cursor: String;
 }
 
-export interface FamilyGroupEdgePromise
-  extends Promise<FamilyGroupEdge>,
-    Fragmentable {
-  node: <T = FamilyGroupPromise>() => T;
+export interface MajorEdgePromise extends Promise<MajorEdge>, Fragmentable {
+  node: <T = MajorPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface FamilyGroupEdgeSubscription
-  extends Promise<AsyncIterator<FamilyGroupEdge>>,
+export interface MajorEdgeSubscription
+  extends Promise<AsyncIterator<MajorEdge>>,
     Fragmentable {
-  node: <T = FamilyGroupSubscription>() => T;
+  node: <T = MajorSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface StationSubscriptionPayload {
+  mutation: MutationType;
+  updatedFields?: String[];
+}
+
+export interface StationSubscriptionPayloadPromise
+  extends Promise<StationSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = StationPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = StationPreviousValuesPromise>() => T;
+}
+
+export interface StationSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<StationSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = StationSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = StationPreviousValuesSubscription>() => T;
+}
+
+export interface LocationConnection {}
+
+export interface LocationConnectionPromise
+  extends Promise<LocationConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<LocationEdge>>() => T;
+  aggregate: <T = AggregateLocationPromise>() => T;
+}
+
+export interface LocationConnectionSubscription
+  extends Promise<AsyncIterator<LocationConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<LocationEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateLocationSubscription>() => T;
+}
+
+export interface StationPreviousValues {
+  id: ID_Output;
+  code?: String;
+  name?: String;
+}
+
+export interface StationPreviousValuesPromise
+  extends Promise<StationPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  code: () => Promise<String>;
+  name: () => Promise<String>;
+}
+
+export interface StationPreviousValuesSubscription
+  extends Promise<AsyncIterator<StationPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  code: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface FamilyEdge {
+  cursor: String;
+}
+
+export interface FamilyEdgePromise extends Promise<FamilyEdge>, Fragmentable {
+  node: <T = FamilyPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface FamilyEdgeSubscription
+  extends Promise<AsyncIterator<FamilyEdge>>,
+    Fragmentable {
+  node: <T = FamilySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface School {
+  id: ID_Output;
+  name?: String;
+  kind?: Educationkind;
+}
+
+export interface SchoolPromise extends Promise<School>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  kind: () => Promise<Educationkind>;
+  location: <T = LocationPromise>() => T;
+}
+
+export interface SchoolSubscription
+  extends Promise<AsyncIterator<School>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  kind: () => Promise<AsyncIterator<Educationkind>>;
+  location: <T = LocationSubscription>() => T;
+}
+
+export interface AggregateColleague {
+  count: Int;
+}
+
+export interface AggregateColleaguePromise
+  extends Promise<AggregateColleague>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateColleagueSubscription
+  extends Promise<AsyncIterator<AggregateColleague>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface StreetSubscriptionPayload {
@@ -10077,20 +11023,22 @@ export interface StreetSubscriptionPayloadSubscription
   previousValues: <T = StreetPreviousValuesSubscription>() => T;
 }
 
-export interface AggregateCollegeEntranceExam {
-  count: Int;
+export interface ClassGroupConnection {}
+
+export interface ClassGroupConnectionPromise
+  extends Promise<ClassGroupConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ClassGroupEdge>>() => T;
+  aggregate: <T = AggregateClassGroupPromise>() => T;
 }
 
-export interface AggregateCollegeEntranceExamPromise
-  extends Promise<AggregateCollegeEntranceExam>,
+export interface ClassGroupConnectionSubscription
+  extends Promise<AsyncIterator<ClassGroupConnection>>,
     Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateCollegeEntranceExamSubscription
-  extends Promise<AsyncIterator<AggregateCollegeEntranceExam>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ClassGroupEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateClassGroupSubscription>() => T;
 }
 
 export interface StreetPreviousValues {
@@ -10115,88 +11063,129 @@ export interface StreetPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface Village {
-  id: ID_Output;
-  code: String;
-  name: String;
+export interface AggregateUniversity {
+  count: Int;
 }
 
-export interface VillagePromise extends Promise<Village>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  code: () => Promise<String>;
-  name: () => Promise<String>;
-  street: <T = StreetPromise>() => T;
-  people: <T = FragmentableArray<User>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-}
-
-export interface VillageSubscription
-  extends Promise<AsyncIterator<Village>>,
+export interface AggregateUniversityPromise
+  extends Promise<AggregateUniversity>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  code: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
-  street: <T = StreetSubscription>() => T;
-  people: <T = Promise<AsyncIterator<UserSubscription>>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  count: () => Promise<Int>;
 }
 
-export interface School {
+export interface AggregateUniversitySubscription
+  extends Promise<AsyncIterator<AggregateUniversity>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface Location {
   id: ID_Output;
   name?: String;
-  kind?: Educationkind;
 }
 
-export interface SchoolPromise extends Promise<School>, Fragmentable {
+export interface LocationPromise extends Promise<Location>, Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
-  kind: () => Promise<Educationkind>;
-  location: <T = LocationPromise>() => T;
+  province: <T = ProvincePromise>() => T;
+  city: <T = CityPromise>() => T;
+  area: <T = AreaPromise>() => T;
+  street: <T = StreetPromise>() => T;
+  village: <T = VillagePromise>() => T;
+  schools: <T = FragmentableArray<School>>(
+    args?: {
+      where?: SchoolWhereInput;
+      orderBy?: SchoolOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  companies: <T = FragmentableArray<Company>>(
+    args?: {
+      where?: CompanyWhereInput;
+      orderBy?: CompanyOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  universities: <T = FragmentableArray<University>>(
+    args?: {
+      where?: UniversityWhereInput;
+      orderBy?: UniversityOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
-export interface SchoolSubscription
-  extends Promise<AsyncIterator<School>>,
+export interface LocationSubscription
+  extends Promise<AsyncIterator<Location>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
-  kind: () => Promise<AsyncIterator<Educationkind>>;
-  location: <T = LocationSubscription>() => T;
+  province: <T = ProvinceSubscription>() => T;
+  city: <T = CitySubscription>() => T;
+  area: <T = AreaSubscription>() => T;
+  street: <T = StreetSubscription>() => T;
+  village: <T = VillageSubscription>() => T;
+  schools: <T = Promise<AsyncIterator<SchoolSubscription>>>(
+    args?: {
+      where?: SchoolWhereInput;
+      orderBy?: SchoolOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  companies: <T = Promise<AsyncIterator<CompanySubscription>>>(
+    args?: {
+      where?: CompanyWhereInput;
+      orderBy?: CompanyOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  universities: <T = Promise<AsyncIterator<UniversitySubscription>>>(
+    args?: {
+      where?: UniversityWhereInput;
+      orderBy?: UniversityOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
-export interface UniversityConnection {}
-
-export interface UniversityConnectionPromise
-  extends Promise<UniversityConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UniversityEdge>>() => T;
-  aggregate: <T = AggregateUniversityPromise>() => T;
+export interface AggregateRegStatus {
+  count: Int;
 }
 
-export interface UniversityConnectionSubscription
-  extends Promise<AsyncIterator<UniversityConnection>>,
+export interface AggregateRegStatusPromise
+  extends Promise<AggregateRegStatus>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UniversityEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUniversitySubscription>() => T;
+  count: () => Promise<Int>;
+}
+
+export interface AggregateRegStatusSubscription
+  extends Promise<AsyncIterator<AggregateRegStatus>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface UniversitySubscriptionPayload {
@@ -10222,22 +11211,20 @@ export interface UniversitySubscriptionPayloadSubscription
   previousValues: <T = UniversityPreviousValuesSubscription>() => T;
 }
 
-export interface RegStatusConnection {}
-
-export interface RegStatusConnectionPromise
-  extends Promise<RegStatusConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<RegStatusEdge>>() => T;
-  aggregate: <T = AggregateRegStatusPromise>() => T;
+export interface AggregateMessage {
+  count: Int;
 }
 
-export interface RegStatusConnectionSubscription
-  extends Promise<AsyncIterator<RegStatusConnection>>,
+export interface AggregateMessagePromise
+  extends Promise<AggregateMessage>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<RegStatusEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateRegStatusSubscription>() => T;
+  count: () => Promise<Int>;
+}
+
+export interface AggregateMessageSubscription
+  extends Promise<AsyncIterator<AggregateMessage>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface UniversityPreviousValues {
@@ -10271,22 +11258,20 @@ export interface UniversityPreviousValuesSubscription
   desc: () => Promise<AsyncIterator<String>>;
 }
 
-export interface MajorConnection {}
-
-export interface MajorConnectionPromise
-  extends Promise<MajorConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<MajorEdge>>() => T;
-  aggregate: <T = AggregateMajorPromise>() => T;
+export interface AggregateFamilyGroup {
+  count: Int;
 }
 
-export interface MajorConnectionSubscription
-  extends Promise<AsyncIterator<MajorConnection>>,
+export interface AggregateFamilyGroupPromise
+  extends Promise<AggregateFamilyGroup>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<MajorEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateMajorSubscription>() => T;
+  count: () => Promise<Int>;
+}
+
+export interface AggregateFamilyGroupSubscription
+  extends Promise<AsyncIterator<AggregateFamilyGroup>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface User {
@@ -10415,6 +11400,39 @@ export interface UserPromise extends Promise<User>, Fragmentable {
     }
   ) => T;
   workGroup: <T = WorkGroupPromise>() => T;
+  colleagues: <T = FragmentableArray<Colleague>>(
+    args?: {
+      where?: ColleagueWhereInput;
+      orderBy?: ColleagueOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  fromOldColleagues: <T = FragmentableArray<OldColleague>>(
+    args?: {
+      where?: OldColleagueWhereInput;
+      orderBy?: OldColleagueOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  toOldColleagues: <T = FragmentableArray<OldColleague>>(
+    args?: {
+      where?: OldColleagueWhereInput;
+      orderBy?: OldColleagueOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
 export interface UserSubscription
@@ -10528,40 +11546,75 @@ export interface UserSubscription
     }
   ) => T;
   workGroup: <T = WorkGroupSubscription>() => T;
+  colleagues: <T = Promise<AsyncIterator<ColleagueSubscription>>>(
+    args?: {
+      where?: ColleagueWhereInput;
+      orderBy?: ColleagueOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  fromOldColleagues: <T = Promise<AsyncIterator<OldColleagueSubscription>>>(
+    args?: {
+      where?: OldColleagueWhereInput;
+      orderBy?: OldColleagueOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  toOldColleagues: <T = Promise<AsyncIterator<OldColleagueSubscription>>>(
+    args?: {
+      where?: OldColleagueWhereInput;
+      orderBy?: OldColleagueOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
-export interface FamilyConnection {}
+export interface ClassMateEdge {
+  cursor: String;
+}
 
-export interface FamilyConnectionPromise
-  extends Promise<FamilyConnection>,
+export interface ClassMateEdgePromise
+  extends Promise<ClassMateEdge>,
+    Fragmentable {
+  node: <T = ClassMatePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ClassMateEdgeSubscription
+  extends Promise<AsyncIterator<ClassMateEdge>>,
+    Fragmentable {
+  node: <T = ClassMateSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface StationConnection {}
+
+export interface StationConnectionPromise
+  extends Promise<StationConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<FamilyEdge>>() => T;
-  aggregate: <T = AggregateFamilyPromise>() => T;
+  edges: <T = FragmentableArray<StationEdge>>() => T;
+  aggregate: <T = AggregateStationPromise>() => T;
 }
 
-export interface FamilyConnectionSubscription
-  extends Promise<AsyncIterator<FamilyConnection>>,
+export interface StationConnectionSubscription
+  extends Promise<AsyncIterator<StationConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<FamilyEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateFamilySubscription>() => T;
-}
-
-export interface AggregateVillage {
-  count: Int;
-}
-
-export interface AggregateVillagePromise
-  extends Promise<AggregateVillage>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateVillageSubscription
-  extends Promise<AsyncIterator<AggregateVillage>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  edges: <T = Promise<AsyncIterator<StationEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateStationSubscription>() => T;
 }
 
 export interface VillageSubscriptionPayload {
@@ -10587,45 +11640,21 @@ export interface VillageSubscriptionPayloadSubscription
   previousValues: <T = VillagePreviousValuesSubscription>() => T;
 }
 
-export interface Location {
+export interface Village {
   id: ID_Output;
-  name?: String;
+  code: String;
+  name: String;
 }
 
-export interface LocationPromise extends Promise<Location>, Fragmentable {
+export interface VillagePromise extends Promise<Village>, Fragmentable {
   id: () => Promise<ID_Output>;
+  code: () => Promise<String>;
   name: () => Promise<String>;
-  province: <T = ProvincePromise>() => T;
-  city: <T = CityPromise>() => T;
-  area: <T = AreaPromise>() => T;
   street: <T = StreetPromise>() => T;
-  village: <T = VillagePromise>() => T;
-  schools: <T = FragmentableArray<School>>(
+  people: <T = FragmentableArray<User>>(
     args?: {
-      where?: SchoolWhereInput;
-      orderBy?: SchoolOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  companies: <T = FragmentableArray<Company>>(
-    args?: {
-      where?: CompanyWhereInput;
-      orderBy?: CompanyOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  universities: <T = FragmentableArray<University>>(
-    args?: {
-      where?: UniversityWhereInput;
-      orderBy?: UniversityOrderByInput;
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
@@ -10635,42 +11664,17 @@ export interface LocationPromise extends Promise<Location>, Fragmentable {
   ) => T;
 }
 
-export interface LocationSubscription
-  extends Promise<AsyncIterator<Location>>,
+export interface VillageSubscription
+  extends Promise<AsyncIterator<Village>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  code: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
-  province: <T = ProvinceSubscription>() => T;
-  city: <T = CitySubscription>() => T;
-  area: <T = AreaSubscription>() => T;
   street: <T = StreetSubscription>() => T;
-  village: <T = VillageSubscription>() => T;
-  schools: <T = Promise<AsyncIterator<SchoolSubscription>>>(
+  people: <T = Promise<AsyncIterator<UserSubscription>>>(
     args?: {
-      where?: SchoolWhereInput;
-      orderBy?: SchoolOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  companies: <T = Promise<AsyncIterator<CompanySubscription>>>(
-    args?: {
-      where?: CompanyWhereInput;
-      orderBy?: CompanyOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  universities: <T = Promise<AsyncIterator<UniversitySubscription>>>(
-    args?: {
-      where?: UniversityWhereInput;
-      orderBy?: UniversityOrderByInput;
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
@@ -10758,83 +11762,80 @@ export interface UserSubscriptionPayloadSubscription
   previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
-export interface AggregateSchoolEdu {
-  count: Int;
-}
-
-export interface AggregateSchoolEduPromise
-  extends Promise<AggregateSchoolEdu>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateSchoolEduSubscription
-  extends Promise<AsyncIterator<AggregateSchoolEdu>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface ClassMateEdge {
+export interface PostEdge {
   cursor: String;
 }
 
-export interface ClassMateEdgePromise
-  extends Promise<ClassMateEdge>,
-    Fragmentable {
-  node: <T = ClassMatePromise>() => T;
+export interface PostEdgePromise extends Promise<PostEdge>, Fragmentable {
+  node: <T = PostPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface ClassMateEdgeSubscription
-  extends Promise<AsyncIterator<ClassMateEdge>>,
+export interface PostEdgeSubscription
+  extends Promise<AsyncIterator<PostEdge>>,
     Fragmentable {
-  node: <T = ClassMateSubscription>() => T;
+  node: <T = PostSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateGroup {
-  count: Int;
+export interface WorkEdge {
+  cursor: String;
 }
 
-export interface AggregateGroupPromise
-  extends Promise<AggregateGroup>,
+export interface WorkEdgePromise extends Promise<WorkEdge>, Fragmentable {
+  node: <T = WorkPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface WorkEdgeSubscription
+  extends Promise<AsyncIterator<WorkEdge>>,
     Fragmentable {
-  count: () => Promise<Int>;
+  node: <T = WorkSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateGroupSubscription
-  extends Promise<AsyncIterator<AggregateGroup>>,
+export interface CompanyConnection {}
+
+export interface CompanyConnectionPromise
+  extends Promise<CompanyConnection>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<CompanyEdge>>() => T;
+  aggregate: <T = AggregateCompanyPromise>() => T;
 }
 
-export interface AggregatePerson {
-  count: Int;
-}
-
-export interface AggregatePersonPromise
-  extends Promise<AggregatePerson>,
+export interface CompanyConnectionSubscription
+  extends Promise<AsyncIterator<CompanyConnection>>,
     Fragmentable {
-  count: () => Promise<Int>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<CompanyEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateCompanySubscription>() => T;
 }
 
-export interface AggregatePersonSubscription
-  extends Promise<AsyncIterator<AggregatePerson>>,
+export interface LogsConnection {}
+
+export interface LogsConnectionPromise
+  extends Promise<LogsConnection>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<LogsEdge>>() => T;
+  aggregate: <T = AggregateLogsPromise>() => T;
 }
 
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
-*/
-export type Int = number;
-
-export type Long = string;
+export interface LogsConnectionSubscription
+  extends Promise<AsyncIterator<LogsConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<LogsEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateLogsSubscription>() => T;
+}
 
 /*
 The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
 */
 export type Float = number;
+
+export type Long = string;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -10862,6 +11863,11 @@ The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
 
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+*/
+export type Int = number;
+
 /**
  * Model Metadata
  */
@@ -10881,6 +11887,10 @@ export const models = [
   },
   {
     name: "ClassMate",
+    embedded: false
+  },
+  {
+    name: "Colleague",
     embedded: false
   },
   {
@@ -10925,6 +11935,10 @@ export const models = [
   },
   {
     name: "Message",
+    embedded: false
+  },
+  {
+    name: "OldColleague",
     embedded: false
   },
   {

@@ -21,6 +21,10 @@ var models = [
     embedded: false
   },
   {
+    name: "Colleague",
+    embedded: false
+  },
+  {
     name: "CollegeEntranceExam",
     embedded: false
   },
@@ -62,6 +66,10 @@ var models = [
   },
   {
     name: "Message",
+    embedded: false
+  },
+  {
+    name: "OldColleague",
     embedded: false
   },
   {

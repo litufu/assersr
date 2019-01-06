@@ -33,7 +33,16 @@ import {
   relationshipGenderMap,
   relationshipTOGender,
 } from "../services/relationship"
-import { FAMILY_CHANGED, FAMILYGROUP_CHANGED,CLASSGROUP_CHANGED } from './Subscription'
+import { 
+  FAMILY_CHANGED, 
+  FAMILYGROUP_CHANGED,
+  CLASSGROUP_CHANGED,
+  WORKGROUP_CHANGED,
+  STUDENTS_ADDED,
+  COLLEAGUES_ADDED,
+  MYOLDCOLLEAGUES_CHANGED,
+  WORKS_CHANGED
+ } from './Subscription'
 import { pubsub } from '../subscriptions';
 import { fee } from '../services/settings'
 
@@ -157,21 +166,21 @@ export const Mutation = {
     })
     // 添加location group
 
-    const villages = await ctx.db.villages({ where: { code: birthplace.village } })
-    const groups = await ctx.db.groups({ where: { type: 'Location', typeId: villages[0].id } })
-    if (groups.length > 0) {
-      await ctx.db.updateGroup({
-        where: { id: groups[0].id },
-        data: { users: { connect: { uid: userId } } }
-      })
-    } else {
-      await ctx.db.createGroup({
-        type: 'Location',
-        typeId: villages[0].id,
-        name: villages[0].name,
-        users: { connect: { uid: userId } }
-      })
-    }
+    // const villages = await ctx.db.villages({ where: { code: birthplace.village } })
+    // const groups = await ctx.db.groups({ where: { type: 'FellowTownsman', typeId: villages[0].id } })
+    // if (groups.length > 0) {
+    //   await ctx.db.updateGroup({
+    //     where: { id: groups[0].id },
+    //     data: { users: { connect: { uid: userId } } }
+    //   })
+    // } else {
+    //   await ctx.db.createGroup({
+    //     type: 'FellowTownsman',
+    //     typeId: villages[0].id,
+    //     name: villages[0].name,
+    //     users: { connect: { uid: userId } }
+    //   })
+    // }
 
     return updateUser
   },
@@ -746,6 +755,7 @@ export const Mutation = {
     // 获取学校地址
     const startTime = `${year}-9-1`
     let schoolEdus
+    let newSchoolEdu
     if (majorId === "") {
       schoolEdus = await ctx.db.schoolEdus({
         where: {
@@ -759,56 +769,59 @@ export const Mutation = {
       })
 
       if (schoolEdus.length === 0) {
-        const res0 = await ctx.db.createSchoolEdu({
+        newSchoolEdu = await ctx.db.createSchoolEdu({
           startTime,
           grade,
           className,
           school: { connect: { id: schoolId } },
           students: { connect: { uid: userId } }
         })
-        return res0
+        
+      }else{
+        newSchoolEdu = await ctx.db.updateSchoolEdu(
+          {
+            where: { id: schoolEdus[0].id },
+            data: { students: { connect: { uid: userId } } }
+          }
+        )
       }
-
-      const res1 = await ctx.db.updateSchoolEdu(
-        {
-          where: { id: schoolEdus[0].id },
-          data: { students: { connect: { uid: userId } } }
+    }else{
+      schoolEdus = await ctx.db.schoolEdus({
+        where: {
+          AND: [
+            { startTime },
+            { grade },
+            { className },
+            { school: { id: schoolId } },
+            { major: { id: majorId } }
+          ]
         }
-      )
-      return res1
-    }
-
-    schoolEdus = await ctx.db.schoolEdus({
-      where: {
-        AND: [
-          { startTime },
-          { grade },
-          { className },
-          { school: { id: schoolId } },
-          { major: { id: majorId } }
-        ]
-      }
-    })
-
-    if (schoolEdus.length === 0) {
-      const res2 = await ctx.db.createSchoolEdu({
-        startTime,
-        grade,
-        className,
-        school: { connect: { id: schoolId } },
-        major: { connect: { id: majorId } },
-        students: { connect: { uid: userId } }
       })
-      return res2
-    }
-
-    const res3 = await ctx.db.updateSchoolEdu(
-      {
-        where: { id: schoolEdus[0].id },
-        data: { students: { connect: { uid: userId } } }
+  
+      if (schoolEdus.length === 0) {
+        newSchoolEdu = await ctx.db.createSchoolEdu({
+          startTime,
+          grade,
+          className,
+          school: { connect: { id: schoolId } },
+          major: { connect: { id: majorId } },
+          students: { connect: { uid: userId } }
+        })
+      }else{
+        newSchoolEdu = await ctx.db.updateSchoolEdu(
+          {
+            where: { id: schoolEdus[0].id },
+            data: { students: { connect: { uid: userId } } }
+          }
+        )
       }
-    )
-    return res3
+    }
+    // 向所有同学推送
+    const students = await ctx.db.schoolEdu({id:newSchoolEdu.id}).students()
+    for (const student of students){
+      pubsub.publish(STUDENTS_ADDED, { [STUDENTS_ADDED]: { "text": student.id } })
+    }
+    return newSchoolEdu
   },
 
   addOrUpdateWork: async (parent, { companyName, startTime, endTime, department, stationId,updateId }, ctx) => {
@@ -830,6 +843,9 @@ export const Mutation = {
     checkId(stationId)
     // -----------------------------------------------
     const companies = await ctx.db.companies({ where: { name: companyName } })
+    let companyId
+    let createdWork
+   
     // 如果要是更新的话
     if(updateId){
       const work = await ctx.db.work({id:updateId})
@@ -841,7 +857,7 @@ export const Mutation = {
         if(companies.length===0){
           throw new Error('无法修改公司名称')
         }
-        return ctx.db.updateWork({
+        const updateWork = await ctx.db.updateWork({
           where:{id:updateId},
           data:{
             startTime,
@@ -850,28 +866,137 @@ export const Mutation = {
             post:{connect:{id:stationId}},
           }
         })
+        // 如果同事离职了，更新同事，更新组，则从workGroup中删除该成员，同时在oldColleagues中增加成员。
+        // 从组中将成员状态为1的成员复制到oldColleagues当中
+        if(new Date(endTime).getFullYear()!==9999){
+          const workGroups = await ctx.db.workGroups({
+            where: {
+              AND: [
+                { company: { id: companies[0].id } },
+                {
+                  colleagues_some: {
+                    AND: [
+                      { worker: { id: user.id } },
+                      { status: '1' }
+                    ]
+                  }
+                }
+              ]
+            }
+          })
+          if(workGroups.length>0){
+            const workGroupWorColleagues = await ctx.db.workGroup({
+              id:workGroups[0].id
+            }).colleagues()
+            for(const colleague of workGroupWorColleagues){
+              const oldworker = await ctx.db.colleague({id:colleague.id}).worker()
+               await ctx.db.createOldColleague({
+                from:{connect:{id:user.id}},
+                to:{connect:{id:oldworker.id}},
+                status:'3',
+                company:{connect:{id:companies[0].id}}
+              })
+              
+              await ctx.db.createOldColleague({
+                from:{connect:{id:oldworker.id}},
+                to:{connect:{id:user.id}},
+                status:'3',
+                company:{connect:{id:companies[0].id}}
+              })
+              pubsub.publish(MYOLDCOLLEAGUES_CHANGED, { [MYOLDCOLLEAGUES_CHANGED]: { "text": oldworker.id } })
+            }
+          }
+          // 从所有的组中删除成员
+          const allWorkGroups = await ctx.db.workGroups({
+            where: {
+              AND: [
+                { company: { id: companies[0].id } },
+                {
+                  colleagues_some: {
+                    AND: [
+                      { worker: { id: user.id } },
+                    ]
+                  }
+                }
+              ]
+            }
+          })
+          
+          for(const workGroup of allWorkGroups){
+            const userColleagues = await ctx.db.colleagues({
+              where:{
+                AND:[
+                  {worker:{id:user.id}},
+                  {group:{id:workGroup.id}}
+                ]
+              }
+            }) 
+            await ctx.db.updateWorkGroup({
+              where:{id:workGroup.id},
+              data:{colleagues:{delete:{id:userColleagues[0].id}}}
+            })
+            const colleagues = await ctx.db.workGroup({id:workGroup.id}).colleagues()
+            for(const colleague of colleagues){
+              const publishWorker = await ctx.db.colleague({id:colleague.id}).worker()
+              if(publishWorker.id!==user.id){
+                pubsub.publish(WORKGROUP_CHANGED, { [WORKGROUP_CHANGED]: { "text": publishWorker.id } })
+              }
+            }
+          }
+        }
+        pubsub.publish(WORKS_CHANGED, { [WORKS_CHANGED]: { "text": user.id } })
+        return updateWork
       }
       throw new Error('未找到对应要更新的工作')
     }
-    // 获取要输入的数据。 
+    // 如果公司已经存在 
     if (companies.length > 0) {
-      return ctx.db.createWork({
+      companyId = companies[0].id
+      createdWork = await ctx.db.createWork({
         startTime,
         endTime,
         department,
         post:{connect:{id:stationId}},
-        company: { connect: { id: companies[0].id } },
+        company: { connect: { id: companyId } },
         worker: { connect: { uid: userId } }
       })
+      
+    }else{
+    // 如果公司不存在
+      createdWork = await ctx.db.createWork({
+        startTime,
+        endTime,
+        department,
+        post:{connect:{id:stationId}},
+        company: { create: { name: companyName } },
+        worker: { connect: { uid: userId } }
+      })
+      const company = await ctx.db.work({id:createdWork.id}).company()
+      companyId = company.id
     }
-    return ctx.db.createWork({
-      startTime,
-      endTime,
-      department,
-      post:{connect:{id:stationId}},
-      company: { create: { name: companyName } },
-      worker: { connect: { uid: userId } }
+
+     // 对于刚刚创建的工作，查找所有同时间工作的人
+     const works = await ctx.db.works({
+      where:{
+        AND:[
+          {OR:[
+          {startTime_gte:(new Date(startTime))},
+          {endTime_lte:(new Date(endTime))},
+        ]},
+          {company:{id:companyId.id}},
+        ]
+      }
     })
+    
+      for(const work of works){
+        // 向所有的人推送通知，重新获取数据
+        const worker = await ctx.db.work({id:work.id}).worker()
+        pubsub.publish(COLLEAGUES_ADDED, { [COLLEAGUES_ADDED]: { "text": worker.id } })
+      }
+    
+    pubsub.publish(WORKS_CHANGED, { [WORKS_CHANGED]: { "text": user.id } })
+    
+    return createdWork
   },
 
   addExamBasicInfo: async (parent, { province, section, score, specialScore, examineeCardNumber }, ctx) => {
@@ -1469,6 +1594,341 @@ export const Mutation = {
       pubsub.publish(CLASSGROUP_CHANGED, { [CLASSGROUP_CHANGED]: { "text": student.id } })
     }
     return myClassGroups[0]
+  },
+
+  addWorkGroup: async (parent, { companyId, workerId }, ctx) => {
+    // 权限验证
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    // -----------------------------------------------
+    // 输入数据验证
+
+    // 检查wokerId是否已经有组,如果有组则把请求者加入得到已有的组中
+    const workGroups = await ctx.db.workGroups({
+      where: {
+        AND: [
+          { company: { id: companyId } },
+          {
+            colleagues_some: {
+              AND: [
+                { worker: { id: workerId } },
+                { status: '1' }
+              ]
+            }
+          }
+        ]
+      }
+    })
+
+    if (workGroups.length > 0) {
+      // 检查我是否已经在组里了，如果在了，不能重复添加
+      const meColleagues = await ctx.db.colleagues({
+        where: {
+          AND: [
+            { worker: { id: user.id } },
+            { group: { id: workGroups[0].id } }
+          ]
+        }
+      })
+      if (meColleagues.length > 0) {
+        throw new Error('你已经提起过申请，无法重复提请')
+      }
+      // 如果我没有在组里，则更新group,将我添加进去
+      const updated = await ctx.db.updateWorkGroup({
+        where: { id: workGroups[0].id },
+        data: { colleagues: { create: { status: '0', worker: { connect: { id: user.id } } } } }
+      })
+      const colleagues = await ctx.db.workGroup({id:updated.id}).colleagues()
+      for(const colleague of colleagues){
+        const worker = await ctx.db.colleague({id:colleague.id}).worker()
+        if(worker.id!==user.id){
+          pubsub.publish(WORKGROUP_CHANGED, { [WORKGROUP_CHANGED]: { "text": worker.id } })
+        }
+      }
+      
+      return updated
+    }
+    // 如果workId没有组，则workId新建一个组，并且把user加入到组中
+    // -----------------------------------------------
+    const created = await ctx.db.createWorkGroup({
+      company: { connect: { id: companyId } },
+      colleagues: {
+        create: [
+          { status: "1", worker: { connect: { id: workerId } } },
+          { status: "0", worker: { connect: { id: user.id } } },
+        ]
+      }
+    })
+    pubsub.publish(WORKGROUP_CHANGED, { [WORKGROUP_CHANGED]: { "text": workerId } })
+    return created
+  },
+  confirmWorkGroup: async (parent, { companyId, workerId }, ctx) => {
+    // 权限验证
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    // -----------------------------------------------
+    // 输入数据验证
+
+    // 检查workerId是否已经有组,如果有组则把请求者加入得到已有的组中
+    const workerGroups = await ctx.db.workGroups({
+      where: {
+        AND: [
+          { company: { id: companyId } },
+          {
+            colleagues_some: {
+              AND: [
+                { worker: { id: workerId } },
+                { status: '1' }
+              ]
+            }
+          }
+        ]
+      }
+    })
+    const myWorkGroups = await ctx.db.workGroups({
+      where: {
+        AND: [
+          { company: { id: companyId } },
+          {
+            colleagues_some: {
+              AND: [
+                { worker: { id: user.id } },
+                { status: '1' }
+              ]
+            }
+          }
+        ]
+      }
+    })
+    // 检查worker是否是我的组成员
+    const InMyGroupWorkers = await ctx.db.workGroup(
+      { id: myWorkGroups[0].id }
+    ).colleagues({ where: { worker: { id: workerId } } })
+    if (InMyGroupWorkers.length === 0) {
+      throw new Error('搞错了，你还不在这个组里')
+    }
+    const myWorkGroupColleagues = await ctx.db.workGroup(
+      { id: myWorkGroups[0].id }
+    ).colleagues()
+
+    // 如果worker也有组,且和我不是一个组，则合并我和stuent的组。
+    if (workerGroups.length > 0 && workerGroups[0].id!==myWorkGroups[0].id) {
+      const workerGroupsColleagues = await ctx.db.workGroup({
+        id: workerGroups[0].id
+      }).colleagues()
+      // 合并到成员多的组中
+      if (workerGroupsColleagues.length >= myWorkGroupColleagues.length) {
+        for (const colleague of myWorkGroupColleagues) {
+          // 检查colleague是否已经在wokerGroup中
+          const colleagueWorker = await ctx.db.colleague({
+            id: colleague.id
+          }).worker()
+          const inWorkerGroupColleagues = await ctx.db.colleagues({
+            where: {
+              AND: [
+                { worker: { id: colleagueWorker.id } },
+                { group: { id: workerGroups[0].id } }
+              ]
+            }
+          })
+          if (inWorkerGroupColleagues.length > 0) {
+            if (colleague.status !== inWorkerGroupColleagues[0].status) {
+              await ctx.db.updateColleague({
+                where: { id: inWorkerGroupColleagues[0].id },
+                data: {
+                  status: '1',
+                  group: { connect: { id: workerGroups[0].id } }
+                }
+              })
+            }
+            await ctx.db.deleteColleague({
+              id: colleague.id
+            })
+          } else {
+            await ctx.db.updateColleague({
+              where: { id: colleague.id },
+              data: { group: { connect: { id: workerGroups[0].id } } }
+            })
+          }
+
+        }
+        // 删除成员少的组
+        await ctx.db.deleteWorkGroup({
+          id: myWorkGroups[0].id
+        })
+
+        const colleagues = await ctx.db.workGroup({id:workerGroups[0].id}).colleagues()
+        for(const colleague of colleagues){
+          const worker = await ctx.db.colleague({id:colleague.id}).worker()
+          pubsub.publish(WORKGROUP_CHANGED, { [WORKGROUP_CHANGED]: { "text": worker.id } })
+        }
+
+        return workerGroups[0]
+      }
+      for (const colleague of workerGroupsColleagues) {
+        // 检查colleague是否已经在MyWorkGroup中
+        const colleagueWorker = await ctx.db.colleague({
+          id: colleague.id
+        }).worker()
+        const inMyWorkGroupColleagues = await ctx.db.colleagues({
+          where: {
+            AND: [
+              { worker: { id: colleagueWorker.id } },
+              { group: { id: myWorkGroups[0].id } }
+            ]
+          }
+        })
+        if (inMyWorkGroupColleagues.length > 0) {
+          if (colleague.status !== inMyWorkGroupColleagues[0].status) {
+            await ctx.db.updateColleague({
+              where: { id: inMyWorkGroupColleagues[0].id },
+              data: {
+                status: '1',
+                group: { connect: { id: myWorkGroups[0].id } }
+              }
+            })
+          }
+          await ctx.db.deleteColleague({
+            id: colleague.id
+          })
+        } else {
+          await ctx.db.updateColleague({
+            where: { id: colleague.id },
+            data: { group: { connect: { id: myWorkGroups[0].id } } }
+          })
+        }
+      }
+
+      // 删除成员少的组
+      await ctx.db.deleteWorkGroup({
+        id: workerGroups[0].id
+      })
+
+      const colleagues = await ctx.db.workGroup({id:myWorkGroups[0].id}).colleagues()
+      for(const colleague of colleagues){
+        const worker = await ctx.db.colleague({id:colleague.id}).worker()
+        pubsub.publish(WORKGROUP_CHANGED, { [WORKGROUP_CHANGED]: { "text": worker.id } })
+      }
+      return myWorkGroups[0]
+    }
+    // 如果worker还没有组，则直接合并到我的组中，并更新状态
+    const workerColleauges = await ctx.db.colleagues({
+      where: {
+        AND: [
+          { worker: { id: workerId } },
+          { group: { id: myWorkGroups[0].id } }
+        ]
+      }
+    })
+    await ctx.db.updateColleague({
+      where: { id: workerColleauges[0].id },
+      data: { status: '1' }
+    })
+    const colleagues = await ctx.db.workGroup({id:myWorkGroups[0].id}).colleagues()
+    for(const colleague of colleagues){
+      const worker = await ctx.db.colleague({id:colleague.id}).worker()
+      pubsub.publish(WORKGROUP_CHANGED, { [WORKGROUP_CHANGED]: { "text": worker.id } })
+    }
+    return myWorkGroups[0]
+  },
+
+  addOldColleague:async (parent, { companyId, workerId}, ctx) => {
+    // 权限验证
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    // -----------------------------------------------
+    // 输入数据验证
+    checkId(companyId)
+    checkId(workerId)
+
+    const myOldColleague = await ctx.db.createOldColleague({
+      from:{connect:{id:user.id}},
+      to:{connect:{id:workerId}},
+      status:'1',
+      company:{connect:{id:companyId}}
+    })
+
+    await ctx.db.createOldColleague({
+      from:{connect:{id:workerId}},
+      to:{connect:{id:user.id}},
+      status:'2',
+      company:{connect:{id:companyId}}
+    })
+    pubsub.publish(MYOLDCOLLEAGUES_CHANGED, { [MYOLDCOLLEAGUES_CHANGED]: { "text": workerId } })
+
+    return myOldColleague
+  },
+
+  confirmOldColleague:async (parent, { companyId, workerId}, ctx) => {
+    // 权限验证
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    // -----------------------------------------------
+    // 输入数据验证
+    checkId(companyId)
+    checkId(workerId)
+    // -----------------------------------------------
+    const myOldColleagues = await ctx.db.oldColleagues({
+      where:{
+        AND:[
+          {from:{id:user.id}},
+          {to:{id:workerId}},
+          {company:{id:companyId}},
+        ]
+      }
+    })
+
+    const oldColleagueTomes = await ctx.db.oldColleagues({
+      where:{
+        AND:[
+          {from:{id:workerId}},
+          {to:{id:user.id}},
+          {company:{id:companyId}},
+        ]
+      }
+    })
+
+    if(oldColleagueTomes.length>0){
+      await ctx.db.updateOldColleague({
+        where:{id:oldColleagueTomes[0].id},
+        data:{status:'3'},
+      })
+      pubsub.publish(MYOLDCOLLEAGUES_CHANGED, { [MYOLDCOLLEAGUES_CHANGED]: { "text": workerId } })
+  }
+
+    if(myOldColleagues.length>0){
+      const updatemyOldColleague = await ctx.db.updateOldColleague({
+        where:{id:myOldColleagues[0].id},
+        data:{status:'3'},
+      })
+      return updatemyOldColleague
+    }
+
+    throw new Error('无法更改同事信息')
   },
 
 

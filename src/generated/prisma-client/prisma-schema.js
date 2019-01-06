@@ -15,6 +15,10 @@ type AggregateClassMate {
   count: Int!
 }
 
+type AggregateColleague {
+  count: Int!
+}
+
 type AggregateCollegeEntranceExam {
   count: Int!
 }
@@ -48,6 +52,10 @@ type AggregateMajor {
 }
 
 type AggregateMessage {
+  count: Int!
+}
+
+type AggregateOldColleague {
   count: Int!
 }
 
@@ -878,6 +886,184 @@ input ClassMateWhereUniqueInput {
   id: ID
 }
 
+type Colleague {
+  id: ID!
+  worker: User
+  status: String!
+  group: WorkGroup
+}
+
+type ColleagueConnection {
+  pageInfo: PageInfo!
+  edges: [ColleagueEdge]!
+  aggregate: AggregateColleague!
+}
+
+input ColleagueCreateInput {
+  worker: UserCreateOneWithoutColleaguesInput
+  status: String!
+  group: WorkGroupCreateOneWithoutColleaguesInput
+}
+
+input ColleagueCreateManyWithoutGroupInput {
+  create: [ColleagueCreateWithoutGroupInput!]
+  connect: [ColleagueWhereUniqueInput!]
+}
+
+input ColleagueCreateManyWithoutWorkerInput {
+  create: [ColleagueCreateWithoutWorkerInput!]
+  connect: [ColleagueWhereUniqueInput!]
+}
+
+input ColleagueCreateWithoutGroupInput {
+  worker: UserCreateOneWithoutColleaguesInput
+  status: String!
+}
+
+input ColleagueCreateWithoutWorkerInput {
+  status: String!
+  group: WorkGroupCreateOneWithoutColleaguesInput
+}
+
+type ColleagueEdge {
+  node: Colleague!
+  cursor: String!
+}
+
+enum ColleagueOrderByInput {
+  id_ASC
+  id_DESC
+  status_ASC
+  status_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ColleaguePreviousValues {
+  id: ID!
+  status: String!
+}
+
+type ColleagueSubscriptionPayload {
+  mutation: MutationType!
+  node: Colleague
+  updatedFields: [String!]
+  previousValues: ColleaguePreviousValues
+}
+
+input ColleagueSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ColleagueWhereInput
+  AND: [ColleagueSubscriptionWhereInput!]
+  OR: [ColleagueSubscriptionWhereInput!]
+  NOT: [ColleagueSubscriptionWhereInput!]
+}
+
+input ColleagueUpdateInput {
+  worker: UserUpdateOneWithoutColleaguesInput
+  status: String
+  group: WorkGroupUpdateOneWithoutColleaguesInput
+}
+
+input ColleagueUpdateManyMutationInput {
+  status: String
+}
+
+input ColleagueUpdateManyWithoutGroupInput {
+  create: [ColleagueCreateWithoutGroupInput!]
+  delete: [ColleagueWhereUniqueInput!]
+  connect: [ColleagueWhereUniqueInput!]
+  disconnect: [ColleagueWhereUniqueInput!]
+  update: [ColleagueUpdateWithWhereUniqueWithoutGroupInput!]
+  upsert: [ColleagueUpsertWithWhereUniqueWithoutGroupInput!]
+}
+
+input ColleagueUpdateManyWithoutWorkerInput {
+  create: [ColleagueCreateWithoutWorkerInput!]
+  delete: [ColleagueWhereUniqueInput!]
+  connect: [ColleagueWhereUniqueInput!]
+  disconnect: [ColleagueWhereUniqueInput!]
+  update: [ColleagueUpdateWithWhereUniqueWithoutWorkerInput!]
+  upsert: [ColleagueUpsertWithWhereUniqueWithoutWorkerInput!]
+}
+
+input ColleagueUpdateWithoutGroupDataInput {
+  worker: UserUpdateOneWithoutColleaguesInput
+  status: String
+}
+
+input ColleagueUpdateWithoutWorkerDataInput {
+  status: String
+  group: WorkGroupUpdateOneWithoutColleaguesInput
+}
+
+input ColleagueUpdateWithWhereUniqueWithoutGroupInput {
+  where: ColleagueWhereUniqueInput!
+  data: ColleagueUpdateWithoutGroupDataInput!
+}
+
+input ColleagueUpdateWithWhereUniqueWithoutWorkerInput {
+  where: ColleagueWhereUniqueInput!
+  data: ColleagueUpdateWithoutWorkerDataInput!
+}
+
+input ColleagueUpsertWithWhereUniqueWithoutGroupInput {
+  where: ColleagueWhereUniqueInput!
+  update: ColleagueUpdateWithoutGroupDataInput!
+  create: ColleagueCreateWithoutGroupInput!
+}
+
+input ColleagueUpsertWithWhereUniqueWithoutWorkerInput {
+  where: ColleagueWhereUniqueInput!
+  update: ColleagueUpdateWithoutWorkerDataInput!
+  create: ColleagueCreateWithoutWorkerInput!
+}
+
+input ColleagueWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  worker: UserWhereInput
+  status: String
+  status_not: String
+  status_in: [String!]
+  status_not_in: [String!]
+  status_lt: String
+  status_lte: String
+  status_gt: String
+  status_gte: String
+  status_contains: String
+  status_not_contains: String
+  status_starts_with: String
+  status_not_starts_with: String
+  status_ends_with: String
+  status_not_ends_with: String
+  group: WorkGroupWhereInput
+  AND: [ColleagueWhereInput!]
+  OR: [ColleagueWhereInput!]
+  NOT: [ColleagueWhereInput!]
+}
+
+input ColleagueWhereUniqueInput {
+  id: ID
+}
+
 type CollegeEntranceExam {
   id: ID!
   province: Province!
@@ -1124,6 +1310,11 @@ input CompanyCreateManyWithoutLocationInput {
   connect: [CompanyWhereUniqueInput!]
 }
 
+input CompanyCreateOneInput {
+  create: CompanyCreateInput
+  connect: CompanyWhereUniqueInput
+}
+
 input CompanyCreateOneWithoutWorkGroupInput {
   create: CompanyCreateWithoutWorkGroupInput
   connect: CompanyWhereUniqueInput
@@ -1215,6 +1406,17 @@ input CompanySubscriptionWhereInput {
   NOT: [CompanySubscriptionWhereInput!]
 }
 
+input CompanyUpdateDataInput {
+  name: String
+  code: String
+  establishmentDate: DateTime
+  representative: String
+  location: LocationUpdateOneWithoutCompaniesInput
+  BusinessScope: String
+  works: WorkUpdateManyWithoutCompanyInput
+  workGroup: WorkGroupUpdateOneWithoutCompanyInput
+}
+
 input CompanyUpdateInput {
   name: String
   code: String
@@ -1241,6 +1443,15 @@ input CompanyUpdateManyWithoutLocationInput {
   disconnect: [CompanyWhereUniqueInput!]
   update: [CompanyUpdateWithWhereUniqueWithoutLocationInput!]
   upsert: [CompanyUpsertWithWhereUniqueWithoutLocationInput!]
+}
+
+input CompanyUpdateOneInput {
+  create: CompanyCreateInput
+  update: CompanyUpdateDataInput
+  upsert: CompanyUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: CompanyWhereUniqueInput
 }
 
 input CompanyUpdateOneWithoutWorkGroupInput {
@@ -1294,6 +1505,11 @@ input CompanyUpdateWithoutWorksDataInput {
 input CompanyUpdateWithWhereUniqueWithoutLocationInput {
   where: CompanyWhereUniqueInput!
   data: CompanyUpdateWithoutLocationDataInput!
+}
+
+input CompanyUpsertNestedInput {
+  update: CompanyUpdateDataInput!
+  create: CompanyCreateInput!
 }
 
 input CompanyUpsertWithoutWorkGroupInput {
@@ -1980,7 +2196,6 @@ input FamilyWhereUniqueInput {
 type Group {
   id: ID!
   type: GroupKind
-  typeId: String
   name: String
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
@@ -1994,7 +2209,6 @@ type GroupConnection {
 
 input GroupCreateInput {
   type: GroupKind
-  typeId: String
   name: String
   users: UserCreateManyWithoutGroupsInput
   messages: MessageCreateManyWithoutToInput
@@ -2012,14 +2226,12 @@ input GroupCreateOneWithoutMessagesInput {
 
 input GroupCreateWithoutMessagesInput {
   type: GroupKind
-  typeId: String
   name: String
   users: UserCreateManyWithoutGroupsInput
 }
 
 input GroupCreateWithoutUsersInput {
   type: GroupKind
-  typeId: String
   name: String
   messages: MessageCreateManyWithoutToInput
 }
@@ -2030,9 +2242,13 @@ type GroupEdge {
 }
 
 enum GroupKind {
-  Location
-  Student
-  Work
+  Family
+  ClassMate
+  Colleague
+  FellowTownsman
+  SameCity
+  SameOccupation
+  SameDisease
 }
 
 enum GroupOrderByInput {
@@ -2040,8 +2256,6 @@ enum GroupOrderByInput {
   id_DESC
   type_ASC
   type_DESC
-  typeId_ASC
-  typeId_DESC
   name_ASC
   name_DESC
   createdAt_ASC
@@ -2053,7 +2267,6 @@ enum GroupOrderByInput {
 type GroupPreviousValues {
   id: ID!
   type: GroupKind
-  typeId: String
   name: String
 }
 
@@ -2077,7 +2290,6 @@ input GroupSubscriptionWhereInput {
 
 input GroupUpdateInput {
   type: GroupKind
-  typeId: String
   name: String
   users: UserUpdateManyWithoutGroupsInput
   messages: MessageUpdateManyWithoutToInput
@@ -2085,7 +2297,6 @@ input GroupUpdateInput {
 
 input GroupUpdateManyMutationInput {
   type: GroupKind
-  typeId: String
   name: String
 }
 
@@ -2107,14 +2318,12 @@ input GroupUpdateOneRequiredWithoutMessagesInput {
 
 input GroupUpdateWithoutMessagesDataInput {
   type: GroupKind
-  typeId: String
   name: String
   users: UserUpdateManyWithoutGroupsInput
 }
 
 input GroupUpdateWithoutUsersDataInput {
   type: GroupKind
-  typeId: String
   name: String
   messages: MessageUpdateManyWithoutToInput
 }
@@ -2154,20 +2363,6 @@ input GroupWhereInput {
   type_not: GroupKind
   type_in: [GroupKind!]
   type_not_in: [GroupKind!]
-  typeId: String
-  typeId_not: String
-  typeId_in: [String!]
-  typeId_not_in: [String!]
-  typeId_lt: String
-  typeId_lte: String
-  typeId_gt: String
-  typeId_gte: String
-  typeId_contains: String
-  typeId_not_contains: String
-  typeId_starts_with: String
-  typeId_not_starts_with: String
-  typeId_ends_with: String
-  typeId_not_ends_with: String
   name: String
   name_not: String
   name_in: [String!]
@@ -2932,6 +3127,12 @@ type Mutation {
   upsertClassMate(where: ClassMateWhereUniqueInput!, create: ClassMateCreateInput!, update: ClassMateUpdateInput!): ClassMate!
   deleteClassMate(where: ClassMateWhereUniqueInput!): ClassMate
   deleteManyClassMates(where: ClassMateWhereInput): BatchPayload!
+  createColleague(data: ColleagueCreateInput!): Colleague!
+  updateColleague(data: ColleagueUpdateInput!, where: ColleagueWhereUniqueInput!): Colleague
+  updateManyColleagues(data: ColleagueUpdateManyMutationInput!, where: ColleagueWhereInput): BatchPayload!
+  upsertColleague(where: ColleagueWhereUniqueInput!, create: ColleagueCreateInput!, update: ColleagueUpdateInput!): Colleague!
+  deleteColleague(where: ColleagueWhereUniqueInput!): Colleague
+  deleteManyColleagues(where: ColleagueWhereInput): BatchPayload!
   createCollegeEntranceExam(data: CollegeEntranceExamCreateInput!): CollegeEntranceExam!
   updateCollegeEntranceExam(data: CollegeEntranceExamUpdateInput!, where: CollegeEntranceExamWhereUniqueInput!): CollegeEntranceExam
   updateManyCollegeEntranceExams(data: CollegeEntranceExamUpdateManyMutationInput!, where: CollegeEntranceExamWhereInput): BatchPayload!
@@ -2983,6 +3184,12 @@ type Mutation {
   upsertMessage(where: MessageWhereUniqueInput!, create: MessageCreateInput!, update: MessageUpdateInput!): Message!
   deleteMessage(where: MessageWhereUniqueInput!): Message
   deleteManyMessages(where: MessageWhereInput): BatchPayload!
+  createOldColleague(data: OldColleagueCreateInput!): OldColleague!
+  updateOldColleague(data: OldColleagueUpdateInput!, where: OldColleagueWhereUniqueInput!): OldColleague
+  updateManyOldColleagues(data: OldColleagueUpdateManyMutationInput!, where: OldColleagueWhereInput): BatchPayload!
+  upsertOldColleague(where: OldColleagueWhereUniqueInput!, create: OldColleagueCreateInput!, update: OldColleagueUpdateInput!): OldColleague!
+  deleteOldColleague(where: OldColleagueWhereUniqueInput!): OldColleague
+  deleteManyOldColleagues(where: OldColleagueWhereInput): BatchPayload!
   createPerson(data: PersonCreateInput!): Person!
   updatePerson(data: PersonUpdateInput!, where: PersonWhereUniqueInput!): Person
   updateManyPersons(data: PersonUpdateManyMutationInput!, where: PersonWhereInput): BatchPayload!
@@ -3070,6 +3277,192 @@ enum MutationType {
 
 interface Node {
   id: ID!
+}
+
+type OldColleague {
+  id: ID!
+  from: User
+  to: User
+  company: Company
+  status: String!
+}
+
+type OldColleagueConnection {
+  pageInfo: PageInfo!
+  edges: [OldColleagueEdge]!
+  aggregate: AggregateOldColleague!
+}
+
+input OldColleagueCreateInput {
+  from: UserCreateOneWithoutFromOldColleaguesInput
+  to: UserCreateOneWithoutToOldColleaguesInput
+  company: CompanyCreateOneInput
+  status: String!
+}
+
+input OldColleagueCreateManyWithoutFromInput {
+  create: [OldColleagueCreateWithoutFromInput!]
+  connect: [OldColleagueWhereUniqueInput!]
+}
+
+input OldColleagueCreateManyWithoutToInput {
+  create: [OldColleagueCreateWithoutToInput!]
+  connect: [OldColleagueWhereUniqueInput!]
+}
+
+input OldColleagueCreateWithoutFromInput {
+  to: UserCreateOneWithoutToOldColleaguesInput
+  company: CompanyCreateOneInput
+  status: String!
+}
+
+input OldColleagueCreateWithoutToInput {
+  from: UserCreateOneWithoutFromOldColleaguesInput
+  company: CompanyCreateOneInput
+  status: String!
+}
+
+type OldColleagueEdge {
+  node: OldColleague!
+  cursor: String!
+}
+
+enum OldColleagueOrderByInput {
+  id_ASC
+  id_DESC
+  status_ASC
+  status_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type OldColleaguePreviousValues {
+  id: ID!
+  status: String!
+}
+
+type OldColleagueSubscriptionPayload {
+  mutation: MutationType!
+  node: OldColleague
+  updatedFields: [String!]
+  previousValues: OldColleaguePreviousValues
+}
+
+input OldColleagueSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: OldColleagueWhereInput
+  AND: [OldColleagueSubscriptionWhereInput!]
+  OR: [OldColleagueSubscriptionWhereInput!]
+  NOT: [OldColleagueSubscriptionWhereInput!]
+}
+
+input OldColleagueUpdateInput {
+  from: UserUpdateOneWithoutFromOldColleaguesInput
+  to: UserUpdateOneWithoutToOldColleaguesInput
+  company: CompanyUpdateOneInput
+  status: String
+}
+
+input OldColleagueUpdateManyMutationInput {
+  status: String
+}
+
+input OldColleagueUpdateManyWithoutFromInput {
+  create: [OldColleagueCreateWithoutFromInput!]
+  delete: [OldColleagueWhereUniqueInput!]
+  connect: [OldColleagueWhereUniqueInput!]
+  disconnect: [OldColleagueWhereUniqueInput!]
+  update: [OldColleagueUpdateWithWhereUniqueWithoutFromInput!]
+  upsert: [OldColleagueUpsertWithWhereUniqueWithoutFromInput!]
+}
+
+input OldColleagueUpdateManyWithoutToInput {
+  create: [OldColleagueCreateWithoutToInput!]
+  delete: [OldColleagueWhereUniqueInput!]
+  connect: [OldColleagueWhereUniqueInput!]
+  disconnect: [OldColleagueWhereUniqueInput!]
+  update: [OldColleagueUpdateWithWhereUniqueWithoutToInput!]
+  upsert: [OldColleagueUpsertWithWhereUniqueWithoutToInput!]
+}
+
+input OldColleagueUpdateWithoutFromDataInput {
+  to: UserUpdateOneWithoutToOldColleaguesInput
+  company: CompanyUpdateOneInput
+  status: String
+}
+
+input OldColleagueUpdateWithoutToDataInput {
+  from: UserUpdateOneWithoutFromOldColleaguesInput
+  company: CompanyUpdateOneInput
+  status: String
+}
+
+input OldColleagueUpdateWithWhereUniqueWithoutFromInput {
+  where: OldColleagueWhereUniqueInput!
+  data: OldColleagueUpdateWithoutFromDataInput!
+}
+
+input OldColleagueUpdateWithWhereUniqueWithoutToInput {
+  where: OldColleagueWhereUniqueInput!
+  data: OldColleagueUpdateWithoutToDataInput!
+}
+
+input OldColleagueUpsertWithWhereUniqueWithoutFromInput {
+  where: OldColleagueWhereUniqueInput!
+  update: OldColleagueUpdateWithoutFromDataInput!
+  create: OldColleagueCreateWithoutFromInput!
+}
+
+input OldColleagueUpsertWithWhereUniqueWithoutToInput {
+  where: OldColleagueWhereUniqueInput!
+  update: OldColleagueUpdateWithoutToDataInput!
+  create: OldColleagueCreateWithoutToInput!
+}
+
+input OldColleagueWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  from: UserWhereInput
+  to: UserWhereInput
+  company: CompanyWhereInput
+  status: String
+  status_not: String
+  status_in: [String!]
+  status_not_in: [String!]
+  status_lt: String
+  status_lte: String
+  status_gt: String
+  status_gte: String
+  status_contains: String
+  status_not_contains: String
+  status_starts_with: String
+  status_not_starts_with: String
+  status_ends_with: String
+  status_not_ends_with: String
+  AND: [OldColleagueWhereInput!]
+  OR: [OldColleagueWhereInput!]
+  NOT: [OldColleagueWhereInput!]
+}
+
+input OldColleagueWhereUniqueInput {
+  id: ID
 }
 
 type PageInfo {
@@ -3690,6 +4083,9 @@ type Query {
   classMate(where: ClassMateWhereUniqueInput!): ClassMate
   classMates(where: ClassMateWhereInput, orderBy: ClassMateOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ClassMate]!
   classMatesConnection(where: ClassMateWhereInput, orderBy: ClassMateOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClassMateConnection!
+  colleague(where: ColleagueWhereUniqueInput!): Colleague
+  colleagues(where: ColleagueWhereInput, orderBy: ColleagueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Colleague]!
+  colleaguesConnection(where: ColleagueWhereInput, orderBy: ColleagueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ColleagueConnection!
   collegeEntranceExam(where: CollegeEntranceExamWhereUniqueInput!): CollegeEntranceExam
   collegeEntranceExams(where: CollegeEntranceExamWhereInput, orderBy: CollegeEntranceExamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CollegeEntranceExam]!
   collegeEntranceExamsConnection(where: CollegeEntranceExamWhereInput, orderBy: CollegeEntranceExamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CollegeEntranceExamConnection!
@@ -3716,6 +4112,9 @@ type Query {
   message(where: MessageWhereUniqueInput!): Message
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message]!
   messagesConnection(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MessageConnection!
+  oldColleague(where: OldColleagueWhereUniqueInput!): OldColleague
+  oldColleagues(where: OldColleagueWhereInput, orderBy: OldColleagueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [OldColleague]!
+  oldColleaguesConnection(where: OldColleagueWhereInput, orderBy: OldColleagueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): OldColleagueConnection!
   person(where: PersonWhereUniqueInput!): Person
   persons(where: PersonWhereInput, orderBy: PersonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Person]!
   personsConnection(where: PersonWhereInput, orderBy: PersonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PersonConnection!
@@ -4657,6 +5056,7 @@ type Subscription {
   city(where: CitySubscriptionWhereInput): CitySubscriptionPayload
   classGroup(where: ClassGroupSubscriptionWhereInput): ClassGroupSubscriptionPayload
   classMate(where: ClassMateSubscriptionWhereInput): ClassMateSubscriptionPayload
+  colleague(where: ColleagueSubscriptionWhereInput): ColleagueSubscriptionPayload
   collegeEntranceExam(where: CollegeEntranceExamSubscriptionWhereInput): CollegeEntranceExamSubscriptionPayload
   company(where: CompanySubscriptionWhereInput): CompanySubscriptionPayload
   family(where: FamilySubscriptionWhereInput): FamilySubscriptionPayload
@@ -4666,6 +5066,7 @@ type Subscription {
   logs(where: LogsSubscriptionWhereInput): LogsSubscriptionPayload
   major(where: MajorSubscriptionWhereInput): MajorSubscriptionPayload
   message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
+  oldColleague(where: OldColleagueSubscriptionWhereInput): OldColleagueSubscriptionPayload
   person(where: PersonSubscriptionWhereInput): PersonSubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   province(where: ProvinceSubscriptionWhereInput): ProvinceSubscriptionPayload
@@ -4937,6 +5338,9 @@ type User {
   creater: FamilyGroup
   classMate(where: ClassMateWhereInput, orderBy: ClassMateOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ClassMate!]
   workGroup: WorkGroup
+  colleagues(where: ColleagueWhereInput, orderBy: ColleagueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Colleague!]
+  fromOldColleagues(where: OldColleagueWhereInput, orderBy: OldColleagueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [OldColleague!]
+  toOldColleagues(where: OldColleagueWhereInput, orderBy: OldColleagueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [OldColleague!]
 }
 
 type UserConnection {
@@ -4970,7 +5374,10 @@ input UserCreateInput {
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
   classMate: ClassMateCreateManyWithoutStudentInput
-  workGroup: WorkGroupCreateOneWithoutWokersInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
 }
 
 input UserCreateManyInput {
@@ -4998,11 +5405,6 @@ input UserCreateManyWithoutStudiesInput {
   connect: [UserWhereUniqueInput!]
 }
 
-input UserCreateManyWithoutWorkGroupInput {
-  create: [UserCreateWithoutWorkGroupInput!]
-  connect: [UserWhereUniqueInput!]
-}
-
 input UserCreateOneInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
@@ -5010,6 +5412,11 @@ input UserCreateOneInput {
 
 input UserCreateOneWithoutClassMateInput {
   create: UserCreateWithoutClassMateInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutColleaguesInput {
+  create: UserCreateWithoutColleaguesInput
   connect: UserWhereUniqueInput
 }
 
@@ -5028,6 +5435,11 @@ input UserCreateOneWithoutFamiliesInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutFromOldColleaguesInput {
+  create: UserCreateWithoutFromOldColleaguesInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutMessagesInput {
   create: UserCreateWithoutMessagesInput
   connect: UserWhereUniqueInput
@@ -5035,6 +5447,11 @@ input UserCreateOneWithoutMessagesInput {
 
 input UserCreateOneWithoutPostsInput {
   create: UserCreateWithoutPostsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutToOldColleaguesInput {
+  create: UserCreateWithoutToOldColleaguesInput
   connect: UserWhereUniqueInput
 }
 
@@ -5067,7 +5484,40 @@ input UserCreateWithoutClassMateInput {
   friends: UserCreateManyInput
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
-  workGroup: WorkGroupCreateOneWithoutWokersInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+}
+
+input UserCreateWithoutColleaguesInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  messages: MessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
 }
 
 input UserCreateWithoutCreaterInput {
@@ -5094,7 +5544,10 @@ input UserCreateWithoutCreaterInput {
   friends: UserCreateManyInput
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   classMate: ClassMateCreateManyWithoutStudentInput
-  workGroup: WorkGroupCreateOneWithoutWokersInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
 }
 
 input UserCreateWithoutExamInput {
@@ -5121,7 +5574,10 @@ input UserCreateWithoutExamInput {
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
   classMate: ClassMateCreateManyWithoutStudentInput
-  workGroup: WorkGroupCreateOneWithoutWokersInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
 }
 
 input UserCreateWithoutFamiliesInput {
@@ -5148,7 +5604,10 @@ input UserCreateWithoutFamiliesInput {
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
   classMate: ClassMateCreateManyWithoutStudentInput
-  workGroup: WorkGroupCreateOneWithoutWokersInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
 }
 
 input UserCreateWithoutFamilyGroupInput {
@@ -5175,7 +5634,40 @@ input UserCreateWithoutFamilyGroupInput {
   friends: UserCreateManyInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
   classMate: ClassMateCreateManyWithoutStudentInput
-  workGroup: WorkGroupCreateOneWithoutWokersInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+}
+
+input UserCreateWithoutFromOldColleaguesInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  messages: MessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
 }
 
 input UserCreateWithoutGroupsInput {
@@ -5202,7 +5694,10 @@ input UserCreateWithoutGroupsInput {
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
   classMate: ClassMateCreateManyWithoutStudentInput
-  workGroup: WorkGroupCreateOneWithoutWokersInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
 }
 
 input UserCreateWithoutMessagesInput {
@@ -5229,7 +5724,10 @@ input UserCreateWithoutMessagesInput {
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
   classMate: ClassMateCreateManyWithoutStudentInput
-  workGroup: WorkGroupCreateOneWithoutWokersInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
 }
 
 input UserCreateWithoutPostsInput {
@@ -5256,7 +5754,10 @@ input UserCreateWithoutPostsInput {
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
   classMate: ClassMateCreateManyWithoutStudentInput
-  workGroup: WorkGroupCreateOneWithoutWokersInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
 }
 
 input UserCreateWithoutRegStatusInput {
@@ -5283,7 +5784,10 @@ input UserCreateWithoutRegStatusInput {
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
   classMate: ClassMateCreateManyWithoutStudentInput
-  workGroup: WorkGroupCreateOneWithoutWokersInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
 }
 
 input UserCreateWithoutStudiesInput {
@@ -5310,10 +5814,13 @@ input UserCreateWithoutStudiesInput {
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
   classMate: ClassMateCreateManyWithoutStudentInput
-  workGroup: WorkGroupCreateOneWithoutWokersInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
 }
 
-input UserCreateWithoutWorkGroupInput {
+input UserCreateWithoutToOldColleaguesInput {
   username: String!
   password: String!
   name: String
@@ -5338,6 +5845,9 @@ input UserCreateWithoutWorkGroupInput {
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
   classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
 }
 
 input UserCreateWithoutWorksInput {
@@ -5364,7 +5874,10 @@ input UserCreateWithoutWorksInput {
   familyGroup: FamilyGroupCreateOneWithoutUsersInput
   creater: FamilyGroupCreateOneWithoutCreaterInput
   classMate: ClassMateCreateManyWithoutStudentInput
-  workGroup: WorkGroupCreateOneWithoutWokersInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
 }
 
 type UserEdge {
@@ -5463,7 +5976,10 @@ input UserUpdateDataInput {
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
   classMate: ClassMateUpdateManyWithoutStudentInput
-  workGroup: WorkGroupUpdateOneWithoutWokersInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
 }
 
 input UserUpdateInput {
@@ -5491,7 +6007,10 @@ input UserUpdateInput {
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
   classMate: ClassMateUpdateManyWithoutStudentInput
-  workGroup: WorkGroupUpdateOneWithoutWokersInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
 }
 
 input UserUpdateManyInput {
@@ -5553,15 +6072,6 @@ input UserUpdateManyWithoutStudiesInput {
   upsert: [UserUpsertWithWhereUniqueWithoutStudiesInput!]
 }
 
-input UserUpdateManyWithoutWorkGroupInput {
-  create: [UserCreateWithoutWorkGroupInput!]
-  delete: [UserWhereUniqueInput!]
-  connect: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutWorkGroupInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutWorkGroupInput!]
-}
-
 input UserUpdateOneInput {
   create: UserCreateInput
   update: UserUpdateDataInput
@@ -5608,10 +6118,37 @@ input UserUpdateOneWithoutClassMateInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneWithoutColleaguesInput {
+  create: UserCreateWithoutColleaguesInput
+  update: UserUpdateWithoutColleaguesDataInput
+  upsert: UserUpsertWithoutColleaguesInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneWithoutCreaterInput {
   create: UserCreateWithoutCreaterInput
   update: UserUpdateWithoutCreaterDataInput
   upsert: UserUpsertWithoutCreaterInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneWithoutFromOldColleaguesInput {
+  create: UserCreateWithoutFromOldColleaguesInput
+  update: UserUpdateWithoutFromOldColleaguesDataInput
+  upsert: UserUpsertWithoutFromOldColleaguesInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneWithoutToOldColleaguesInput {
+  create: UserCreateWithoutToOldColleaguesInput
+  update: UserUpdateWithoutToOldColleaguesDataInput
+  upsert: UserUpsertWithoutToOldColleaguesInput
   delete: Boolean
   disconnect: Boolean
   connect: UserWhereUniqueInput
@@ -5650,7 +6187,40 @@ input UserUpdateWithoutClassMateDataInput {
   friends: UserUpdateManyInput
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
-  workGroup: WorkGroupUpdateOneWithoutWokersInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+}
+
+input UserUpdateWithoutColleaguesDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
 }
 
 input UserUpdateWithoutCreaterDataInput {
@@ -5677,7 +6247,10 @@ input UserUpdateWithoutCreaterDataInput {
   friends: UserUpdateManyInput
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   classMate: ClassMateUpdateManyWithoutStudentInput
-  workGroup: WorkGroupUpdateOneWithoutWokersInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
 }
 
 input UserUpdateWithoutExamDataInput {
@@ -5704,7 +6277,10 @@ input UserUpdateWithoutExamDataInput {
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
   classMate: ClassMateUpdateManyWithoutStudentInput
-  workGroup: WorkGroupUpdateOneWithoutWokersInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
 }
 
 input UserUpdateWithoutFamiliesDataInput {
@@ -5731,7 +6307,10 @@ input UserUpdateWithoutFamiliesDataInput {
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
   classMate: ClassMateUpdateManyWithoutStudentInput
-  workGroup: WorkGroupUpdateOneWithoutWokersInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
 }
 
 input UserUpdateWithoutFamilyGroupDataInput {
@@ -5758,7 +6337,40 @@ input UserUpdateWithoutFamilyGroupDataInput {
   friends: UserUpdateManyInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
   classMate: ClassMateUpdateManyWithoutStudentInput
-  workGroup: WorkGroupUpdateOneWithoutWokersInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+}
+
+input UserUpdateWithoutFromOldColleaguesDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
 }
 
 input UserUpdateWithoutGroupsDataInput {
@@ -5785,7 +6397,10 @@ input UserUpdateWithoutGroupsDataInput {
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
   classMate: ClassMateUpdateManyWithoutStudentInput
-  workGroup: WorkGroupUpdateOneWithoutWokersInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
 }
 
 input UserUpdateWithoutMessagesDataInput {
@@ -5812,7 +6427,10 @@ input UserUpdateWithoutMessagesDataInput {
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
   classMate: ClassMateUpdateManyWithoutStudentInput
-  workGroup: WorkGroupUpdateOneWithoutWokersInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -5839,7 +6457,10 @@ input UserUpdateWithoutPostsDataInput {
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
   classMate: ClassMateUpdateManyWithoutStudentInput
-  workGroup: WorkGroupUpdateOneWithoutWokersInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
 }
 
 input UserUpdateWithoutRegStatusDataInput {
@@ -5866,7 +6487,10 @@ input UserUpdateWithoutRegStatusDataInput {
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
   classMate: ClassMateUpdateManyWithoutStudentInput
-  workGroup: WorkGroupUpdateOneWithoutWokersInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
 }
 
 input UserUpdateWithoutStudiesDataInput {
@@ -5893,10 +6517,13 @@ input UserUpdateWithoutStudiesDataInput {
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
   classMate: ClassMateUpdateManyWithoutStudentInput
-  workGroup: WorkGroupUpdateOneWithoutWokersInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
 }
 
-input UserUpdateWithoutWorkGroupDataInput {
+input UserUpdateWithoutToOldColleaguesDataInput {
   username: String
   password: String
   name: String
@@ -5921,6 +6548,9 @@ input UserUpdateWithoutWorkGroupDataInput {
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
   classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
 }
 
 input UserUpdateWithoutWorksDataInput {
@@ -5947,7 +6577,10 @@ input UserUpdateWithoutWorksDataInput {
   familyGroup: FamilyGroupUpdateOneWithoutUsersInput
   creater: FamilyGroupUpdateOneWithoutCreaterInput
   classMate: ClassMateUpdateManyWithoutStudentInput
-  workGroup: WorkGroupUpdateOneWithoutWokersInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
 }
 
 input UserUpdateWithWhereUniqueNestedInput {
@@ -5975,11 +6608,6 @@ input UserUpdateWithWhereUniqueWithoutStudiesInput {
   data: UserUpdateWithoutStudiesDataInput!
 }
 
-input UserUpdateWithWhereUniqueWithoutWorkGroupInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutWorkGroupDataInput!
-}
-
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
@@ -5988,6 +6616,11 @@ input UserUpsertNestedInput {
 input UserUpsertWithoutClassMateInput {
   update: UserUpdateWithoutClassMateDataInput!
   create: UserCreateWithoutClassMateInput!
+}
+
+input UserUpsertWithoutColleaguesInput {
+  update: UserUpdateWithoutColleaguesDataInput!
+  create: UserCreateWithoutColleaguesInput!
 }
 
 input UserUpsertWithoutCreaterInput {
@@ -6005,6 +6638,11 @@ input UserUpsertWithoutFamiliesInput {
   create: UserCreateWithoutFamiliesInput!
 }
 
+input UserUpsertWithoutFromOldColleaguesInput {
+  update: UserUpdateWithoutFromOldColleaguesDataInput!
+  create: UserCreateWithoutFromOldColleaguesInput!
+}
+
 input UserUpsertWithoutMessagesInput {
   update: UserUpdateWithoutMessagesDataInput!
   create: UserCreateWithoutMessagesInput!
@@ -6013,6 +6651,11 @@ input UserUpsertWithoutMessagesInput {
 input UserUpsertWithoutPostsInput {
   update: UserUpdateWithoutPostsDataInput!
   create: UserCreateWithoutPostsInput!
+}
+
+input UserUpsertWithoutToOldColleaguesInput {
+  update: UserUpdateWithoutToOldColleaguesDataInput!
+  create: UserCreateWithoutToOldColleaguesInput!
 }
 
 input UserUpsertWithoutWorksInput {
@@ -6048,12 +6691,6 @@ input UserUpsertWithWhereUniqueWithoutStudiesInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutStudiesDataInput!
   create: UserCreateWithoutStudiesInput!
-}
-
-input UserUpsertWithWhereUniqueWithoutWorkGroupInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutWorkGroupDataInput!
-  create: UserCreateWithoutWorkGroupInput!
 }
 
 input UserWhereInput {
@@ -6253,6 +6890,15 @@ input UserWhereInput {
   classMate_some: ClassMateWhereInput
   classMate_none: ClassMateWhereInput
   workGroup: WorkGroupWhereInput
+  colleagues_every: ColleagueWhereInput
+  colleagues_some: ColleagueWhereInput
+  colleagues_none: ColleagueWhereInput
+  fromOldColleagues_every: OldColleagueWhereInput
+  fromOldColleagues_some: OldColleagueWhereInput
+  fromOldColleagues_none: OldColleagueWhereInput
+  toOldColleagues_every: OldColleagueWhereInput
+  toOldColleagues_some: OldColleagueWhereInput
+  toOldColleagues_none: OldColleagueWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
@@ -6523,7 +7169,7 @@ type WorkEdge {
 type WorkGroup {
   id: ID!
   company: Company
-  wokers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  colleagues(where: ColleagueWhereInput, orderBy: ColleagueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Colleague!]
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
 }
 
@@ -6535,8 +7181,18 @@ type WorkGroupConnection {
 
 input WorkGroupCreateInput {
   company: CompanyCreateOneWithoutWorkGroupInput
-  wokers: UserCreateManyWithoutWorkGroupInput
+  colleagues: ColleagueCreateManyWithoutGroupInput
   messages: MessageCreateManyInput
+}
+
+input WorkGroupCreateOneInput {
+  create: WorkGroupCreateInput
+  connect: WorkGroupWhereUniqueInput
+}
+
+input WorkGroupCreateOneWithoutColleaguesInput {
+  create: WorkGroupCreateWithoutColleaguesInput
+  connect: WorkGroupWhereUniqueInput
 }
 
 input WorkGroupCreateOneWithoutCompanyInput {
@@ -6544,18 +7200,13 @@ input WorkGroupCreateOneWithoutCompanyInput {
   connect: WorkGroupWhereUniqueInput
 }
 
-input WorkGroupCreateOneWithoutWokersInput {
-  create: WorkGroupCreateWithoutWokersInput
-  connect: WorkGroupWhereUniqueInput
-}
-
-input WorkGroupCreateWithoutCompanyInput {
-  wokers: UserCreateManyWithoutWorkGroupInput
+input WorkGroupCreateWithoutColleaguesInput {
+  company: CompanyCreateOneWithoutWorkGroupInput
   messages: MessageCreateManyInput
 }
 
-input WorkGroupCreateWithoutWokersInput {
-  company: CompanyCreateOneWithoutWorkGroupInput
+input WorkGroupCreateWithoutCompanyInput {
+  colleagues: ColleagueCreateManyWithoutGroupInput
   messages: MessageCreateManyInput
 }
 
@@ -6595,10 +7246,34 @@ input WorkGroupSubscriptionWhereInput {
   NOT: [WorkGroupSubscriptionWhereInput!]
 }
 
+input WorkGroupUpdateDataInput {
+  company: CompanyUpdateOneWithoutWorkGroupInput
+  colleagues: ColleagueUpdateManyWithoutGroupInput
+  messages: MessageUpdateManyInput
+}
+
 input WorkGroupUpdateInput {
   company: CompanyUpdateOneWithoutWorkGroupInput
-  wokers: UserUpdateManyWithoutWorkGroupInput
+  colleagues: ColleagueUpdateManyWithoutGroupInput
   messages: MessageUpdateManyInput
+}
+
+input WorkGroupUpdateOneInput {
+  create: WorkGroupCreateInput
+  update: WorkGroupUpdateDataInput
+  upsert: WorkGroupUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: WorkGroupWhereUniqueInput
+}
+
+input WorkGroupUpdateOneWithoutColleaguesInput {
+  create: WorkGroupCreateWithoutColleaguesInput
+  update: WorkGroupUpdateWithoutColleaguesDataInput
+  upsert: WorkGroupUpsertWithoutColleaguesInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: WorkGroupWhereUniqueInput
 }
 
 input WorkGroupUpdateOneWithoutCompanyInput {
@@ -6610,33 +7285,29 @@ input WorkGroupUpdateOneWithoutCompanyInput {
   connect: WorkGroupWhereUniqueInput
 }
 
-input WorkGroupUpdateOneWithoutWokersInput {
-  create: WorkGroupCreateWithoutWokersInput
-  update: WorkGroupUpdateWithoutWokersDataInput
-  upsert: WorkGroupUpsertWithoutWokersInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: WorkGroupWhereUniqueInput
+input WorkGroupUpdateWithoutColleaguesDataInput {
+  company: CompanyUpdateOneWithoutWorkGroupInput
+  messages: MessageUpdateManyInput
 }
 
 input WorkGroupUpdateWithoutCompanyDataInput {
-  wokers: UserUpdateManyWithoutWorkGroupInput
+  colleagues: ColleagueUpdateManyWithoutGroupInput
   messages: MessageUpdateManyInput
 }
 
-input WorkGroupUpdateWithoutWokersDataInput {
-  company: CompanyUpdateOneWithoutWorkGroupInput
-  messages: MessageUpdateManyInput
+input WorkGroupUpsertNestedInput {
+  update: WorkGroupUpdateDataInput!
+  create: WorkGroupCreateInput!
+}
+
+input WorkGroupUpsertWithoutColleaguesInput {
+  update: WorkGroupUpdateWithoutColleaguesDataInput!
+  create: WorkGroupCreateWithoutColleaguesInput!
 }
 
 input WorkGroupUpsertWithoutCompanyInput {
   update: WorkGroupUpdateWithoutCompanyDataInput!
   create: WorkGroupCreateWithoutCompanyInput!
-}
-
-input WorkGroupUpsertWithoutWokersInput {
-  update: WorkGroupUpdateWithoutWokersDataInput!
-  create: WorkGroupCreateWithoutWokersInput!
 }
 
 input WorkGroupWhereInput {
@@ -6655,9 +7326,9 @@ input WorkGroupWhereInput {
   id_ends_with: ID
   id_not_ends_with: ID
   company: CompanyWhereInput
-  wokers_every: UserWhereInput
-  wokers_some: UserWhereInput
-  wokers_none: UserWhereInput
+  colleagues_every: ColleagueWhereInput
+  colleagues_some: ColleagueWhereInput
+  colleagues_none: ColleagueWhereInput
   messages_every: MessageWhereInput
   messages_some: MessageWhereInput
   messages_none: MessageWhereInput
