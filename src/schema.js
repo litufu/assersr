@@ -45,6 +45,8 @@ export const typeDefs = gql`
     colleagues(companyId:String):[User]
     oldColleagues(startTime:String,endTime:String,companyId:String):[User]
     myOldColleagues(companyId:String):[OldColleague]
+    locationGroups:[LocationGroup]
+    locationGroupUsers(locationGroupId:String):[User]
   }
 
   type Mutation {
@@ -88,6 +90,10 @@ export const typeDefs = gql`
     workGroupChanged:Info
     colleaguesAdded:Info
     myOldcolleaguesChanged:Info
+    locationGroupChanged:Info
+    locationGroupUsersChanged:Info
+    locationGroupUserAdded:User
+    locationGroupUserRemoved:Info
   }
 
   type Info {
@@ -138,6 +144,7 @@ export const typeDefs = gql`
     classMate:[ClassMate]
     workGroup:WorkGroup
     colleagues:[Colleague]
+    locationGroups:[LocationGroup]
   }
 
   type Person {
@@ -269,7 +276,8 @@ export const typeDefs = gql`
     schools:[School]
     companies:[Company]
     universities:[University]
-    people:[User]
+    borns:[User]
+    lives:[User]
   }
 
   type Province {
@@ -373,6 +381,40 @@ type WorkGroup{
   company:Company
   colleagues:[Colleague!]!
   messages: [Message!]!
+}
+
+enum LocationGroupKind {
+  HomeVillage, #老家
+  ResidenceVillage,#现住地
+  VillageInResidenceVillage, #同村的在相同的街道老乡
+  StreetInResidenceVillage, #同镇的在相同的街道老乡
+  AreaInResidenceVillage, #同区的在相同的街道老乡
+  CityInResidenceVillage, #同市的在相同的街道老乡
+  ProvinceInResidenceVillage, #同省的在相同的街道老乡
+  VillageInResidenceStreet, #同村的在相同的镇老乡
+  StreetInResidenceStreet, #同镇的在相同的镇老乡
+  AreaInResidenceStreet, #同区的在相同的镇老乡
+  CityInResidenceStreet, #同市的在相同的镇老乡
+  ProvinceInResidenceStreet, #同省的在相同的镇老乡
+  VillageInResidenceArea, #同村的在相同的区老乡
+  StreetInResidenceArea, #同镇的在相同的区老乡
+  AreaInResidenceArea, #同区的在相同的区老乡
+  CityInResidenceArea, #同市的在相同的区老乡
+  ProvinceInResidenceArea, #同省的在相同的区老乡
+  VillageInResidenceCity, #同村的在相同的市老乡
+  StreetInResidenceCity, #同镇的在相同的市老乡
+  AreaInResidenceCity, #同区的在相同的市老乡
+  CityInResidenceCity, #同市的在相同的市老乡
+  ProvinceInResidenceCity, #同省的在相同的市老乡
+}
+
+type LocationGroup{
+  id:ID!
+  kind:LocationGroupKind
+  code:String
+  name:String
+  users:[User!]!
+  messages:[Message!]!
 }
 
 type Message {

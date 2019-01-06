@@ -207,17 +207,14 @@ export const Query = {
     meAndSpousesfamilies.push(meFamilies)
     // 配偶
     const mySpouseFamilies = meFamilies.filter(family=>!!~['wife','husband'].indexOf(family.relationship))
-    console.log(mySpouseFamilies)
     for (const mySpouseFamily of mySpouseFamilies ){
       const mySpouse = await ctx.db.family({id:mySpouseFamily.id}).to().user()
       if(mySpouse){
         groupUsersId.push({id:mySpouse.id})
         const spouseFamilies = await ctx.db.user({id:mySpouse.id}).families()
-        console.log('spouseFamilies',spouseFamilies)
         meAndSpousesfamilies.push(spouseFamilies)
       }
     }
-    console.log(meAndSpousesfamilies)
     for(const myFamilies of meAndSpousesfamilies){
       const familyFather = myFamilies.filter(family=>family.relationship==='father')
       if(familyFather.length>0){
@@ -304,8 +301,6 @@ export const Query = {
     })
   },
   stations: async (parent, {text}, ctx) => {
-    console.log(text)
-  
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -388,9 +383,6 @@ export const Query = {
       throw new Error("用户不存在")
     }
 
-    console.log(userId)
-    console.log(companyId)
-
     const myOldColleagues = await ctx.db.oldColleagues({
       where:{
         AND:[
@@ -399,9 +391,31 @@ export const Query = {
         ]
       }
     })
-    console.log(myOldColleagues)
     return myOldColleagues
   },
+  locationGroups:async (parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    return ctx.db.user({id:user.id}).locationGroups()
+  },
+  locationGroupUsers:async (parent, {locationGroupId}, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    return ctx.db.locationGroup({id:locationGroupId}).users()
+  },
+
   group: (parent, {id}, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {

@@ -44,14 +44,6 @@ const checkeCtxUserExist = async (ctx)=>{
   return true
 }
 
-const getPlaceName = async(place,ctx)=>{
-  const province = await ctx.db.province({code:place.province})
-  const area = await ctx.db.area({code:place.area})
-  const city = await ctx.db.city({code:place.city})
-  const village = await ctx.db.village({code:place.village})
-  const street = await ctx.db.street({code:place.street})
-  return province.name + city.name + area.name + village.name + street.name
-}
 
 const getCommonFamilies = async (relationship, families,id,ctx) => {
   // 判断自己的家人中那些是共同的家人，如父亲与我共同的家人是（母亲、兄弟姐妹）
@@ -518,16 +510,12 @@ export const createFamilyGroupById=async (id,ctx)=>{
   return familyGroup
 }
 
-
-
-
 module.exports = {
   getUserId,
   checkeCtxUserExist,
   APP_SECRET,
   getUser,
   updateCommonUserFamily,
-  getPlaceName,
   getCommonFamilies,
   getIntersectionFamiles,
   getDifferentFamilies,

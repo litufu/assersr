@@ -31,4 +31,5 @@ export const User = {
   familyGroup:(parent, args, ctx) => ctx.db.user({ id: parent.id }).familyGroup(),
   workGroup:(parent, args, ctx) => ctx.db.user({ id: parent.id }).workGroup(),
   colleagues:(parent, args, ctx) => ctx.db.user({ id: parent.id }).colleagues(),
+  locationGroups:(parent, args, ctx) => ctx.db.user({ id: parent.id }).locationGroups(),
 }

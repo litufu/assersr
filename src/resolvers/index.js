@@ -21,6 +21,7 @@ import {WorkGroup} from './WorkGroup'
 import {Company} from './Company'
 import {Colleague} from './Colleague'
 import {OldColleague} from './OldColleague'
+import {LocationGroup} from './LocationGroup'
 
 export const resolvers = {
   Query,
@@ -45,5 +46,6 @@ export const resolvers = {
   WorkGroup,
   Company,
   Colleague,
-  OldColleague
+  OldColleague,
+  LocationGroup,
 }

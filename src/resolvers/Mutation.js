@@ -10,7 +10,6 @@ import {
   getIntersectionFamiles,
   getDifferentFamilies,
   createFamilyGroupById,
-  getPlaceName
 } from '../services/utils'
 
 import {
@@ -41,7 +40,9 @@ import {
   STUDENTS_ADDED,
   COLLEAGUES_ADDED,
   MYOLDCOLLEAGUES_CHANGED,
-  WORKS_CHANGED
+  WORKS_CHANGED,
+  LOCATIONGROUPUSERS_CHANGED,
+  LOCATIONGROUP_CHANGED
  } from './Subscription'
 import { pubsub } from '../subscriptions';
 import { fee } from '../services/settings'
@@ -158,8 +159,22 @@ export const Mutation = {
     // 输入数据验证
     validateBasicInfo(name, gender, birthday, birthplace,residence)
     // 检查是或否已经存在location
+
     let birthLocation
     let residenceLocation
+
+    const homeVillage = await ctx.db.village({code:birthplace.village})
+    const homeStreet = await ctx.db.street({code:birthplace.street})
+    const homeArea = await ctx.db.area({code:birthplace.area})
+    const homeCity = await ctx.db.city({code:birthplace.city})
+    const homeProvince = await ctx.db.province({code:birthplace.province})
+
+    const residenceVillage = await ctx.db.village({code:residence.village})
+    const residenceStreet = await ctx.db.street({code:residence.street})
+    const residenceArea = await ctx.db.area({code:residence.area})
+    const residenceCity = await ctx.db.city({code:residence.city})
+    const residenceProvince = await ctx.db.province({code:residence.province})
+
     const existBirthplaces = await ctx.db.locations({
       where:{
         province:{code:birthplace.province},
@@ -171,10 +186,8 @@ export const Mutation = {
     })
     
     if(existBirthplaces.length===0){
-      const birthplaceName = await getPlaceName(birthplace,ctx)
-      console.log(birthplaceName)
       birthLocation = await ctx.db.createLocation({
-        name:birthplaceName,
+        name:homeProvince.name+homeCity.name+homeArea.name+homeStreet.name+homeVillage.name,
         province:{connect:{code:birthplace.province}},
         city:{connect:{code:birthplace.city}},
         area:{connect:{code:birthplace.area}},
@@ -194,10 +207,8 @@ export const Mutation = {
       }
     })
     if(existResidences.length===0){
-      const residenceplaceName = await getPlaceName(residence,ctx)
-      console.log(residenceplaceName)
       residenceLocation = await ctx.db.createLocation({
-        name:residenceplaceName,
+        name:residenceProvince.name+residenceCity.name+residenceArea.name+residenceStreet.name+residenceVillage.name,
         province:{connect:{code:residence.province}},
         city:{connect:{code:residence.city}},
         area:{connect:{code:residence.area}},
@@ -220,22 +231,148 @@ export const Mutation = {
       }
     })
     // 添加location group
+    const villageGroupTypes = {'HomeVillage':homeVillage,'ResidenceVillage':residenceVillage}
+    // 添加village组
+    for(const type of Object.keys(villageGroupTypes)){
+      // 检查老家组是否存在
+      const villageLocationGroups = await ctx.db.locationGroups({
+        where:{code:villageGroupTypes[type].code}
+      })
 
-    // const villages = await ctx.db.villages({ where: { code: birthplace.village } })
-    // const groups = await ctx.db.groups({ where: { type: 'FellowTownsman', typeId: villages[0].id } })
-    // if (groups.length > 0) {
-    //   await ctx.db.updateGroup({
-    //     where: { id: groups[0].id },
-    //     data: { users: { connect: { uid: userId } } }
-    //   })
-    // } else {
-    //   await ctx.db.createGroup({
-    //     type: 'FellowTownsman',
-    //     typeId: villages[0].id,
-    //     name: villages[0].name,
-    //     users: { connect: { uid: userId } }
-    //   })
-    // }
+      if(villageLocationGroups.length===0){
+        await ctx.db.createLocationGroup({
+          kind:type,
+          code:villageGroupTypes[type].code,
+          name:villageGroupTypes[type].name,
+          users:{connect:{uid:userId}}
+        })
+        pubsub.publish(LOCATIONGROUP_CHANGED, { [LOCATIONGROUP_CHANGED]: { "text": user.id } })
+      }else{
+        // 检查用户是否已经有老家组
+        const userInVillageGroups = await ctx.db.user({id:user.id}).locationGroups({
+          where:{kind:type}
+        })
+
+        if(userInVillageGroups.length>0){
+          if(userInVillageGroups[0].id!==villageLocationGroups[0].id){
+            // 从原来的组中删除User
+            const oldGroup = await ctx.db.updateLocationGroup({
+              where:{id:userInVillageGroups[0].id},
+              data:{users:{disconnect:{uid:userId}}}
+            })
+            const oldGroupUsers = await ctx.db.locationGroup({id:oldGroup.id}).users()
+            for(const oldGroupUser of oldGroupUsers ){
+              pubsub.publish(LOCATIONGROUPUSERS_CHANGED, { [LOCATIONGROUPUSERS_CHANGED]: { "text": oldGroupUser.id } })
+            }
+            // 将User添加到现在的组中
+            const newGroup = await ctx.db.updateLocationGroup({
+              where:{id:villageLocationGroups[0].id},
+              data:{users:{connect:{uid:userId}}}
+            })
+            const newGroupUsers = await ctx.db.locationGroup({id:newGroup.id}).users()
+            for(const newGroupUser of newGroupUsers ){
+              pubsub.publish(LOCATIONGROUPUSERS_CHANGED, { [LOCATIONGROUPUSERS_CHANGED]: { "text": newGroupUser.id } })
+            }
+            pubsub.publish(LOCATIONGROUP_CHANGED, { [LOCATIONGROUP_CHANGED]: { "text": user.id } })
+          }
+        }else{
+          // 将用户添加到现在的组中
+          const newGroup = await ctx.db.updateLocationGroup({
+            where:{id:villageLocationGroups[0].id},
+            data:{users:{connect:{uid:userId}}}
+          })
+          const newGroupUsers = await ctx.db.locationGroup({id:newGroup.id}).users()
+          for(const newGroupUser of newGroupUsers ){
+            pubsub.publish(LOCATIONGROUPUSERS_CHANGED, { [LOCATIONGROUPUSERS_CHANGED]: { "text": newGroupUser.id } })
+          }
+          pubsub.publish(LOCATIONGROUP_CHANGED, { [LOCATIONGROUP_CHANGED]: { "text": user.id } })
+        }
+      }
+    }
+
+    // 添加老乡组
+    const hometownGroupTypes = {
+      "VillageInResidenceVillage":[homeVillage,residenceVillage],
+      "StreetInResidenceVillage":[homeStreet,residenceVillage],
+      "AreaInResidenceVillage":[homeArea,residenceVillage],
+      "CityInResidenceVillage":[homeCity,residenceVillage],
+      "ProvinceInResidenceVillage":[homeProvince,residenceVillage],
+      "VillageInResidenceStreet":[homeVillage,residenceStreet],
+      "StreetInResidenceStreet":[homeStreet,residenceStreet],
+      "AreaInResidenceStreet":[homeArea,residenceStreet],
+      "CityInResidenceStreet":[homeCity,residenceStreet],
+      "ProvinceInResidenceStreet":[homeProvince,residenceStreet],
+      "VillageInResidenceArea":[homeVillage,residenceArea],
+      "StreetInResidenceArea":[homeStreet,residenceArea],
+      "AreaInResidenceArea":[homeArea,residenceArea],
+      "CityInResidenceArea":[homeCity,residenceArea],
+      "ProvinceInResidenceArea":[homeProvince,residenceArea],
+      "VillageInResidenceCity":[homeVillage,residenceCity],
+      "StreetInResidenceCity":[homeStreet,residenceCity],
+      "AreaInResidenceCity":[homeArea,residenceCity],
+      "CityInResidenceCity":[homeCity,residenceCity],
+      "ProvinceInResidenceCity":[homeProvince,residenceCity],
+    }
+
+    if(homeProvince.id!==residenceProvince.id){
+      // 对于跨省人的增加老乡组
+      for(const type of Object.keys(hometownGroupTypes)){
+        // 检查组是否存在
+        const hometownLocationGroups = await ctx.db.locationGroups({
+          where:{code:`${hometownGroupTypes[type][0].code}in${hometownGroupTypes[type][1].code}` }
+        })
+        if(hometownLocationGroups.length===0){
+          await ctx.db.createLocationGroup({
+            kind:type,
+            code:`${hometownGroupTypes[type][0].code}in${hometownGroupTypes[type][1].code}`,
+            name:`${hometownGroupTypes[type][0].name}人在${hometownGroupTypes[type][1].name}`,
+            users:{connect:{uid:userId}}
+          })
+          pubsub.publish(LOCATIONGROUP_CHANGED, { [LOCATIONGROUP_CHANGED]: { "text": user.id } })
+        }else{
+          // 检查用户是否已经有组
+          const userInHometownGroups = await ctx.db.user({id:user.id}).locationGroups({
+            where:{kind:type}
+          })
+
+          if(userInHometownGroups.length>0){
+            if(userInHometownGroups[0].id!==hometownLocationGroups[0].id){
+              // 从原来的组中删除User
+              const oldGroup = await ctx.db.updateLocationGroup({
+                where:{id:userInHometownGroups[0].id},
+                data:{users:{disconnect:{uid:userId}}}
+              })
+              const oldGroupUsers = await ctx.db.locationGroup({id:oldGroup.id}).users()
+              for(const oldGroupUser of oldGroupUsers ){
+                pubsub.publish(LOCATIONGROUPUSERS_CHANGED, { [LOCATIONGROUPUSERS_CHANGED]: { "text": oldGroupUser.id } })
+              }
+              // 将User添加到现在的组中
+              const newGroup = await ctx.db.updateLocationGroup({
+                where:{id:hometownLocationGroups[0].id},
+                data:{users:{connect:{uid:userId}}}
+              })
+              const newGroupUsers = await ctx.db.locationGroup({id:newGroup.id}).users()
+              for(const newGroupUser of newGroupUsers ){
+                pubsub.publish(LOCATIONGROUPUSERS_CHANGED, { [LOCATIONGROUPUSERS_CHANGED]: { "text": newGroupUser.id } })
+              }
+
+              pubsub.publish(LOCATIONGROUP_CHANGED, { [LOCATIONGROUP_CHANGED]: { "text": user.id } })
+            }
+          }else{
+            // 将用户添加到现在的组中
+            const newGroup = await ctx.db.updateLocationGroup({
+              where:{id:hometownLocationGroups[0].id},
+              data:{users:{connect:{uid:userId}}}
+            })
+            const newGroupUsers = await ctx.db.locationGroup({id:newGroup.id}).users()
+            for(const newGroupUser of newGroupUsers ){
+              pubsub.publish(LOCATIONGROUPUSERS_CHANGED, { [LOCATIONGROUPUSERS_CHANGED]: { "text": newGroupUser.id } })
+            }
+            pubsub.publish(LOCATIONGROUP_CHANGED, { [LOCATIONGROUP_CHANGED]: { "text": user.id } })
+          }
+        }
+      }
+    }
 
     return updateUser
   },

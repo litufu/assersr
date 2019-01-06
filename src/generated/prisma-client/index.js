@@ -57,6 +57,14 @@ var models = [
     embedded: false
   },
   {
+    name: "LocationGroup",
+    embedded: false
+  },
+  {
+    name: "LocationGroupKind",
+    embedded: false
+  },
+  {
     name: "Logs",
     embedded: false
   },

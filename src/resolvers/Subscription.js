@@ -11,7 +11,9 @@ export const WORKGROUP_CHANGED = 'workGroupChanged'
 export const STUDENTS_ADDED = 'studentsAdded'
 export const COLLEAGUES_ADDED = 'colleaguesAdded'
 export const MYOLDCOLLEAGUES_CHANGED = 'myOldcolleaguesChanged'
-export const WORKS_CHANGED  = 'worksChanged'
+export const LOCATIONGROUP_CHANGED  = 'locationGroupChanged'
+export const LOCATIONGROUPUSERS_CHANGED  = 'locationGroupUsersChanged'
+export const LOCATIONGROUPUSER_ADDED = 'locationGroupUserAdded'
 
 export const Subscription = {
   familyConnected: {
@@ -76,6 +78,30 @@ export const Subscription = {
         () => pubsub.asyncIterator(WORKGROUP_CHANGED),
         (payload, variables,ctx) => {
           return Boolean(ctx.user.id === payload.workGroupChanged.text)
+        }
+    )
+  },
+  locationGroupChanged: {
+    subscribe: withFilter(
+        () => pubsub.asyncIterator(LOCATIONGROUP_CHANGED),
+        (payload, variables,ctx) => {
+          return Boolean(ctx.user.id === payload.locationGroupChanged.text)
+        }
+    )
+  },
+  locationGroupUsersChanged: {
+    subscribe: withFilter(
+        () => pubsub.asyncIterator(LOCATIONGROUPUSERS_CHANGED),
+        (payload, variables,ctx) => {
+          return Boolean(ctx.user.id === payload.locationGroupUsersChanged.text)
+        }
+    )
+  },
+  locationGroupUsersAdded: {
+    subscribe: withFilter(
+        () => pubsub.asyncIterator(LOCATIONGROUPUSERS_CHANGED),
+        (payload, variables,ctx) => {
+          return Boolean(ctx.user.id === payload.locationGroupUserAdded.user.id)
         }
     )
   },
