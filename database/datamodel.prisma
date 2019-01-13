@@ -45,7 +45,7 @@ type User {
   password: String!
   name: String
   gender:String
-  avatar:String
+  avatar:Photo
   birthdaycalendar:String
   birthday:DateTime
   birthplace:Location  @relation(name: "Birth")
@@ -329,6 +329,13 @@ type Station {
   id:ID! @unique
   code:String  @unique
   name:String  @unique
+}
+
+type Photo {
+  id:ID! @unique
+  name:String @unique
+  url:String
+  user:User
 }
 
 type Logs {

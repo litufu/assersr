@@ -47,7 +47,7 @@ const server = new ApolloServer({
   validationRules: [ depthLimit(10) ],// 最大深度查询限制。
 });
 
-server.listen({ port: PORT  }).then(({ url }) => console.log(`🚀 Server ready at ${url}`));
+server.listen({ port: PORT,host:"192.168.0.102" }).then(({ url }) => console.log(`🚀 Server ready at ${url}`));
 
 // ,host:"192.168.0.102" 
 

@@ -10,6 +10,8 @@ import {
   getIntersectionFamiles,
   getDifferentFamilies,
   createFamilyGroupById,
+  getFileName,
+  getFileExt,
 } from '../services/utils'
 
 import {
@@ -32,8 +34,8 @@ import {
   relationshipGenderMap,
   relationshipTOGender,
 } from "../services/relationship"
-import { 
-  FAMILY_CHANGED, 
+import {
+  FAMILY_CHANGED,
   FAMILYGROUP_CHANGED,
   CLASSGROUP_CHANGED,
   WORKGROUP_CHANGED,
@@ -41,11 +43,10 @@ import {
   COLLEAGUES_ADDED,
   MYOLDCOLLEAGUES_CHANGED,
   WORKS_CHANGED,
-  LOCATIONGROUPUSERS_CHANGED,
   LOCATIONGROUP_CHANGED
- } from './Subscription'
+} from './Subscription'
 import { pubsub } from '../subscriptions';
-import { fee } from '../services/settings'
+import { fee,ossClient } from '../services/settings'
 
 const pubGroupFamily = async (familyGroup, ctx) => {
   const groupFamilies = await ctx.db.familyGroup({ id: familyGroup.id }).families()
@@ -145,7 +146,7 @@ export const Mutation = {
 
   },
 
-  addBasicInfo: async (parent, { name, gender, birthday, birthplace,residence }, ctx) => {
+  addBasicInfo: async (parent, { name, gender, birthday, birthplace, residence }, ctx) => {
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -157,218 +158,349 @@ export const Mutation = {
     }
     // -----------------------------------------------
     // 输入数据验证
-    validateBasicInfo(name, gender, birthday, birthplace,residence)
+    validateBasicInfo(name, gender, birthday, birthplace, residence)
     // 检查是或否已经存在location
 
     let birthLocation
     let residenceLocation
 
-    const homeVillage = await ctx.db.village({code:birthplace.village})
-    const homeStreet = await ctx.db.street({code:birthplace.street})
-    const homeArea = await ctx.db.area({code:birthplace.area})
-    const homeCity = await ctx.db.city({code:birthplace.city})
-    const homeProvince = await ctx.db.province({code:birthplace.province})
+    const homeVillage = await ctx.db.village({ code: birthplace.village })
+    const homeStreet = await ctx.db.street({ code: birthplace.street })
+    const homeArea = await ctx.db.area({ code: birthplace.area })
+    const homeCity = await ctx.db.city({ code: birthplace.city })
+    const homeProvince = await ctx.db.province({ code: birthplace.province })
 
-    const residenceVillage = await ctx.db.village({code:residence.village})
-    const residenceStreet = await ctx.db.street({code:residence.street})
-    const residenceArea = await ctx.db.area({code:residence.area})
-    const residenceCity = await ctx.db.city({code:residence.city})
-    const residenceProvince = await ctx.db.province({code:residence.province})
+    const residenceVillage = await ctx.db.village({ code: residence.village })
+    const residenceStreet = await ctx.db.street({ code: residence.street })
+    const residenceArea = await ctx.db.area({ code: residence.area })
+    const residenceCity = await ctx.db.city({ code: residence.city })
+    const residenceProvince = await ctx.db.province({ code: residence.province })
 
     const existBirthplaces = await ctx.db.locations({
-      where:{
-        province:{code:birthplace.province},
-        city:{code:birthplace.city},
-        area:{code:birthplace.area},
-        village:{code:birthplace.village},
-        street:{code:birthplace.street},
+      where: {
+        province: { code: birthplace.province },
+        city: { code: birthplace.city },
+        area: { code: birthplace.area },
+        village: { code: birthplace.village },
+        street: { code: birthplace.street },
       }
     })
-    
-    if(existBirthplaces.length===0){
+
+    if (existBirthplaces.length === 0) {
       birthLocation = await ctx.db.createLocation({
-        name:homeProvince.name+homeCity.name+homeArea.name+homeStreet.name+homeVillage.name,
-        province:{connect:{code:birthplace.province}},
-        city:{connect:{code:birthplace.city}},
-        area:{connect:{code:birthplace.area}},
-        street:{connect:{code:birthplace.street}},
-        village:{connect:{code:birthplace.village}},
+        name: homeProvince.name + homeCity.name + homeArea.name + homeStreet.name + homeVillage.name,
+        province: { connect: { code: birthplace.province } },
+        city: { connect: { code: birthplace.city } },
+        area: { connect: { code: birthplace.area } },
+        street: { connect: { code: birthplace.street } },
+        village: { connect: { code: birthplace.village } },
       })
-    }else{
+    } else {
       birthLocation = existBirthplaces[0]
     }
     const existResidences = await ctx.db.locations({
-      where:{
-        province:{code:residence.province},
-        city:{code:residence.city},
-        area:{code:residence.area},
-        village:{code:residence.village},
-        street:{code:residence.street},
+      where: {
+        province: { code: residence.province },
+        city: { code: residence.city },
+        area: { code: residence.area },
+        village: { code: residence.village },
+        street: { code: residence.street },
       }
     })
-    if(existResidences.length===0){
+    if (existResidences.length === 0) {
       residenceLocation = await ctx.db.createLocation({
-        name:residenceProvince.name+residenceCity.name+residenceArea.name+residenceStreet.name+residenceVillage.name,
-        province:{connect:{code:residence.province}},
-        city:{connect:{code:residence.city}},
-        area:{connect:{code:residence.area}},
-        street:{connect:{code:residence.street}},
-        village:{connect:{code:residence.village}},
+        name: residenceProvince.name + residenceCity.name + residenceArea.name + residenceStreet.name + residenceVillage.name,
+        province: { connect: { code: residence.province } },
+        city: { connect: { code: residence.city } },
+        area: { connect: { code: residence.area } },
+        street: { connect: { code: residence.street } },
+        village: { connect: { code: residence.village } },
       })
-    }else{
+    } else {
       residenceLocation = existResidences[0]
     }
     // -----------------------------------------------
     const updateUser = ctx.db.updateUser({
       where: { uid: userId },
-      data:{
+      data: {
         name,
         gender,
-        birthdaycalendar:birthday.calendar,
-        birthday:birthday.date,
-        birthplace:{connect:{id:birthLocation.id}},
-        residence:{connect:{id:residenceLocation.id}},
+        birthdaycalendar: birthday.calendar,
+        birthday: birthday.date,
+        birthplace: { connect: { id: birthLocation.id } },
+        residence: { connect: { id: residenceLocation.id } },
       }
     })
     // 添加location group
-    const villageGroupTypes = {'HomeVillage':homeVillage,'ResidenceVillage':residenceVillage}
+    const villageGroupTypes = { 'HomeVillage': homeVillage, 'ResidenceVillage': residenceVillage }
     // 添加village组
-    for(const type of Object.keys(villageGroupTypes)){
+    for (const type of Object.keys(villageGroupTypes)) {
       // 检查老家组是否存在
       const villageLocationGroups = await ctx.db.locationGroups({
-        where:{code:villageGroupTypes[type].code}
+        where: { code: villageGroupTypes[type].code }
+      })
+      // 检查用户是否已经有老家组
+      const userInVillageGroups = await ctx.db.user({ id: user.id }).locationGroups({
+        where: { kind: type }
       })
 
-      if(villageLocationGroups.length===0){
+      // 如果没有老家组
+      if (villageLocationGroups.length === 0) {
         await ctx.db.createLocationGroup({
-          kind:type,
-          code:villageGroupTypes[type].code,
-          name:villageGroupTypes[type].name,
-          users:{connect:{uid:userId}}
+          kind: type,
+          code: villageGroupTypes[type].code,
+          name: villageGroupTypes[type].name,
+          users: { connect: { uid: userId } }
         })
-        pubsub.publish(LOCATIONGROUP_CHANGED, { [LOCATIONGROUP_CHANGED]: { "text": user.id } })
-      }else{
-        // 检查用户是否已经有老家组
-        const userInVillageGroups = await ctx.db.user({id:user.id}).locationGroups({
-          where:{kind:type}
+        pubsub.publish(LOCATIONGROUP_CHANGED, {
+          [LOCATIONGROUP_CHANGED]: {
+            "toId": user.id,
+            "type": "refech"
+          }
         })
-
-        if(userInVillageGroups.length>0){
-          if(userInVillageGroups[0].id!==villageLocationGroups[0].id){
+        // 如果用户有老家组
+        if (userInVillageGroups.length > 0) {
+          // 从原来的组中删除User
+          const oldGroup = await ctx.db.updateLocationGroup({
+            where: { id: userInVillageGroups[0].id },
+            data: { users: { disconnect: { uid: userId } } }
+          })
+          const oldGroupUsers = await ctx.db.locationGroup({ id: oldGroup.id }).users()
+          for (const oldGroupUser of oldGroupUsers) {
+            pubsub.publish(LOCATIONGROUP_CHANGED, {
+              [LOCATIONGROUP_CHANGED]: {
+                "toId": oldGroupUser.id,
+                "groupId": oldGroup.id,
+                'userid': user.id,
+                'type': "userRemoved"
+              }
+            })
+          }
+        }
+      } else {
+        const a = 1
+        if (userInVillageGroups.length > 0) {
+          if (userInVillageGroups[0].id !== villageLocationGroups[0].id) {
             // 从原来的组中删除User
             const oldGroup = await ctx.db.updateLocationGroup({
-              where:{id:userInVillageGroups[0].id},
-              data:{users:{disconnect:{uid:userId}}}
+              where: { id: userInVillageGroups[0].id },
+              data: { users: { disconnect: { uid: userId } } }
             })
-            const oldGroupUsers = await ctx.db.locationGroup({id:oldGroup.id}).users()
-            for(const oldGroupUser of oldGroupUsers ){
-              pubsub.publish(LOCATIONGROUPUSERS_CHANGED, { [LOCATIONGROUPUSERS_CHANGED]: { "text": oldGroupUser.id } })
+            const oldGroupUsers = await ctx.db.locationGroup({ id: oldGroup.id }).users()
+            for (const oldGroupUser of oldGroupUsers) {
+              pubsub.publish(LOCATIONGROUP_CHANGED, {
+                [LOCATIONGROUP_CHANGED]: {
+                  "toId": oldGroupUser.id,
+                  "groupId": oldGroup.id,
+                  'userid': user.id,
+                  'type': "userRemoved"
+                }
+              })
             }
             // 将User添加到现在的组中
             const newGroup = await ctx.db.updateLocationGroup({
-              where:{id:villageLocationGroups[0].id},
-              data:{users:{connect:{uid:userId}}}
+              where: { id: villageLocationGroups[0].id },
+              data: { users: { connect: { uid: userId } } }
             })
-            const newGroupUsers = await ctx.db.locationGroup({id:newGroup.id}).users()
-            for(const newGroupUser of newGroupUsers ){
-              pubsub.publish(LOCATIONGROUPUSERS_CHANGED, { [LOCATIONGROUPUSERS_CHANGED]: { "text": newGroupUser.id } })
+            const newGroupUsers = await ctx.db.locationGroup({ id: newGroup.id }).users()
+            for (const newGroupUser of newGroupUsers) {
+              if (newGroupUser.id !== user.id) {
+                pubsub.publish(LOCATIONGROUP_CHANGED, {
+                  [LOCATIONGROUP_CHANGED]: {
+                    "toId": newGroupUser.id,
+                    "groupId": newGroup.id,
+                    "userid": user.id,
+                    "username": user.name,
+                    "userAvatar": user.avatar,
+                    'type': 'userAdded'
+                  }
+                })
+              }
             }
-            pubsub.publish(LOCATIONGROUP_CHANGED, { [LOCATIONGROUP_CHANGED]: { "text": user.id } })
+            pubsub.publish(LOCATIONGROUP_CHANGED, {
+              [LOCATIONGROUP_CHANGED]: {
+                "toId": user.id,
+                "type": "refech"
+              }
+            })
           }
-        }else{
+        } else {
           // 将用户添加到现在的组中
           const newGroup = await ctx.db.updateLocationGroup({
-            where:{id:villageLocationGroups[0].id},
-            data:{users:{connect:{uid:userId}}}
+            where: { id: villageLocationGroups[0].id },
+            data: { users: { connect: { uid: userId } } }
           })
-          const newGroupUsers = await ctx.db.locationGroup({id:newGroup.id}).users()
-          for(const newGroupUser of newGroupUsers ){
-            pubsub.publish(LOCATIONGROUPUSERS_CHANGED, { [LOCATIONGROUPUSERS_CHANGED]: { "text": newGroupUser.id } })
+          const newGroupUsers = await ctx.db.locationGroup({ id: newGroup.id }).users()
+          for (const newGroupUser of newGroupUsers) {
+            if (newGroupUser.id !== user.id) {
+              pubsub.publish(LOCATIONGROUP_CHANGED, {
+                [LOCATIONGROUP_CHANGED]: {
+                  "toId": newGroupUser.id,
+                  "groupId": newGroup.id,
+                  "userid": user.id,
+                  "username": user.name,
+                  "userAvatar": user.avatar,
+                  'type': 'userAdded'
+                }
+              })
+            }
           }
-          pubsub.publish(LOCATIONGROUP_CHANGED, { [LOCATIONGROUP_CHANGED]: { "text": user.id } })
+          pubsub.publish(LOCATIONGROUP_CHANGED, {
+            [LOCATIONGROUP_CHANGED]: {
+              "toId": user.id,
+              "type": "refech"
+            }
+          })
         }
       }
+
+
+
     }
 
     // 添加老乡组
     const hometownGroupTypes = {
-      "VillageInResidenceVillage":[homeVillage,residenceVillage],
-      "StreetInResidenceVillage":[homeStreet,residenceVillage],
-      "AreaInResidenceVillage":[homeArea,residenceVillage],
-      "CityInResidenceVillage":[homeCity,residenceVillage],
-      "ProvinceInResidenceVillage":[homeProvince,residenceVillage],
-      "VillageInResidenceStreet":[homeVillage,residenceStreet],
-      "StreetInResidenceStreet":[homeStreet,residenceStreet],
-      "AreaInResidenceStreet":[homeArea,residenceStreet],
-      "CityInResidenceStreet":[homeCity,residenceStreet],
-      "ProvinceInResidenceStreet":[homeProvince,residenceStreet],
-      "VillageInResidenceArea":[homeVillage,residenceArea],
-      "StreetInResidenceArea":[homeStreet,residenceArea],
-      "AreaInResidenceArea":[homeArea,residenceArea],
-      "CityInResidenceArea":[homeCity,residenceArea],
-      "ProvinceInResidenceArea":[homeProvince,residenceArea],
-      "VillageInResidenceCity":[homeVillage,residenceCity],
-      "StreetInResidenceCity":[homeStreet,residenceCity],
-      "AreaInResidenceCity":[homeArea,residenceCity],
-      "CityInResidenceCity":[homeCity,residenceCity],
-      "ProvinceInResidenceCity":[homeProvince,residenceCity],
+      "VillageInResidenceVillage": [homeVillage, residenceVillage],
+      "StreetInResidenceVillage": [homeStreet, residenceVillage],
+      "AreaInResidenceVillage": [homeArea, residenceVillage],
+      "CityInResidenceVillage": [homeCity, residenceVillage],
+      "ProvinceInResidenceVillage": [homeProvince, residenceVillage],
+      "VillageInResidenceStreet": [homeVillage, residenceStreet],
+      "StreetInResidenceStreet": [homeStreet, residenceStreet],
+      "AreaInResidenceStreet": [homeArea, residenceStreet],
+      "CityInResidenceStreet": [homeCity, residenceStreet],
+      "ProvinceInResidenceStreet": [homeProvince, residenceStreet],
+      "VillageInResidenceArea": [homeVillage, residenceArea],
+      "StreetInResidenceArea": [homeStreet, residenceArea],
+      "AreaInResidenceArea": [homeArea, residenceArea],
+      "CityInResidenceArea": [homeCity, residenceArea],
+      "ProvinceInResidenceArea": [homeProvince, residenceArea],
+      "VillageInResidenceCity": [homeVillage, residenceCity],
+      "StreetInResidenceCity": [homeStreet, residenceCity],
+      "AreaInResidenceCity": [homeArea, residenceCity],
+      "CityInResidenceCity": [homeCity, residenceCity],
+      "ProvinceInResidenceCity": [homeProvince, residenceCity],
     }
 
-    if(homeProvince.id!==residenceProvince.id){
+    if (homeProvince.id !== residenceProvince.id) {
       // 对于跨省人的增加老乡组
-      for(const type of Object.keys(hometownGroupTypes)){
+      for (const type of Object.keys(hometownGroupTypes)) {
         // 检查组是否存在
         const hometownLocationGroups = await ctx.db.locationGroups({
-          where:{code:`${hometownGroupTypes[type][0].code}in${hometownGroupTypes[type][1].code}` }
+          where: { code: `${hometownGroupTypes[type][0].code}in${hometownGroupTypes[type][1].code}` }
         })
-        if(hometownLocationGroups.length===0){
-          await ctx.db.createLocationGroup({
-            kind:type,
-            code:`${hometownGroupTypes[type][0].code}in${hometownGroupTypes[type][1].code}`,
-            name:`${hometownGroupTypes[type][0].name}人在${hometownGroupTypes[type][1].name}`,
-            users:{connect:{uid:userId}}
-          })
-          pubsub.publish(LOCATIONGROUP_CHANGED, { [LOCATIONGROUP_CHANGED]: { "text": user.id } })
-        }else{
-          // 检查用户是否已经有组
-          const userInHometownGroups = await ctx.db.user({id:user.id}).locationGroups({
-            where:{kind:type}
-          })
+        // 检查用户是否已经有组
+        const userInHometownGroups = await ctx.db.user({ id: user.id }).locationGroups({
+          where: { kind: type }
+        })
 
-          if(userInHometownGroups.length>0){
-            if(userInHometownGroups[0].id!==hometownLocationGroups[0].id){
+        if (hometownLocationGroups.length === 0) {
+          await ctx.db.createLocationGroup({
+            kind: type,
+            code: `${hometownGroupTypes[type][0].code}in${hometownGroupTypes[type][1].code}`,
+            name: `${hometownGroupTypes[type][0].name}人在${hometownGroupTypes[type][1].name}`,
+            users: { connect: { uid: userId } }
+          })
+          pubsub.publish(LOCATIONGROUP_CHANGED, {
+            [LOCATIONGROUP_CHANGED]: {
+              "toId": user.id,
+              "type": "refech"
+            }
+          })
+          // 如果用户有老家组
+          if (userInHometownGroups.length > 0) {
+            // 从原来的组中删除User
+            const oldGroup = await ctx.db.updateLocationGroup({
+              where: { id: userInHometownGroups[0].id },
+              data: { users: { disconnect: { uid: userId } } }
+            })
+            const oldGroupUsers = await ctx.db.locationGroup({ id: oldGroup.id }).users()
+            for (const oldGroupUser of oldGroupUsers) {
+              pubsub.publish(LOCATIONGROUP_CHANGED, {
+                [LOCATIONGROUP_CHANGED]: {
+                  "toId": oldGroupUser.id,
+                  "groupId": oldGroup.id,
+                  'userid': user.id,
+                  'type': "userRemoved"
+                }
+              })
+            }
+          }
+        }else{
+          const b = 1
+          if (userInHometownGroups.length > 0) {
+            if (userInHometownGroups[0].id !== hometownLocationGroups[0].id) {
               // 从原来的组中删除User
               const oldGroup = await ctx.db.updateLocationGroup({
-                where:{id:userInHometownGroups[0].id},
-                data:{users:{disconnect:{uid:userId}}}
+                where: { id: userInHometownGroups[0].id },
+                data: { users: { disconnect: { uid: userId } } }
               })
-              const oldGroupUsers = await ctx.db.locationGroup({id:oldGroup.id}).users()
-              for(const oldGroupUser of oldGroupUsers ){
-                pubsub.publish(LOCATIONGROUPUSERS_CHANGED, { [LOCATIONGROUPUSERS_CHANGED]: { "text": oldGroupUser.id } })
+              const oldGroupUsers = await ctx.db.locationGroup({ id: oldGroup.id }).users()
+              for (const oldGroupUser of oldGroupUsers) {
+                pubsub.publish(LOCATIONGROUP_CHANGED, {
+                  [LOCATIONGROUP_CHANGED]: {
+                    "toId": oldGroupUser.id,
+                    "groupId": oldGroup.id,
+                    'userid': user.id,
+                    'type': "userRemoved"
+                  }
+                })
               }
               // 将User添加到现在的组中
               const newGroup = await ctx.db.updateLocationGroup({
-                where:{id:hometownLocationGroups[0].id},
-                data:{users:{connect:{uid:userId}}}
+                where: { id: hometownLocationGroups[0].id },
+                data: { users: { connect: { uid: userId } } }
               })
-              const newGroupUsers = await ctx.db.locationGroup({id:newGroup.id}).users()
-              for(const newGroupUser of newGroupUsers ){
-                pubsub.publish(LOCATIONGROUPUSERS_CHANGED, { [LOCATIONGROUPUSERS_CHANGED]: { "text": newGroupUser.id } })
+              const newGroupUsers = await ctx.db.locationGroup({ id: newGroup.id }).users()
+              for (const newGroupUser of newGroupUsers) {
+                if (newGroupUser.id !== user.id) {
+                  pubsub.publish(LOCATIONGROUP_CHANGED, {
+                    [LOCATIONGROUP_CHANGED]: {
+                      "toId": newGroupUser.id,
+                      "groupId": newGroup.id,
+                      "userid": user.id,
+                      "username": user.name,
+                      "userAvatar": user.avatar,
+                      'type': 'userAdded'
+                    }
+                  })
+                }
               }
-
-              pubsub.publish(LOCATIONGROUP_CHANGED, { [LOCATIONGROUP_CHANGED]: { "text": user.id } })
+  
+              pubsub.publish(LOCATIONGROUP_CHANGED, {
+                [LOCATIONGROUP_CHANGED]: {
+                  "toId": user.id,
+                  "type": "refech"
+                }
+              })
             }
-          }else{
+          } else {
             // 将用户添加到现在的组中
             const newGroup = await ctx.db.updateLocationGroup({
-              where:{id:hometownLocationGroups[0].id},
-              data:{users:{connect:{uid:userId}}}
+              where: { id: hometownLocationGroups[0].id },
+              data: { users: { connect: { uid: userId } } }
             })
-            const newGroupUsers = await ctx.db.locationGroup({id:newGroup.id}).users()
-            for(const newGroupUser of newGroupUsers ){
-              pubsub.publish(LOCATIONGROUPUSERS_CHANGED, { [LOCATIONGROUPUSERS_CHANGED]: { "text": newGroupUser.id } })
+            const newGroupUsers = await ctx.db.locationGroup({ id: newGroup.id }).users()
+            for (const newGroupUser of newGroupUsers) {
+              if (newGroupUser.id !== user.id) {
+                pubsub.publish(LOCATIONGROUP_CHANGED, {
+                  [LOCATIONGROUP_CHANGED]: {
+                    "toId": newGroupUser.id,
+                    "groupId": newGroup.id,
+                    "userid": user.id,
+                    "username": user.name,
+                    "userAvatar": user.avatar,
+                    'type': 'userAdded'
+                  }
+                })
+              }
             }
-            pubsub.publish(LOCATIONGROUP_CHANGED, { [LOCATIONGROUP_CHANGED]: { "text": user.id } })
+            pubsub.publish(LOCATIONGROUP_CHANGED, {
+              [LOCATIONGROUP_CHANGED]: {
+                "toId": user.id,
+                "type": "refech"
+              }
+            })
           }
         }
       }
@@ -585,8 +717,6 @@ export const Mutation = {
         })
     }
     // 此处发送向relative发送订阅
-    console.log('relativeId', relativeId)
-    console.log('发送订阅1')
     pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": relativeId } })
     // 更新自己的家庭成员状态为“等待确认”,更新to中的user
     // 检查person中是否已经存在relative
@@ -713,7 +843,6 @@ export const Mutation = {
             await updateCommonUserFamily(user, myRelationship, myCommonFamily, relative, relativeRelationship, ctx)
           }
           // 向relative推送familyChanged
-          console.log('发送订阅2')
           pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": relative.id } })
         }
         else {
@@ -732,7 +861,6 @@ export const Mutation = {
             await updateCommonUserFamily(relative, relativeRelationship, relativeToCommonUserFamily[0], user, myRelationship, ctx)
           }
           // 像我推送“familyChanged"
-          // console.log('发送订阅3')
           pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": user.id } })
         }
       }
@@ -770,7 +898,6 @@ export const Mutation = {
         // 如果等于0,则还没有共同的user,无需更新,如果大于0，则要更新CommonUser
         await updateCommonUserFamily(relative, relativeRelationship, relativeCommonFamily, user, myRelationship, ctx)
       }
-      // console.log('发送订阅4')
       pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": user.id } })
     }
 
@@ -826,7 +953,6 @@ export const Mutation = {
         await updateCommonUserFamily(user, myRelationship, myCommonFamily, relative, relativeRelationship, ctx)
       }
       // 向relative推送familychanged
-      console.log('发送订阅6')
       pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": relative.id } })
     }
 
@@ -851,7 +977,6 @@ export const Mutation = {
     // 获取学校地址
     let place
     place = await ctx.db.location({ name: locationName })
-    console.log(place)
     if (!place) {
       if (location.village !== "") {
         place = await ctx.db.createLocation({
@@ -968,8 +1093,8 @@ export const Mutation = {
           school: { connect: { id: schoolId } },
           students: { connect: { uid: userId } }
         })
-        
-      }else{
+
+      } else {
         newSchoolEdu = await ctx.db.updateSchoolEdu(
           {
             where: { id: schoolEdus[0].id },
@@ -977,7 +1102,7 @@ export const Mutation = {
           }
         )
       }
-    }else{
+    } else {
       schoolEdus = await ctx.db.schoolEdus({
         where: {
           AND: [
@@ -989,7 +1114,7 @@ export const Mutation = {
           ]
         }
       })
-  
+
       if (schoolEdus.length === 0) {
         newSchoolEdu = await ctx.db.createSchoolEdu({
           startTime,
@@ -999,7 +1124,7 @@ export const Mutation = {
           major: { connect: { id: majorId } },
           students: { connect: { uid: userId } }
         })
-      }else{
+      } else {
         newSchoolEdu = await ctx.db.updateSchoolEdu(
           {
             where: { id: schoolEdus[0].id },
@@ -1009,14 +1134,14 @@ export const Mutation = {
       }
     }
     // 向所有同学推送
-    const students = await ctx.db.schoolEdu({id:newSchoolEdu.id}).students()
-    for (const student of students){
+    const students = await ctx.db.schoolEdu({ id: newSchoolEdu.id }).students()
+    for (const student of students) {
       pubsub.publish(STUDENTS_ADDED, { [STUDENTS_ADDED]: { "text": student.id } })
     }
     return newSchoolEdu
   },
 
-  addOrUpdateWork: async (parent, { companyName, startTime, endTime, department, stationId,updateId }, ctx) => {
+  addOrUpdateWork: async (parent, { companyName, startTime, endTime, department, stationId, updateId }, ctx) => {
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -1037,30 +1162,30 @@ export const Mutation = {
     const companies = await ctx.db.companies({ where: { name: companyName } })
     let companyId
     let createdWork
-   
+
     // 如果要是更新的话
-    if(updateId){
-      const work = await ctx.db.work({id:updateId})
-      if(work){
-        const worker = await ctx.db.work({id:updateId}).worker()
-        if(worker.id!==user.id){
+    if (updateId) {
+      const work = await ctx.db.work({ id: updateId })
+      if (work) {
+        const worker = await ctx.db.work({ id: updateId }).worker()
+        if (worker.id !== user.id) {
           throw new Error('你没有权利修改')
         }
-        if(companies.length===0){
+        if (companies.length === 0) {
           throw new Error('无法修改公司名称')
         }
         const updateWork = await ctx.db.updateWork({
-          where:{id:updateId},
-          data:{
+          where: { id: updateId },
+          data: {
             startTime,
             endTime,
             department,
-            post:{connect:{id:stationId}},
+            post: { connect: { id: stationId } },
           }
         })
         // 如果同事离职了，更新同事，更新组，则从workGroup中删除该成员，同时在oldColleagues中增加成员。
         // 从组中将成员状态为1的成员复制到oldColleagues当中
-        if(new Date(endTime).getFullYear()!==9999){
+        if (new Date(endTime).getFullYear() !== 9999) {
           const workGroups = await ctx.db.workGroups({
             where: {
               AND: [
@@ -1076,24 +1201,24 @@ export const Mutation = {
               ]
             }
           })
-          if(workGroups.length>0){
+          if (workGroups.length > 0) {
             const workGroupWorColleagues = await ctx.db.workGroup({
-              id:workGroups[0].id
+              id: workGroups[0].id
             }).colleagues()
-            for(const colleague of workGroupWorColleagues){
-              const oldworker = await ctx.db.colleague({id:colleague.id}).worker()
-               await ctx.db.createOldColleague({
-                from:{connect:{id:user.id}},
-                to:{connect:{id:oldworker.id}},
-                status:'3',
-                company:{connect:{id:companies[0].id}}
-              })
-              
+            for (const colleague of workGroupWorColleagues) {
+              const oldworker = await ctx.db.colleague({ id: colleague.id }).worker()
               await ctx.db.createOldColleague({
-                from:{connect:{id:oldworker.id}},
-                to:{connect:{id:user.id}},
-                status:'3',
-                company:{connect:{id:companies[0].id}}
+                from: { connect: { id: user.id } },
+                to: { connect: { id: oldworker.id } },
+                status: '3',
+                company: { connect: { id: companies[0].id } }
+              })
+
+              await ctx.db.createOldColleague({
+                from: { connect: { id: oldworker.id } },
+                to: { connect: { id: user.id } },
+                status: '3',
+                company: { connect: { id: companies[0].id } }
               })
               pubsub.publish(MYOLDCOLLEAGUES_CHANGED, { [MYOLDCOLLEAGUES_CHANGED]: { "text": oldworker.id } })
             }
@@ -1113,24 +1238,24 @@ export const Mutation = {
               ]
             }
           })
-          
-          for(const workGroup of allWorkGroups){
+
+          for (const workGroup of allWorkGroups) {
             const userColleagues = await ctx.db.colleagues({
-              where:{
-                AND:[
-                  {worker:{id:user.id}},
-                  {group:{id:workGroup.id}}
+              where: {
+                AND: [
+                  { worker: { id: user.id } },
+                  { group: { id: workGroup.id } }
                 ]
               }
-            }) 
-            await ctx.db.updateWorkGroup({
-              where:{id:workGroup.id},
-              data:{colleagues:{delete:{id:userColleagues[0].id}}}
             })
-            const colleagues = await ctx.db.workGroup({id:workGroup.id}).colleagues()
-            for(const colleague of colleagues){
-              const publishWorker = await ctx.db.colleague({id:colleague.id}).worker()
-              if(publishWorker.id!==user.id){
+            await ctx.db.updateWorkGroup({
+              where: { id: workGroup.id },
+              data: { colleagues: { delete: { id: userColleagues[0].id } } }
+            })
+            const colleagues = await ctx.db.workGroup({ id: workGroup.id }).colleagues()
+            for (const colleague of colleagues) {
+              const publishWorker = await ctx.db.colleague({ id: colleague.id }).worker()
+              if (publishWorker.id !== user.id) {
                 pubsub.publish(WORKGROUP_CHANGED, { [WORKGROUP_CHANGED]: { "text": publishWorker.id } })
               }
             }
@@ -1148,46 +1273,48 @@ export const Mutation = {
         startTime,
         endTime,
         department,
-        post:{connect:{id:stationId}},
+        post: { connect: { id: stationId } },
         company: { connect: { id: companyId } },
         worker: { connect: { uid: userId } }
       })
-      
-    }else{
-    // 如果公司不存在
+
+    } else {
+      // 如果公司不存在
       createdWork = await ctx.db.createWork({
         startTime,
         endTime,
         department,
-        post:{connect:{id:stationId}},
+        post: { connect: { id: stationId } },
         company: { create: { name: companyName } },
         worker: { connect: { uid: userId } }
       })
-      const company = await ctx.db.work({id:createdWork.id}).company()
+      const company = await ctx.db.work({ id: createdWork.id }).company()
       companyId = company.id
     }
 
-     // 对于刚刚创建的工作，查找所有同时间工作的人
-     const works = await ctx.db.works({
-      where:{
-        AND:[
-          {OR:[
-          {startTime_gte:(new Date(startTime))},
-          {endTime_lte:(new Date(endTime))},
-        ]},
-          {company:{id:companyId.id}},
+    // 对于刚刚创建的工作，查找所有同时间工作的人
+    const works = await ctx.db.works({
+      where: {
+        AND: [
+          {
+            OR: [
+              { startTime_gte: (new Date(startTime)) },
+              { endTime_lte: (new Date(endTime)) },
+            ]
+          },
+          { company: { id: companyId.id } },
         ]
       }
     })
-    
-      for(const work of works){
-        // 向所有的人推送通知，重新获取数据
-        const worker = await ctx.db.work({id:work.id}).worker()
-        pubsub.publish(COLLEAGUES_ADDED, { [COLLEAGUES_ADDED]: { "text": worker.id } })
-      }
-    
+
+    for (const work of works) {
+      // 向所有的人推送通知，重新获取数据
+      const worker = await ctx.db.work({ id: work.id }).worker()
+      pubsub.publish(COLLEAGUES_ADDED, { [COLLEAGUES_ADDED]: { "text": worker.id } })
+    }
+
     pubsub.publish(WORKS_CHANGED, { [WORKS_CHANGED]: { "text": user.id } })
-    
+
     return createdWork
   },
 
@@ -1368,30 +1495,27 @@ export const Mutation = {
     if (!user) {
       throw new Error("用户不存在")
     }
-   
+
     const groupUsersId = []
     const meAndSpousesfamilies = []
-    groupUsersId.push({id:user.id})
+    groupUsersId.push({ id: user.id })
     const meFamilies = await ctx.db.user({ id: user.id }).families()
     meAndSpousesfamilies.push(meFamilies)
     // 配偶
-    const mySpouseFamilies = meFamilies.filter(family=>!!~['wife','husband'].indexOf(family.relationship))
-    console.log(mySpouseFamilies)
-    for (const mySpouseFamily of mySpouseFamilies ){
-      const mySpouse = await ctx.db.family({id:mySpouseFamily.id}).to().user()
-      if(mySpouse){
-        groupUsersId.push({id:mySpouse.id})
-        const spouseFamilies = await ctx.db.user({id:mySpouse.id}).families()
-        console.log('spouseFamilies',spouseFamilies)
+    const mySpouseFamilies = meFamilies.filter(family => !!~['wife', 'husband'].indexOf(family.relationship))
+    for (const mySpouseFamily of mySpouseFamilies) {
+      const mySpouse = await ctx.db.family({ id: mySpouseFamily.id }).to().user()
+      if (mySpouse) {
+        groupUsersId.push({ id: mySpouse.id })
+        const spouseFamilies = await ctx.db.user({ id: mySpouse.id }).families()
         meAndSpousesfamilies.push(spouseFamilies)
       }
     }
-    console.log(meAndSpousesfamilies)
-    for(const myFamilies of meAndSpousesfamilies){
+    for (const myFamilies of meAndSpousesfamilies) {
       // 我和配偶的家庭组全部创建
       // parents
       let p
-        // father's parents
+      // father's parents
       let fp
       // father's father's parents
       let ffp
@@ -1407,49 +1531,41 @@ export const Mutation = {
       let mpast
       // 如果有father pa或者其上面的父母
       let fpast
-      console.log('start')
       // 创建父母群
-      const me = await ctx.db.family({id:myFamilies[0].id}).from()
-      if(me.id===user.id){
+      const me = await ctx.db.family({ id: myFamilies[0].id }).from()
+      if (me.id === user.id) {
         p = await createFamilyGroupById(me.id, ctx)
-      }else{
-        try{
+      } else {
+        try {
           p = await createFamilyGroupById(me.id, ctx)
-        }catch(error){
+        } catch (error) {
           console.log(error)
         }
       }
-      console.log('p', p)
       // 创建父母的父母群
-      
+
       const familyFather = myFamilies.filter(family => family.relationship === 'father')
       const father = await ctx.db.family({ id: familyFather[0].id }).to().user()
-      console.log('father', father)
       if (father) {
         // 创建祖父母群
         try {
           groupUsersId.push({ id: father.id })
           fp = await createFamilyGroupById(father.id, ctx)
-          console.log('fp', fp)
           // 创建爷爷和奶奶的父母
           const fatherFamilies = await ctx.db.user({ id: father.id }).families()
           const fatherFamilyFather = fatherFamilies.filter(family => family.relationship === 'father')
           const grandpa = await ctx.db.family({ id: fatherFamilyFather[0].id }).to().user()
-          console.log('grandpa', grandpa)
           if (grandpa) {
             // 创建曾祖父母
             groupUsersId.push({ id: grandpa.id })
             ffp = await createFamilyGroupById(grandpa.id, ctx)
-            console.log('ffp', ffp)
           }
           const motherFamilyFather = fatherFamilies.filter(family => family.relationship === 'mother')
           const grandma = await ctx.db.family({ id: motherFamilyFather[0].id }).to().user()
-          console.log('grandma', grandma)
           if (grandma) {
             // 创建曾外祖父
             groupUsersId.push({ id: grandma.id })
             fmp = await createFamilyGroupById(grandma.id, ctx)
-            console.log('fmp', fmp)
           }
         } catch (error) {
           console.log(error.message)
@@ -1457,32 +1573,26 @@ export const Mutation = {
       }
       const familyMother = myFamilies.filter(family => family.relationship === 'mother')
       const mother = await ctx.db.family({ id: familyMother[0].id }).to().user()
-      console.log('mother', mother)
       if (mother) {
         try {
           // 创建外祖父母群
           groupUsersId.push({ id: mother.id })
           mp = await createFamilyGroupById(mother.id, ctx)
-          console.log('mp', mp)
           // 创建姥姥和姥爷的父母
           const motherFamilies = await ctx.db.user({ id: mother.id }).families()
           const fatherFamilyMother = motherFamilies.filter(family => family.relationship === 'father')
           const grandpa = await ctx.db.family({ id: fatherFamilyMother[0].id }).to().user()
-          console.log('grandpa', grandpa)
           if (grandpa) {
             // 创建外曾祖父母
             groupUsersId.push({ id: grandpa.id })
             mfp = await createFamilyGroupById(grandpa.id, ctx)
-            console.log('mfp', mfp)
           }
           const motherFamilyMother = motherFamilies.filter(family => family.relationship === 'mother')
           const grandma = await ctx.db.family({ id: motherFamilyMother[0].id }).to().user()
-          console.log('grandma', grandma)
           if (grandma) {
             // 创建外曾外祖父母
             groupUsersId.push({ id: grandma.id })
             mmp = await createFamilyGroupById(grandma.id, ctx)
-            console.log('mmp', mmp)
           }
         } catch (error) {
           console.log(error.message)
@@ -1525,11 +1635,11 @@ export const Mutation = {
     }
 
     // 我的群由子女负责创建
-    const sonAndDaughters = meFamilies.filter(family=>!!~['son','daughter'].indexOf(family.relationship))
-    for(const sonAndDaughter of sonAndDaughters){
-      const sd = await ctx.db.family({id:sonAndDaughter.id}).to().user()
-      if(sd){
-        groupUsersId.push({id:sd.id})
+    const sonAndDaughters = meFamilies.filter(family => !!~['son', 'daughter'].indexOf(family.relationship))
+    for (const sonAndDaughter of sonAndDaughters) {
+      const sd = await ctx.db.family({ id: sonAndDaughter.id }).to().user()
+      if (sd) {
+        groupUsersId.push({ id: sd.id })
       }
     }
 
@@ -1586,14 +1696,14 @@ export const Mutation = {
         where: { id: classGroups[0].id },
         data: { members: { create: { status: '0', student: { connect: { id: user.id } } } } }
       })
-      const members = await ctx.db.classGroup({id:updated.id}).members()
-      for(const member of members){
-        const student = await ctx.db.classMate({id:member.id}).student()
-        if(student.id!==user.id){
+      const members = await ctx.db.classGroup({ id: updated.id }).members()
+      for (const member of members) {
+        const student = await ctx.db.classMate({ id: member.id }).student()
+        if (student.id !== user.id) {
           pubsub.publish(CLASSGROUP_CHANGED, { [CLASSGROUP_CHANGED]: { "text": student.id } })
         }
       }
-      
+
       return updated
     }
     // 如果studentId没有组，则studentId新建一个组，并且把user加入到组中
@@ -1668,7 +1778,7 @@ export const Mutation = {
     ).members()
 
     // 如果student也有组,且和我不是一个组，则合并我和stuent的组。
-    if (studentClassGroups.length > 0 && studentClassGroups[0].id!==myClassGroups[0].id) {
+    if (studentClassGroups.length > 0 && studentClassGroups[0].id !== myClassGroups[0].id) {
       const studentClassGroupsMembers = await ctx.db.classGroup({
         id: studentClassGroups[0].id
       }).members()
@@ -1713,9 +1823,9 @@ export const Mutation = {
           id: myClassGroups[0].id
         })
 
-        const members = await ctx.db.classGroup({id:studentClassGroups[0].id}).members()
-        for(const member of members){
-          const student = await ctx.db.classMate({id:member.id}).student()
+        const members = await ctx.db.classGroup({ id: studentClassGroups[0].id }).members()
+        for (const member of members) {
+          const student = await ctx.db.classMate({ id: member.id }).student()
           pubsub.publish(CLASSGROUP_CHANGED, { [CLASSGROUP_CHANGED]: { "text": student.id } })
         }
 
@@ -1760,9 +1870,9 @@ export const Mutation = {
         id: studentClassGroups[0].id
       })
 
-      const members = await ctx.db.classGroup({id:myClassGroups[0].id}).members()
-      for(const member of members){
-        const student = await ctx.db.classMate({id:member.id}).student()
+      const members = await ctx.db.classGroup({ id: myClassGroups[0].id }).members()
+      for (const member of members) {
+        const student = await ctx.db.classMate({ id: member.id }).student()
         pubsub.publish(CLASSGROUP_CHANGED, { [CLASSGROUP_CHANGED]: { "text": student.id } })
       }
       return myClassGroups[0]
@@ -1780,9 +1890,9 @@ export const Mutation = {
       where: { id: studentClassMates[0].id },
       data: { status: '1' }
     })
-    const members = await ctx.db.classGroup({id:myClassGroups[0].id}).members()
-    for(const member of members){
-      const student = await ctx.db.classMate({id:member.id}).student()
+    const members = await ctx.db.classGroup({ id: myClassGroups[0].id }).members()
+    for (const member of members) {
+      const student = await ctx.db.classMate({ id: member.id }).student()
       pubsub.publish(CLASSGROUP_CHANGED, { [CLASSGROUP_CHANGED]: { "text": student.id } })
     }
     return myClassGroups[0]
@@ -1836,14 +1946,14 @@ export const Mutation = {
         where: { id: workGroups[0].id },
         data: { colleagues: { create: { status: '0', worker: { connect: { id: user.id } } } } }
       })
-      const colleagues = await ctx.db.workGroup({id:updated.id}).colleagues()
-      for(const colleague of colleagues){
-        const worker = await ctx.db.colleague({id:colleague.id}).worker()
-        if(worker.id!==user.id){
+      const colleagues = await ctx.db.workGroup({ id: updated.id }).colleagues()
+      for (const colleague of colleagues) {
+        const worker = await ctx.db.colleague({ id: colleague.id }).worker()
+        if (worker.id !== user.id) {
           pubsub.publish(WORKGROUP_CHANGED, { [WORKGROUP_CHANGED]: { "text": worker.id } })
         }
       }
-      
+
       return updated
     }
     // 如果workId没有组，则workId新建一个组，并且把user加入到组中
@@ -1916,7 +2026,7 @@ export const Mutation = {
     ).colleagues()
 
     // 如果worker也有组,且和我不是一个组，则合并我和stuent的组。
-    if (workerGroups.length > 0 && workerGroups[0].id!==myWorkGroups[0].id) {
+    if (workerGroups.length > 0 && workerGroups[0].id !== myWorkGroups[0].id) {
       const workerGroupsColleagues = await ctx.db.workGroup({
         id: workerGroups[0].id
       }).colleagues()
@@ -1961,9 +2071,9 @@ export const Mutation = {
           id: myWorkGroups[0].id
         })
 
-        const colleagues = await ctx.db.workGroup({id:workerGroups[0].id}).colleagues()
-        for(const colleague of colleagues){
-          const worker = await ctx.db.colleague({id:colleague.id}).worker()
+        const colleagues = await ctx.db.workGroup({ id: workerGroups[0].id }).colleagues()
+        for (const colleague of colleagues) {
+          const worker = await ctx.db.colleague({ id: colleague.id }).worker()
           pubsub.publish(WORKGROUP_CHANGED, { [WORKGROUP_CHANGED]: { "text": worker.id } })
         }
 
@@ -2008,9 +2118,9 @@ export const Mutation = {
         id: workerGroups[0].id
       })
 
-      const colleagues = await ctx.db.workGroup({id:myWorkGroups[0].id}).colleagues()
-      for(const colleague of colleagues){
-        const worker = await ctx.db.colleague({id:colleague.id}).worker()
+      const colleagues = await ctx.db.workGroup({ id: myWorkGroups[0].id }).colleagues()
+      for (const colleague of colleagues) {
+        const worker = await ctx.db.colleague({ id: colleague.id }).worker()
         pubsub.publish(WORKGROUP_CHANGED, { [WORKGROUP_CHANGED]: { "text": worker.id } })
       }
       return myWorkGroups[0]
@@ -2028,15 +2138,15 @@ export const Mutation = {
       where: { id: workerColleauges[0].id },
       data: { status: '1' }
     })
-    const colleagues = await ctx.db.workGroup({id:myWorkGroups[0].id}).colleagues()
-    for(const colleague of colleagues){
-      const worker = await ctx.db.colleague({id:colleague.id}).worker()
+    const colleagues = await ctx.db.workGroup({ id: myWorkGroups[0].id }).colleagues()
+    for (const colleague of colleagues) {
+      const worker = await ctx.db.colleague({ id: colleague.id }).worker()
       pubsub.publish(WORKGROUP_CHANGED, { [WORKGROUP_CHANGED]: { "text": worker.id } })
     }
     return myWorkGroups[0]
   },
 
-  addOldColleague:async (parent, { companyId, workerId}, ctx) => {
+  addOldColleague: async (parent, { companyId, workerId }, ctx) => {
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2052,24 +2162,24 @@ export const Mutation = {
     checkId(workerId)
 
     const myOldColleague = await ctx.db.createOldColleague({
-      from:{connect:{id:user.id}},
-      to:{connect:{id:workerId}},
-      status:'1',
-      company:{connect:{id:companyId}}
+      from: { connect: { id: user.id } },
+      to: { connect: { id: workerId } },
+      status: '1',
+      company: { connect: { id: companyId } }
     })
 
     await ctx.db.createOldColleague({
-      from:{connect:{id:workerId}},
-      to:{connect:{id:user.id}},
-      status:'2',
-      company:{connect:{id:companyId}}
+      from: { connect: { id: workerId } },
+      to: { connect: { id: user.id } },
+      status: '2',
+      company: { connect: { id: companyId } }
     })
     pubsub.publish(MYOLDCOLLEAGUES_CHANGED, { [MYOLDCOLLEAGUES_CHANGED]: { "text": workerId } })
 
     return myOldColleague
   },
 
-  confirmOldColleague:async (parent, { companyId, workerId}, ctx) => {
+  confirmOldColleague: async (parent, { companyId, workerId }, ctx) => {
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2085,42 +2195,111 @@ export const Mutation = {
     checkId(workerId)
     // -----------------------------------------------
     const myOldColleagues = await ctx.db.oldColleagues({
-      where:{
-        AND:[
-          {from:{id:user.id}},
-          {to:{id:workerId}},
-          {company:{id:companyId}},
+      where: {
+        AND: [
+          { from: { id: user.id } },
+          { to: { id: workerId } },
+          { company: { id: companyId } },
         ]
       }
     })
 
     const oldColleagueTomes = await ctx.db.oldColleagues({
-      where:{
-        AND:[
-          {from:{id:workerId}},
-          {to:{id:user.id}},
-          {company:{id:companyId}},
+      where: {
+        AND: [
+          { from: { id: workerId } },
+          { to: { id: user.id } },
+          { company: { id: companyId } },
         ]
       }
     })
 
-    if(oldColleagueTomes.length>0){
+    if (oldColleagueTomes.length > 0) {
       await ctx.db.updateOldColleague({
-        where:{id:oldColleagueTomes[0].id},
-        data:{status:'3'},
+        where: { id: oldColleagueTomes[0].id },
+        data: { status: '3' },
       })
       pubsub.publish(MYOLDCOLLEAGUES_CHANGED, { [MYOLDCOLLEAGUES_CHANGED]: { "text": workerId } })
-  }
+    }
 
-    if(myOldColleagues.length>0){
+    if (myOldColleagues.length > 0) {
       const updatemyOldColleague = await ctx.db.updateOldColleague({
-        where:{id:myOldColleagues[0].id},
-        data:{status:'3'},
+        where: { id: myOldColleagues[0].id },
+        data: { status: '3' },
       })
       return updatemyOldColleague
     }
 
     throw new Error('无法更改同事信息')
+  },
+
+  postPhoto:async (parent, {uri}, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    console.log('uri',uri)
+    const ext = getFileExt(uri)
+    const name = getFileName(ext)
+    const typesMap = {'jpg':'jpeg','png':'png','gif':'gif','jpeg':'jpeg','bmp':'bmp'}
+    const options = {expires: 1800,method:'PUT','Content-Type':`image/${typesMap[ext]}`} 
+    console.log(name)
+    const url = ossClient.signatureUrl(`images/${name}`,options);
+    console.log(url)
+    const avatar = await ctx.db.user({uid:userId}).avatar()
+    let newPhoto
+    if(avatar && avatar.id){
+      newPhoto = await ctx.db.updatePhoto({
+        where:{id:avatar.id},
+        data:{
+          name,
+        }
+      })
+    }else{
+      newPhoto = await ctx.db.createPhoto({
+        name,
+        user:{connect:{uid:userId}}
+      })
+    }
+    return {id:newPhoto.id,name,url}
+  },
+
+  addAvatar:async (parent, {uri}, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    const ext = getFileExt(uri)
+    const name = `${user.username}_${getFileName(ext)}`
+    console.log('name',name)
+    const typesMap = {'jpg':'jpeg','png':'png','gif':'gif','jpeg':'jpeg','bmp':'bmp'}
+    const options = {expires: 1800,method:'PUT','Content-Type':`image/${typesMap[ext]}`} 
+    const url = ossClient.signatureUrl(`images/${name}`,options);
+    const avatar = await ctx.db.user({uid:userId}).avatar()
+    let newPhoto
+    if(avatar && avatar.id){
+      newPhoto = await ctx.db.updatePhoto({
+        where:{id:avatar.id},
+        data:{
+          name,
+        }
+      })
+    }else{
+      newPhoto = await ctx.db.createPhoto({
+        name,
+        user:{connect:{uid:userId}}
+      })
+    }
+    
+    return {id:newPhoto.id,name,url}
   },
 
 

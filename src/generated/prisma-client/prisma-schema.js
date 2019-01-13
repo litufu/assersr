@@ -67,6 +67,10 @@ type AggregatePerson {
   count: Int!
 }
 
+type AggregatePhoto {
+  count: Int!
+}
+
 type AggregatePost {
   count: Int!
 }
@@ -3494,6 +3498,12 @@ type Mutation {
   upsertPerson(where: PersonWhereUniqueInput!, create: PersonCreateInput!, update: PersonUpdateInput!): Person!
   deletePerson(where: PersonWhereUniqueInput!): Person
   deleteManyPersons(where: PersonWhereInput): BatchPayload!
+  createPhoto(data: PhotoCreateInput!): Photo!
+  updatePhoto(data: PhotoUpdateInput!, where: PhotoWhereUniqueInput!): Photo
+  updateManyPhotos(data: PhotoUpdateManyMutationInput!, where: PhotoWhereInput): BatchPayload!
+  upsertPhoto(where: PhotoWhereUniqueInput!, create: PhotoCreateInput!, update: PhotoUpdateInput!): Photo!
+  deletePhoto(where: PhotoWhereUniqueInput!): Photo
+  deleteManyPhotos(where: PhotoWhereInput): BatchPayload!
   createPost(data: PostCreateInput!): Post!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateManyPosts(data: PostUpdateManyMutationInput!, where: PostWhereInput): BatchPayload!
@@ -3989,6 +3999,161 @@ input PersonWhereUniqueInput {
   id: ID
 }
 
+type Photo {
+  id: ID!
+  name: String
+  url: String
+  user: User
+}
+
+type PhotoConnection {
+  pageInfo: PageInfo!
+  edges: [PhotoEdge]!
+  aggregate: AggregatePhoto!
+}
+
+input PhotoCreateInput {
+  name: String
+  url: String
+  user: UserCreateOneWithoutAvatarInput
+}
+
+input PhotoCreateOneWithoutUserInput {
+  create: PhotoCreateWithoutUserInput
+  connect: PhotoWhereUniqueInput
+}
+
+input PhotoCreateWithoutUserInput {
+  name: String
+  url: String
+}
+
+type PhotoEdge {
+  node: Photo!
+  cursor: String!
+}
+
+enum PhotoOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  url_ASC
+  url_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PhotoPreviousValues {
+  id: ID!
+  name: String
+  url: String
+}
+
+type PhotoSubscriptionPayload {
+  mutation: MutationType!
+  node: Photo
+  updatedFields: [String!]
+  previousValues: PhotoPreviousValues
+}
+
+input PhotoSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: PhotoWhereInput
+  AND: [PhotoSubscriptionWhereInput!]
+  OR: [PhotoSubscriptionWhereInput!]
+  NOT: [PhotoSubscriptionWhereInput!]
+}
+
+input PhotoUpdateInput {
+  name: String
+  url: String
+  user: UserUpdateOneWithoutAvatarInput
+}
+
+input PhotoUpdateManyMutationInput {
+  name: String
+  url: String
+}
+
+input PhotoUpdateOneWithoutUserInput {
+  create: PhotoCreateWithoutUserInput
+  update: PhotoUpdateWithoutUserDataInput
+  upsert: PhotoUpsertWithoutUserInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: PhotoWhereUniqueInput
+}
+
+input PhotoUpdateWithoutUserDataInput {
+  name: String
+  url: String
+}
+
+input PhotoUpsertWithoutUserInput {
+  update: PhotoUpdateWithoutUserDataInput!
+  create: PhotoCreateWithoutUserInput!
+}
+
+input PhotoWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  url: String
+  url_not: String
+  url_in: [String!]
+  url_not_in: [String!]
+  url_lt: String
+  url_lte: String
+  url_gt: String
+  url_gte: String
+  url_contains: String
+  url_not_contains: String
+  url_starts_with: String
+  url_not_starts_with: String
+  url_ends_with: String
+  url_not_ends_with: String
+  user: UserWhereInput
+  AND: [PhotoWhereInput!]
+  OR: [PhotoWhereInput!]
+  NOT: [PhotoWhereInput!]
+}
+
+input PhotoWhereUniqueInput {
+  id: ID
+  name: String
+}
+
 type Post {
   id: ID!
   createdAt: DateTime!
@@ -4419,6 +4584,9 @@ type Query {
   person(where: PersonWhereUniqueInput!): Person
   persons(where: PersonWhereInput, orderBy: PersonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Person]!
   personsConnection(where: PersonWhereInput, orderBy: PersonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PersonConnection!
+  photo(where: PhotoWhereUniqueInput!): Photo
+  photos(where: PhotoWhereInput, orderBy: PhotoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Photo]!
+  photosConnection(where: PhotoWhereInput, orderBy: PhotoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PhotoConnection!
   post(where: PostWhereUniqueInput!): Post
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
@@ -5370,6 +5538,7 @@ type Subscription {
   message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
   oldColleague(where: OldColleagueSubscriptionWhereInput): OldColleagueSubscriptionPayload
   person(where: PersonSubscriptionWhereInput): PersonSubscriptionPayload
+  photo(where: PhotoSubscriptionWhereInput): PhotoSubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   province(where: ProvinceSubscriptionWhereInput): ProvinceSubscriptionPayload
   regStatus(where: RegStatusSubscriptionWhereInput): RegStatusSubscriptionPayload
@@ -5617,7 +5786,7 @@ type User {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: Photo
   birthdaycalendar: String
   birthday: DateTime
   birthplace: Location
@@ -5658,7 +5827,7 @@ input UserCreateInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -5731,6 +5900,11 @@ input UserCreateOneInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutAvatarInput {
+  create: UserCreateWithoutAvatarInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutClassMateInput {
   create: UserCreateWithoutClassMateInput
   connect: UserWhereUniqueInput
@@ -5781,12 +5955,44 @@ input UserCreateOneWithoutWorksInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateWithoutAvatarInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneWithoutBornsInput
+  residence: LocationCreateOneWithoutLivesInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  messages: MessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+  locationGroups: LocationGroupCreateManyWithoutUsersInput
+}
+
 input UserCreateWithoutBirthplaceInput {
   username: String!
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   residence: LocationCreateOneWithoutLivesInput
@@ -5818,7 +6024,7 @@ input UserCreateWithoutClassMateInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -5850,7 +6056,7 @@ input UserCreateWithoutColleaguesInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -5882,7 +6088,7 @@ input UserCreateWithoutCreaterInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -5914,7 +6120,7 @@ input UserCreateWithoutExamInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -5946,7 +6152,7 @@ input UserCreateWithoutFamiliesInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -5978,7 +6184,7 @@ input UserCreateWithoutFamilyGroupInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -6010,7 +6216,7 @@ input UserCreateWithoutFromOldColleaguesInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -6042,7 +6248,7 @@ input UserCreateWithoutGroupsInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -6074,7 +6280,7 @@ input UserCreateWithoutLocationGroupsInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -6106,7 +6312,7 @@ input UserCreateWithoutMessagesInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -6138,7 +6344,7 @@ input UserCreateWithoutPostsInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -6170,7 +6376,7 @@ input UserCreateWithoutRegStatusInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -6202,7 +6408,7 @@ input UserCreateWithoutResidenceInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -6234,7 +6440,7 @@ input UserCreateWithoutStudiesInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -6266,7 +6472,7 @@ input UserCreateWithoutToOldColleaguesInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -6298,7 +6504,7 @@ input UserCreateWithoutWorksInput {
   password: String!
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoCreateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationCreateOneWithoutBornsInput
@@ -6341,8 +6547,6 @@ enum UserOrderByInput {
   name_DESC
   gender_ASC
   gender_DESC
-  avatar_ASC
-  avatar_DESC
   birthdaycalendar_ASC
   birthdaycalendar_DESC
   birthday_ASC
@@ -6367,7 +6571,6 @@ type UserPreviousValues {
   password: String!
   name: String
   gender: String
-  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   uid: String!
@@ -6401,7 +6604,7 @@ input UserUpdateDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -6434,7 +6637,7 @@ input UserUpdateInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -6476,7 +6679,6 @@ input UserUpdateManyMutationInput {
   password: String
   name: String
   gender: String
-  avatar: String
   birthdaycalendar: String
   birthday: DateTime
   uid: String
@@ -6585,6 +6787,15 @@ input UserUpdateOneRequiredWithoutPostsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneWithoutAvatarInput {
+  create: UserCreateWithoutAvatarInput
+  update: UserUpdateWithoutAvatarDataInput
+  upsert: UserUpsertWithoutAvatarInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneWithoutClassMateInput {
   create: UserCreateWithoutClassMateInput
   update: UserUpdateWithoutClassMateDataInput
@@ -6639,12 +6850,44 @@ input UserUpdateOneWithoutWorksInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateWithoutAvatarDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneWithoutBornsInput
+  residence: LocationUpdateOneWithoutLivesInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  messages: MessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+  locationGroups: LocationGroupUpdateManyWithoutUsersInput
+}
+
 input UserUpdateWithoutBirthplaceDataInput {
   username: String
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   residence: LocationUpdateOneWithoutLivesInput
@@ -6676,7 +6919,7 @@ input UserUpdateWithoutClassMateDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -6708,7 +6951,7 @@ input UserUpdateWithoutColleaguesDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -6740,7 +6983,7 @@ input UserUpdateWithoutCreaterDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -6772,7 +7015,7 @@ input UserUpdateWithoutExamDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -6804,7 +7047,7 @@ input UserUpdateWithoutFamiliesDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -6836,7 +7079,7 @@ input UserUpdateWithoutFamilyGroupDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -6868,7 +7111,7 @@ input UserUpdateWithoutFromOldColleaguesDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -6900,7 +7143,7 @@ input UserUpdateWithoutGroupsDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -6932,7 +7175,7 @@ input UserUpdateWithoutLocationGroupsDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -6964,7 +7207,7 @@ input UserUpdateWithoutMessagesDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -6996,7 +7239,7 @@ input UserUpdateWithoutPostsDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -7028,7 +7271,7 @@ input UserUpdateWithoutRegStatusDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -7060,7 +7303,7 @@ input UserUpdateWithoutResidenceDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -7092,7 +7335,7 @@ input UserUpdateWithoutStudiesDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -7124,7 +7367,7 @@ input UserUpdateWithoutToOldColleaguesDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -7156,7 +7399,7 @@ input UserUpdateWithoutWorksDataInput {
   password: String
   name: String
   gender: String
-  avatar: String
+  avatar: PhotoUpdateOneWithoutUserInput
   birthdaycalendar: String
   birthday: DateTime
   birthplace: LocationUpdateOneWithoutBornsInput
@@ -7226,6 +7469,11 @@ input UserUpdateWithWhereUniqueWithoutStudiesInput {
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutAvatarInput {
+  update: UserUpdateWithoutAvatarDataInput!
+  create: UserCreateWithoutAvatarInput!
 }
 
 input UserUpsertWithoutClassMateInput {
@@ -7397,20 +7645,7 @@ input UserWhereInput {
   gender_not_starts_with: String
   gender_ends_with: String
   gender_not_ends_with: String
-  avatar: String
-  avatar_not: String
-  avatar_in: [String!]
-  avatar_not_in: [String!]
-  avatar_lt: String
-  avatar_lte: String
-  avatar_gt: String
-  avatar_gte: String
-  avatar_contains: String
-  avatar_not_contains: String
-  avatar_starts_with: String
-  avatar_not_starts_with: String
-  avatar_ends_with: String
-  avatar_not_ends_with: String
+  avatar: PhotoWhereInput
   birthdaycalendar: String
   birthdaycalendar_not: String
   birthdaycalendar_in: [String!]

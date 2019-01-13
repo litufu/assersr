@@ -510,6 +510,59 @@ export const createFamilyGroupById=async (id,ctx)=>{
   return familyGroup
 }
 
+
+const getFileTypeByExt=(ext)=> {
+  const imgExt = ['png','jpg','gif','bmp','jpeg'];
+  const videoExt = ['mp4','mov'];
+  for (let i = 0; i < imgExt.length; i++){
+      const type = imgExt[i];
+      if (ext === type || ext === type.toUpperCase()){
+          return 0;
+      }
+  }
+  for (let i = 0; i < videoExt.length; i++){
+      const type = videoExt[i];
+      if (ext === type || ext === type.toUpperCase()){
+          return 1;
+      }
+  }
+  return -1;
+}
+const getFileExt=(filepath)=> {
+  if (filepath !== "") {
+      if (filepath.indexOf(".") === -1){
+          return '';
+      }
+      const pos = filepath.replace(/.+\./, "");
+      return pos;
+  }
+  return '';
+}
+
+
+const getFileName=(ext)=> {
+  const timestamp = new Date().getTime();
+  const randNum = Math.floor(Math.random()*1000+1);
+  const fileName = `${_getNowFormatDate()}_${timestamp}_${randNum}.${ext}`;
+  return fileName;
+}
+
+const _getNowFormatDate=()=> {
+  const date = new Date();
+  const seperator1 = "-";
+  const year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let strDate = date.getDate();
+  if (month >= 1 && month <= 9) {
+      month = `0${month}`;
+  }
+  if (strDate >= 0 && strDate <= 9) {
+      strDate =`0${strDate}`;
+  }
+  const currentdate = year + seperator1 + month + seperator1 + strDate;
+  return currentdate;
+}
+
 module.exports = {
   getUserId,
   checkeCtxUserExist,
@@ -521,4 +574,7 @@ module.exports = {
   getDifferentFamilies,
   getAllFamilies,
   createFamilyGroupById,
+  getFileTypeByExt,
+  getFileName,
+  getFileExt,
 }

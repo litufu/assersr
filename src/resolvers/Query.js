@@ -1,9 +1,8 @@
-import { getUserId } from '../services/utils'
-
+import { getUserId, } from '../services/utils'
+import {ossClient} from '../services/settings'
 
 export const Query = {
   me: (parent, args, ctx) => {
-
     return ctx.db.user({ uid: getUserId(ctx) })
   },
   searchUser:(parent, {username}, ctx) => ctx.db.user({username}),
@@ -404,7 +403,7 @@ export const Query = {
     }
     return ctx.db.user({id:user.id}).locationGroups()
   },
-  locationGroupUsers:async (parent, {locationGroupId}, ctx) => {
+  photo:async (parent, {id,name}, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -413,7 +412,38 @@ export const Query = {
     if (!user) {
       throw new Error("用户不存在")
     }
-    return ctx.db.locationGroup({id:locationGroupId}).users()
+    let url
+    let imgName
+    let photo
+    const options = { expires:1800 }
+    if(id){
+      console.log(id)
+      photo = await ctx.db.photo({id})
+      imgName = photo.name
+      url = ossClient.signatureUrl(`images/${imgName}`,options);
+    }
+
+    if(name){
+      console.log(name)
+      photo = await ctx.db.photo({name})
+      imgName = name
+      url = ossClient.signatureUrl(`images/${imgName}`,options);
+      console.log(url)
+    }
+    
+    return {id:photo.id,name:imgName,url}
+  },
+  userInfo:async (parent, {id}, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ id })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    
+    return user
   },
 
   group: (parent, {id}, ctx) => {

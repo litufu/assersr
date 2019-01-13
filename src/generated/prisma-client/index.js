@@ -85,6 +85,10 @@ var models = [
     embedded: false
   },
   {
+    name: "Photo",
+    embedded: false
+  },
+  {
     name: "Post",
     embedded: false
   },

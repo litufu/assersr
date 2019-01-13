@@ -1,7 +1,7 @@
 import { withFilter } from 'apollo-server'
-
+import { map } from 'lodash';
 import { pubsub } from '../subscriptions';
-
+import { subscriptionLogic } from './logic';
 
 export const FAMILY_CONNECTED = 'familyConnected';
 export const FAMILY_CHANGED = 'familyChanged'
@@ -12,8 +12,9 @@ export const STUDENTS_ADDED = 'studentsAdded'
 export const COLLEAGUES_ADDED = 'colleaguesAdded'
 export const MYOLDCOLLEAGUES_CHANGED = 'myOldcolleaguesChanged'
 export const LOCATIONGROUP_CHANGED  = 'locationGroupChanged'
-export const LOCATIONGROUPUSERS_CHANGED  = 'locationGroupUsersChanged'
 export const LOCATIONGROUPUSER_ADDED = 'locationGroupUserAdded'
+export const LOCATIONGROUPUSER_REMOVED = 'locationGroupUserRemoved'
+export const LOCATIONGROUP_REFETCH = 'locationGroupRefech'
 
 export const Subscription = {
   familyConnected: {
@@ -81,28 +82,20 @@ export const Subscription = {
         }
     )
   },
+  // locationGroupChanged: {
+  //   subscribe: withFilter(
+  //       () => pubsub.asyncIterator(LOCATIONGROUP_CHANGED),
+  //       (payload, variables,ctx) => {
+  //         return Boolean(ctx.user.id === payload.locationGroupChanged.text)
+  //       }
+  //   )
+  // },
   locationGroupChanged: {
     subscribe: withFilter(
         () => pubsub.asyncIterator(LOCATIONGROUP_CHANGED),
-        (payload, variables,ctx) => {
-          return Boolean(ctx.user.id === payload.locationGroupChanged.text)
-        }
-    )
-  },
-  locationGroupUsersChanged: {
-    subscribe: withFilter(
-        () => pubsub.asyncIterator(LOCATIONGROUPUSERS_CHANGED),
-        (payload, variables,ctx) => {
-          return Boolean(ctx.user.id === payload.locationGroupUsersChanged.text)
-        }
-    )
-  },
-  locationGroupUsersAdded: {
-    subscribe: withFilter(
-        () => pubsub.asyncIterator(LOCATIONGROUPUSERS_CHANGED),
-        (payload, variables,ctx) => {
-          return Boolean(ctx.user.id === payload.locationGroupUserAdded.user.id)
-        }
+        (payload, args,ctx) => {
+          return Boolean(ctx.user.id === payload.locationGroupChanged.toId)
+       }
     )
   },
 }

@@ -46,7 +46,8 @@ export const typeDefs = gql`
     oldColleagues(startTime:String,endTime:String,companyId:String):[User]
     myOldColleagues(companyId:String):[OldColleague]
     locationGroups:[LocationGroup]
-    locationGroupUsers(locationGroupId:String):[User]
+    photo(id:String,name:String):Photo
+    userInfo(id:String):User
   }
 
   type Mutation {
@@ -79,6 +80,8 @@ export const typeDefs = gql`
     confirmColleague(colleagueId:String):Colleague
     addOldColleague(companyId:String,workerId:String):OldColleague
     confirmOldColleague(companyId:String,workerId:String):OldColleague
+    postPhoto(uri:String):Photo
+    addAvatar(uri:String):Photo
   }
 
   type Subscription {
@@ -90,10 +93,17 @@ export const typeDefs = gql`
     workGroupChanged:Info
     colleaguesAdded:Info
     myOldcolleaguesChanged:Info
-    locationGroupChanged:Info
-    locationGroupUsersChanged:Info
-    locationGroupUserAdded:User
-    locationGroupUserRemoved:Info
+    locationGroupChanged:LocationGroupChangedInfo
+    locationGroupAdded(userId:String):Group
+  }
+
+  type LocationGroupChangedInfo{
+    toId:String
+    groupId:String
+    userid:String
+    username:String
+    userAvatar:String
+    type:String
   }
 
   type Info {
@@ -124,7 +134,7 @@ export const typeDefs = gql`
     username: String!
     name:String
     gender:String
-    avatar:String
+    avatar:Photo
     birthdaycalendar:String
     birthday:String
     birthplace:Location
@@ -146,6 +156,14 @@ export const typeDefs = gql`
     colleagues:[Colleague]
     locationGroups:[LocationGroup]
   }
+
+  type Photo {
+    id:ID
+    name:String
+    url:String
+    user:User
+  }
+
 
   type Person {
     id: ID!
