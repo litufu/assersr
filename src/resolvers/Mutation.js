@@ -2232,7 +2232,6 @@ export const Mutation = {
 
     throw new Error('无法更改同事信息')
   },
-
   postPhoto:async (parent, {uri}, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2257,16 +2256,53 @@ export const Mutation = {
         where:{id:avatar.id},
         data:{
           name,
+          url:`https://gewu-avatar.oss-cn-hangzhou.aliyuncs.com/images/${name}`,
         }
       })
     }else{
       newPhoto = await ctx.db.createPhoto({
         name,
+        url:`https://gewu-avatar.oss-cn-hangzhou.aliyuncs.com/images/${name}`,
         user:{connect:{uid:userId}}
       })
     }
     return {id:newPhoto.id,name,url}
   },
+
+  // postPhoto:async (parent, {uri}, ctx) => {
+  //   const userId = getUserId(ctx)
+  //   if (!userId) {
+  //     throw new Error("用户不存在")
+  //   }
+  //   const user = await ctx.db.user({ uid: userId })
+  //   if (!user) {
+  //     throw new Error("用户不存在")
+  //   }
+  //   console.log('uri',uri)
+  //   const ext = getFileExt(uri)
+  //   const name = getFileName(ext)
+  //   const typesMap = {'jpg':'jpeg','png':'png','gif':'gif','jpeg':'jpeg','bmp':'bmp'}
+  //   const options = {expires: 1800,method:'PUT','Content-Type':`image/${typesMap[ext]}`} 
+  //   console.log(name)
+  //   const url = ossClient.signatureUrl(`images/${name}`,options);
+  //   console.log(url)
+  //   const avatar = await ctx.db.user({uid:userId}).avatar()
+  //   let newPhoto
+  //   if(avatar && avatar.id){
+  //     newPhoto = await ctx.db.updatePhoto({
+  //       where:{id:avatar.id},
+  //       data:{
+  //         name,
+  //       }
+  //     })
+  //   }else{
+  //     newPhoto = await ctx.db.createPhoto({
+  //       name,
+  //       user:{connect:{uid:userId}}
+  //     })
+  //   }
+  //   return {id:newPhoto.id,name,url}
+  // },
 
   addAvatar:async (parent, {uri}, ctx) => {
     const userId = getUserId(ctx)

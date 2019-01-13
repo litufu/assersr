@@ -412,27 +412,49 @@ export const Query = {
     if (!user) {
       throw new Error("用户不存在")
     }
-    let url
-    let imgName
-    let photo
-    const options = { expires:1800 }
+
+
+  
     if(id){
-      console.log(id)
-      photo = await ctx.db.photo({id})
-      imgName = photo.name
-      url = ossClient.signatureUrl(`images/${imgName}`,options);
+      return ctx.db.photo({id})
     }
 
     if(name){
-      console.log(name)
-      photo = await ctx.db.photo({name})
-      imgName = name
-      url = ossClient.signatureUrl(`images/${imgName}`,options);
-      console.log(url)
+      return ctx.db.photo({name})
     }
     
-    return {id:photo.id,name:imgName,url}
+    throw new Error('没有输入id或者名称')
   },
+  // photo:async (parent, {id,name}, ctx) => {
+  //   const userId = getUserId(ctx)
+  //   if (!userId) {
+  //     throw new Error("用户不存在")
+  //   }
+  //   const user = await ctx.db.user({ uid: userId })
+  //   if (!user) {
+  //     throw new Error("用户不存在")
+  //   }
+  //   let url
+  //   let imgName
+  //   let photo
+  //   const options = { expires:1800 }
+  //   if(id){
+  //     console.log(id)
+  //     photo = await ctx.db.photo({id})
+  //     imgName = photo.name
+  //     url = ossClient.signatureUrl(`images/${imgName}`,options);
+  //   }
+
+  //   if(name){
+  //     console.log(name)
+  //     photo = await ctx.db.photo({name})
+  //     imgName = name
+  //     url = ossClient.signatureUrl(`images/${imgName}`,options);
+  //     console.log(url)
+  //   }
+    
+  //   return {id:photo.id,name:imgName,url}
+  // },
   userInfo:async (parent, {id}, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
