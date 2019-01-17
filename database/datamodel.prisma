@@ -27,6 +27,7 @@ type RegStatus {
   university:University
   major:Major!
   applicants:[User!]!
+  messages: [RegStatusMessage!]!
 }
 
 type University {
@@ -62,7 +63,8 @@ type User {
   studies:[SchoolEdu!]!
   works:[Work!]!
   exam:CollegeEntranceExam
-  messages: [Message!]!
+  sentMessages: [Message!]! @relation(name: "FromMessage")
+  receiveMessages: [Message!]! @relation(name: "ToMessage")
   groups: [Group!]!
   friends: [User!]!
   familyGroup:FamilyGroup @relation(name: "SonAndDaughter")
@@ -240,7 +242,7 @@ type FamilyGroup{
   creater:User @relation(name: "Creater")
   name: String
   families: [Family!]!
-  messages: [Message!]!
+  messages: [FamilyGroupMessage!]!
   users:[User!]! @relation(name: "SonAndDaughter")
 }
 
@@ -256,7 +258,7 @@ type ClassGroup{
   study:SchoolEdu
   name:String
   members:[ClassMate!]! 
-  messages: [Message!]!
+  messages: [ClassGroupMessage!]!
 }
 
 type OldColleague{
@@ -278,7 +280,7 @@ type WorkGroup{
   id:ID! @unique
   company:Company
   colleagues:[Colleague!]!
-  messages: [Message!]!
+  messages: [WorkGroupMessage!]!
 }
 
 
@@ -319,7 +321,52 @@ type LocationGroup{
 
 type Message {
   id:ID! @unique
-  to: Group!
+  to: User!  @relation(name: "ToMessage")
+  from: User!  @relation(name: "FromMessage")
+  text: String
+  image: Photo
+  createdAt: DateTime!
+}
+
+type ClassGroupMessage{
+  id:ID! @unique
+  to: ClassGroup!
+  from: User!
+  text: String
+  image: Photo
+  createdAt: DateTime!
+}
+
+type WorkGroupMessage{
+  id:ID! @unique
+  to: WorkGroup!
+  from: User!
+  text: String
+  image: Photo
+  createdAt: DateTime!
+}
+
+type FamilyGroupMessage{
+  id:ID! @unique
+  to: FamilyGroup!
+  from: User!
+  text: String
+  image: Photo
+  createdAt: DateTime!
+}
+
+type LocationGroupMessage{
+  id:ID! @unique
+  to: LocationGroup!
+  from: User!
+  text: String
+  image: Photo
+  createdAt: DateTime!
+}
+
+type RegStatusMessage{
+  id:ID! @unique
+  to: RegStatus!
   from: User!
   text: String
   image: Photo

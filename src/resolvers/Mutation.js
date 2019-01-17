@@ -43,10 +43,11 @@ import {
   COLLEAGUES_ADDED,
   MYOLDCOLLEAGUES_CHANGED,
   WORKS_CHANGED,
-  LOCATIONGROUP_CHANGED
+  LOCATIONGROUP_CHANGED,
+  MESSAGE_ADDED_TOPIC,
 } from './Subscription'
 import { pubsub } from '../subscriptions';
-import { fee,ossClient } from '../services/settings'
+import { fee, ossClient } from '../services/settings'
 
 const pubGroupFamily = async (familyGroup, ctx) => {
   const groupFamilies = await ctx.db.familyGroup({ id: familyGroup.id }).families()
@@ -426,7 +427,7 @@ export const Mutation = {
               })
             }
           }
-        }else{
+        } else {
           const b = 1
           if (userInHometownGroups.length > 0) {
             if (userInHometownGroups[0].id !== hometownLocationGroups[0].id) {
@@ -466,7 +467,7 @@ export const Mutation = {
                   })
                 }
               }
-  
+
               pubsub.publish(LOCATIONGROUP_CHANGED, {
                 [LOCATIONGROUP_CHANGED]: {
                   "toId": user.id,
@@ -2232,7 +2233,7 @@ export const Mutation = {
 
     throw new Error('无法更改同事信息')
   },
-  postPhoto:async (parent, {uri}, ctx) => {
+  postPhoto: async (parent, { uri }, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -2241,32 +2242,32 @@ export const Mutation = {
     if (!user) {
       throw new Error("用户不存在")
     }
-    console.log('uri',uri)
+    console.log('uri', uri)
     const ext = getFileExt(uri)
     const name = getFileName(ext)
-    const typesMap = {'jpg':'jpeg','png':'png','gif':'gif','jpeg':'jpeg','bmp':'bmp'}
-    const options = {expires: 1800,method:'PUT','Content-Type':`image/${typesMap[ext]}`} 
+    const typesMap = { 'jpg': 'jpeg', 'png': 'png', 'gif': 'gif', 'jpeg': 'jpeg', 'bmp': 'bmp' }
+    const options = { expires: 1800, method: 'PUT', 'Content-Type': `image/${typesMap[ext]}` }
     console.log(name)
-    const url = ossClient.signatureUrl(`images/${name}`,options);
+    const url = ossClient.signatureUrl(`avatars/${name}`, options);
     console.log(url)
-    const avatar = await ctx.db.user({uid:userId}).avatar()
+    const avatar = await ctx.db.user({ uid: userId }).avatar()
     let newPhoto
-    if(avatar && avatar.id){
+    if (avatar && avatar.id) {
       newPhoto = await ctx.db.updatePhoto({
-        where:{id:avatar.id},
-        data:{
+        where: { id: avatar.id },
+        data: {
           name,
-          url:`https://gewu-avatar.oss-cn-hangzhou.aliyuncs.com/images/${name}`,
+          url: `https://gewu-avatar.oss-cn-hangzhou.aliyuncs.com/avatars/${name}`,
         }
       })
-    }else{
+    } else {
       newPhoto = await ctx.db.createPhoto({
         name,
-        url:`https://gewu-avatar.oss-cn-hangzhou.aliyuncs.com/images/${name}`,
-        user:{connect:{uid:userId}}
+        url: `https://gewu-avatar.oss-cn-hangzhou.aliyuncs.com/avatars/${name}`,
+        user: { connect: { uid: userId } }
       })
     }
-    return {id:newPhoto.id,name,url}
+    return { id: newPhoto.id, name, url }
   },
 
   // postPhoto:async (parent, {uri}, ctx) => {
@@ -2304,7 +2305,7 @@ export const Mutation = {
   //   return {id:newPhoto.id,name,url}
   // },
 
-  addAvatar:async (parent, {uri}, ctx) => {
+  addAvatar: async (parent, { uri }, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -2315,27 +2316,315 @@ export const Mutation = {
     }
     const ext = getFileExt(uri)
     const name = `${user.username}_${getFileName(ext)}`
-    console.log('name',name)
-    const typesMap = {'jpg':'jpeg','png':'png','gif':'gif','jpeg':'jpeg','bmp':'bmp'}
-    const options = {expires: 1800,method:'PUT','Content-Type':`image/${typesMap[ext]}`} 
-    const url = ossClient.signatureUrl(`images/${name}`,options);
-    const avatar = await ctx.db.user({uid:userId}).avatar()
+    console.log('name', name)
+    const typesMap = { 'jpg': 'jpeg', 'png': 'png', 'gif': 'gif', 'jpeg': 'jpeg', 'bmp': 'bmp' }
+    const options = { expires: 1800, method: 'PUT', 'Content-Type': `image/${typesMap[ext]}` }
+    const url = ossClient.signatureUrl(`images/${name}`, options);
+    const avatar = await ctx.db.user({ uid: userId }).avatar()
     let newPhoto
-    if(avatar && avatar.id){
+    if (avatar && avatar.id) {
       newPhoto = await ctx.db.updatePhoto({
-        where:{id:avatar.id},
-        data:{
+        where: { id: avatar.id },
+        data: {
           name,
         }
       })
-    }else{
+    } else {
       newPhoto = await ctx.db.createPhoto({
         name,
-        user:{connect:{uid:userId}}
+        user: { connect: { uid: userId } }
       })
     }
+
+    return { id: newPhoto.id, name, url }
+  },
+
+  /*
+fragment MessageFragment on Message {
+    id
+    to{
+      id
+      name
+      avatar{
+        id
+        url
+      }
+    }
+    from{
+      id
+      name
+      avatar{
+        id
+        url
+      }
+    } 
+    text
+    image{
+      id
+      name
+      url
+    }
+    createdAt
+  }
+  }
+  **/
+
+  sendMessage: async (parent, { toId, text, image }, ctx) => {
+    console.log('kaishi')
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    if (!text && !image) {
+      throw new Error('没有发送信息')
+    }
+
+    const toUser = await ctx.db.user({ id: toId })
+    // 更新好友，可以添加评论
+    await ctx.db.updateUser({
+      where: { id: toId },
+      data:{friends: { connect: { id: user.id } }}
+    })
+
+    if (image) {
+      const ext = getFileExt(image)
+      const name = getFileName(ext)
+      const typesMap = { 'jpg': 'jpeg', 'png': 'png', 'gif': 'gif', 'jpeg': 'jpeg', 'bmp': 'bmp' }
+      const options = { expires: 1800, method: 'PUT', 'Content-Type': `image/${typesMap[ext]}` }
+      const url = ossClient.signatureUrl(`images/${name}`, options);
+      const imageId = uuidv4()
+
+      const returnMessage = await ctx.db.createMessage({
+        from:{connect:{id:user.id}},
+        to:{connect:{id:toId}},
+        text,
+        image:{
+          create:{
+            name,
+            url
+          }
+        }
+      })
+
+      const pubMessage = await ctx.db.createMessage({
+        from:{connect:{id:user.id}},
+        to:{connect:{id:toId}},
+        text,
+        image:{
+          create:{
+            name,
+            url:`https://gewu-avatar.oss-cn-hangzhou.aliyuncs.com/images/${name}`,
+          }
+        }
+      })
+      pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: pubMessage })
+      console.log('returnMessage',returnMessage)
+      console.log('pubmessage',pubMessage)
+      return returnMessages
+    }
     
-    return {id:newPhoto.id,name,url}
+    const message = await ctx.db.createMessage({
+      from:{connect:{id:user.id}},
+      to:{connect:{id:toId}},
+      text,
+    })
+    pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: message })
+    console.log('backmessage',message)
+    return message
+  },
+
+  sendClassMessage: async (parent, { toId, text, image }, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    if (!text && !image) {
+      throw new Error('没有发送信息')
+    }
+
+    let message
+
+    if (text && image) {
+      message = await ctx.db.createClassGroupMessage({
+        text,
+        image: { connect: { name: image } },
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } }
+      })
+    } else if (text) {
+      message = await ctx.db.createClassGroupMessage({
+        text,
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } }
+      })
+    } else if (image) {
+      message = await ctx.db.createClassGroupMessage({
+        image: { connect: { name: image } },
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } }
+      })
+    }
+
+    return message
+
+
+  },
+
+  sendWorkMessage: async (parent, { toId, text, image }, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    let message
+
+    if (text && image) {
+      message = await ctx.db.createWorkGroupMessage({
+        text,
+        image: { connect: { name: image } },
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } }
+      })
+    } else if (text) {
+      message = await ctx.db.createWorkGroupMessage({
+        text,
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } }
+      })
+    } else if (image) {
+      message = await ctx.db.createWorkGroupMessage({
+        image: { connect: { name: image } },
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } }
+      })
+    }
+
+    return message
+
+  },
+
+  sendFamilyMessage: async (parent, { toId, text, image }, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    let message
+
+    if (text && image) {
+
+      message = await ctx.db.createFamilyGroupMessage({
+        text,
+        image: { connect: { name: image } },
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } }
+      })
+    } else if (text) {
+      message = await ctx.db.createFamilyGroupMessage({
+        text,
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } }
+      })
+    } else if (image) {
+      message = await ctx.db.createFamilyGroupMessage({
+        image: { connect: { name: image } },
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } }
+      })
+    }
+
+    return message
+
+  },
+  sendLocationMessage: async (parent, { toId, text, image }, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    let message
+
+    if (text && image) {
+      message = await ctx.db.createLocationGroupMessage({
+        text,
+        image: { connect: { name: image } },
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } }
+      })
+    } else if (text) {
+      message = await ctx.db.createLocationGroupMessage({
+        text,
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } }
+      })
+    } else if (image) {
+      message = await ctx.db.createLocationGroupMessage({
+        image: { connect: { name: image } },
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } }
+      })
+    }
+
+    return message
+
+  },
+  sendRegStatusMessage: async (parent, { toId, text, image }, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    let message
+
+    if (text && image) {
+      message = await ctx.db.createRegStatusMessage({
+        text,
+        image: { connect: { name: image } },
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } }
+      })
+    } else if (text) {
+      message = await ctx.db.createRegStatusMessage({
+        text,
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } }
+      })
+    } else if (image) {
+      message = await ctx.db.createRegStatusMessage({
+        image: { connect: { name: image } },
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } }
+      })
+    }
+
+    return message
+
   },
 
 

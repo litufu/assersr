@@ -16,6 +16,15 @@ export const typeDefs = gql`
     village:String
   }
 
+  type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String
+    endCursor: String
+  }
+
+
+
   type Query {
     me: User
     searchUser(username:String!):User
@@ -35,8 +44,6 @@ export const typeDefs = gql`
     getRegStatus:RegStatus
     getRegStatusApplicants(education:String,universityId:String,majorId:String):[User]
     getRegStatusApplicantsById(regStatusId:String):[User]
-    group(id: String!): Group
-    messages(groupId: String, userId: String): [Message]
     getFamilyGroups:[FamilyGroup]
     students(schoolEduId:String):[User]
     classGroups(schoolEduId:String):[ClassGroup]
@@ -48,6 +55,12 @@ export const typeDefs = gql`
     locationGroups:[LocationGroup]
     photo(id:String,name:String):Photo
     userInfo(id:String):User
+    messages:[Message]
+    classMessages:[ClassGroupMessage]
+    workMessages:[WorkGroupMessage]
+    familyMessages:[FamilyGroupMessage]
+    locationMessages:[LocationGroupMessage]
+    regStatusMessages:[RegStatusMessage]
   }
 
   type Mutation {
@@ -82,6 +95,12 @@ export const typeDefs = gql`
     confirmOldColleague(companyId:String,workerId:String):OldColleague
     postPhoto(uri:String):Photo
     addAvatar(uri:String):Photo
+    sendMessage(toId:String,text:String,image:String):Message
+    sendClassMessage(toId:String,text:String,image:String):ClassGroupMessage
+    sendWorkMessage(toId:String,text:String,image:String):WorkGroupMessage
+    sendFamilyMessage(toId:String,text:String,image:String):FamilyGroupMessage
+    sendLocationMessage(toId:String,text:String,image:String):LocationGroupMessage
+    sendRegStatusMessage(toId:String,text:String,image:String):RegStatusMessage
   }
 
   type Subscription {
@@ -95,6 +114,7 @@ export const typeDefs = gql`
     myOldcolleaguesChanged:Info
     locationGroupChanged:LocationGroupChangedInfo
     locationGroupAdded(userId:String):Group
+    messageAdded(userId: String):Message
   }
 
   type LocationGroupChangedInfo{
@@ -147,7 +167,8 @@ export const typeDefs = gql`
     exam:CollegeEntranceExam
     regStatus:RegStatus
     regTimes:Int
-    messages: [Message]
+    sentMessages: [Message]
+    receiveMessages: [Message]
     groups: [Group]
     friends: [User]
     familyGroup:FamilyGroup
@@ -280,7 +301,8 @@ export const typeDefs = gql`
     education:Educationkind!
     university:University
     major:Major!
-    applicants:[User!]!
+    applicants:[User]
+    messages:[RegStatusMessage]
   }
 
   type Location {
@@ -346,6 +368,7 @@ export const typeDefs = gql`
     Student,
     Work,
   }
+
   type Group{
   id:ID!
   name: String
@@ -360,7 +383,7 @@ type FamilyGroup{
   mother:Person
   name: String
   families: [Family]
-  messages: [Message]
+  messages: [FamilyGroupMessage]
   users:[User]
 }
 
@@ -376,7 +399,7 @@ type ClassGroup{
   study:SchoolEdu
   name:String
   members:[ClassMate]
-  messages: [Message]
+  messages: [ClassGroupMessage]
 }
 
 type Colleague{
@@ -397,8 +420,8 @@ type OldColleague{
 type WorkGroup{
   id:ID! 
   company:Company
-  colleagues:[Colleague!]!
-  messages: [Message!]!
+  colleagues:[Colleague]
+  messages: [WorkGroupMessage]
 }
 
 enum LocationGroupKind {
@@ -432,14 +455,61 @@ type LocationGroup{
   code:String
   name:String
   users:[User!]!
-  messages:[Message!]!
+  messages:[LocationGroupMessage!]!
 }
+
 
 type Message {
   id:ID!
-  to: Group!
-  from: User!
-  text: String!
+  to: User
+  from: User 
+  text: String
+  image: Photo
+  createdAt: DateTime!
+}
+
+type ClassGroupMessage{
+  id:ID!
+  to: ClassGroup!
+  from: User
+  text: String
+  image: Photo
+  createdAt: DateTime!
+}
+
+type WorkGroupMessage{
+  id:ID!
+  to: WorkGroup!
+  from: User
+  text: String
+  image: Photo
+  createdAt: DateTime!
+}
+
+type FamilyGroupMessage{
+  id:ID!
+  to: FamilyGroup!
+  from: User
+  text: String
+  image: Photo
+  createdAt: DateTime!
+}
+
+type LocationGroupMessage{
+  id:ID!
+  to: LocationGroup!
+  from: User
+  text: String
+  image: Photo
+  createdAt: DateTime!
+}
+
+type RegStatusMessage{
+  id:ID!
+  to: RegStatus!
+  from: User
+  text: String
+  image: Photo
   createdAt: DateTime!
 }
 

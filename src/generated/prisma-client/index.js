@@ -17,6 +17,10 @@ var models = [
     embedded: false
   },
   {
+    name: "ClassGroupMessage",
+    embedded: false
+  },
+  {
     name: "ClassMate",
     embedded: false
   },
@@ -45,6 +49,10 @@ var models = [
     embedded: false
   },
   {
+    name: "FamilyGroupMessage",
+    embedded: false
+  },
+  {
     name: "Group",
     embedded: false
   },
@@ -62,6 +70,10 @@ var models = [
   },
   {
     name: "LocationGroupKind",
+    embedded: false
+  },
+  {
+    name: "LocationGroupMessage",
     embedded: false
   },
   {
@@ -101,6 +113,10 @@ var models = [
     embedded: false
   },
   {
+    name: "RegStatusMessage",
+    embedded: false
+  },
+  {
     name: "School",
     embedded: false
   },
@@ -134,6 +150,10 @@ var models = [
   },
   {
     name: "WorkGroup",
+    embedded: false
+  },
+  {
+    name: "WorkGroupMessage",
     embedded: false
   }
 ];
