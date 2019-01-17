@@ -33,7 +33,7 @@ const server = new ApolloServer({
         const user = await prisma.user({ uid: userId })
         if(user){
           console.log('开始订阅',user)
-          return {user}
+          return {user,db:prisma}
           
         }
         throw new Error("用户不存在")
@@ -47,7 +47,7 @@ const server = new ApolloServer({
   validationRules: [ depthLimit(10) ],// 最大深度查询限制。
 });
 
-server.listen({ port: PORT,host:"192.168.0.100"  }).then(({ url }) => console.log(`🚀 Server ready at ${url}`));
+server.listen({ port: PORT }).then(({ url }) => console.log(`🚀 Server ready at ${url}`));
 
 // ,host:"192.168.0.102" 
 

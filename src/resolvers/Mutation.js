@@ -2379,12 +2379,14 @@ fragment MessageFragment on Message {
     if (!user) {
       throw new Error("用户不存在")
     }
+    const userAvatar = await ctx.db.user({ uid: userId }).avatar()
 
     if (!text && !image) {
       throw new Error('没有发送信息')
     }
 
     const toUser = await ctx.db.user({ id: toId })
+    const toUserAvatar = await ctx.db.user({ id: toId }).avatar()
     // 更新好友，可以添加评论
     await ctx.db.updateUser({
       where: { id: toId },
@@ -2396,46 +2398,122 @@ fragment MessageFragment on Message {
       const name = getFileName(ext)
       const typesMap = { 'jpg': 'jpeg', 'png': 'png', 'gif': 'gif', 'jpeg': 'jpeg', 'bmp': 'bmp' }
       const options = { expires: 1800, method: 'PUT', 'Content-Type': `image/${typesMap[ext]}` }
-      const url = ossClient.signatureUrl(`images/${name}`, options);
+      const writeUrl = ossClient.signatureUrl(`images/${name}`, options);
+      const readUrl = `https://gewu-avatar.oss-cn-hangzhou.aliyuncs.com/images/${name}`
       const imageId = uuidv4()
 
-      const returnMessage = await ctx.db.createMessage({
+      const message = await ctx.db.createMessage({
         from:{connect:{id:user.id}},
         to:{connect:{id:toId}},
         text,
         image:{
           create:{
             name,
-            url
+            url:readUrl
           }
         }
       })
+      
 
-      const pubMessage = await ctx.db.createMessage({
-        from:{connect:{id:user.id}},
-        to:{connect:{id:toId}},
+      const messageImage = await ctx.db.message({id:message.id}).image()
+      // imageurl返回给上传图片的人，用于上传图片，由于这里要修改image，所以这里使用手动解析。
+      const returnMessage = {
+        id:message.id,
+        to:{
+          id:toUser.id,
+          name:toUser.name,
+          avatar:toUserAvatar,
+        },
+        from:{
+          id:user.id,
+          name:user.name,
+          avatar:userAvatar
+        },
         text,
         image:{
-          create:{
-            name,
-            url:`https://gewu-avatar.oss-cn-hangzhou.aliyuncs.com/images/${name}`,
-          }
-        }
-      })
+          ...messageImage,
+          url:writeUrl
+        },
+        createdAt:message.createdAt
+      }
+      // 返回给订阅者，由于subscription无法解析Message，因此这里手动解析。
+      const pubMessage = {
+        __typename:"Message",
+        id:message.id,
+        to:{
+          __typename:"User",
+          id:toUser.id,
+          name:toUser.name,
+          avatar:toUserAvatar,
+        },
+        from:{
+          __typename:"User",
+          id:user.id,
+          name:user.name,
+          avatar:userAvatar
+        },
+        text,
+        image:{
+          __typename:"Photo",
+          id:messageImage.id,
+          name:messageImage.name,
+          url:messageImage.url
+        },
+        createdAt:message.createdAt
+      }
+
       pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: pubMessage })
       console.log('returnMessage',returnMessage)
       console.log('pubmessage',pubMessage)
-      return returnMessages
+      return returnMessage
     }
-    
+    // 如果没有上传图片，则直接创建
     const message = await ctx.db.createMessage({
       from:{connect:{id:user.id}},
       to:{connect:{id:toId}},
       text,
     })
-    pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: message })
+    // 手动解析订阅信息
+    const pubMessage = {
+      __typename:"Messgae",
+      id:message.id,
+      to:{
+        __typename:"User",
+        id:toUser.id,
+        name:toUser.name,
+        avatar:toUserAvatar,
+      },
+      from:{
+        __typename:"User",
+        id:user.id,
+        name:user.name,
+        avatar:userAvatar
+      },
+      text,
+      image:null,
+      createdAt:message.createdAt
+    }
+
+    const returnMessage =  {
+      id:message.id,
+      to:{
+        id:toUser.id,
+        name:toUser.name,
+        avatar:toUserAvatar,
+      },
+      from:{
+        id:user.id,
+        name:user.name,
+        avatar:userAvatar
+      },
+      text,
+      image:null,
+      createdAt:message.createdAt
+    }
+  
+    pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: pubMessage })
     console.log('backmessage',message)
-    return message
+    return returnMessage
   },
 
   sendClassMessage: async (parent, { toId, text, image }, ctx) => {
