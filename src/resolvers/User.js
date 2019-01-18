@@ -26,8 +26,22 @@ export const User = {
   regStatus: (parent, args, ctx) => ctx.db.user({ id: parent.id }).regStatus(),
   works: (parent, args, ctx) => ctx.db.user({ id: parent.id }).works(),
   exam: (parent, args, ctx) => ctx.db.user({ id: parent.id }).exam(),
-  sentMessages: (parent, args, ctx) => ctx.db.user({ id: parent.id }).sentMessages(),
-  receiveMessages: (parent, args, ctx) => ctx.db.user({ id: parent.id }).receiveMessages(),
+  messages:async (parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    if (userId !== parent.uid) {
+      throw new Error('Author Invalid')
+    }
+    const messages = await ctx.db.messages({
+      where:{OR:[
+        {from:{id:parent.id}},
+        {to:{id:parent.id}}
+      ]}
+    })
+    return messages
+  },
   groups: (parent, args, ctx) => ctx.db.user({ id: parent.id }).groups(),
   friends: (parent, args, ctx) => ctx.db.user({ id: parent.id }).friends(),
   familyGroup:(parent, args, ctx) => ctx.db.user({ id: parent.id }).familyGroup(),

@@ -2369,7 +2369,7 @@ fragment MessageFragment on Message {
   }
   **/
 
-  sendMessage: async (parent, { toId, text, image }, ctx) => {
+  sendMessage: async (parent, { toId, text="", image="" }, ctx) => {
     console.log('kaishi')
     const userId = getUserId(ctx)
     if (!userId) {

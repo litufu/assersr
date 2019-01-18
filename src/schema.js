@@ -167,8 +167,7 @@ export const typeDefs = gql`
     exam:CollegeEntranceExam
     regStatus:RegStatus
     regTimes:Int
-    sentMessages: [Message]
-    receiveMessages: [Message]
+    messages:[Message]
     groups: [Group]
     friends: [User]
     familyGroup:FamilyGroup
