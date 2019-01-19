@@ -3,7 +3,10 @@ import {ossClient} from '../services/settings'
 
 export const Query = {
   me: (parent, args, ctx) => {
-    return ctx.db.user({ uid: getUserId(ctx) })
+    if( getUserId(ctx)){
+      return ctx.db.user({ uid: getUserId(ctx) })
+    }
+    return null
   },
   searchUser:(parent, {username}, ctx) => ctx.db.user({username}),
   cities:(parent, {code}, ctx)=> ctx.db.cities({where:{province:{code}}}),
@@ -280,6 +283,13 @@ export const Query = {
     if (!userId) {
       throw new Error("用户不存在")
     }
+    if(!schoolEduId){
+      return ctx.db.classGroups({
+        where:{AND:[
+          {members_some:{student:{uid:userId}}}
+        ]}
+      })
+    }
     return ctx.db.classGroups({
       where:{AND:[
         {study:{id:schoolEduId}},
@@ -291,6 +301,13 @@ export const Query = {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
+    }
+    if(!companyId){
+      return ctx.db.workGroups({
+        where:{AND:[
+          {colleagues_some:{worker:{uid:userId}}}
+        ]}
+      })
     }
     return ctx.db.workGroups({
       where:{AND:[
@@ -380,6 +397,16 @@ export const Query = {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
+    }
+
+    if(!companyId){
+      return ctx.db.oldColleagues({
+        where:{
+          AND:[
+            {from:{uid:userId}},
+          ]
+        }
+      })
     }
 
     const myOldColleagues = await ctx.db.oldColleagues({

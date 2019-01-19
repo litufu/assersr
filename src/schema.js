@@ -170,7 +170,7 @@ export const typeDefs = gql`
     messages:[Message]
     groups: [Group]
     friends: [User]
-    familyGroup:FamilyGroup
+    relativefamilyGroups:[FamilyGroup]
     classMate:[ClassMate]
     workGroup:WorkGroup
     colleagues:[Colleague]
@@ -377,7 +377,7 @@ export const typeDefs = gql`
 
 type FamilyGroup{
   id:ID! 
-  creater:User
+  creater:User 
   father:Person 
   mother:Person
   name: String
