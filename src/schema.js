@@ -56,11 +56,6 @@ export const typeDefs = gql`
     photo(id:String,name:String):Photo
     userInfo(id:String):User
     messages:[Message]
-    classMessages:[ClassGroupMessage]
-    workMessages:[WorkGroupMessage]
-    familyMessages:[FamilyGroupMessage]
-    locationMessages:[LocationGroupMessage]
-    regStatusMessages:[RegStatusMessage]
   }
 
   type Mutation {
@@ -96,11 +91,8 @@ export const typeDefs = gql`
     postPhoto(uri:String):Photo
     addAvatar(uri:String):Photo
     sendMessage(toId:String,text:String,image:String):Message
-    sendClassMessage(toId:String,text:String,image:String):ClassGroupMessage
-    sendWorkMessage(toId:String,text:String,image:String):WorkGroupMessage
-    sendFamilyMessage(toId:String,text:String,image:String):FamilyGroupMessage
-    sendLocationMessage(toId:String,text:String,image:String):LocationGroupMessage
-    sendRegStatusMessage(toId:String,text:String,image:String):RegStatusMessage
+    sendGroupMessage(type:String,toId:String,text:String,image:String):GroupMessage
+    
   }
 
   type Subscription {
@@ -113,8 +105,9 @@ export const typeDefs = gql`
     colleaguesAdded:Info
     myOldcolleaguesChanged:Info
     locationGroupChanged:LocationGroupChangedInfo
-    locationGroupAdded(userId:String):Group
+    locationGroupAdded(userId:String):LocationGroup
     messageAdded(userId: String):Message
+    groupMessageAdded(userId: String, groupIds: [String]):GroupMessage
   }
 
   type LocationGroupChangedInfo{
@@ -168,7 +161,7 @@ export const typeDefs = gql`
     regStatus:RegStatus
     regTimes:Int
     messages:[Message]
-    groups: [Group]
+    groupMessages:[GroupMessage]
     friends: [User]
     relativefamilyGroups:[FamilyGroup]
     classMate:[ClassMate]
@@ -301,7 +294,7 @@ export const typeDefs = gql`
     university:University
     major:Major!
     applicants:[User]
-    messages:[RegStatusMessage]
+    messages:[GroupMessage]
   }
 
   type Location {
@@ -362,18 +355,6 @@ export const typeDefs = gql`
     people:[User!]!
   }
 
-  enum GroupKind {
-    Location, 
-    Student,
-    Work,
-  }
-
-  type Group{
-  id:ID!
-  name: String
-  users: [User]!
-  messages: [Message]
-}
 
 type FamilyGroup{
   id:ID! 
@@ -382,7 +363,7 @@ type FamilyGroup{
   mother:Person
   name: String
   families: [Family]
-  messages: [FamilyGroupMessage]
+  messages: [GroupMessage]
   users:[User]
 }
 
@@ -398,7 +379,7 @@ type ClassGroup{
   study:SchoolEdu
   name:String
   members:[ClassMate]
-  messages: [ClassGroupMessage]
+  messages: [GroupMessage]
 }
 
 type Colleague{
@@ -420,7 +401,7 @@ type WorkGroup{
   id:ID! 
   company:Company
   colleagues:[Colleague]
-  messages: [WorkGroupMessage]
+  messages: [GroupMessage]
 }
 
 enum LocationGroupKind {
@@ -454,7 +435,7 @@ type LocationGroup{
   code:String
   name:String
   users:[User!]!
-  messages:[LocationGroupMessage!]!
+  messages:[GroupMessage]
 }
 
 
@@ -467,51 +448,26 @@ type Message {
   createdAt: DateTime!
 }
 
-type ClassGroupMessage{
+enum GroupKind {
+  Family, #家人
+  ClassMate,#同学
+  Colleague, #同事
+  FellowTownsman, #同乡
+  SameCity, #同城
+  SameOccupation, #同行
+  SameDisease,#同病
+  RegStatus,#高考报名群
+}
+
+type GroupMessage {
   id:ID!
-  to: ClassGroup!
-  from: User
+  type:GroupKind
+  to: String! 
+  from: User! 
   text: String
   image: Photo
   createdAt: DateTime!
 }
-
-type WorkGroupMessage{
-  id:ID!
-  to: WorkGroup!
-  from: User
-  text: String
-  image: Photo
-  createdAt: DateTime!
-}
-
-type FamilyGroupMessage{
-  id:ID!
-  to: FamilyGroup!
-  from: User
-  text: String
-  image: Photo
-  createdAt: DateTime!
-}
-
-type LocationGroupMessage{
-  id:ID!
-  to: LocationGroup!
-  from: User
-  text: String
-  image: Photo
-  createdAt: DateTime!
-}
-
-type RegStatusMessage{
-  id:ID!
-  to: RegStatus!
-  from: User
-  text: String
-  image: Photo
-  createdAt: DateTime!
-}
-
 
 type Station {
   id:ID!

@@ -439,9 +439,6 @@ export const Query = {
     if (!user) {
       throw new Error("用户不存在")
     }
-
-
-  
     if(id){
       return ctx.db.photo({id})
     }
@@ -452,36 +449,6 @@ export const Query = {
     
     throw new Error('没有输入id或者名称')
   },
-  // photo:async (parent, {id,name}, ctx) => {
-  //   const userId = getUserId(ctx)
-  //   if (!userId) {
-  //     throw new Error("用户不存在")
-  //   }
-  //   const user = await ctx.db.user({ uid: userId })
-  //   if (!user) {
-  //     throw new Error("用户不存在")
-  //   }
-  //   let url
-  //   let imgName
-  //   let photo
-  //   const options = { expires:1800 }
-  //   if(id){
-  //     console.log(id)
-  //     photo = await ctx.db.photo({id})
-  //     imgName = photo.name
-  //     url = ossClient.signatureUrl(`images/${imgName}`,options);
-  //   }
-
-  //   if(name){
-  //     console.log(name)
-  //     photo = await ctx.db.photo({name})
-  //     imgName = name
-  //     url = ossClient.signatureUrl(`images/${imgName}`,options);
-  //     console.log(url)
-  //   }
-    
-  //   return {id:photo.id,name:imgName,url}
-  // },
   userInfo:async (parent, {id}, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
@@ -511,104 +478,6 @@ export const Query = {
       ]}
     })
     
-   
-    
     return messages
   },
-  classMessages:async (parent, args, ctx) => {
-    const userId = getUserId(ctx)
-    if (!userId) {
-      throw new Error("用户不存在")
-    }
-    const user = await ctx.db.user({ uid:userId })
-    if (!user) {
-      throw new Error("用户不存在")
-    }
-
-    const messages = await ctx.db.classGroupMessages({
-      where:{OR:[
-        {from:{id:user.id}},
-        {to:{id:user.id}}
-      ]}
-    })
-    
-    return messages
-  },
-  workMessages:async (parent, args, ctx) => {
-    const userId = getUserId(ctx)
-    if (!userId) {
-      throw new Error("用户不存在")
-    }
-    const user = await ctx.db.user({ uid:userId })
-    if (!user) {
-      throw new Error("用户不存在")
-    }
-
-    const messages = await ctx.db.workGroupMessages({
-      where:{OR:[
-        {from:{id:user.id}},
-        {to:{id:user.id}}
-      ]}
-    })
-    
-    return messages
-  },
-  familyMessages:async (parent, args, ctx) => {
-    const userId = getUserId(ctx)
-    if (!userId) {
-      throw new Error("用户不存在")
-    }
-    const user = await ctx.db.user({ uid:userId })
-    if (!user) {
-      throw new Error("用户不存在")
-    }
-
-    const messages = await ctx.db.familyGroupMessages({
-      where:{OR:[
-        {from:{id:user.id}},
-        {to:{id:user.id}}
-      ]}
-    })
-    
-    return messages
-  },
-  locationMessages:async (parent, args, ctx) => {
-    const userId = getUserId(ctx)
-    if (!userId) {
-      throw new Error("用户不存在")
-    }
-    const user = await ctx.db.user({ uid:userId })
-    if (!user) {
-      throw new Error("用户不存在")
-    }
-
-    const messages = await ctx.db.locationGroupMessages({
-      where:{OR:[
-        {from:{id:user.id}},
-        {to:{id:user.id}}
-      ]}
-    })
-    
-    return messages
-  },
-  regStatusMessages:async (parent, args, ctx) => {
-    const userId = getUserId(ctx)
-    if (!userId) {
-      throw new Error("用户不存在")
-    }
-    const user = await ctx.db.user({ uid:userId })
-    if (!user) {
-      throw new Error("用户不存在")
-    }
-
-    const messages = await ctx.db.regStatusMessages({
-      where:{OR:[
-        {from:{id:user.id}},
-        {to:{id:user.id}}
-      ]}
-    })
-    
-    return messages
-  },
-
 }

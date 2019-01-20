@@ -27,7 +27,6 @@ type RegStatus {
   university:University
   major:Major!
   applicants:[User!]!
-  messages: [RegStatusMessage!]!
 }
 
 type University {
@@ -65,6 +64,7 @@ type User {
   exam:CollegeEntranceExam
   sentMessages: [Message!]! @relation(name: "FromMessage")
   receiveMessages: [Message!]! @relation(name: "ToMessage")
+  groupMessages:[GroupMessage!]!
   groups: [Group!]!
   friends: [User!]!
   familyGroup:FamilyGroup @relation(name: "SonAndDaughter")
@@ -225,6 +225,7 @@ enum GroupKind {
   SameCity, #同城
   SameOccupation, #同行
   SameDisease,#同病
+  RegStatus,#高考报名群
 }
 
 type Group{
@@ -242,7 +243,6 @@ type FamilyGroup{
   creater:User @relation(name: "Creater")
   name: String
   families: [Family!]!
-  messages: [FamilyGroupMessage!]!
   users:[User!]! @relation(name: "SonAndDaughter")
 }
 
@@ -258,7 +258,6 @@ type ClassGroup{
   study:SchoolEdu
   name:String
   members:[ClassMate!]! 
-  messages: [ClassGroupMessage!]!
 }
 
 type OldColleague{
@@ -280,7 +279,6 @@ type WorkGroup{
   id:ID! @unique
   company:Company
   colleagues:[Colleague!]!
-  messages: [WorkGroupMessage!]!
 }
 
 
@@ -316,7 +314,6 @@ type LocationGroup{
   code:String @unique
   name:String
   users:[User!]!
-  messages:[Message!]!
 }
 
 type Message {
@@ -328,46 +325,11 @@ type Message {
   createdAt: DateTime!
 }
 
-type ClassGroupMessage{
+type GroupMessage {
   id:ID! @unique
-  to: ClassGroup!
-  from: User!
-  text: String
-  image: Photo
-  createdAt: DateTime!
-}
-
-type WorkGroupMessage{
-  id:ID! @unique
-  to: WorkGroup!
-  from: User!
-  text: String
-  image: Photo
-  createdAt: DateTime!
-}
-
-type FamilyGroupMessage{
-  id:ID! @unique
-  to: FamilyGroup!
-  from: User!
-  text: String
-  image: Photo
-  createdAt: DateTime!
-}
-
-type LocationGroupMessage{
-  id:ID! @unique
-  to: LocationGroup!
-  from: User!
-  text: String
-  image: Photo
-  createdAt: DateTime!
-}
-
-type RegStatusMessage{
-  id:ID! @unique
-  to: RegStatus!
-  from: User!
+  type:GroupKind
+  to: String! 
+  from: User! 
   text: String
   image: Photo
   createdAt: DateTime!

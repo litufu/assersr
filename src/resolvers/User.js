@@ -43,7 +43,6 @@ export const User = {
     })
     return messages
   },
-  groups: (parent, args, ctx) => ctx.db.user({ id: parent.id }).groups(),
   friends: (parent, args, ctx) => ctx.db.user({ id: parent.id }).friends(),
   relativefamilyGroups:async (parent, args, ctx) => {
     const userId = getUserId(ctx)
@@ -128,5 +127,6 @@ export const User = {
   },
   workGroup:(parent, args, ctx) => ctx.db.user({ id: parent.id }).workGroup(),
   colleagues:(parent, args, ctx) => ctx.db.user({ id: parent.id }).colleagues(),
+  groupMessages:(parent, args, ctx) => ctx.db.user({ id: parent.id }).groupMessages(),
   locationGroups:(parent, args, ctx) => ctx.db.user({ id: parent.id }).locationGroups(),
 }

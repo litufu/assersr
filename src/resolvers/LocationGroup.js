@@ -10,6 +10,19 @@ export const LocationGroup = {
       }
       return ctx.db.locationGroup({ id: parent.id }).users()
     },
-    messages: (parent, args, ctx) => ctx.db.locationGroup({ id: parent.id }).messages(),
+    messages:async (parent, args, ctx) =>{
+
+      const groupMessages = await ctx.db.groupMessages({
+        where:{
+          AND:[
+            {type:"FellowTownsman"},
+            {to:parent.id},
+          ]
+        }
+      })
+
+      return groupMessages
+
+    }
   }
   
