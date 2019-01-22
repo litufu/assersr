@@ -32,8 +32,12 @@ export const User = {
     if (!userId) {
       throw new Error("用户不存在")
     }
+    const user = ctx.db.user({uid:userId})
+    console.log(user.id)
+    console.log(parent.id)
     if (userId !== parent.uid) {
-      throw new Error('Author Invalid')
+      return []
+      // throw new Error('Author Invalid')
     }
     const messages = await ctx.db.messages({
       where:{OR:[
@@ -54,7 +58,8 @@ export const User = {
       throw new Error("用户不存在")
     }
     if (userId !== parent.uid) {
-      throw new Error('Author Invalid')
+      return []
+      // throw new Error('Author Invalid')
     }
     const groupUsersId = []
     const meAndSpousesfamilies = []
@@ -125,7 +130,29 @@ export const User = {
       }
     })
   },
-  workGroup:(parent, args, ctx) => ctx.db.user({ id: parent.id }).workGroup(),
+  workGroups:(parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (userId !== parent.uid) {
+      return []
+    }
+    return  ctx.db.workGroups({
+      where:{AND:[
+        {colleagues_some:{worker:{uid:userId}}}
+      ]}
+    })
+  },
+  classGroups:(parent, args, ctx)=>{
+    const userId = getUserId(ctx)
+    if (userId !== parent.uid) {
+      return []
+    }
+    return ctx.db.classGroups({
+      where:{AND:[
+        {members_some:{student:{uid:userId}}}
+      ]}
+    })
+  },
+  
   colleagues:(parent, args, ctx) => ctx.db.user({ id: parent.id }).colleagues(),
   groupMessages:(parent, args, ctx) => ctx.db.user({ id: parent.id }).groupMessages(),
   locationGroups:(parent, args, ctx) => ctx.db.user({ id: parent.id }).locationGroups(),

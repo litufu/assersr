@@ -57,7 +57,6 @@ async function addStation(){
     console.log(err);
   }
 }
-addStation()
 // 添加大学信息
 async function addUniversity(){
   try {
@@ -228,3 +227,13 @@ async function addVillage() {
     console.log(err);
   }
 }
+
+
+// addProvince()
+// addCity()
+// addArea()
+// addStreet()
+addVillage()
+// addMajor()
+// addUniversity()
+// addStation()

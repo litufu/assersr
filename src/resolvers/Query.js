@@ -8,6 +8,7 @@ export const Query = {
     }
     return null
   },
+  
   searchUser:(parent, {username}, ctx) => ctx.db.user({username}),
   cities:(parent, {code}, ctx)=> ctx.db.cities({where:{province:{code}}}),
   areas:(parent, {code}, ctx)=> ctx.db.areas({where:{city:{code}}}),
@@ -17,7 +18,7 @@ export const Query = {
   drafts: (parent, args, ctx) =>
     ctx.db.posts({ where: { isPublished: false } }),
   post: (parent, { id }, ctx) => ctx.db.post({ id }),
-  family:(parent, args, ctx) => {
+  families:(parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")

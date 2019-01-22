@@ -35,8 +35,8 @@ export const typeDefs = gql`
     feed: [Post!]!
     drafts: [Post!]!
     post(id: ID!): Post
-    family:[Family!]!
-    getFamiliesById(id:String):[Family!]!
+    families:[Family]
+    getFamiliesById(id:String):[Family]
     getSchools(locationName:String,kind:String):[School]
     getMajors(majorName:String):[Major]
     getUniversities(universityName:String):[University]
@@ -164,8 +164,9 @@ export const typeDefs = gql`
     groupMessages:[GroupMessage]
     friends: [User]
     relativefamilyGroups:[FamilyGroup]
+    classGroups:[ClassGroup]
     classMate:[ClassMate]
-    workGroup:WorkGroup
+    workGroups:[WorkGroup]
     colleagues:[Colleague]
     locationGroups:[LocationGroup]
   }
@@ -462,8 +463,8 @@ enum GroupKind {
 type GroupMessage {
   id:ID!
   type:GroupKind
-  to: String! 
-  from: User! 
+  to: String 
+  from: User
   text: String
   image: Photo
   createdAt: DateTime!

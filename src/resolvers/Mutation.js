@@ -10,6 +10,8 @@ import {
   getIntersectionFamiles,
   getDifferentFamilies,
   createFamilyGroupById,
+  refreshMyFamilyGroups,
+  checkExistFatherAndMother,
   getFileName,
   getFileExt,
 } from '../services/utils'
@@ -36,7 +38,6 @@ import {
 } from "../services/relationship"
 import {
   FAMILY_CHANGED,
-  FAMILYGROUP_CHANGED,
   CLASSGROUP_CHANGED,
   WORKGROUP_CHANGED,
   STUDENTS_ADDED,
@@ -50,15 +51,6 @@ import {
 import { pubsub } from '../subscriptions';
 import { fee, ossClient } from '../services/settings'
 
-const pubGroupFamily = async (familyGroup, ctx) => {
-  const groupFamilies = await ctx.db.familyGroup({ id: familyGroup.id }).families()
-  for (const family of groupFamilies) {
-    const user = await ctx.db.family({ id: family.id }).to().user()
-    if (user) {
-      pubsub.publish(FAMILYGROUP_CHANGED, { [FAMILYGROUP_CHANGED]: { "text": user.id } })
-    }
-  }
-}
 
 export const Mutation = {
   signup: async (parent, { username, password }, ctx) => {
@@ -546,6 +538,10 @@ export const Mutation = {
         to: { create: { name } },
       })
     }
+    // const hasFatherAndMother = await checkExistFatherAndMother(user.id,ctx)
+    // if(hasFatherAndMother){
+    //   await refreshMyFamilyGroups(parent,{},ctx)
+    // }
     return family
   },
 
@@ -592,6 +588,10 @@ export const Mutation = {
         },
       })
     }
+    const hasFatherAndMother = await checkExistFatherAndMother(user.id,ctx)
+    if(hasFatherAndMother){
+      await refreshMyFamilyGroups(parent,{},ctx)
+    }
     return updateFamily
   },
 
@@ -617,7 +617,10 @@ export const Mutation = {
     if (!personUser && personFamilies.length === 0) {
       await ctx.db.deletePerson({ id: toId })
     }
-
+    const hasFatherAndMother = await checkExistFatherAndMother(user.id,ctx)
+    if(hasFatherAndMother){
+      await refreshMyFamilyGroups(parent,{},ctx)
+    }
     return deleteFamily
   },
 
@@ -854,7 +857,7 @@ export const Mutation = {
             where: { id: myCommonFamily.id },
             data: {
               status: relativeToCommonUserFamily[0].status,
-              to: { where: { id: relativeToCommonUserFamilyTo.id } }
+              to: { connect: { id: relativeToCommonUserFamilyTo.id } }
             }
           })
 
@@ -957,7 +960,10 @@ export const Mutation = {
       // 向relative推送familychanged
       pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": relative.id } })
     }
-
+    const hasFatherAndMother = await checkExistFatherAndMother(user.id,ctx)
+    if(hasFatherAndMother){
+      await refreshMyFamilyGroups(parent,{},ctx)
+    }
     return myUpdateFamily
   },
 
