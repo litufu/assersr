@@ -1,7 +1,5 @@
 import { withFilter } from 'apollo-server'
-import { map } from 'lodash';
 import { pubsub } from '../subscriptions';
-import { subscriptionLogic } from './logic';
 
 export const FAMILY_CONNECTED = 'familyConnected';
 export const FAMILY_CHANGED = 'familyChanged'
@@ -32,7 +30,6 @@ export const Subscription = {
     subscribe: withFilter(
         () => pubsub.asyncIterator(FAMILY_CHANGED),
         (payload, variables,ctx) => {
-          console.log('familychanged',ctx.user)
           return Boolean(ctx.user.id === payload.familyChanged.text)
         }
     )
@@ -85,14 +82,7 @@ export const Subscription = {
         }
     )
   },
-  // locationGroupChanged: {
-  //   subscribe: withFilter(
-  //       () => pubsub.asyncIterator(LOCATIONGROUP_CHANGED),
-  //       (payload, variables,ctx) => {
-  //         return Boolean(ctx.user.id === payload.locationGroupChanged.text)
-  //       }
-  //   )
-  // },
+
   locationGroupChanged: {
     subscribe: withFilter(
         () => pubsub.asyncIterator(LOCATIONGROUP_CHANGED),
@@ -105,8 +95,6 @@ export const Subscription = {
     subscribe: withFilter(
       () => pubsub.asyncIterator(MESSAGE_ADDED_TOPIC),
       (payload, args) => {
-        console.log('payload',payload)
-        console.log('args',args)
         return Boolean(args.userId === payload.messageAdded.to.id)
      }
   )
@@ -115,12 +103,10 @@ export const Subscription = {
     subscribe: withFilter(
       () => pubsub.asyncIterator(GROUP_MESSAGE_ADDED_TOPIC),
       (payload, args) => {
-        console.log('payload',payload)
-        console.log('args',args)
         return Boolean(
           args.groupIds &&
-          ~args.groupIds.indexOf(payload.messageAdded.toId) &&
-          args.userId !== payload.messageAdded.from.id, // don't send to user creating message
+          ~args.groupIds.indexOf(payload.groupMessageAdded.to) &&
+          args.userId !== payload.groupMessageAdded.from.id, // don't send to user creating message
           )
      }
   )

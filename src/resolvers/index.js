@@ -22,6 +22,7 @@ import {Colleague} from './Colleague'
 import {OldColleague} from './OldColleague'
 import {LocationGroup} from './LocationGroup'
 import {Photo} from './Photo'
+import {GroupMessage} from './GroupMessage'
 
 export const resolvers = {
   Query,
@@ -47,5 +48,6 @@ export const resolvers = {
   Colleague,
   OldColleague,
   LocationGroup,
-  Photo
+  Photo,
+  GroupMessage
 }
