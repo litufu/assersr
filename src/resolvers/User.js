@@ -54,6 +54,7 @@ export const User = {
       throw new Error("用户不存在")
     }
     const user = await ctx.db.user({ uid: userId })
+    console.log('user',user)
     if (!user) {
       throw new Error("用户不存在")
     }
@@ -66,6 +67,7 @@ export const User = {
     groupUsersId.push({id:user.id})
     const meFamilies = await ctx.db.user({id:user.id}).families()
     meAndSpousesfamilies.push(meFamilies)
+    console.log('meAndSpousesfamilies',meAndSpousesfamilies)
     // 配偶
     const mySpouseFamilies = meFamilies.filter(family=>!!~['wife','husband'].indexOf(family.relationship))
     for (const mySpouseFamily of mySpouseFamilies ){
@@ -76,6 +78,7 @@ export const User = {
         meAndSpousesfamilies.push(spouseFamilies)
       }
     }
+    console.log('meAndSpousesfamilies2',meAndSpousesfamilies)
     for(const myFamilies of meAndSpousesfamilies){
       const familyFather = myFamilies.filter(family=>family.relationship==='father')
       if(familyFather.length>0){
@@ -84,38 +87,51 @@ export const User = {
           groupUsersId.push({id:father.id})
           const fatherFamilies = await ctx.db.user({id:father.id}).families()
           const fatherFamilyFather = fatherFamilies.filter(family=>family.relationship==='father')
-          const grandpa = await ctx.db.family({id:fatherFamilyFather[0].id}).to().user()
-          if(grandpa){
-            groupUsersId.push({id:grandpa.id})
+          if(fatherFamilyFather.length>0){
+            const grandpa = await ctx.db.family({id:fatherFamilyFather[0].id}).to().user()
+            if(grandpa){
+              groupUsersId.push({id:grandpa.id})
+            }
           }
           const motherFamilyFather = fatherFamilies.filter(family=>family.relationship==='mother')
-          const grandma =  await ctx.db.family({id:motherFamilyFather[0].id}).to().user()
-          if(grandma){
-            groupUsersId.push({id:grandma.id})
+          if(motherFamilyFather.length>0){
+            const grandma =  await ctx.db.family({id:motherFamilyFather[0].id}).to().user()
+            if(grandma){
+              groupUsersId.push({id:grandma.id})
+            }
           }
         }
       }
+      console.log('groupUsersId',groupUsersId)
       const familyMother = myFamilies.filter(family=>family.relationship==='mother')
-      
+      console.log('familyMother',familyMother)
       if(familyMother.length>0){
         const mother = await ctx.db.family({id:familyMother[0].id}).to().user()
+        console.log('mother',mother)
         if(mother){
           groupUsersId.push({id:mother.id})
           const motherFamilies = await ctx.db.user({id:mother.id}).families()
           const fatherFamilyMother = motherFamilies.filter(family=>family.relationship==='father')
-          const grandpa = await ctx.db.family({id:fatherFamilyMother[0].id}).to().user()
-          if(grandpa){
-            groupUsersId.push({id:grandpa.id})
+          console.log('fatherFamilyMother',fatherFamilyMother)
+          if(fatherFamilyMother.length>0){
+            const grandpa = await ctx.db.family({id:fatherFamilyMother[0].id}).to().user()
+            if(grandpa){
+              groupUsersId.push({id:grandpa.id})
+            }
           }
+          
           const motherFamilyMother = motherFamilies.filter(family=>family.relationship==='mother')
-          const grandma =  await ctx.db.family({id:motherFamilyMother[0].id}).to().user()
-          if(grandma){
-            groupUsersId.push({id:grandma.id})
+          if(motherFamilyMother.length>0){
+            console.log('motherFamilyMother',motherFamilyMother)
+            const grandma =  await ctx.db.family({id:motherFamilyMother[0].id}).to().user()
+            if(grandma){
+              groupUsersId.push({id:grandma.id})
+            }
           }
         }
       }
     }
-    
+    console.log('groupUsersId2',groupUsersId)
     // 我的群由子女负责创建
     const sonAndDaughters = meFamilies.filter(family=>!!~['son','daughter'].indexOf(family.relationship))
     for(const sonAndDaughter of sonAndDaughters){
@@ -124,6 +140,7 @@ export const User = {
         groupUsersId.push({id:sd.id})
       }
     }
+    console.log('groupUsersId3',groupUsersId)
     return  ctx.db.familyGroups({
       where:{
         OR:groupUsersId.map(usersId=>({users_some:usersId}))

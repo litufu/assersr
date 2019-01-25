@@ -36,6 +36,7 @@ export const typeDefs = gql`
     drafts: [Post!]!
     post(id: ID!): Post
     families:[Family]
+    findPasswords:[FindPassWord]
     getFamiliesById(id:String):[Family]
     getSchools(locationName:String,kind:String):[School]
     getMajors(majorName:String):[Major]
@@ -53,6 +54,7 @@ export const typeDefs = gql`
     oldColleagues(startTime:String,endTime:String,companyId:String):[User]
     myOldColleagues(companyId:String):[OldColleague]
     locationGroups:[LocationGroup]
+    locationGroupUsers(locationGroupId:String):[User]
     photo(id:String,name:String):Photo
     userInfo(id:String):User
     messages:[Message]
@@ -65,6 +67,7 @@ export const typeDefs = gql`
     signup(username: String!, password: String!): AuthPayload!
     login(username: String!, password: String!): AuthPayload!
     changePassword(currentPassword:String!,newPassword: String!):User!
+    findPassword(forgetterId:String!): FindPassWord
     addBasicInfo(name:String!,gender:String!,birthday:BirthdayInput!,birthplace:PlaceInput!,residence:PlaceInput!):User!
     createFamily(name:String!,relationship:String!,spouseId:String):Family
     updateFamily(id:ID!, name:String,relationship:String,spouseId:String,status:String):Family
@@ -107,7 +110,7 @@ export const typeDefs = gql`
     locationGroupChanged:LocationGroupChangedInfo
     locationGroupAdded(userId:String):LocationGroup
     messageAdded(userId: String):Message
-    groupMessageAdded(userId: String, groupIds: [String]):GroupMessage
+    gMessageAdded(userId: String, groupIds: [String]):GroupMessage
   }
 
   type LocationGroupChangedInfo{
@@ -474,6 +477,13 @@ type Station {
   id:ID!
   code:String
   name:String
+}
+
+type FindPassWord{
+  id:ID
+  times:Int
+  forgetter:User
+  remmember:[User]
 }
 
 

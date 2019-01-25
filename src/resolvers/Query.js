@@ -29,6 +29,17 @@ export const Query = {
     }
   })
   },
+  findPasswords:(parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    return ctx.db.findPassWords({
+      where: {
+        remmember_some: {uid:userId}
+      }
+    })
+  },
   getFamiliesById:(parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
@@ -430,6 +441,17 @@ export const Query = {
       throw new Error("用户不存在")
     }
     return ctx.db.user({id:user.id}).locationGroups()
+  },
+  locationGroupUsers:async (parent, {locationGroupId}, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    return ctx.db.locationGroup({id:locationGroupId}).users()
   },
   photo:async (parent, {id,name}, ctx) => {
     const userId = getUserId(ctx)

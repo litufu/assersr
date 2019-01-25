@@ -13,8 +13,8 @@ export const LOCATIONGROUP_CHANGED  = 'locationGroupChanged'
 export const LOCATIONGROUPUSER_ADDED = 'locationGroupUserAdded'
 export const LOCATIONGROUPUSER_REMOVED = 'locationGroupUserRemoved'
 export const LOCATIONGROUP_REFETCH = 'locationGroupRefech'
-export const MESSAGE_ADDED_TOPIC = 'messageAdded';
-export const GROUP_MESSAGE_ADDED_TOPIC = 'groupMessageAdded';
+export const MESSAGE_ADDED_TOPIC = 'messageAdded'
+export const GMESSAGE_ADDED_TOPIC = 'gMessageAdded'
 
 export const Subscription = {
   familyConnected: {
@@ -91,6 +91,7 @@ export const Subscription = {
        }
     )
   },
+ 
   messageAdded:{
     subscribe: withFilter(
       () => pubsub.asyncIterator(MESSAGE_ADDED_TOPIC),
@@ -99,14 +100,15 @@ export const Subscription = {
      }
   )
   },
-  groupMessageAdded:{
+
+  gMessageAdded:{
     subscribe: withFilter(
-      () => pubsub.asyncIterator(GROUP_MESSAGE_ADDED_TOPIC),
+      () => pubsub.asyncIterator(GMESSAGE_ADDED_TOPIC),
       (payload, args) => {
         return Boolean(
-          args.groupIds &&
-          ~args.groupIds.indexOf(payload.groupMessageAdded.to) &&
-          args.userId !== payload.groupMessageAdded.from.id, // don't send to user creating message
+          args.groupIds
+          && ~args.groupIds.indexOf(payload.gMessageAdded.to) 
+          &&  args.userId !== payload.gMessageAdded.from.id, // don't send to user creating message
           )
      }
   )

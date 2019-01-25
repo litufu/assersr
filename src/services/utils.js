@@ -306,14 +306,16 @@ const createFamilyGroupById=async (id,ctx)=>{
   const father = myFamilies.filter(family=>family.relationship==='father')
   console.log('father',father)
   if(father.length===0){
-    throw new Error("尚未输入父亲姓名")
+    return null
+    // throw new Error("尚未输入父亲姓名")
   }
   const fatherPerson = await ctx.db.family({id:father[0].id}).to()
   console.log('fatherPerson',fatherPerson)
   const mother = myFamilies.filter(family=>family.relationship==='mother')
   console.log('mother',mother)
   if(mother.length===0){
-    throw new Error("尚未输入母亲姓名")
+    return null
+    // throw new Error("尚未输入母亲姓名")
   }
   const motherPerson = await ctx.db.family({id:mother[0].id}).to()
   console.log('motherPerson',motherPerson)

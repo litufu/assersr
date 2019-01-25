@@ -46,7 +46,7 @@ import {
   WORKS_CHANGED,
   LOCATIONGROUP_CHANGED,
   MESSAGE_ADDED_TOPIC,
-  GROUP_MESSAGE_ADDED_TOPIC,
+  GMESSAGE_ADDED_TOPIC,
 } from './Subscription'
 import { pubsub } from '../subscriptions';
 import { fee, ossClient } from '../services/settings'
@@ -62,7 +62,7 @@ export const Mutation = {
     if (hasuser) {
       throw new Error(`${username}已经被占用`)
     }
-    // -------------------------------------
+    //------------------------------------
     const hashedPassword = await hash(password, 10)
     const uid = uuidv4()
     const token = sign({ userId: uid }, APP_SECRET)
@@ -137,6 +137,70 @@ export const Mutation = {
     })
 
     return updateUser
+
+  },
+
+  findPassword:async (parent, { forgetterId }, ctx) => {
+       // -----------------------------------------------
+    // 输入数据验证
+    checkId(forgetterId)
+    console.log(forgetterId)
+
+    // --------------------------------------------------------
+    // 权限验证
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    const forgetter = await ctx.db.user({id:forgetterId})
+
+    if(!forgetter){
+      throw new Error('用户不存在')
+    }
+    const findPasswords = await ctx.db.findPassWords({
+      where:{forgetter:{id:forgetterId}}
+    })
+    if(findPasswords.length>0){
+      const remmembers = await ctx.db.findPassWord({id:findPasswords[0].id}).remmember()
+      if(remmembers[0].id===user.id){
+        return findPasswords[0]
+      }
+      const updateFindPassword = await ctx.db.updateFindPassWord({
+        where:{id:findPasswords[0].id},
+        data:{
+          times:2,
+          forgetter:{connect:{id:forgetterId}},
+          remmember:{connect:{id:user.id}}
+        }
+      })
+      const newPassword = '123456abcd'
+      const hashedNewPassword = await hash(newPassword, 10)
+      const uid = uuidv4()
+      await ctx.db.updateUser({
+        data: {
+          password: hashedNewPassword,
+          uid,
+          token: sign({ userId: uid }, APP_SECRET)
+        },
+        where: {
+          id: forgetterId
+        }
+      })
+
+      await ctx.db.deleteFindPassWord({id:updateFindPassword.id})
+        
+      return updateFindPassword
+    }
+
+    return ctx.db.createFindPassWord({
+      times:1,
+      forgetter:{connect:{id:forgetterId}},
+      remmember:{connect:{id:user.id}}
+    })
 
   },
 
@@ -2413,7 +2477,6 @@ export const Mutation = {
       image:null,
       createdAt:message.createdAt
     }
-  
     pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: pubMessage })
     return returnMessage
   },
@@ -2453,7 +2516,7 @@ export const Mutation = {
     }else if(type === "FellowTownsman"){
       toGroup = await ctx.db.locationGroup({id:toId})
     }else if(type==="RegStatus"){
-      toGroup = await ctx.db.RegStatus({id:toId})
+      toGroup = await ctx.db.regStatus({id:toId})
     }
     if(!toGroup){
       throw  new Error('没有找到对应的组')
@@ -2521,7 +2584,8 @@ export const Mutation = {
         createdAt:message.createdAt
       }
 
-      pubsub.publish(GROUP_MESSAGE_ADDED_TOPIC, { [GROUP_MESSAGE_ADDED_TOPIC]: pubMessage })
+      pubsub.publish(GMESSAGE_ADDED_TOPIC, { [GMESSAGE_ADDED_TOPIC]: pubMessage })
+      
       console.log('returnMessage',returnMessage)
       console.log('pubmessage',pubMessage)
       return returnMessage
@@ -2563,8 +2627,11 @@ export const Mutation = {
       image:null,
       createdAt:message.createdAt
     }
-  
-    pubsub.publish(GROUP_MESSAGE_ADDED_TOPIC, { [GROUP_MESSAGE_ADDED_TOPIC]: pubMessage })
+    console.log('group pubmessage',pubMessage)
+    console.log('GMESSAGE_ADDED_TOPIC',GMESSAGE_ADDED_TOPIC)
+    console.log('MESSAGE_ADDED_TOPIC',MESSAGE_ADDED_TOPIC)
+    pubsub.publish(GMESSAGE_ADDED_TOPIC, { [GMESSAGE_ADDED_TOPIC]: pubMessage })
+    pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: pubMessage })
     console.log('backmessage',message)
     return returnMessage
   },

@@ -35,6 +35,10 @@ type AggregateFamilyGroup {
   count: Int!
 }
 
+type AggregateFindPassWord {
+  count: Int!
+}
+
 type AggregateGroup {
   count: Int!
 }
@@ -2607,6 +2611,168 @@ input FamilyWhereUniqueInput {
   id: ID
 }
 
+type FindPassWord {
+  id: ID!
+  times: Int
+  forgetter: User
+  remmember(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+}
+
+type FindPassWordConnection {
+  pageInfo: PageInfo!
+  edges: [FindPassWordEdge]!
+  aggregate: AggregateFindPassWord!
+}
+
+input FindPassWordCreateInput {
+  times: Int
+  forgetter: UserCreateOneWithoutForgetPasswordInput
+  remmember: UserCreateManyWithoutRemmemberPasswordInput
+}
+
+input FindPassWordCreateOneWithoutForgetterInput {
+  create: FindPassWordCreateWithoutForgetterInput
+  connect: FindPassWordWhereUniqueInput
+}
+
+input FindPassWordCreateOneWithoutRemmemberInput {
+  create: FindPassWordCreateWithoutRemmemberInput
+  connect: FindPassWordWhereUniqueInput
+}
+
+input FindPassWordCreateWithoutForgetterInput {
+  times: Int
+  remmember: UserCreateManyWithoutRemmemberPasswordInput
+}
+
+input FindPassWordCreateWithoutRemmemberInput {
+  times: Int
+  forgetter: UserCreateOneWithoutForgetPasswordInput
+}
+
+type FindPassWordEdge {
+  node: FindPassWord!
+  cursor: String!
+}
+
+enum FindPassWordOrderByInput {
+  id_ASC
+  id_DESC
+  times_ASC
+  times_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type FindPassWordPreviousValues {
+  id: ID!
+  times: Int
+}
+
+type FindPassWordSubscriptionPayload {
+  mutation: MutationType!
+  node: FindPassWord
+  updatedFields: [String!]
+  previousValues: FindPassWordPreviousValues
+}
+
+input FindPassWordSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: FindPassWordWhereInput
+  AND: [FindPassWordSubscriptionWhereInput!]
+  OR: [FindPassWordSubscriptionWhereInput!]
+  NOT: [FindPassWordSubscriptionWhereInput!]
+}
+
+input FindPassWordUpdateInput {
+  times: Int
+  forgetter: UserUpdateOneWithoutForgetPasswordInput
+  remmember: UserUpdateManyWithoutRemmemberPasswordInput
+}
+
+input FindPassWordUpdateManyMutationInput {
+  times: Int
+}
+
+input FindPassWordUpdateOneWithoutForgetterInput {
+  create: FindPassWordCreateWithoutForgetterInput
+  update: FindPassWordUpdateWithoutForgetterDataInput
+  upsert: FindPassWordUpsertWithoutForgetterInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: FindPassWordWhereUniqueInput
+}
+
+input FindPassWordUpdateOneWithoutRemmemberInput {
+  create: FindPassWordCreateWithoutRemmemberInput
+  update: FindPassWordUpdateWithoutRemmemberDataInput
+  upsert: FindPassWordUpsertWithoutRemmemberInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: FindPassWordWhereUniqueInput
+}
+
+input FindPassWordUpdateWithoutForgetterDataInput {
+  times: Int
+  remmember: UserUpdateManyWithoutRemmemberPasswordInput
+}
+
+input FindPassWordUpdateWithoutRemmemberDataInput {
+  times: Int
+  forgetter: UserUpdateOneWithoutForgetPasswordInput
+}
+
+input FindPassWordUpsertWithoutForgetterInput {
+  update: FindPassWordUpdateWithoutForgetterDataInput!
+  create: FindPassWordCreateWithoutForgetterInput!
+}
+
+input FindPassWordUpsertWithoutRemmemberInput {
+  update: FindPassWordUpdateWithoutRemmemberDataInput!
+  create: FindPassWordCreateWithoutRemmemberInput!
+}
+
+input FindPassWordWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  times: Int
+  times_not: Int
+  times_in: [Int!]
+  times_not_in: [Int!]
+  times_lt: Int
+  times_lte: Int
+  times_gt: Int
+  times_gte: Int
+  forgetter: UserWhereInput
+  remmember_every: UserWhereInput
+  remmember_some: UserWhereInput
+  remmember_none: UserWhereInput
+  AND: [FindPassWordWhereInput!]
+  OR: [FindPassWordWhereInput!]
+  NOT: [FindPassWordWhereInput!]
+}
+
+input FindPassWordWhereUniqueInput {
+  id: ID
+}
+
 type Group {
   id: ID!
   type: GroupKind
@@ -4266,6 +4432,12 @@ type Mutation {
   upsertFamilyGroup(where: FamilyGroupWhereUniqueInput!, create: FamilyGroupCreateInput!, update: FamilyGroupUpdateInput!): FamilyGroup!
   deleteFamilyGroup(where: FamilyGroupWhereUniqueInput!): FamilyGroup
   deleteManyFamilyGroups(where: FamilyGroupWhereInput): BatchPayload!
+  createFindPassWord(data: FindPassWordCreateInput!): FindPassWord!
+  updateFindPassWord(data: FindPassWordUpdateInput!, where: FindPassWordWhereUniqueInput!): FindPassWord
+  updateManyFindPassWords(data: FindPassWordUpdateManyMutationInput!, where: FindPassWordWhereInput): BatchPayload!
+  upsertFindPassWord(where: FindPassWordWhereUniqueInput!, create: FindPassWordCreateInput!, update: FindPassWordUpdateInput!): FindPassWord!
+  deleteFindPassWord(where: FindPassWordWhereUniqueInput!): FindPassWord
+  deleteManyFindPassWords(where: FindPassWordWhereInput): BatchPayload!
   createGroup(data: GroupCreateInput!): Group!
   updateGroup(data: GroupUpdateInput!, where: GroupWhereUniqueInput!): Group
   updateManyGroups(data: GroupUpdateManyMutationInput!, where: GroupWhereInput): BatchPayload!
@@ -5531,6 +5703,9 @@ type Query {
   familyGroup(where: FamilyGroupWhereUniqueInput!): FamilyGroup
   familyGroups(where: FamilyGroupWhereInput, orderBy: FamilyGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FamilyGroup]!
   familyGroupsConnection(where: FamilyGroupWhereInput, orderBy: FamilyGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FamilyGroupConnection!
+  findPassWord(where: FindPassWordWhereUniqueInput!): FindPassWord
+  findPassWords(where: FindPassWordWhereInput, orderBy: FindPassWordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FindPassWord]!
+  findPassWordsConnection(where: FindPassWordWhereInput, orderBy: FindPassWordOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FindPassWordConnection!
   group(where: GroupWhereUniqueInput!): Group
   groups(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group]!
   groupsConnection(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GroupConnection!
@@ -6676,6 +6851,7 @@ type Subscription {
   company(where: CompanySubscriptionWhereInput): CompanySubscriptionPayload
   family(where: FamilySubscriptionWhereInput): FamilySubscriptionPayload
   familyGroup(where: FamilyGroupSubscriptionWhereInput): FamilyGroupSubscriptionPayload
+  findPassWord(where: FindPassWordSubscriptionWhereInput): FindPassWordSubscriptionPayload
   group(where: GroupSubscriptionWhereInput): GroupSubscriptionPayload
   groupMessage(where: GroupMessageSubscriptionWhereInput): GroupMessageSubscriptionPayload
   location(where: LocationSubscriptionWhereInput): LocationSubscriptionPayload
@@ -7058,6 +7234,8 @@ type User {
   fromOldColleagues(where: OldColleagueWhereInput, orderBy: OldColleagueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [OldColleague!]
   toOldColleagues(where: OldColleagueWhereInput, orderBy: OldColleagueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [OldColleague!]
   locationGroups(where: LocationGroupWhereInput, orderBy: LocationGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LocationGroup!]
+  forgetPassword: FindPassWord
+  remmemberPassword: FindPassWord
 }
 
 type UserConnection {
@@ -7099,6 +7277,8 @@ input UserCreateInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateManyInput {
@@ -7128,6 +7308,11 @@ input UserCreateManyWithoutLocationGroupsInput {
 
 input UserCreateManyWithoutRegStatusInput {
   create: [UserCreateWithoutRegStatusInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutRemmemberPasswordInput {
+  create: [UserCreateWithoutRemmemberPasswordInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -7173,6 +7358,11 @@ input UserCreateOneWithoutExamInput {
 
 input UserCreateOneWithoutFamiliesInput {
   create: UserCreateWithoutFamiliesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutForgetPasswordInput {
+  create: UserCreateWithoutForgetPasswordInput
   connect: UserWhereUniqueInput
 }
 
@@ -7243,6 +7433,8 @@ input UserCreateWithoutAvatarInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutBirthplaceInput {
@@ -7277,6 +7469,8 @@ input UserCreateWithoutBirthplaceInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutClassMateInput {
@@ -7311,6 +7505,8 @@ input UserCreateWithoutClassMateInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutColleaguesInput {
@@ -7345,6 +7541,8 @@ input UserCreateWithoutColleaguesInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutCreaterInput {
@@ -7379,6 +7577,8 @@ input UserCreateWithoutCreaterInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutExamInput {
@@ -7413,6 +7613,8 @@ input UserCreateWithoutExamInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutFamiliesInput {
@@ -7447,6 +7649,8 @@ input UserCreateWithoutFamiliesInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutFamilyGroupInput {
@@ -7481,6 +7685,44 @@ input UserCreateWithoutFamilyGroupInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+}
+
+input UserCreateWithoutForgetPasswordInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: PhotoCreateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneWithoutBornsInput
+  residence: LocationCreateOneWithoutLivesInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  sentMessages: MessageCreateManyWithoutFromInput
+  receiveMessages: MessageCreateManyWithoutToInput
+  groupMessages: GroupMessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+  locationGroups: LocationGroupCreateManyWithoutUsersInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutFromOldColleaguesInput {
@@ -7515,6 +7757,8 @@ input UserCreateWithoutFromOldColleaguesInput {
   colleagues: ColleagueCreateManyWithoutWorkerInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutGroupMessagesInput {
@@ -7549,6 +7793,8 @@ input UserCreateWithoutGroupMessagesInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutGroupsInput {
@@ -7583,6 +7829,8 @@ input UserCreateWithoutGroupsInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutLocationGroupsInput {
@@ -7617,6 +7865,8 @@ input UserCreateWithoutLocationGroupsInput {
   colleagues: ColleagueCreateManyWithoutWorkerInput
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutPostsInput {
@@ -7651,6 +7901,8 @@ input UserCreateWithoutPostsInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutReceiveMessagesInput {
@@ -7685,6 +7937,8 @@ input UserCreateWithoutReceiveMessagesInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutRegStatusInput {
@@ -7719,6 +7973,44 @@ input UserCreateWithoutRegStatusInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+}
+
+input UserCreateWithoutRemmemberPasswordInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: PhotoCreateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneWithoutBornsInput
+  residence: LocationCreateOneWithoutLivesInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  sentMessages: MessageCreateManyWithoutFromInput
+  receiveMessages: MessageCreateManyWithoutToInput
+  groupMessages: GroupMessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+  locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
 }
 
 input UserCreateWithoutResidenceInput {
@@ -7753,6 +8045,8 @@ input UserCreateWithoutResidenceInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutSentMessagesInput {
@@ -7787,6 +8081,8 @@ input UserCreateWithoutSentMessagesInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutStudiesInput {
@@ -7821,6 +8117,8 @@ input UserCreateWithoutStudiesInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutToOldColleaguesInput {
@@ -7855,6 +8153,8 @@ input UserCreateWithoutToOldColleaguesInput {
   colleagues: ColleagueCreateManyWithoutWorkerInput
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 input UserCreateWithoutWorksInput {
@@ -7889,6 +8189,8 @@ input UserCreateWithoutWorksInput {
   fromOldColleagues: OldColleagueCreateManyWithoutFromInput
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
 }
 
 type UserEdge {
@@ -8150,6 +8452,8 @@ input UserUpdateDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateInput {
@@ -8185,6 +8489,8 @@ input UserUpdateInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateManyDataInput {
@@ -8275,6 +8581,17 @@ input UserUpdateManyWithoutRegStatusInput {
   disconnect: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutRegStatusInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutRegStatusInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
+input UserUpdateManyWithoutRemmemberPasswordInput {
+  create: [UserCreateWithoutRemmemberPasswordInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutRemmemberPasswordInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutRemmemberPasswordInput!]
   deleteMany: [UserScalarWhereInput!]
   updateMany: [UserUpdateManyWithWhereNestedInput!]
 }
@@ -8393,6 +8710,15 @@ input UserUpdateOneWithoutCreaterInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneWithoutForgetPasswordInput {
+  create: UserCreateWithoutForgetPasswordInput
+  update: UserUpdateWithoutForgetPasswordDataInput
+  upsert: UserUpsertWithoutForgetPasswordInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneWithoutFromOldColleaguesInput {
   create: UserCreateWithoutFromOldColleaguesInput
   update: UserUpdateWithoutFromOldColleaguesDataInput
@@ -8452,6 +8778,8 @@ input UserUpdateWithoutAvatarDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutBirthplaceDataInput {
@@ -8486,6 +8814,8 @@ input UserUpdateWithoutBirthplaceDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutClassMateDataInput {
@@ -8520,6 +8850,8 @@ input UserUpdateWithoutClassMateDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutColleaguesDataInput {
@@ -8554,6 +8886,8 @@ input UserUpdateWithoutColleaguesDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutCreaterDataInput {
@@ -8588,6 +8922,8 @@ input UserUpdateWithoutCreaterDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutExamDataInput {
@@ -8622,6 +8958,8 @@ input UserUpdateWithoutExamDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutFamiliesDataInput {
@@ -8656,6 +8994,8 @@ input UserUpdateWithoutFamiliesDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutFamilyGroupDataInput {
@@ -8690,6 +9030,44 @@ input UserUpdateWithoutFamilyGroupDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+}
+
+input UserUpdateWithoutForgetPasswordDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: PhotoUpdateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneWithoutBornsInput
+  residence: LocationUpdateOneWithoutLivesInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  sentMessages: MessageUpdateManyWithoutFromInput
+  receiveMessages: MessageUpdateManyWithoutToInput
+  groupMessages: GroupMessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+  locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutFromOldColleaguesDataInput {
@@ -8724,6 +9102,8 @@ input UserUpdateWithoutFromOldColleaguesDataInput {
   colleagues: ColleagueUpdateManyWithoutWorkerInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutGroupMessagesDataInput {
@@ -8758,6 +9138,8 @@ input UserUpdateWithoutGroupMessagesDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutGroupsDataInput {
@@ -8792,6 +9174,8 @@ input UserUpdateWithoutGroupsDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutLocationGroupsDataInput {
@@ -8826,6 +9210,8 @@ input UserUpdateWithoutLocationGroupsDataInput {
   colleagues: ColleagueUpdateManyWithoutWorkerInput
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -8860,6 +9246,8 @@ input UserUpdateWithoutPostsDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutReceiveMessagesDataInput {
@@ -8894,6 +9282,8 @@ input UserUpdateWithoutReceiveMessagesDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutRegStatusDataInput {
@@ -8928,6 +9318,44 @@ input UserUpdateWithoutRegStatusDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+}
+
+input UserUpdateWithoutRemmemberPasswordDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: PhotoUpdateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneWithoutBornsInput
+  residence: LocationUpdateOneWithoutLivesInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  sentMessages: MessageUpdateManyWithoutFromInput
+  receiveMessages: MessageUpdateManyWithoutToInput
+  groupMessages: GroupMessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+  locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
 }
 
 input UserUpdateWithoutResidenceDataInput {
@@ -8962,6 +9390,8 @@ input UserUpdateWithoutResidenceDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutSentMessagesDataInput {
@@ -8996,6 +9426,8 @@ input UserUpdateWithoutSentMessagesDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutStudiesDataInput {
@@ -9030,6 +9462,8 @@ input UserUpdateWithoutStudiesDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutToOldColleaguesDataInput {
@@ -9064,6 +9498,8 @@ input UserUpdateWithoutToOldColleaguesDataInput {
   colleagues: ColleagueUpdateManyWithoutWorkerInput
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithoutWorksDataInput {
@@ -9098,6 +9534,8 @@ input UserUpdateWithoutWorksDataInput {
   fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
 }
 
 input UserUpdateWithWhereUniqueNestedInput {
@@ -9128,6 +9566,11 @@ input UserUpdateWithWhereUniqueWithoutLocationGroupsInput {
 input UserUpdateWithWhereUniqueWithoutRegStatusInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutRegStatusDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutRemmemberPasswordInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutRemmemberPasswordDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutResidenceInput {
@@ -9173,6 +9616,11 @@ input UserUpsertWithoutExamInput {
 input UserUpsertWithoutFamiliesInput {
   update: UserUpdateWithoutFamiliesDataInput!
   create: UserCreateWithoutFamiliesInput!
+}
+
+input UserUpsertWithoutForgetPasswordInput {
+  update: UserUpdateWithoutForgetPasswordDataInput!
+  create: UserCreateWithoutForgetPasswordInput!
 }
 
 input UserUpsertWithoutFromOldColleaguesInput {
@@ -9244,6 +9692,12 @@ input UserUpsertWithWhereUniqueWithoutRegStatusInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutRegStatusDataInput!
   create: UserCreateWithoutRegStatusInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutRemmemberPasswordInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutRemmemberPasswordDataInput!
+  create: UserCreateWithoutRemmemberPasswordInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutResidenceInput {
@@ -9461,6 +9915,8 @@ input UserWhereInput {
   locationGroups_every: LocationGroupWhereInput
   locationGroups_some: LocationGroupWhereInput
   locationGroups_none: LocationGroupWhereInput
+  forgetPassword: FindPassWordWhereInput
+  remmemberPassword: FindPassWordWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

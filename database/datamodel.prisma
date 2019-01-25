@@ -75,6 +75,8 @@ type User {
   fromOldColleagues:[OldColleague!]!  @relation(name: "FromOldColleagues")
   toOldColleagues:[OldColleague!]! @relation(name: "ToOldColleagues")
   locationGroups:[LocationGroup!]!
+  forgetPassword:FindPassWord  @relation(name: "Forget")
+  remmemberPassword:FindPassWord @relation(name: "Remmember")
 }
 
 # 地理位置
@@ -351,5 +353,12 @@ type Photo {
 type Logs {
   user:User
   createFamilyGroupTime:DateTime
+}
+
+type FindPassWord{
+  id:ID! @unique
+  times:Int
+  forgetter:User @relation(name: "Forget")
+  remmember:[User!]! @relation(name: "Remmember")
 }
 

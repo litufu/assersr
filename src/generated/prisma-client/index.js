@@ -45,6 +45,10 @@ var models = [
     embedded: false
   },
   {
+    name: "FindPassWord",
+    embedded: false
+  },
+  {
     name: "Group",
     embedded: false
   },
