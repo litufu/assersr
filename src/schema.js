@@ -58,13 +58,16 @@ export const typeDefs = gql`
     photo(id:String,name:String):Photo
     userInfo(id:String):User
     messages:[Message]
+    bootInfo:BootCount
+    visitCount:VisitCount
+    advertisements:[Advertisement]
   }
 
   type Mutation {
     createDraft(title: String!, content: String!, authorEmail: String!): Post!
     deletePost(id: ID!): Post
     publish(id: ID!): Post
-    signup(username: String!, password: String!): AuthPayload!
+    signup(username: String!, password: String!,deviceId:String!): AuthPayload!
     login(username: String!, password: String!): AuthPayload!
     changePassword(currentPassword:String!,newPassword: String!):User!
     findPassword(forgetterId:String!): FindPassWord
@@ -95,6 +98,7 @@ export const typeDefs = gql`
     addAvatar(uri:String):Photo
     sendMessage(toId:String,text:String,image:String):Message
     sendGroupMessage(type:String,toId:String,text:String,image:String):GroupMessage
+    addAdvertisement(url:String,startTime:String):Advertisement
     
   }
 
@@ -484,6 +488,37 @@ type FindPassWord{
   times:Int
   forgetter:User
   remmember:[User]
+}
+
+type RegisterCount{
+  id:ID!
+  addUser:User
+  deviceId:String
+  createdAt:DateTime!
+}
+
+type BootCount{
+  id:ID!
+  bootUser:User
+  createdAt: DateTime!
+}
+
+type VisitCount{
+  userNum:Int,
+  addNum:Int,
+  visits:String
+}
+
+type Advertisement{
+  id:ID!
+  image1:String
+  image2:String
+  image3:String
+  image4:String
+  image5:String
+  startTime:DateTime
+  endTime:DateTime
+
 }
 
 

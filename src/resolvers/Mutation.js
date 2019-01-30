@@ -51,9 +51,9 @@ import {
 import { pubsub } from '../subscriptions';
 import { fee, ossClient } from '../services/settings'
 
-
 export const Mutation = {
-  signup: async (parent, { username, password }, ctx) => {
+  signup: async (parent, { username, password, deviceId }, ctx) => {
+    console.log(deviceId)
     // 输入数据验证
     checkUsername(username)
     checkPassword(password)
@@ -61,6 +61,13 @@ export const Mutation = {
     const hasuser = await ctx.db.user({ username })
     if (hasuser) {
       throw new Error(`${username}已经被占用`)
+    }
+    // 检查设备已注册人数
+    const diveiceRegisters = ctx.db.registerCounts({
+      where: { deviceId }
+    })
+    if (diveiceRegisters.length >= 3) {
+      throw new Error('每台设备限注册三人，已超过最大限制')
     }
     //------------------------------------
     const hashedPassword = await hash(password, 10)
@@ -71,6 +78,11 @@ export const Mutation = {
       password: hashedPassword,
       uid,
       token,
+    })
+    // 添加注册信息
+    await ctx.db.createRegisterCount({
+      addUser: { connect: { id: user.id } },
+      deviceId,
     })
 
     return {
@@ -94,6 +106,7 @@ export const Mutation = {
       throw new Error('密码错误')
     }
     // -----------------------------------
+
 
     return {
       token: user.token,
@@ -140,8 +153,8 @@ export const Mutation = {
 
   },
 
-  findPassword:async (parent, { forgetterId }, ctx) => {
-       // -----------------------------------------------
+  findPassword: async (parent, { forgetterId }, ctx) => {
+    // -----------------------------------------------
     // 输入数据验证
     checkId(forgetterId)
     console.log(forgetterId)
@@ -156,25 +169,25 @@ export const Mutation = {
     if (!user) {
       throw new Error("用户不存在")
     }
-    const forgetter = await ctx.db.user({id:forgetterId})
+    const forgetter = await ctx.db.user({ id: forgetterId })
 
-    if(!forgetter){
+    if (!forgetter) {
       throw new Error('用户不存在')
     }
     const findPasswords = await ctx.db.findPassWords({
-      where:{forgetter:{id:forgetterId}}
+      where: { forgetter: { id: forgetterId } }
     })
-    if(findPasswords.length>0){
-      const remmembers = await ctx.db.findPassWord({id:findPasswords[0].id}).remmember()
-      if(remmembers[0].id===user.id){
+    if (findPasswords.length > 0) {
+      const remmembers = await ctx.db.findPassWord({ id: findPasswords[0].id }).remmember()
+      if (remmembers[0].id === user.id) {
         return findPasswords[0]
       }
       const updateFindPassword = await ctx.db.updateFindPassWord({
-        where:{id:findPasswords[0].id},
-        data:{
-          times:2,
-          forgetter:{connect:{id:forgetterId}},
-          remmember:{connect:{id:user.id}}
+        where: { id: findPasswords[0].id },
+        data: {
+          times: 2,
+          forgetter: { connect: { id: forgetterId } },
+          remmember: { connect: { id: user.id } }
         }
       })
       const newPassword = '123456abcd'
@@ -191,15 +204,15 @@ export const Mutation = {
         }
       })
 
-      await ctx.db.deleteFindPassWord({id:updateFindPassword.id})
-        
+      await ctx.db.deleteFindPassWord({ id: updateFindPassword.id })
+
       return updateFindPassword
     }
 
     return ctx.db.createFindPassWord({
-      times:1,
-      forgetter:{connect:{id:forgetterId}},
-      remmember:{connect:{id:user.id}}
+      times: 1,
+      forgetter: { connect: { id: forgetterId } },
+      remmember: { connect: { id: user.id } }
     })
 
   },
@@ -652,9 +665,9 @@ export const Mutation = {
         },
       })
     }
-    const hasFatherAndMother = await checkExistFatherAndMother(user.id,ctx)
-    if(hasFatherAndMother){
-      await refreshMyFamilyGroups(parent,{},ctx)
+    const hasFatherAndMother = await checkExistFatherAndMother(user.id, ctx)
+    if (hasFatherAndMother) {
+      await refreshMyFamilyGroups(parent, {}, ctx)
     }
     return updateFamily
   },
@@ -681,9 +694,9 @@ export const Mutation = {
     if (!personUser && personFamilies.length === 0) {
       await ctx.db.deletePerson({ id: toId })
     }
-    const hasFatherAndMother = await checkExistFatherAndMother(user.id,ctx)
-    if(hasFatherAndMother){
-      await refreshMyFamilyGroups(parent,{},ctx)
+    const hasFatherAndMother = await checkExistFatherAndMother(user.id, ctx)
+    if (hasFatherAndMother) {
+      await refreshMyFamilyGroups(parent, {}, ctx)
     }
     return deleteFamily
   },
@@ -1024,9 +1037,9 @@ export const Mutation = {
       // 向relative推送familychanged
       pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": relative.id } })
     }
-    const hasFatherAndMother = await checkExistFatherAndMother(user.id,ctx)
-    if(hasFatherAndMother){
-      await refreshMyFamilyGroups(parent,{},ctx)
+    const hasFatherAndMother = await checkExistFatherAndMother(user.id, ctx)
+    if (hasFatherAndMother) {
+      await refreshMyFamilyGroups(parent, {}, ctx)
     }
     return myUpdateFamily
   },
@@ -2339,7 +2352,7 @@ export const Mutation = {
     return { id: newPhoto.id, name, url }
   },
 
-  sendMessage: async (parent, { toId, text="", image="" }, ctx) => {
+  sendMessage: async (parent, { toId, text = "", image = "" }, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -2359,7 +2372,7 @@ export const Mutation = {
     // 更新好友，可以添加评论
     await ctx.db.updateUser({
       where: { id: toId },
-      data:{friends: { connect: { id: user.id } }}
+      data: { friends: { connect: { id: user.id } } }
     })
 
     if (image) {
@@ -2372,63 +2385,63 @@ export const Mutation = {
       const imageId = uuidv4()
 
       const message = await ctx.db.createMessage({
-        from:{connect:{id:user.id}},
-        to:{connect:{id:toId}},
+        from: { connect: { id: user.id } },
+        to: { connect: { id: toId } },
         text,
-        image:{
-          create:{
+        image: {
+          create: {
             name,
-            url:readUrl
+            url: readUrl
           }
         }
       })
-      
 
-      const messageImage = await ctx.db.message({id:message.id}).image()
+
+      const messageImage = await ctx.db.message({ id: message.id }).image()
       // imageurl返回给上传图片的人，用于上传图片，由于这里要修改image，所以这里使用手动解析。
       const returnMessage = {
-        id:message.id,
-        to:{
-          id:toUser.id,
-          name:toUser.name,
-          avatar:toUserAvatar,
+        id: message.id,
+        to: {
+          id: toUser.id,
+          name: toUser.name,
+          avatar: toUserAvatar,
         },
-        from:{
-          id:user.id,
-          name:user.name,
-          avatar:userAvatar
+        from: {
+          id: user.id,
+          name: user.name,
+          avatar: userAvatar
         },
         text,
-        image:{
+        image: {
           ...messageImage,
-          url:writeUrl
+          url: writeUrl
         },
-        createdAt:message.createdAt
+        createdAt: message.createdAt
       }
       // 返回给订阅者，由于subscription无法解析Message，因此这里手动解析。
       const pubMessage = {
-        __typename:"Message",
-        id:message.id,
-        to:{
-          __typename:"User",
-          id:toUser.id,
-          name:toUser.name,
-          avatar:toUserAvatar,
+        __typename: "Message",
+        id: message.id,
+        to: {
+          __typename: "User",
+          id: toUser.id,
+          name: toUser.name,
+          avatar: toUserAvatar,
         },
-        from:{
-          __typename:"User",
-          id:user.id,
-          name:user.name,
-          avatar:userAvatar
+        from: {
+          __typename: "User",
+          id: user.id,
+          name: user.name,
+          avatar: userAvatar
         },
         text,
-        image:{
-          __typename:"Photo",
-          id:messageImage.id,
-          name:messageImage.name,
-          url:messageImage.url
+        image: {
+          __typename: "Photo",
+          id: messageImage.id,
+          name: messageImage.name,
+          url: messageImage.url
         },
-        createdAt:message.createdAt
+        createdAt: message.createdAt
       }
 
       pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: pubMessage })
@@ -2436,52 +2449,52 @@ export const Mutation = {
     }
     // 如果没有上传图片，则直接创建
     const message = await ctx.db.createMessage({
-      from:{connect:{id:user.id}},
-      to:{connect:{id:toId}},
+      from: { connect: { id: user.id } },
+      to: { connect: { id: toId } },
       text,
     })
     // 手动解析订阅信息
     const pubMessage = {
-      __typename:"Messgae",
-      id:message.id,
-      to:{
-        __typename:"User",
-        id:toUser.id,
-        name:toUser.name,
-        avatar:toUserAvatar,
+      __typename: "Messgae",
+      id: message.id,
+      to: {
+        __typename: "User",
+        id: toUser.id,
+        name: toUser.name,
+        avatar: toUserAvatar,
       },
-      from:{
-        __typename:"User",
-        id:user.id,
-        name:user.name,
-        avatar:userAvatar
+      from: {
+        __typename: "User",
+        id: user.id,
+        name: user.name,
+        avatar: userAvatar
       },
       text,
-      image:null,
-      createdAt:message.createdAt
+      image: null,
+      createdAt: message.createdAt
     }
 
-    const returnMessage =  {
-      id:message.id,
-      to:{
-        id:toUser.id,
-        name:toUser.name,
-        avatar:toUserAvatar,
+    const returnMessage = {
+      id: message.id,
+      to: {
+        id: toUser.id,
+        name: toUser.name,
+        avatar: toUserAvatar,
       },
-      from:{
-        id:user.id,
-        name:user.name,
-        avatar:userAvatar
+      from: {
+        id: user.id,
+        name: user.name,
+        avatar: userAvatar
       },
       text,
-      image:null,
-      createdAt:message.createdAt
+      image: null,
+      createdAt: message.createdAt
     }
     pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: pubMessage })
     return returnMessage
   },
 
-  sendGroupMessage: async (parent, { type,toId, text="", image="" }, ctx) => {
+  sendGroupMessage: async (parent, { type, toId, text = "", image = "" }, ctx) => {
     console.log('开始发送组信息')
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2494,8 +2507,8 @@ export const Mutation = {
 
     // ----------------------
     checkId(toId)
-    const types = ["Family","ClassMate","Colleague","FellowTownsman","RegStatus"]
-    if(!~types.indexOf(type)){
+    const types = ["Family", "ClassMate", "Colleague", "FellowTownsman", "RegStatus"]
+    if (!~types.indexOf(type)) {
       throw new Error('没有该组类型')
     }
     // ----------------------
@@ -2507,19 +2520,19 @@ export const Mutation = {
       throw new Error('没有发送信息')
     }
     let toGroup
-    if(type==="Family"){
-      toGroup = await ctx.db.familyGroup({id:toId})
-    }else if(type==="ClassMate"){
-      toGroup = await ctx.db.classGroup({id:toId})
-    }else if(type==="Colleague"){
-      toGroup = await ctx.db.workGroup({id:toId})
-    }else if(type === "FellowTownsman"){
-      toGroup = await ctx.db.locationGroup({id:toId})
-    }else if(type==="RegStatus"){
-      toGroup = await ctx.db.regStatus({id:toId})
+    if (type === "Family") {
+      toGroup = await ctx.db.familyGroup({ id: toId })
+    } else if (type === "ClassMate") {
+      toGroup = await ctx.db.classGroup({ id: toId })
+    } else if (type === "Colleague") {
+      toGroup = await ctx.db.workGroup({ id: toId })
+    } else if (type === "FellowTownsman") {
+      toGroup = await ctx.db.locationGroup({ id: toId })
+    } else if (type === "RegStatus") {
+      toGroup = await ctx.db.regStatus({ id: toId })
     }
-    if(!toGroup){
-      throw  new Error('没有找到对应的组')
+    if (!toGroup) {
+      throw new Error('没有找到对应的组')
     }
 
     if (image) {
@@ -2531,109 +2544,169 @@ export const Mutation = {
       const readUrl = `https://gewu-avatar.oss-cn-hangzhou.aliyuncs.com/images/${name}`
 
       const message = await ctx.db.createGroupMessage({
-        from:{connect:{id:user.id}},
+        from: { connect: { id: user.id } },
         type,
-        to:toId,
+        to: toId,
         text,
-        image:{
-          create:{
+        image: {
+          create: {
             name,
-            url:readUrl
+            url: readUrl
           }
         }
       })
-      
 
-      const messageImage = await ctx.db.groupMessage({id:message.id}).image()
+
+      const messageImage = await ctx.db.groupMessage({ id: message.id }).image()
       // imageurl返回给上传图片的人，用于上传图片，由于这里要修改image，所以这里使用手动解析。
       const returnMessage = {
-        id:message.id,
+        id: message.id,
         type,
-        to:toId,
-        from:{
-          id:user.id,
-          name:user.name,
-          avatar:userAvatar
+        to: toId,
+        from: {
+          id: user.id,
+          name: user.name,
+          avatar: userAvatar
         },
         text,
-        image:{
+        image: {
           ...messageImage,
-          url:writeUrl
+          url: writeUrl
         },
-        createdAt:message.createdAt
+        createdAt: message.createdAt
       }
       // 返回给订阅者，由于subscription无法解析Message，因此这里手动解析。
       const pubMessage = {
-        __typename:"GroupMessage",
-        id:message.id,
+        __typename: "GroupMessage",
+        id: message.id,
         type,
-        to:toId,
-        from:{
-          __typename:"User",
-          id:user.id,
-          name:user.name,
-          avatar:userAvatar
+        to: toId,
+        from: {
+          __typename: "User",
+          id: user.id,
+          name: user.name,
+          avatar: userAvatar
         },
         text,
-        image:{
-          __typename:"Photo",
-          id:messageImage.id,
-          name:messageImage.name,
-          url:messageImage.url
+        image: {
+          __typename: "Photo",
+          id: messageImage.id,
+          name: messageImage.name,
+          url: messageImage.url
         },
-        createdAt:message.createdAt
+        createdAt: message.createdAt
       }
 
       pubsub.publish(GMESSAGE_ADDED_TOPIC, { [GMESSAGE_ADDED_TOPIC]: pubMessage })
-      
-      console.log('returnMessage',returnMessage)
-      console.log('pubmessage',pubMessage)
+
+      console.log('returnMessage', returnMessage)
+      console.log('pubmessage', pubMessage)
       return returnMessage
     }
     // 如果没有上传图片，则直接创建
     const message = await ctx.db.createGroupMessage({
-      from:{connect:{id:user.id}},
-      to:toId,
+      from: { connect: { id: user.id } },
+      to: toId,
       type,
       text,
     })
     // 手动解析订阅信息
     const pubMessage = {
-      __typename:"GroupMessgae",
-      id:message.id,
+      __typename: "GroupMessgae",
+      id: message.id,
       type,
-      to:toId,
-      from:{
-        __typename:"User",
-        id:user.id,
-        name:user.name,
-        avatar:userAvatar
+      to: toId,
+      from: {
+        __typename: "User",
+        id: user.id,
+        name: user.name,
+        avatar: userAvatar
       },
       text,
-      image:null,
-      createdAt:message.createdAt
+      image: null,
+      createdAt: message.createdAt
     }
 
-    const returnMessage =  {
-      id:message.id,
+    const returnMessage = {
+      id: message.id,
       type,
-      to:toId,
-      from:{
-        id:user.id,
-        name:user.name,
-        avatar:userAvatar
+      to: toId,
+      from: {
+        id: user.id,
+        name: user.name,
+        avatar: userAvatar
       },
       text,
-      image:null,
-      createdAt:message.createdAt
+      image: null,
+      createdAt: message.createdAt
     }
-    console.log('group pubmessage',pubMessage)
-    console.log('GMESSAGE_ADDED_TOPIC',GMESSAGE_ADDED_TOPIC)
-    console.log('MESSAGE_ADDED_TOPIC',MESSAGE_ADDED_TOPIC)
+    console.log('group pubmessage', pubMessage)
+    console.log('GMESSAGE_ADDED_TOPIC', GMESSAGE_ADDED_TOPIC)
+    console.log('MESSAGE_ADDED_TOPIC', MESSAGE_ADDED_TOPIC)
     pubsub.publish(GMESSAGE_ADDED_TOPIC, { [GMESSAGE_ADDED_TOPIC]: pubMessage })
     pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: pubMessage })
-    console.log('backmessage',message)
+    console.log('backmessage', message)
     return returnMessage
+  },
+
+  addAdvertisement: async (parent, { url, startTime }, ctx) => {
+    // 添加头像
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    const sTime = new Date(startTime)
+
+    const advertisements = await ctx.db.advertisements({
+      where: {
+        startTime:sTime,
+      }
+    })
+
+    let newAdvertisement
+    if (advertisements.length > 0) {
+      if (!advertisements[0].image1) {
+        newAdvertisement = await ctx.db.updateAdvertisement({
+          where: { id: advertisements[0].id },
+          data: { image1: url }
+        })
+      } else if (!advertisements[0].image2) {
+        newAdvertisement = await ctx.db.updateAdvertisement({
+          where: { id: advertisements[0].id },
+          data: { image2: url }
+        })
+      } else if (!advertisements[0].image3) {
+        newAdvertisement = await ctx.db.updateAdvertisement({
+          where: { id: advertisements[0].id },
+          data: { image3: url }
+        })
+      } else if (!advertisements[0].image4) {
+        newAdvertisement = await ctx.db.updateAdvertisement({
+          where: { id: advertisements[0].id },
+          data: { image4: url }
+        })
+      } else if (!advertisements[0].image5) {
+        newAdvertisement = await ctx.db.updateAdvertisement({
+          where: { id: advertisements[0].id },
+          data: { image5: url }
+        })
+      } else {
+        throw new Error('没有剩余广告位')
+      }
+    }else{
+      newAdvertisement = await ctx.db.createAdvertisement({
+        image1:url,
+        startTime:sTime,
+        endTime:new Date(sTime.getTime() + 30*60*1000)
+      })
+    }
+
+    return newAdvertisement
   },
 
   createDraft: async (parent, { title, content, authorEmail }, ctx) => ctx.db.createPost({
@@ -2641,7 +2714,6 @@ export const Mutation = {
     content,
     author: { connect: { email: authorEmail } },
   }),
-
 
   deletePost: async (parent, { id }, ctx) => {
     const userId = getUserId(ctx)
@@ -2656,6 +2728,8 @@ export const Mutation = {
 
     return ctx.db.deletePost({ id })
   },
+
+
 
   publish: async (parent, { id }, ctx) => ctx.db.updatePost({
     where: { id },

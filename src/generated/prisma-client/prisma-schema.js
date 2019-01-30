@@ -1,5 +1,227 @@
 module.exports = {
-        typeDefs: /* GraphQL */ `type AggregateArea {
+        typeDefs: /* GraphQL */ `type Advertisement {
+  id: ID!
+  image1: String
+  image2: String
+  image3: String
+  image4: String
+  image5: String
+  startTime: DateTime
+  endTime: DateTime
+}
+
+type AdvertisementConnection {
+  pageInfo: PageInfo!
+  edges: [AdvertisementEdge]!
+  aggregate: AggregateAdvertisement!
+}
+
+input AdvertisementCreateInput {
+  image1: String
+  image2: String
+  image3: String
+  image4: String
+  image5: String
+  startTime: DateTime
+  endTime: DateTime
+}
+
+type AdvertisementEdge {
+  node: Advertisement!
+  cursor: String!
+}
+
+enum AdvertisementOrderByInput {
+  id_ASC
+  id_DESC
+  image1_ASC
+  image1_DESC
+  image2_ASC
+  image2_DESC
+  image3_ASC
+  image3_DESC
+  image4_ASC
+  image4_DESC
+  image5_ASC
+  image5_DESC
+  startTime_ASC
+  startTime_DESC
+  endTime_ASC
+  endTime_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type AdvertisementPreviousValues {
+  id: ID!
+  image1: String
+  image2: String
+  image3: String
+  image4: String
+  image5: String
+  startTime: DateTime
+  endTime: DateTime
+}
+
+type AdvertisementSubscriptionPayload {
+  mutation: MutationType!
+  node: Advertisement
+  updatedFields: [String!]
+  previousValues: AdvertisementPreviousValues
+}
+
+input AdvertisementSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: AdvertisementWhereInput
+  AND: [AdvertisementSubscriptionWhereInput!]
+  OR: [AdvertisementSubscriptionWhereInput!]
+  NOT: [AdvertisementSubscriptionWhereInput!]
+}
+
+input AdvertisementUpdateInput {
+  image1: String
+  image2: String
+  image3: String
+  image4: String
+  image5: String
+  startTime: DateTime
+  endTime: DateTime
+}
+
+input AdvertisementUpdateManyMutationInput {
+  image1: String
+  image2: String
+  image3: String
+  image4: String
+  image5: String
+  startTime: DateTime
+  endTime: DateTime
+}
+
+input AdvertisementWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  image1: String
+  image1_not: String
+  image1_in: [String!]
+  image1_not_in: [String!]
+  image1_lt: String
+  image1_lte: String
+  image1_gt: String
+  image1_gte: String
+  image1_contains: String
+  image1_not_contains: String
+  image1_starts_with: String
+  image1_not_starts_with: String
+  image1_ends_with: String
+  image1_not_ends_with: String
+  image2: String
+  image2_not: String
+  image2_in: [String!]
+  image2_not_in: [String!]
+  image2_lt: String
+  image2_lte: String
+  image2_gt: String
+  image2_gte: String
+  image2_contains: String
+  image2_not_contains: String
+  image2_starts_with: String
+  image2_not_starts_with: String
+  image2_ends_with: String
+  image2_not_ends_with: String
+  image3: String
+  image3_not: String
+  image3_in: [String!]
+  image3_not_in: [String!]
+  image3_lt: String
+  image3_lte: String
+  image3_gt: String
+  image3_gte: String
+  image3_contains: String
+  image3_not_contains: String
+  image3_starts_with: String
+  image3_not_starts_with: String
+  image3_ends_with: String
+  image3_not_ends_with: String
+  image4: String
+  image4_not: String
+  image4_in: [String!]
+  image4_not_in: [String!]
+  image4_lt: String
+  image4_lte: String
+  image4_gt: String
+  image4_gte: String
+  image4_contains: String
+  image4_not_contains: String
+  image4_starts_with: String
+  image4_not_starts_with: String
+  image4_ends_with: String
+  image4_not_ends_with: String
+  image5: String
+  image5_not: String
+  image5_in: [String!]
+  image5_not_in: [String!]
+  image5_lt: String
+  image5_lte: String
+  image5_gt: String
+  image5_gte: String
+  image5_contains: String
+  image5_not_contains: String
+  image5_starts_with: String
+  image5_not_starts_with: String
+  image5_ends_with: String
+  image5_not_ends_with: String
+  startTime: DateTime
+  startTime_not: DateTime
+  startTime_in: [DateTime!]
+  startTime_not_in: [DateTime!]
+  startTime_lt: DateTime
+  startTime_lte: DateTime
+  startTime_gt: DateTime
+  startTime_gte: DateTime
+  endTime: DateTime
+  endTime_not: DateTime
+  endTime_in: [DateTime!]
+  endTime_not_in: [DateTime!]
+  endTime_lt: DateTime
+  endTime_lte: DateTime
+  endTime_gt: DateTime
+  endTime_gte: DateTime
+  AND: [AdvertisementWhereInput!]
+  OR: [AdvertisementWhereInput!]
+  NOT: [AdvertisementWhereInput!]
+}
+
+input AdvertisementWhereUniqueInput {
+  id: ID
+}
+
+type AggregateAdvertisement {
+  count: Int!
+}
+
+type AggregateArea {
+  count: Int!
+}
+
+type AggregateBootCount {
   count: Int!
 }
 
@@ -84,6 +306,10 @@ type AggregatePost {
 }
 
 type AggregateProvince {
+  count: Int!
+}
+
+type AggregateRegisterCount {
   count: Int!
 }
 
@@ -413,6 +639,96 @@ input AreaWhereUniqueInput {
 
 type BatchPayload {
   count: Long!
+}
+
+type BootCount {
+  id: ID!
+  bootUser: User
+  createdAt: DateTime!
+}
+
+type BootCountConnection {
+  pageInfo: PageInfo!
+  edges: [BootCountEdge]!
+  aggregate: AggregateBootCount!
+}
+
+input BootCountCreateInput {
+  bootUser: UserCreateOneInput
+}
+
+type BootCountEdge {
+  node: BootCount!
+  cursor: String!
+}
+
+enum BootCountOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type BootCountPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+}
+
+type BootCountSubscriptionPayload {
+  mutation: MutationType!
+  node: BootCount
+  updatedFields: [String!]
+  previousValues: BootCountPreviousValues
+}
+
+input BootCountSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: BootCountWhereInput
+  AND: [BootCountSubscriptionWhereInput!]
+  OR: [BootCountSubscriptionWhereInput!]
+  NOT: [BootCountSubscriptionWhereInput!]
+}
+
+input BootCountUpdateInput {
+  bootUser: UserUpdateOneInput
+}
+
+input BootCountWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  bootUser: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [BootCountWhereInput!]
+  OR: [BootCountWhereInput!]
+  NOT: [BootCountWhereInput!]
+}
+
+input BootCountWhereUniqueInput {
+  id: ID
 }
 
 type City {
@@ -4378,12 +4694,23 @@ input MessageWhereUniqueInput {
 }
 
 type Mutation {
+  createAdvertisement(data: AdvertisementCreateInput!): Advertisement!
+  updateAdvertisement(data: AdvertisementUpdateInput!, where: AdvertisementWhereUniqueInput!): Advertisement
+  updateManyAdvertisements(data: AdvertisementUpdateManyMutationInput!, where: AdvertisementWhereInput): BatchPayload!
+  upsertAdvertisement(where: AdvertisementWhereUniqueInput!, create: AdvertisementCreateInput!, update: AdvertisementUpdateInput!): Advertisement!
+  deleteAdvertisement(where: AdvertisementWhereUniqueInput!): Advertisement
+  deleteManyAdvertisements(where: AdvertisementWhereInput): BatchPayload!
   createArea(data: AreaCreateInput!): Area!
   updateArea(data: AreaUpdateInput!, where: AreaWhereUniqueInput!): Area
   updateManyAreas(data: AreaUpdateManyMutationInput!, where: AreaWhereInput): BatchPayload!
   upsertArea(where: AreaWhereUniqueInput!, create: AreaCreateInput!, update: AreaUpdateInput!): Area!
   deleteArea(where: AreaWhereUniqueInput!): Area
   deleteManyAreas(where: AreaWhereInput): BatchPayload!
+  createBootCount(data: BootCountCreateInput!): BootCount!
+  updateBootCount(data: BootCountUpdateInput!, where: BootCountWhereUniqueInput!): BootCount
+  upsertBootCount(where: BootCountWhereUniqueInput!, create: BootCountCreateInput!, update: BootCountUpdateInput!): BootCount!
+  deleteBootCount(where: BootCountWhereUniqueInput!): BootCount
+  deleteManyBootCounts(where: BootCountWhereInput): BatchPayload!
   createCity(data: CityCreateInput!): City!
   updateCity(data: CityUpdateInput!, where: CityWhereUniqueInput!): City
   updateManyCities(data: CityUpdateManyMutationInput!, where: CityWhereInput): BatchPayload!
@@ -4513,6 +4840,12 @@ type Mutation {
   upsertRegStatus(where: RegStatusWhereUniqueInput!, create: RegStatusCreateInput!, update: RegStatusUpdateInput!): RegStatus!
   deleteRegStatus(where: RegStatusWhereUniqueInput!): RegStatus
   deleteManyRegStatuses(where: RegStatusWhereInput): BatchPayload!
+  createRegisterCount(data: RegisterCountCreateInput!): RegisterCount!
+  updateRegisterCount(data: RegisterCountUpdateInput!, where: RegisterCountWhereUniqueInput!): RegisterCount
+  updateManyRegisterCounts(data: RegisterCountUpdateManyMutationInput!, where: RegisterCountWhereInput): BatchPayload!
+  upsertRegisterCount(where: RegisterCountWhereUniqueInput!, create: RegisterCountCreateInput!, update: RegisterCountUpdateInput!): RegisterCount!
+  deleteRegisterCount(where: RegisterCountWhereUniqueInput!): RegisterCount
+  deleteManyRegisterCounts(where: RegisterCountWhereInput): BatchPayload!
   createSchool(data: SchoolCreateInput!): School!
   updateSchool(data: SchoolUpdateInput!, where: SchoolWhereUniqueInput!): School
   updateManySchools(data: SchoolUpdateManyMutationInput!, where: SchoolWhereInput): BatchPayload!
@@ -5676,9 +6009,15 @@ input ProvinceWhereUniqueInput {
 }
 
 type Query {
+  advertisement(where: AdvertisementWhereUniqueInput!): Advertisement
+  advertisements(where: AdvertisementWhereInput, orderBy: AdvertisementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Advertisement]!
+  advertisementsConnection(where: AdvertisementWhereInput, orderBy: AdvertisementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AdvertisementConnection!
   area(where: AreaWhereUniqueInput!): Area
   areas(where: AreaWhereInput, orderBy: AreaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Area]!
   areasConnection(where: AreaWhereInput, orderBy: AreaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AreaConnection!
+  bootCount(where: BootCountWhereUniqueInput!): BootCount
+  bootCounts(where: BootCountWhereInput, orderBy: BootCountOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BootCount]!
+  bootCountsConnection(where: BootCountWhereInput, orderBy: BootCountOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BootCountConnection!
   city(where: CityWhereUniqueInput!): City
   cities(where: CityWhereInput, orderBy: CityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [City]!
   citiesConnection(where: CityWhereInput, orderBy: CityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CityConnection!
@@ -5744,6 +6083,9 @@ type Query {
   regStatus(where: RegStatusWhereUniqueInput!): RegStatus
   regStatuses(where: RegStatusWhereInput, orderBy: RegStatusOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RegStatus]!
   regStatusesConnection(where: RegStatusWhereInput, orderBy: RegStatusOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RegStatusConnection!
+  registerCount(where: RegisterCountWhereUniqueInput!): RegisterCount
+  registerCounts(where: RegisterCountWhereInput, orderBy: RegisterCountOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RegisterCount]!
+  registerCountsConnection(where: RegisterCountWhereInput, orderBy: RegisterCountOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RegisterCountConnection!
   school(where: SchoolWhereUniqueInput!): School
   schools(where: SchoolWhereInput, orderBy: SchoolOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [School]!
   schoolsConnection(where: SchoolWhereInput, orderBy: SchoolOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SchoolConnection!
@@ -5772,6 +6114,120 @@ type Query {
   workGroups(where: WorkGroupWhereInput, orderBy: WorkGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [WorkGroup]!
   workGroupsConnection(where: WorkGroupWhereInput, orderBy: WorkGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): WorkGroupConnection!
   node(id: ID!): Node
+}
+
+type RegisterCount {
+  id: ID!
+  addUser: User
+  deviceId: String
+  createdAt: DateTime!
+}
+
+type RegisterCountConnection {
+  pageInfo: PageInfo!
+  edges: [RegisterCountEdge]!
+  aggregate: AggregateRegisterCount!
+}
+
+input RegisterCountCreateInput {
+  addUser: UserCreateOneInput
+  deviceId: String
+}
+
+type RegisterCountEdge {
+  node: RegisterCount!
+  cursor: String!
+}
+
+enum RegisterCountOrderByInput {
+  id_ASC
+  id_DESC
+  deviceId_ASC
+  deviceId_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type RegisterCountPreviousValues {
+  id: ID!
+  deviceId: String
+  createdAt: DateTime!
+}
+
+type RegisterCountSubscriptionPayload {
+  mutation: MutationType!
+  node: RegisterCount
+  updatedFields: [String!]
+  previousValues: RegisterCountPreviousValues
+}
+
+input RegisterCountSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: RegisterCountWhereInput
+  AND: [RegisterCountSubscriptionWhereInput!]
+  OR: [RegisterCountSubscriptionWhereInput!]
+  NOT: [RegisterCountSubscriptionWhereInput!]
+}
+
+input RegisterCountUpdateInput {
+  addUser: UserUpdateOneInput
+  deviceId: String
+}
+
+input RegisterCountUpdateManyMutationInput {
+  deviceId: String
+}
+
+input RegisterCountWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  addUser: UserWhereInput
+  deviceId: String
+  deviceId_not: String
+  deviceId_in: [String!]
+  deviceId_not_in: [String!]
+  deviceId_lt: String
+  deviceId_lte: String
+  deviceId_gt: String
+  deviceId_gte: String
+  deviceId_contains: String
+  deviceId_not_contains: String
+  deviceId_starts_with: String
+  deviceId_not_starts_with: String
+  deviceId_ends_with: String
+  deviceId_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [RegisterCountWhereInput!]
+  OR: [RegisterCountWhereInput!]
+  NOT: [RegisterCountWhereInput!]
+}
+
+input RegisterCountWhereUniqueInput {
+  id: ID
 }
 
 type RegStatus {
@@ -6842,7 +7298,9 @@ input StreetWhereUniqueInput {
 }
 
 type Subscription {
+  advertisement(where: AdvertisementSubscriptionWhereInput): AdvertisementSubscriptionPayload
   area(where: AreaSubscriptionWhereInput): AreaSubscriptionPayload
+  bootCount(where: BootCountSubscriptionWhereInput): BootCountSubscriptionPayload
   city(where: CitySubscriptionWhereInput): CitySubscriptionPayload
   classGroup(where: ClassGroupSubscriptionWhereInput): ClassGroupSubscriptionPayload
   classMate(where: ClassMateSubscriptionWhereInput): ClassMateSubscriptionPayload
@@ -6865,6 +7323,7 @@ type Subscription {
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   province(where: ProvinceSubscriptionWhereInput): ProvinceSubscriptionPayload
   regStatus(where: RegStatusSubscriptionWhereInput): RegStatusSubscriptionPayload
+  registerCount(where: RegisterCountSubscriptionWhereInput): RegisterCountSubscriptionPayload
   school(where: SchoolSubscriptionWhereInput): SchoolSubscriptionPayload
   schoolEdu(where: SchoolEduSubscriptionWhereInput): SchoolEduSubscriptionPayload
   station(where: StationSubscriptionWhereInput): StationSubscriptionPayload

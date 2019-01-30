@@ -24,6 +24,7 @@ import {LocationGroup} from './LocationGroup'
 import {Photo} from './Photo'
 import {GroupMessage} from './GroupMessage'
 import {FindPassWord} from './FindPassWord'
+import {VisitCount} from './VisitCount'
 
 export const resolvers = {
   Query,
@@ -51,5 +52,6 @@ export const resolvers = {
   LocationGroup,
   Photo,
   GroupMessage,
-  FindPassWord
+  FindPassWord,
+  VisitCount
 }

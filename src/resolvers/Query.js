@@ -484,6 +484,46 @@ export const Query = {
     
     return user
   },
+  bootInfo: async (parent, args, ctx) => {
+
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    return ctx.db.createBootCount({
+      bootUser:{connect:{id:user.id}},
+    })
+  },
+  visitCount:async (parent, args, ctx) => {
+
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    console.log('visit')
+    return {}
+  },
+
+  advertisements:async (parent, args, ctx) => {
+    const now = new Date()
+    return ctx.db.advertisements({
+      where:{
+        AND:[
+          {startTime_lte:now},
+          {endTime_gt:now},
+        ]
+      }
+    })
+  },
+
   messages:async (parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
