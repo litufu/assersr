@@ -843,6 +843,7 @@ export const Mutation = {
   },
 
   confirmFamily: async (parent, { familyId }, ctx) => {
+    console.log('start confirmfamily')
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -876,7 +877,9 @@ export const Mutation = {
       where: { id: relativeFamily[0].id },
       data: { status: "3" }
     })
+    console.log('kaishi family changed confirm5')
     pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": relative.id } })
+    console.log('kaishi family changed confirm6')
     // 删除多余的person 见deletePersons
     // 没有必要每个删除，可以定时的删除所有family为[],并且user 为null的person.
 
@@ -925,7 +928,9 @@ export const Mutation = {
             await updateCommonUserFamily(user, myRelationship, myCommonFamily, relative, relativeRelationship, ctx)
           }
           // 向relative推送familyChanged
+          console.log('kaishi family changed confirm1')
           pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": relative.id } })
+          console.log('kaishi family changed confirm2')
         }
         else {
           // 如果relative的status大于我的家庭成员的status，则更新我的family
@@ -943,7 +948,9 @@ export const Mutation = {
             await updateCommonUserFamily(relative, relativeRelationship, relativeToCommonUserFamily[0], user, myRelationship, ctx)
           }
           // 像我推送“familyChanged"
+          console.log('kaishi family changed confirm3')
           pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": user.id } })
+          console.log('kaishi family changed confirm4')
         }
       }
     }

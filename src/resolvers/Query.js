@@ -1,78 +1,80 @@
 import { getUserId, } from '../services/utils'
-import {ossClient} from '../services/settings'
+import { ossClient } from '../services/settings'
 
 export const Query = {
   me: (parent, args, ctx) => {
-    if( getUserId(ctx)){
+    if (getUserId(ctx)) {
       return ctx.db.user({ uid: getUserId(ctx) })
     }
     return null
   },
-  
-  searchUser:(parent, {username}, ctx) => ctx.db.user({username}),
-  cities:(parent, {code}, ctx)=> ctx.db.cities({where:{province:{code}}}),
-  areas:(parent, {code}, ctx)=> ctx.db.areas({where:{city:{code}}}),
-  streets:(parent, {code}, ctx)=> ctx.db.streets({where:{Area:{code}}}),
-  villages:(parent, {code}, ctx)=> ctx.db.villages({where:{street:{code}}}),
+
+  searchUser: (parent, { username }, ctx) => ctx.db.user({ username }),
+  cities: (parent, { code }, ctx) => ctx.db.cities({ where: { province: { code } } }),
+  areas: (parent, { code }, ctx) => ctx.db.areas({ where: { city: { code } } }),
+  streets: (parent, { code }, ctx) => ctx.db.streets({ where: { Area: { code } } }),
+  villages: (parent, { code }, ctx) => ctx.db.villages({ where: { street: { code } } }),
   feed: (parent, args, ctx) => ctx.db.posts({ where: { isPublished: true } }),
   drafts: (parent, args, ctx) =>
     ctx.db.posts({ where: { isPublished: false } }),
   post: (parent, { id }, ctx) => ctx.db.post({ id }),
-  families:(parent, args, ctx) => {
+  families: (parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
     return ctx.db.families({
-    where: {
-      from: {uid:userId}
-    }
-  })
+      where: {
+        from: { uid: userId }
+      }
+    })
   },
-  findPasswords:(parent, args, ctx) => {
+  findPasswords: (parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
     return ctx.db.findPassWords({
       where: {
-        remmember_some: {uid:userId}
+        remmember_some: { uid: userId }
       }
     })
   },
-  getFamiliesById:(parent, args, ctx) => {
+  getFamiliesById: (parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
-    if(!args.id){
+    if (!args.id) {
       return ctx.db.families({
         where: {
-          from: {uid:userId}
+          from: { uid: userId }
         }
       })
     }
     return ctx.db.families({
       where: {
-        from: {id:args.id}
+        from: { id: args.id }
       }
     })
   },
-  getSchools:(parent, args, ctx) => {
+  getSchools: (parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
-    return ctx.db.schools({where: {
-      AND: [{
-        location: {name:args.locationName}
-      }, {
-        kind:args.kind
-      }]
-    }}
+    return ctx.db.schools({
+      where: {
+        AND: [{
+          location: { name: args.locationName }
+        }, {
+          kind: args.kind
+        }]
+      }
+    }
     )
   },
-  getMajors:(parent, args, ctx) => {
+  getMajors: (parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -83,7 +85,7 @@ export const Query = {
       }
     })
   },
-  getUniversities:(parent, args, ctx) => {
+  getUniversities: (parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -101,111 +103,111 @@ export const Query = {
     }
     const results = await ctx.db.collegeEntranceExams({
       where: {
-        student: {uid:userId}
+        student: { uid: userId }
       }
     })
-    if(results.length===0){
+    if (results.length === 0) {
       return null
-    } 
+    }
     return results[0]
   },
-  getRegStatusApplicants:async (parent, {  education, universityId, majorId}, ctx) => {
+  getRegStatusApplicants: async (parent, { education, universityId, majorId }, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
     const userExams = await ctx.db.collegeEntranceExams(
       {
-        where:{student:{uid:userId}}
+        where: { student: { uid: userId } }
       }
     )
-    if(userExams.length===0){
+    if (userExams.length === 0) {
       throw new Error('尚未填写高考基本信息')
     }
     const userExamProvinceId = await ctx.db.collegeEntranceExam({
-      id:userExams[0].id
+      id: userExams[0].id
     }).province().id()
-    const userExamSubject =  await ctx.db.collegeEntranceExam({
-      id:userExams[0].id
+    const userExamSubject = await ctx.db.collegeEntranceExam({
+      id: userExams[0].id
     }).subject()
 
     const regStatuses = await ctx.db.regStatuses({
       where: {
         education,
-        university:{id:universityId},
-        major:{id:majorId},
+        university: { id: universityId },
+        major: { id: majorId },
       }
     })
-    if(regStatuses.length===0){
+    if (regStatuses.length === 0) {
       return []
     }
 
     const applicants = await ctx.db.regStatus(
       {
-        id:regStatuses[0].id
+        id: regStatuses[0].id
       }
     ).applicants({
-      where:{
-        exam:{
-          AND:[
-            {province:{id:userExamProvinceId}},
-            {subject:userExamSubject}
+      where: {
+        exam: {
+          AND: [
+            { province: { id: userExamProvinceId } },
+            { subject: userExamSubject }
           ]
         }
       }
     })
-    
+
     return applicants
   },
-  getRegStatusApplicantsById:async (parent, {  regStatusId}, ctx) => {
+  getRegStatusApplicantsById: async (parent, { regStatusId }, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
     const userExams = await ctx.db.collegeEntranceExams(
       {
-        where:{student:{uid:userId}}
+        where: { student: { uid: userId } }
       }
     )
-    if(userExams.length===0){
+    if (userExams.length === 0) {
       throw new Error('尚未填写高考基本信息')
     }
     const userExamProvinceId = await ctx.db.collegeEntranceExam({
-      id:userExams[0].id
+      id: userExams[0].id
     }).province().id()
-    const userExamSubject =  await ctx.db.collegeEntranceExam({
-      id:userExams[0].id
+    const userExamSubject = await ctx.db.collegeEntranceExam({
+      id: userExams[0].id
     }).subject()
 
     const applicants = await ctx.db.regStatus(
       {
-        id:regStatusId
+        id: regStatusId
       }
     ).applicants({
-      where:{
-        exam:{
-          AND:[
-            {province:{id:userExamProvinceId}},
-            {subject:userExamSubject}
+      where: {
+        exam: {
+          AND: [
+            { province: { id: userExamProvinceId } },
+            { subject: userExamSubject }
           ]
         }
       }
     })
 
-  
+
     return applicants
   },
-  getRegStatus:async (parent, args, ctx) => {
+  getRegStatus: async (parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
-    return  ctx.db.user(
-      {uid:userId}
+    return ctx.db.user(
+      { uid: userId }
     ).regStatus()
 
   },
-  getFamilyGroups:async (parent, args, ctx) => {
+  getFamilyGroups: async (parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -216,222 +218,244 @@ export const Query = {
     }
     const groupUsersId = []
     const meAndSpousesfamilies = []
-    groupUsersId.push({id:user.id})
-    const meFamilies = await ctx.db.user({id:user.id}).families()
+    groupUsersId.push({ id: user.id })
+    const meFamilies = await ctx.db.user({ id: user.id }).families()
     meAndSpousesfamilies.push(meFamilies)
     // 配偶
-    const mySpouseFamilies = meFamilies.filter(family=>!!~['wife','husband'].indexOf(family.relationship))
-    for (const mySpouseFamily of mySpouseFamilies ){
-      const mySpouse = await ctx.db.family({id:mySpouseFamily.id}).to().user()
-      if(mySpouse){
-        groupUsersId.push({id:mySpouse.id})
-        const spouseFamilies = await ctx.db.user({id:mySpouse.id}).families()
+    const mySpouseFamilies = meFamilies.filter(family => !!~['wife', 'husband'].indexOf(family.relationship))
+    for (const mySpouseFamily of mySpouseFamilies) {
+      const mySpouse = await ctx.db.family({ id: mySpouseFamily.id }).to().user()
+      if (mySpouse) {
+        groupUsersId.push({ id: mySpouse.id })
+        const spouseFamilies = await ctx.db.user({ id: mySpouse.id }).families()
         meAndSpousesfamilies.push(spouseFamilies)
       }
     }
-    for(const myFamilies of meAndSpousesfamilies){
-      const familyFather = myFamilies.filter(family=>family.relationship==='father')
-      if(familyFather.length>0){
-        const father = await ctx.db.family({id:familyFather[0].id}).to().user()
-        if(father){
-          groupUsersId.push({id:father.id})
-          const fatherFamilies = await ctx.db.user({id:father.id}).families()
-          const fatherFamilyFather = fatherFamilies.filter(family=>family.relationship==='father')
-          const grandpa = await ctx.db.family({id:fatherFamilyFather[0].id}).to().user()
-          if(grandpa){
-            groupUsersId.push({id:grandpa.id})
+    for (const myFamilies of meAndSpousesfamilies) {
+      const familyFather = myFamilies.filter(family => family.relationship === 'father')
+      if (familyFather.length > 0) {
+        const father = await ctx.db.family({ id: familyFather[0].id }).to().user()
+        if (father) {
+          groupUsersId.push({ id: father.id })
+          const fatherFamilies = await ctx.db.user({ id: father.id }).families()
+          const fatherFamilyFather = fatherFamilies.filter(family => family.relationship === 'father')
+          if (fatherFamilyFather.length > 0) {
+            const grandpa = await ctx.db.family({ id: fatherFamilyFather[0].id }).to().user()
+            if (grandpa) {
+              groupUsersId.push({ id: grandpa.id })
+            }
           }
-          const motherFamilyFather = fatherFamilies.filter(family=>family.relationship==='mother')
-          const grandma =  await ctx.db.family({id:motherFamilyFather[0].id}).to().user()
-          if(grandma){
-            groupUsersId.push({id:grandma.id})
+
+          const motherFamilyFather = fatherFamilies.filter(family => family.relationship === 'mother')
+          if (motherFamilyFather.length > 0) {
+            const grandma = await ctx.db.family({ id: motherFamilyFather[0].id }).to().user()
+            if (grandma) {
+              groupUsersId.push({ id: grandma.id })
+            }
           }
+
         }
       }
-      const familyMother = myFamilies.filter(family=>family.relationship==='mother')
-      
-      if(familyMother.length>0){
-        const mother = await ctx.db.family({id:familyMother[0].id}).to().user()
-        if(mother){
-          groupUsersId.push({id:mother.id})
-          const motherFamilies = await ctx.db.user({id:mother.id}).families()
-          const fatherFamilyMother = motherFamilies.filter(family=>family.relationship==='father')
-          const grandpa = await ctx.db.family({id:fatherFamilyMother[0].id}).to().user()
-          if(grandpa){
-            groupUsersId.push({id:grandpa.id})
+      const familyMother = myFamilies.filter(family => family.relationship === 'mother')
+
+      if (familyMother.length > 0) {
+        const mother = await ctx.db.family({ id: familyMother[0].id }).to().user()
+        if (mother) {
+          groupUsersId.push({ id: mother.id })
+          const motherFamilies = await ctx.db.user({ id: mother.id }).families()
+          const fatherFamilyMother = motherFamilies.filter(family => family.relationship === 'father')
+          if (fatherFamilyMother.length > 0) {
+            const grandpa = await ctx.db.family({ id: fatherFamilyMother[0].id }).to().user()
+            if (grandpa) {
+              groupUsersId.push({ id: grandpa.id })
+            }
           }
-          const motherFamilyMother = motherFamilies.filter(family=>family.relationship==='mother')
-          const grandma =  await ctx.db.family({id:motherFamilyMother[0].id}).to().user()
-          if(grandma){
-            groupUsersId.push({id:grandma.id})
+
+          const motherFamilyMother = motherFamilies.filter(family => family.relationship === 'mother')
+          if (motherFamilyMother.length > 0) {
+            const grandma = await ctx.db.family({ id: motherFamilyMother[0].id }).to().user()
+            if (grandma) {
+              groupUsersId.push({ id: grandma.id })
+            }
           }
+
         }
       }
     }
-    
+
     // 我的群由子女负责创建
-    const sonAndDaughters = meFamilies.filter(family=>!!~['son','daughter'].indexOf(family.relationship))
-    for(const sonAndDaughter of sonAndDaughters){
-      const sd = await ctx.db.family({id:sonAndDaughter.id}).to().user()
-      if(sd){
-        groupUsersId.push({id:sd.id})
+    const sonAndDaughters = meFamilies.filter(family => !!~['son', 'daughter'].indexOf(family.relationship))
+    for (const sonAndDaughter of sonAndDaughters) {
+      const sd = await ctx.db.family({ id: sonAndDaughter.id }).to().user()
+      if (sd) {
+        groupUsersId.push({ id: sd.id })
       }
     }
-    return  ctx.db.familyGroups({
-      where:{
-        OR:groupUsersId.map(usersId=>({users_some:usersId}))
+    return ctx.db.familyGroups({
+      where: {
+        OR: groupUsersId.map(usersId => ({ users_some: usersId }))
       }
     })
   },
-  students: (parent, {schoolEduId}, ctx) => {
+  students: (parent, { schoolEduId }, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
-    return ctx.db.schoolEdu({id:schoolEduId}).students()
+    return ctx.db.schoolEdu({ id: schoolEduId }).students()
   },
-  classGroups: (parent, {schoolEduId}, ctx) => {
+  classGroups: (parent, { schoolEduId }, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
-    if(!schoolEduId){
+    if (!schoolEduId) {
       return ctx.db.classGroups({
-        where:{AND:[
-          {members_some:{student:{uid:userId}}}
-        ]}
+        where: {
+          AND: [
+            { members_some: { student: { uid: userId } } }
+          ]
+        }
       })
     }
     return ctx.db.classGroups({
-      where:{AND:[
-        {study:{id:schoolEduId}},
-        {members_some:{student:{uid:userId}}}
-      ]}
+      where: {
+        AND: [
+          { study: { id: schoolEduId } },
+          { members_some: { student: { uid: userId } } }
+        ]
+      }
     })
   },
-  workGroups:(parent, {companyId}, ctx) => {
+  workGroups: (parent, { companyId }, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
-    if(!companyId){
+    if (!companyId) {
       return ctx.db.workGroups({
-        where:{AND:[
-          {colleagues_some:{worker:{uid:userId}}}
-        ]}
+        where: {
+          AND: [
+            { colleagues_some: { worker: { uid: userId } } }
+          ]
+        }
       })
     }
     return ctx.db.workGroups({
-      where:{AND:[
-        {company:{id:companyId}},
-        {colleagues_some:{worker:{uid:userId}}}
-      ]}
+      where: {
+        AND: [
+          { company: { id: companyId } },
+          { colleagues_some: { worker: { uid: userId } } }
+        ]
+      }
     })
   },
-  stations: async (parent, {text}, ctx) => {
+  stations: async (parent, { text }, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
-    const stations =   await ctx.db.stations({
-      where:{name_contains:text}
+    const stations = await ctx.db.stations({
+      where: { name_contains: text }
     })
-    if(stations.length===0){
-      return [{id:'000',code:"000",name:"未找到相关职位,请更换关键字试一下"}]
+    if (stations.length === 0) {
+      return [{ id: '000', code: "000", name: "未找到相关职位,请更换关键字试一下" }]
     }
     return stations
   },
-  colleagues: async (parent, {companyId}, ctx) => {
-  
+  colleagues: async (parent, { companyId }, ctx) => {
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
     const workers = []
     const works = await ctx.db.works({
-      where:{
-        AND:[
-          {endTime_gt:(new Date('9999-1-1'))},
-          {company:{id:companyId}},
+      where: {
+        AND: [
+          { endTime_gt: (new Date('9999-1-1')) },
+          { company: { id: companyId } },
         ]
       }
     })
-    
-    for(const work of works){
-      const worker = await ctx.db.work({id:work.id}).worker()
+
+    for (const work of works) {
+      const worker = await ctx.db.work({ id: work.id }).worker()
       workers.push(worker)
     }
-    
+
     return workers
   },
-  oldColleagues: async (parent, {startTime,endTime,companyId}, ctx) => {
-  
+  oldColleagues: async (parent, { startTime, endTime, companyId }, ctx) => {
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
     const workers = []
     let works
-    if(new Date(endTime).getFullYear()===9999){
+    if (new Date(endTime).getFullYear() === 9999) {
       works = await ctx.db.works({
-        where:{
-          AND:[
-            {startTime_gte:(new Date(startTime))},
-            {endTime_lt:(new Date(endTime))},
-            {company:{id:companyId}},
+        where: {
+          AND: [
+            { startTime_gte: (new Date(startTime)) },
+            { endTime_lt: (new Date(endTime)) },
+            { company: { id: companyId } },
           ]
         }
       })
-    }else{
+    } else {
       works = await ctx.db.works({
-        where:{
-          AND:[
-            {OR:[
-            {startTime_gte:(new Date(startTime))},
-            {endTime_lte:(new Date(endTime))},
-          ]},
-            {company:{id:companyId}},
+        where: {
+          AND: [
+            {
+              OR: [
+                { startTime_gte: (new Date(startTime)) },
+                { endTime_lte: (new Date(endTime)) },
+              ]
+            },
+            { company: { id: companyId } },
           ]
         }
       })
     }
-   
-    
-    for(const work of works){
-      const worker = await ctx.db.work({id:work.id}).worker()
+
+
+    for (const work of works) {
+      const worker = await ctx.db.work({ id: work.id }).worker()
       workers.push(worker)
     }
-    
+
     return workers
   },
-  myOldColleagues:async (parent, {companyId}, ctx) => {
-  
+  myOldColleagues: async (parent, { companyId }, ctx) => {
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
 
-    if(!companyId){
+    if (!companyId) {
       return ctx.db.oldColleagues({
-        where:{
-          AND:[
-            {from:{uid:userId}},
+        where: {
+          AND: [
+            { from: { uid: userId } },
           ]
         }
       })
     }
 
     const myOldColleagues = await ctx.db.oldColleagues({
-      where:{
-        AND:[
-          {from:{uid:userId}},
-          {company:{id:companyId}},
+      where: {
+        AND: [
+          { from: { uid: userId } },
+          { company: { id: companyId } },
         ]
       }
     })
     return myOldColleagues
   },
-  locationGroups:async (parent, args, ctx) => {
+  locationGroups: async (parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -440,9 +464,9 @@ export const Query = {
     if (!user) {
       throw new Error("用户不存在")
     }
-    return ctx.db.user({id:user.id}).locationGroups()
+    return ctx.db.user({ id: user.id }).locationGroups()
   },
-  locationGroupUsers:async (parent, {locationGroupId}, ctx) => {
+  locationGroupUsers: async (parent, { locationGroupId }, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -451,9 +475,9 @@ export const Query = {
     if (!user) {
       throw new Error("用户不存在")
     }
-    return ctx.db.locationGroup({id:locationGroupId}).users()
+    return ctx.db.locationGroup({ id: locationGroupId }).users()
   },
-  photo:async (parent, {id,name}, ctx) => {
+  photo: async (parent, { id, name }, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -462,17 +486,17 @@ export const Query = {
     if (!user) {
       throw new Error("用户不存在")
     }
-    if(id){
-      return ctx.db.photo({id})
+    if (id) {
+      return ctx.db.photo({ id })
     }
 
-    if(name){
-      return ctx.db.photo({name})
+    if (name) {
+      return ctx.db.photo({ name })
     }
-    
+
     throw new Error('没有输入id或者名称')
   },
-  userInfo:async (parent, {id}, ctx) => {
+  userInfo: async (parent, { id }, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -481,7 +505,7 @@ export const Query = {
     if (!user) {
       throw new Error("用户不存在")
     }
-    
+
     return user
   },
   bootInfo: async (parent, args, ctx) => {
@@ -495,10 +519,10 @@ export const Query = {
       throw new Error("用户不存在")
     }
     return ctx.db.createBootCount({
-      bootUser:{connect:{id:user.id}},
+      bootUser: { connect: { id: user.id } },
     })
   },
-  visitCount:async (parent, args, ctx) => {
+  visitCount: async (parent, args, ctx) => {
 
     const userId = getUserId(ctx)
     if (!userId) {
@@ -512,35 +536,37 @@ export const Query = {
     return {}
   },
 
-  advertisements:async (parent, args, ctx) => {
+  advertisements: async (parent, args, ctx) => {
     const now = new Date()
     return ctx.db.advertisements({
-      where:{
-        AND:[
-          {startTime_lte:now},
-          {endTime_gt:now},
+      where: {
+        AND: [
+          { startTime_lte: now },
+          { endTime_gt: now },
         ]
       }
     })
   },
 
-  messages:async (parent, args, ctx) => {
+  messages: async (parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
-    const user = await ctx.db.user({ uid:userId })
+    const user = await ctx.db.user({ uid: userId })
     if (!user) {
       throw new Error("用户不存在")
     }
 
     const messages = await ctx.db.messages({
-      where:{OR:[
-        {from:{id:user.id}},
-        {to:{id:user.id}}
-      ]}
+      where: {
+        OR: [
+          { from: { id: user.id } },
+          { to: { id: user.id } }
+        ]
+      }
     })
-    
+
     return messages
   },
 }
