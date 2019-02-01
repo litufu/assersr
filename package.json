@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "start": "babel-node src/index.js",
     "dev": "cross-env NODE_ENV=dev nodemon --exec babel-node --max-old-space-size=4096 src/index.js",
     "prettier": "prettier --single-quote --print-width 80 --trailing-comma all --write \"src/**/*.js\"",
     "test": "jest",
