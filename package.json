@@ -11,6 +11,7 @@
     "getData": "cross-env NODE_ENV=dev nodemon --exec babel-node src/services/getData.js"
   },
   "dependencies": {
+    "@babel/register": "^7.0.0",
     "ali-oss": "^6.1.0",
     "apollo-server": "^2.2.5",
     "apollo-server-express": "^2.2.0",
