@@ -6,14 +6,14 @@ import stream from 'stream'
 
 import { prisma } from '../generated/prisma-client'
 
-const provinceFile = 'H:/projectNew/data/province.csv'
-const cityFile = 'H:/projectNew/data/city.csv'
-const areaFile = 'H:/projectNew/data/area.csv'
-const streetFile = 'H:/projectNew/data/street.csv'
-const villageFile = 'H:/projectNew/data/village.csv'
-const majorFile = 'H:/projectNew/data/major.csv'
-const universityFile = 'H:/projectNew/data/university.csv'
-const stationFile = 'H:/projectNew/data/station.csv'
+const provinceFile = '../data/province.csv'
+const cityFile = '../data/city.csv'
+const areaFile = '../data/area.csv'
+const streetFile = '../data/street.csv'
+const villageFile = '../data/village.csv'
+const majorFile = '../data/major.csv'
+const universityFile = '../data/university.csv'
+const stationFile = '../data/station.csv'
 
 
 
