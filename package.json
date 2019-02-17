@@ -4,13 +4,15 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "babel-node src/index.js",
+    "start": "pm2 start lib/index.js",
+    "build": "babel src --out-dir lib --presets=@babel/env --source-maps",
     "dev": "cross-env NODE_ENV=dev nodemon --exec babel-node --max-old-space-size=4096 src/index.js",
     "prettier": "prettier --single-quote --print-width 80 --trailing-comma all --write \"src/**/*.js\"",
     "test": "jest",
     "getData": "cross-env NODE_ENV=dev nodemon --exec babel-node src/services/getData.js"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.2.5",
     "@babel/register": "^7.0.0",
     "ali-oss": "^6.1.0",
     "apollo-server": "^2.2.5",

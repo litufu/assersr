@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/services/statusMap.js"],"names":["statusMap"],"mappings":";;;;;;AAAO,IAAMA,SAAS,GAAG;AACrB,OAAI,GADiB;AAErB,OAAI,GAFiB;AAGrB,OAAI,GAHiB;AAIrB,OAAI;AAJiB,CAAlB","sourcesContent":["export const statusMap = {\r\n    \"0\":\"0\",\r\n    \"1\":\"2\",\r\n    \"2\":\"1\",\r\n    \"3\":\"3\",\r\n}"],"file":"statusMap.js"}

@@ -1,3 +1,5 @@
+import 'babel-polyfill';
+
 import { ApolloServer } from 'apollo-server'
 import {verify} from 'jsonwebtoken';
 import depthLimit from 'graphql-depth-limit'
