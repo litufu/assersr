@@ -12,7 +12,8 @@ export const FamilyGroup = {
             {type:"Family"},
             {to:parent.id},
           ]
-        }
+        },
+        first:10
       })
 
       return groupMessages

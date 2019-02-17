@@ -10,7 +10,8 @@ export const RegStatus = {
             {type:"RegStatus"},
             {to:parent.id},
           ]
-        }
+        },
+        first:10
       })
 
       return groupMessages

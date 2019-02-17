@@ -43,7 +43,8 @@ export const User = {
       where:{OR:[
         {from:{id:parent.id}},
         {to:{id:parent.id}}
-      ]}
+      ]},
+      first:10
     })
     return messages
   },

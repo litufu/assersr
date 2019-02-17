@@ -8,7 +8,8 @@ export const WorkGroup = {
             {type:"Colleague"},
             {to:parent.id},
           ]
-        }
+        },
+        first:10
       })
 
       return groupMessages

@@ -9,7 +9,8 @@ export const ClassGroup = {
             {type:"ClassMate"},
             {to:parent.id},
           ]
-        }
+        },
+        first:10
       })
 
       return groupMessages

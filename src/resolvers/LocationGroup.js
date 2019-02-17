@@ -18,7 +18,8 @@ export const LocationGroup = {
             {type:"FellowTownsman"},
             {to:parent.id},
           ]
-        }
+        },
+        first:10
       })
 
       return groupMessages
