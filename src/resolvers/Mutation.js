@@ -9,7 +9,6 @@ import {
   getCommonFamilies,
   getIntersectionFamiles,
   getDifferentFamilies,
-  createFamilyGroupById,
   refreshMyFamilyGroups,
   checkExistFatherAndMother,
   getFileName,
@@ -53,7 +52,6 @@ import { fee, ossClient } from '../services/settings'
 
 export const Mutation = {
   signup: async (parent, { username, password, deviceId }, ctx) => {
-    console.log(deviceId)
     // 输入数据验证
     checkUsername(username)
     checkPassword(password)
@@ -157,7 +155,6 @@ export const Mutation = {
     // -----------------------------------------------
     // 输入数据验证
     checkId(forgetterId)
-    console.log(forgetterId)
 
     // --------------------------------------------------------
     // 权限验证
@@ -843,7 +840,6 @@ export const Mutation = {
   },
 
   confirmFamily: async (parent, { familyId }, ctx) => {
-    console.log('start confirmfamily')
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -877,9 +873,7 @@ export const Mutation = {
       where: { id: relativeFamily[0].id },
       data: { status: "3" }
     })
-    console.log('kaishi family changed confirm5')
     pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": relative.id } })
-    console.log('kaishi family changed confirm6')
     // 删除多余的person 见deletePersons
     // 没有必要每个删除，可以定时的删除所有family为[],并且user 为null的person.
 
@@ -928,9 +922,7 @@ export const Mutation = {
             await updateCommonUserFamily(user, myRelationship, myCommonFamily, relative, relativeRelationship, ctx)
           }
           // 向relative推送familyChanged
-          console.log('kaishi family changed confirm1')
           pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": relative.id } })
-          console.log('kaishi family changed confirm2')
         }
         else {
           // 如果relative的status大于我的家庭成员的status，则更新我的family
@@ -948,9 +940,7 @@ export const Mutation = {
             await updateCommonUserFamily(relative, relativeRelationship, relativeToCommonUserFamily[0], user, myRelationship, ctx)
           }
           // 像我推送“familyChanged"
-          console.log('kaishi family changed confirm3')
           pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": user.id } })
-          console.log('kaishi family changed confirm4')
         }
       }
     }
@@ -1578,169 +1568,7 @@ export const Mutation = {
     })
   },
 
-  refreshMyFamilyGroups: async (parent, args, ctx) => {
-    const userId = getUserId(ctx)
-    if (!userId) {
-      throw new Error("用户不存在")
-    }
-    const user = await ctx.db.user({ uid: userId })
-    if (!user) {
-      throw new Error("用户不存在")
-    }
-
-    const groupUsersId = []
-    const meAndSpousesfamilies = []
-    groupUsersId.push({ id: user.id })
-    const meFamilies = await ctx.db.user({ id: user.id }).families()
-    meAndSpousesfamilies.push(meFamilies)
-    // 配偶
-    const mySpouseFamilies = meFamilies.filter(family => !!~['wife', 'husband'].indexOf(family.relationship))
-    for (const mySpouseFamily of mySpouseFamilies) {
-      const mySpouse = await ctx.db.family({ id: mySpouseFamily.id }).to().user()
-      if (mySpouse) {
-        groupUsersId.push({ id: mySpouse.id })
-        const spouseFamilies = await ctx.db.user({ id: mySpouse.id }).families()
-        meAndSpousesfamilies.push(spouseFamilies)
-      }
-    }
-    for (const myFamilies of meAndSpousesfamilies) {
-      // 我和配偶的家庭组全部创建
-      // parents
-      let p
-      // father's parents
-      let fp
-      // father's father's parents
-      let ffp
-      // father's mother's parents
-      let fmp
-      // mother's parents
-      let mp
-      // mother's father's parents
-      let mfp
-      // mother's mother's parents
-      let mmp
-      // 如果有mother pa或者其上面的父母
-      let mpast
-      // 如果有father pa或者其上面的父母
-      let fpast
-      // 创建父母群
-      const me = await ctx.db.family({ id: myFamilies[0].id }).from()
-      if (me.id === user.id) {
-        p = await createFamilyGroupById(me.id, ctx)
-      } else {
-        try {
-          p = await createFamilyGroupById(me.id, ctx)
-        } catch (error) {
-          console.log(error)
-        }
-      }
-      // 创建父母的父母群
-
-      const familyFather = myFamilies.filter(family => family.relationship === 'father')
-      const father = await ctx.db.family({ id: familyFather[0].id }).to().user()
-      if (father) {
-        // 创建祖父母群
-        try {
-          groupUsersId.push({ id: father.id })
-          fp = await createFamilyGroupById(father.id, ctx)
-          // 创建爷爷和奶奶的父母
-          const fatherFamilies = await ctx.db.user({ id: father.id }).families()
-          const fatherFamilyFather = fatherFamilies.filter(family => family.relationship === 'father')
-          const grandpa = await ctx.db.family({ id: fatherFamilyFather[0].id }).to().user()
-          if (grandpa) {
-            // 创建曾祖父母
-            groupUsersId.push({ id: grandpa.id })
-            ffp = await createFamilyGroupById(grandpa.id, ctx)
-          }
-          const motherFamilyFather = fatherFamilies.filter(family => family.relationship === 'mother')
-          const grandma = await ctx.db.family({ id: motherFamilyFather[0].id }).to().user()
-          if (grandma) {
-            // 创建曾外祖父
-            groupUsersId.push({ id: grandma.id })
-            fmp = await createFamilyGroupById(grandma.id, ctx)
-          }
-        } catch (error) {
-          console.log(error.message)
-        }
-      }
-      const familyMother = myFamilies.filter(family => family.relationship === 'mother')
-      const mother = await ctx.db.family({ id: familyMother[0].id }).to().user()
-      if (mother) {
-        try {
-          // 创建外祖父母群
-          groupUsersId.push({ id: mother.id })
-          mp = await createFamilyGroupById(mother.id, ctx)
-          // 创建姥姥和姥爷的父母
-          const motherFamilies = await ctx.db.user({ id: mother.id }).families()
-          const fatherFamilyMother = motherFamilies.filter(family => family.relationship === 'father')
-          const grandpa = await ctx.db.family({ id: fatherFamilyMother[0].id }).to().user()
-          if (grandpa) {
-            // 创建外曾祖父母
-            groupUsersId.push({ id: grandpa.id })
-            mfp = await createFamilyGroupById(grandpa.id, ctx)
-          }
-          const motherFamilyMother = motherFamilies.filter(family => family.relationship === 'mother')
-          const grandma = await ctx.db.family({ id: motherFamilyMother[0].id }).to().user()
-          if (grandma) {
-            // 创建外曾外祖父母
-            groupUsersId.push({ id: grandma.id })
-            mmp = await createFamilyGroupById(grandma.id, ctx)
-          }
-        } catch (error) {
-          console.log(error.message)
-        }
-      }
-
-      // 向所有的成员推送通知
-      if (mmp || mfp) {
-        // 分别推送到mmp中的所有family.user和mfp的所有family.user
-        if (mmp) {
-          pubGroupFamily(mmp, ctx)
-        }
-        if (mfp) {
-          pubGroupFamily(mfp, ctx)
-        }
-        mpast = true
-      } else if (mp) {
-        // 推送到mp的所有family.user
-        pubGroupFamily(mp, ctx)
-        mpast = true
-      }
-
-      if (ffp || fmp) {
-        if (ffp) {
-          pubGroupFamily(ffp, ctx)
-        }
-        if (fmp) {
-          pubGroupFamily(ffp, ctx)
-        }
-        fpast = true
-      } else if (fp) {
-        pubGroupFamily(fp, ctx)
-        fpast = true
-      }
-
-      if (!fpast && !mpast) {
-        // 推送到p的所有family.user
-        pubGroupFamily(p, ctx)
-      }
-    }
-
-    // 我的群由子女负责创建
-    const sonAndDaughters = meFamilies.filter(family => !!~['son', 'daughter'].indexOf(family.relationship))
-    for (const sonAndDaughter of sonAndDaughters) {
-      const sd = await ctx.db.family({ id: sonAndDaughter.id }).to().user()
-      if (sd) {
-        groupUsersId.push({ id: sd.id })
-      }
-    }
-
-    return ctx.db.familyGroups({
-      where: {
-        OR: groupUsersId.map(usersId => ({ users_some: usersId }))
-      }
-    })
-  },
+  
   addClassGroup: async (parent, { name, schoolEduId, studentId }, ctx) => {
     // 权限验证
     const userId = getUserId(ctx)
@@ -2389,7 +2217,6 @@ export const Mutation = {
       const options = { expires: 1800, method: 'PUT', 'Content-Type': `image/${typesMap[ext]}` }
       const writeUrl = ossClient.signatureUrl(`images/${name}`, options);
       const readUrl = `https://gewu-avatar.oss-cn-hangzhou.aliyuncs.com/images/${name}`
-      const imageId = uuidv4()
 
       const message = await ctx.db.createMessage({
         from: { connect: { id: user.id } },
@@ -2502,7 +2329,6 @@ export const Mutation = {
   },
 
   sendGroupMessage: async (parent, { type, toId, text = "", image = "" }, ctx) => {
-    console.log('开始发送组信息')
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -2606,8 +2432,6 @@ export const Mutation = {
 
       pubsub.publish(GMESSAGE_ADDED_TOPIC, { [GMESSAGE_ADDED_TOPIC]: pubMessage })
 
-      console.log('returnMessage', returnMessage)
-      console.log('pubmessage', pubMessage)
       return returnMessage
     }
     // 如果没有上传图片，则直接创建
@@ -2647,12 +2471,9 @@ export const Mutation = {
       image: null,
       createdAt: message.createdAt
     }
-    console.log('group pubmessage', pubMessage)
-    console.log('GMESSAGE_ADDED_TOPIC', GMESSAGE_ADDED_TOPIC)
-    console.log('MESSAGE_ADDED_TOPIC', MESSAGE_ADDED_TOPIC)
+
     pubsub.publish(GMESSAGE_ADDED_TOPIC, { [GMESSAGE_ADDED_TOPIC]: pubMessage })
     pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: pubMessage })
-    console.log('backmessage', message)
     return returnMessage
   },
 

@@ -85,7 +85,6 @@ export const typeDefs = gql`
     updateExamBasicInfo(province:String, section:String, score:String, specialScore:String, examineeCardNumber:String):CollegeEntranceExam
     addRegStatus(education:String,universityId:String,majorId:String):RegStatus
     cancelRegStatus(id:String):RegStatus
-    refreshMyFamilyGroups:[FamilyGroup]
     addClassGroup(name:String,schoolEduId:String,studentId:String):ClassGroup
     confirmClassGroup(schoolEduId:String,studentId:String):ClassGroup
     addWorkGroup(companyId:String,workerId:String):WorkGroup
