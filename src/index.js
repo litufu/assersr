@@ -34,7 +34,6 @@ const server = new ApolloServer({
         }
         const user = await prisma.user({ uid: userId })
         if(user){
-          console.log('开始订阅',user)
           return {user,db:prisma}
           
         }
