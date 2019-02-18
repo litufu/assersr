@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "pm2 start lib/index.js",
-    "clean": "pm2 start lib/schedule/clean.js",
+    "delete": "bode lib/schedule/delete.js",
     "build": "babel src --out-dir lib --presets=@babel/env --source-maps",
     "dev": "cross-env NODE_ENV=dev nodemon --exec babel-node --max-old-space-size=4096 src/index.js",
     "prettier": "prettier --single-quote --print-width 80 --trailing-comma all --write \"src/**/*.js\"",
@@ -20,7 +20,6 @@
     "apollo-server-express": "^2.2.0",
     "bcrypt": "^3.0.2",
     "cors": "^2.8.5",
-    "cron": "^1.6.0",
     "dateformat": "^3.0.3",
     "express": "^4.16.4",
     "graphql": "^14.0.2",
