@@ -113,3 +113,11 @@ export const checkScore = (str)=>{
     throw new Error("分数格式错误")
   }
 }
+
+export const  checkPhotoName= (str)=>{
+  const strRegex = "(.jpg|.png|.gif|.ps|.jpeg)$";
+  const re=new RegExp(strRegex);
+  if (!re.test(str.toLowerCase())){
+    throw new Error("图片格式错误")
+  }
+}

@@ -1,4 +1,4 @@
-import 'babel-polyfill';
+// import 'babel-polyfill';
 
 import { ApolloServer } from 'apollo-server'
 import {verify} from 'jsonwebtoken';

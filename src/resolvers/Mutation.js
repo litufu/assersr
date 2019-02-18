@@ -1,6 +1,7 @@
 import { hash, compare } from 'bcrypt'
 import { sign } from 'jsonwebtoken'
 import uuidv4 from 'uuid/v4'
+import validator from 'validator';
 
 import {
   APP_SECRET,
@@ -55,7 +56,10 @@ export const Mutation = {
     // 输入数据验证
     checkUsername(username)
     checkPassword(password)
-
+    if(!validator.isAlphanumeric(deviceId)){
+      throw new Error('设备号索取错误')
+    }
+    //------------------------------------
     const hasuser = await ctx.db.user({ username })
     if (hasuser) {
       throw new Error(`${username}已经被占用`)
@@ -93,7 +97,7 @@ export const Mutation = {
     // 输入数据验证
     checkUsername(username)
     checkPassword(password)
-
+    //------------------------------------
     const user = await ctx.db.user({ username })
     if (!user) {
       throw new Error(`用户不存在: ${username}`)
@@ -227,6 +231,7 @@ export const Mutation = {
     // -----------------------------------------------
     // 输入数据验证
     validateBasicInfo(name, gender, birthday, birthplace, residence)
+    //------------------------------------
     // 检查是或否已经存在location
 
     let birthLocation
@@ -592,6 +597,10 @@ export const Mutation = {
     // 输入数据验证
     checkName(name)
     checkRelationship(relationship)
+    if(spouseId){
+      checkId(spouseId)
+    }
+    
     // -----------------------------------------------
     // 创建家人
     let family
@@ -612,10 +621,7 @@ export const Mutation = {
         to: { create: { name } },
       })
     }
-    // const hasFatherAndMother = await checkExistFatherAndMother(user.id,ctx)
-    // if(hasFatherAndMother){
-    //   await refreshMyFamilyGroups(parent,{},ctx)
-    // }
+ 
     return family
   },
 
@@ -639,6 +645,10 @@ export const Mutation = {
     checkName(name)
     checkRelationship(relationship)
     checkStatus(status)
+    if(spouseId){
+      checkId(spouseId)
+    }
+    
     // -----------------------------------------------
     let updateFamily
     if (spouseId) {
@@ -1053,7 +1063,8 @@ export const Mutation = {
     }
     // -----------------------------------------------
     // 输入数据验证
-    // validateBasicInfo(name, gender, birthday, birthplace)
+    checkCnEnNum(locationName)
+
     // -----------------------------------------------
     // 获取要输入的数据。 
     // 获取学校地址
@@ -1106,6 +1117,15 @@ export const Mutation = {
   },
 
   addSchool: async (parent, { name, kind, locationName }, ctx) => {
+    // 输入数据校验
+    // -----------------------------------------------
+    checkCnEnNum(name)
+    if(!validator.isAlpha(kind)){
+      throw new Error('学校种类输入错误')
+    }
+    checkCnEnNum(locationName)
+
+    // -----------------------------------------------
     const schools = await ctx.db.schools(
       {
         where: {
@@ -1240,6 +1260,9 @@ export const Mutation = {
     checkCompanyName(companyName)
     checkName(department)
     checkId(stationId)
+    if(updateId){
+      checkId(updateId)
+    }
     // -----------------------------------------------
     const companies = await ctx.db.companies({ where: { name: companyName } })
     let companyId
@@ -1581,6 +1604,11 @@ export const Mutation = {
     }
     // -----------------------------------------------
     // 输入数据验证
+    checkCnEnNum(name)
+    checkId(schoolEduId)
+    checkId(studentId)
+
+    // -----------------------------------------------
 
     // 检查studentId是否已经有组,如果有组则把请求者加入得到已有的组中
     const classGroups = await ctx.db.classGroups({
@@ -1643,6 +1671,12 @@ export const Mutation = {
 
   },
   confirmClassGroup: async (parent, { schoolEduId, studentId }, ctx) => {
+
+    // -----------------------------------------------
+    // 输入数据验证
+    checkId(schoolEduId)
+    checkId(studentId)
+    // -----------------------------------------------
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -1652,8 +1686,7 @@ export const Mutation = {
     if (!user) {
       throw new Error("用户不存在")
     }
-    // -----------------------------------------------
-    // 输入数据验证
+
 
     // 检查studentId是否已经有组,如果有组则把请求者加入得到已有的组中
     const studentClassGroups = await ctx.db.classGroups({
@@ -1819,6 +1852,11 @@ export const Mutation = {
   },
 
   addWorkGroup: async (parent, { companyId, workerId }, ctx) => {
+    // -----------------------------------------------
+    // 输入数据验证
+    checkId(companyId)
+    checkId(workerId)
+    // -----------------------------------------------
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -1828,8 +1866,6 @@ export const Mutation = {
     if (!user) {
       throw new Error("用户不存在")
     }
-    // -----------------------------------------------
-    // 输入数据验证
 
     // 检查wokerId是否已经有组,如果有组则把请求者加入得到已有的组中
     const workGroups = await ctx.db.workGroups({
@@ -1891,6 +1927,11 @@ export const Mutation = {
     return created
   },
   confirmWorkGroup: async (parent, { companyId, workerId }, ctx) => {
+        // -----------------------------------------------
+    // 输入数据验证
+    checkId(companyId)
+    checkId(workerId)
+    // -----------------------------------------------
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2067,6 +2108,11 @@ export const Mutation = {
   },
 
   addOldColleague: async (parent, { companyId, workerId }, ctx) => {
+        // -----------------------------------------------
+    // 输入数据验证
+    checkId(companyId)
+    checkId(workerId)
+    // -----------------------------------------------
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2100,6 +2146,11 @@ export const Mutation = {
   },
 
   confirmOldColleague: async (parent, { companyId, workerId }, ctx) => {
+        // -----------------------------------------------
+    // 输入数据验证
+    checkId(companyId)
+    checkId(workerId)
+    // -----------------------------------------------
     // 权限验证
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2109,11 +2160,7 @@ export const Mutation = {
     if (!user) {
       throw new Error("用户不存在")
     }
-    // -----------------------------------------------
-    // 输入数据验证
-    checkId(companyId)
-    checkId(workerId)
-    // -----------------------------------------------
+
     const myOldColleagues = await ctx.db.oldColleagues({
       where: {
         AND: [
@@ -2153,6 +2200,10 @@ export const Mutation = {
     throw new Error('无法更改同事信息')
   },
   postPhoto: async (parent, { uri }, ctx) => {
+            // -----------------------------------------------
+    // 输入数据验证
+    // uri并不用于数据库
+    // -----------------------------------------------
     // 添加头像
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2188,6 +2239,11 @@ export const Mutation = {
   },
 
   sendMessage: async (parent, { toId, text = "", image = "" }, ctx) => {
+                // -----------------------------------------------
+    // 输入数据验证
+    checkId(toId)
+    // -----------------------------------------------
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -2329,6 +2385,15 @@ export const Mutation = {
   },
 
   sendGroupMessage: async (parent, { type, toId, text = "", image = "" }, ctx) => {
+
+    // 输入数据检查
+    // ----------------------
+    checkId(toId)
+    if(!validator.isAlpha(type)){
+      throw new Error('组类型错误')
+    }
+
+    // ----------------------
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -2478,6 +2543,14 @@ export const Mutation = {
   },
 
   addAdvertisement: async (parent, { url, startTime }, ctx) => {
+
+    // -------------------------
+    if(!validator.isURL(url)){
+      throw new Error('url格式错误')
+    }
+
+    // -------------------------
+    
     // 添加头像
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2537,30 +2610,5 @@ export const Mutation = {
     return newAdvertisement
   },
 
-  createDraft: async (parent, { title, content, authorEmail }, ctx) => ctx.db.createPost({
-    title,
-    content,
-    author: { connect: { email: authorEmail } },
-  }),
-
-  deletePost: async (parent, { id }, ctx) => {
-    const userId = getUserId(ctx)
-    const author = await ctx.db
-      .post({ id })
-      .author()
-      .$fragment('{ id }')
-    const authorId = author.id
-    if (userId !== authorId) {
-      throw new Error('Author Invalid')
-    }
-
-    return ctx.db.deletePost({ id })
-  },
-
-
-
-  publish: async (parent, { id }, ctx) => ctx.db.updatePost({
-    where: { id },
-    data: { isPublished: true },
-  }),
+ 
 }

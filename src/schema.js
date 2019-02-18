@@ -32,9 +32,6 @@ export const typeDefs = gql`
     areas(code:String!):[Area]
     streets(code:String!):[Street]
     villages(code:String!):[Village]
-    feed: [Post!]!
-    drafts: [Post!]!
-    post(id: ID!): Post
     families:[Family]
     findPasswords:[FindPassWord]
     getFamiliesById(id:String):[Family]

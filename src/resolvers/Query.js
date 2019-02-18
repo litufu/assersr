@@ -1,5 +1,12 @@
+import validator from 'validator'
 import { getUserId, } from '../services/utils'
-import { ossClient } from '../services/settings'
+import {
+  checkUsername,
+  checkId,
+  checkCnEnNum,
+  checkPlaceCode,
+  checkPhotoName
+} from '../validate'
 
 export const Query = {
   me: (parent, args, ctx) => {
@@ -9,15 +16,29 @@ export const Query = {
     return null
   },
 
-  searchUser: (parent, { username }, ctx) => ctx.db.user({ username }),
-  cities: (parent, { code }, ctx) => ctx.db.cities({ where: { province: { code } } }),
-  areas: (parent, { code }, ctx) => ctx.db.areas({ where: { city: { code } } }),
-  streets: (parent, { code }, ctx) => ctx.db.streets({ where: { Area: { code } } }),
-  villages: (parent, { code }, ctx) => ctx.db.villages({ where: { street: { code } } }),
-  feed: (parent, args, ctx) => ctx.db.posts({ where: { isPublished: true } }),
-  drafts: (parent, args, ctx) =>
-    ctx.db.posts({ where: { isPublished: false } }),
-  post: (parent, { id }, ctx) => ctx.db.post({ id }),
+  searchUser: (parent, { username }, ctx) => {
+    checkUsername(username)
+
+    return ctx.db.user({ username })
+
+  },
+  cities: (parent, { code }, ctx) => {
+    checkPlaceCode(code)
+    return ctx.db.cities({ where: { province: { code } } })
+  },
+  areas: (parent, { code }, ctx) => {
+    checkPlaceCode(code)
+    return ctx.db.areas({ where: { city: { code } } })
+  },
+  streets: (parent, { code }, ctx) => {
+    checkPlaceCode(code)
+    return ctx.db.streets({ where: { Area: { code } } })
+  },
+  villages: (parent, { code }, ctx) => {
+    checkPlaceCode(code)
+
+    return ctx.db.villages({ where: { street: { code } } })
+  },
   families: (parent, args, ctx) => {
     const userId = getUserId(ctx)
     if (!userId) {
@@ -45,6 +66,11 @@ export const Query = {
     if (!userId) {
       throw new Error("用户不存在")
     }
+
+    if(args.id){
+      checkId(args.id)
+    }
+
     if (!args.id) {
       return ctx.db.families({
         where: {
@@ -63,6 +89,12 @@ export const Query = {
     if (!userId) {
       throw new Error("用户不存在")
     }
+    // 输入数据校验
+    checkCnEnNum(args.locationName)
+    if(!validator.isAlpha(args.kind)){
+      throw new Error('学校类型错误')
+    }
+
     return ctx.db.schools({
       where: {
         AND: [{
@@ -79,6 +111,9 @@ export const Query = {
     if (!userId) {
       throw new Error("用户不存在")
     }
+
+    checkCnEnNum(args.majorName)
+
     return ctx.db.majors({
       where: {
         name_contains: args.majorName
@@ -90,6 +125,9 @@ export const Query = {
     if (!userId) {
       throw new Error("用户不存在")
     }
+
+    checkCnEnNum(args.universityName)
+
     return ctx.db.universities({
       where: {
         name_contains: args.universityName
@@ -112,6 +150,13 @@ export const Query = {
     return results[0]
   },
   getRegStatusApplicants: async (parent, { education, universityId, majorId }, ctx) => {
+    // 输入数据校验
+    checkId(universityId)
+    checkId(majorId)
+    if(!validator.isAlpha(education)){
+      throw new Error('学历类型错误')
+    }
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -160,10 +205,14 @@ export const Query = {
     return applicants
   },
   getRegStatusApplicantsById: async (parent, { regStatusId }, ctx) => {
+
+    checkId(regStatusId)
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
     }
+    
     const userExams = await ctx.db.collegeEntranceExams(
       {
         where: { student: { uid: userId } }
@@ -298,6 +347,8 @@ export const Query = {
     })
   },
   students: (parent, { schoolEduId }, ctx) => {
+    checkId(schoolEduId)
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -305,6 +356,8 @@ export const Query = {
     return ctx.db.schoolEdu({ id: schoolEduId }).students()
   },
   classGroups: (parent, { schoolEduId }, ctx) => {
+    checkId(schoolEduId)
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -328,6 +381,9 @@ export const Query = {
     })
   },
   workGroups: (parent, { companyId }, ctx) => {
+
+    checkId(companyId)
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -351,6 +407,9 @@ export const Query = {
     })
   },
   stations: async (parent, { text }, ctx) => {
+
+    checkCnEnNum(text)
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -364,6 +423,8 @@ export const Query = {
     return stations
   },
   colleagues: async (parent, { companyId }, ctx) => {
+
+    checkId(companyId)
 
     const userId = getUserId(ctx)
     if (!userId) {
@@ -387,6 +448,9 @@ export const Query = {
     return workers
   },
   oldColleagues: async (parent, { startTime, endTime, companyId }, ctx) => {
+
+    checkId(companyId)
+
 
     const userId = getUserId(ctx)
     if (!userId) {
@@ -430,6 +494,8 @@ export const Query = {
   },
   myOldColleagues: async (parent, { companyId }, ctx) => {
 
+    checkId(companyId)
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -467,6 +533,9 @@ export const Query = {
     return ctx.db.user({ id: user.id }).locationGroups()
   },
   locationGroupUsers: async (parent, { locationGroupId }, ctx) => {
+
+    checkId(locationGroupId)
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -487,16 +556,21 @@ export const Query = {
       throw new Error("用户不存在")
     }
     if (id) {
+      checkId(id)
       return ctx.db.photo({ id })
     }
 
     if (name) {
+      checkPhotoName(name)
       return ctx.db.photo({ name })
     }
 
     throw new Error('没有输入id或者名称')
   },
   userInfo: async (parent, { id }, ctx) => {
+
+    checkId(id)
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
