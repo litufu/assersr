@@ -17,6 +17,7 @@ export const Query = {
   },
 
   searchUser: (parent, { username }, ctx) => {
+    
     checkUsername(username)
 
     return ctx.db.user({ username })
