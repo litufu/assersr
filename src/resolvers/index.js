@@ -25,6 +25,7 @@ import {Photo} from './Photo'
 import {GroupMessage} from './GroupMessage'
 import {FindPassWord} from './FindPassWord'
 import {VisitCount} from './VisitCount'
+import {Trade} from './Trade'
 
 export const resolvers = {
   Query,
@@ -53,5 +54,6 @@ export const resolvers = {
   Photo,
   GroupMessage,
   FindPassWord,
-  VisitCount
+  VisitCount,
+  Trade
 }

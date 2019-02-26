@@ -621,6 +621,9 @@ export const Query = {
       }
     })
   },
+  products:async (parent, args, ctx) => {
+    return ctx.db.products()
+  },
 
   messages: async (parent, args, ctx) => {
     const userId = getUserId(ctx)

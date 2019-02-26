@@ -109,6 +109,10 @@ var models = [
     embedded: false
   },
   {
+    name: "Product",
+    embedded: false
+  },
+  {
     name: "Province",
     embedded: false
   },
@@ -134,6 +138,10 @@ var models = [
   },
   {
     name: "Street",
+    embedded: false
+  },
+  {
+    name: "Trade",
     embedded: false
   },
   {

@@ -386,3 +386,19 @@ type Advertisement{
   endTime:DateTime
 }
 
+type Product{
+  id:ID! @unique
+  subject:String
+  info:String
+  price:Float
+}
+
+type Trade{
+  id:ID! @unique
+  product:Product
+  number:Int
+  amount:Float
+  user:User
+  status:String
+}
+

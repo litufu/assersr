@@ -305,6 +305,10 @@ type AggregatePost {
   count: Int!
 }
 
+type AggregateProduct {
+  count: Int!
+}
+
 type AggregateProvince {
   count: Int!
 }
@@ -330,6 +334,10 @@ type AggregateStation {
 }
 
 type AggregateStreet {
+  count: Int!
+}
+
+type AggregateTrade {
   count: Int!
 }
 
@@ -4828,6 +4836,12 @@ type Mutation {
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   deletePost(where: PostWhereUniqueInput!): Post
   deleteManyPosts(where: PostWhereInput): BatchPayload!
+  createProduct(data: ProductCreateInput!): Product!
+  updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product
+  updateManyProducts(data: ProductUpdateManyMutationInput!, where: ProductWhereInput): BatchPayload!
+  upsertProduct(where: ProductWhereUniqueInput!, create: ProductCreateInput!, update: ProductUpdateInput!): Product!
+  deleteProduct(where: ProductWhereUniqueInput!): Product
+  deleteManyProducts(where: ProductWhereInput): BatchPayload!
   createProvince(data: ProvinceCreateInput!): Province!
   updateProvince(data: ProvinceUpdateInput!, where: ProvinceWhereUniqueInput!): Province
   updateManyProvinces(data: ProvinceUpdateManyMutationInput!, where: ProvinceWhereInput): BatchPayload!
@@ -4870,6 +4884,12 @@ type Mutation {
   upsertStreet(where: StreetWhereUniqueInput!, create: StreetCreateInput!, update: StreetUpdateInput!): Street!
   deleteStreet(where: StreetWhereUniqueInput!): Street
   deleteManyStreets(where: StreetWhereInput): BatchPayload!
+  createTrade(data: TradeCreateInput!): Trade!
+  updateTrade(data: TradeUpdateInput!, where: TradeWhereUniqueInput!): Trade
+  updateManyTrades(data: TradeUpdateManyMutationInput!, where: TradeWhereInput): BatchPayload!
+  upsertTrade(where: TradeWhereUniqueInput!, create: TradeCreateInput!, update: TradeUpdateInput!): Trade!
+  deleteTrade(where: TradeWhereUniqueInput!): Trade
+  deleteManyTrades(where: TradeWhereInput): BatchPayload!
   createUniversity(data: UniversityCreateInput!): University!
   updateUniversity(data: UniversityUpdateInput!, where: UniversityWhereUniqueInput!): University
   updateManyUniversities(data: UniversityUpdateManyMutationInput!, where: UniversityWhereInput): BatchPayload!
@@ -5820,6 +5840,167 @@ input PostWhereUniqueInput {
   id: ID
 }
 
+type Product {
+  id: ID!
+  subject: String
+  info: String
+  price: Float
+}
+
+type ProductConnection {
+  pageInfo: PageInfo!
+  edges: [ProductEdge]!
+  aggregate: AggregateProduct!
+}
+
+input ProductCreateInput {
+  subject: String
+  info: String
+  price: Float
+}
+
+input ProductCreateOneInput {
+  create: ProductCreateInput
+  connect: ProductWhereUniqueInput
+}
+
+type ProductEdge {
+  node: Product!
+  cursor: String!
+}
+
+enum ProductOrderByInput {
+  id_ASC
+  id_DESC
+  subject_ASC
+  subject_DESC
+  info_ASC
+  info_DESC
+  price_ASC
+  price_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ProductPreviousValues {
+  id: ID!
+  subject: String
+  info: String
+  price: Float
+}
+
+type ProductSubscriptionPayload {
+  mutation: MutationType!
+  node: Product
+  updatedFields: [String!]
+  previousValues: ProductPreviousValues
+}
+
+input ProductSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ProductWhereInput
+  AND: [ProductSubscriptionWhereInput!]
+  OR: [ProductSubscriptionWhereInput!]
+  NOT: [ProductSubscriptionWhereInput!]
+}
+
+input ProductUpdateDataInput {
+  subject: String
+  info: String
+  price: Float
+}
+
+input ProductUpdateInput {
+  subject: String
+  info: String
+  price: Float
+}
+
+input ProductUpdateManyMutationInput {
+  subject: String
+  info: String
+  price: Float
+}
+
+input ProductUpdateOneInput {
+  create: ProductCreateInput
+  update: ProductUpdateDataInput
+  upsert: ProductUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: ProductWhereUniqueInput
+}
+
+input ProductUpsertNestedInput {
+  update: ProductUpdateDataInput!
+  create: ProductCreateInput!
+}
+
+input ProductWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  subject: String
+  subject_not: String
+  subject_in: [String!]
+  subject_not_in: [String!]
+  subject_lt: String
+  subject_lte: String
+  subject_gt: String
+  subject_gte: String
+  subject_contains: String
+  subject_not_contains: String
+  subject_starts_with: String
+  subject_not_starts_with: String
+  subject_ends_with: String
+  subject_not_ends_with: String
+  info: String
+  info_not: String
+  info_in: [String!]
+  info_not_in: [String!]
+  info_lt: String
+  info_lte: String
+  info_gt: String
+  info_gte: String
+  info_contains: String
+  info_not_contains: String
+  info_starts_with: String
+  info_not_starts_with: String
+  info_ends_with: String
+  info_not_ends_with: String
+  price: Float
+  price_not: Float
+  price_in: [Float!]
+  price_not_in: [Float!]
+  price_lt: Float
+  price_lte: Float
+  price_gt: Float
+  price_gte: Float
+  AND: [ProductWhereInput!]
+  OR: [ProductWhereInput!]
+  NOT: [ProductWhereInput!]
+}
+
+input ProductWhereUniqueInput {
+  id: ID
+}
+
 type Province {
   id: ID!
   code: String!
@@ -6077,6 +6258,9 @@ type Query {
   post(where: PostWhereUniqueInput!): Post
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
+  product(where: ProductWhereUniqueInput!): Product
+  products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
+  productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
   province(where: ProvinceWhereUniqueInput!): Province
   provinces(where: ProvinceWhereInput, orderBy: ProvinceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Province]!
   provincesConnection(where: ProvinceWhereInput, orderBy: ProvinceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProvinceConnection!
@@ -6098,6 +6282,9 @@ type Query {
   street(where: StreetWhereUniqueInput!): Street
   streets(where: StreetWhereInput, orderBy: StreetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Street]!
   streetsConnection(where: StreetWhereInput, orderBy: StreetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StreetConnection!
+  trade(where: TradeWhereUniqueInput!): Trade
+  trades(where: TradeWhereInput, orderBy: TradeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Trade]!
+  tradesConnection(where: TradeWhereInput, orderBy: TradeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TradeConnection!
   university(where: UniversityWhereUniqueInput!): University
   universities(where: UniversityWhereInput, orderBy: UniversityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [University]!
   universitiesConnection(where: UniversityWhereInput, orderBy: UniversityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UniversityConnection!
@@ -7321,6 +7508,7 @@ type Subscription {
   person(where: PersonSubscriptionWhereInput): PersonSubscriptionPayload
   photo(where: PhotoSubscriptionWhereInput): PhotoSubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
+  product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
   province(where: ProvinceSubscriptionWhereInput): ProvinceSubscriptionPayload
   regStatus(where: RegStatusSubscriptionWhereInput): RegStatusSubscriptionPayload
   registerCount(where: RegisterCountSubscriptionWhereInput): RegisterCountSubscriptionPayload
@@ -7328,11 +7516,150 @@ type Subscription {
   schoolEdu(where: SchoolEduSubscriptionWhereInput): SchoolEduSubscriptionPayload
   station(where: StationSubscriptionWhereInput): StationSubscriptionPayload
   street(where: StreetSubscriptionWhereInput): StreetSubscriptionPayload
+  trade(where: TradeSubscriptionWhereInput): TradeSubscriptionPayload
   university(where: UniversitySubscriptionWhereInput): UniversitySubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   village(where: VillageSubscriptionWhereInput): VillageSubscriptionPayload
   work(where: WorkSubscriptionWhereInput): WorkSubscriptionPayload
   workGroup(where: WorkGroupSubscriptionWhereInput): WorkGroupSubscriptionPayload
+}
+
+type Trade {
+  id: ID!
+  product: Product
+  number: Int
+  amount: Float
+  user: User
+  status: String
+}
+
+type TradeConnection {
+  pageInfo: PageInfo!
+  edges: [TradeEdge]!
+  aggregate: AggregateTrade!
+}
+
+input TradeCreateInput {
+  product: ProductCreateOneInput
+  number: Int
+  amount: Float
+  user: UserCreateOneInput
+  status: String
+}
+
+type TradeEdge {
+  node: Trade!
+  cursor: String!
+}
+
+enum TradeOrderByInput {
+  id_ASC
+  id_DESC
+  number_ASC
+  number_DESC
+  amount_ASC
+  amount_DESC
+  status_ASC
+  status_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type TradePreviousValues {
+  id: ID!
+  number: Int
+  amount: Float
+  status: String
+}
+
+type TradeSubscriptionPayload {
+  mutation: MutationType!
+  node: Trade
+  updatedFields: [String!]
+  previousValues: TradePreviousValues
+}
+
+input TradeSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TradeWhereInput
+  AND: [TradeSubscriptionWhereInput!]
+  OR: [TradeSubscriptionWhereInput!]
+  NOT: [TradeSubscriptionWhereInput!]
+}
+
+input TradeUpdateInput {
+  product: ProductUpdateOneInput
+  number: Int
+  amount: Float
+  user: UserUpdateOneInput
+  status: String
+}
+
+input TradeUpdateManyMutationInput {
+  number: Int
+  amount: Float
+  status: String
+}
+
+input TradeWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  product: ProductWhereInput
+  number: Int
+  number_not: Int
+  number_in: [Int!]
+  number_not_in: [Int!]
+  number_lt: Int
+  number_lte: Int
+  number_gt: Int
+  number_gte: Int
+  amount: Float
+  amount_not: Float
+  amount_in: [Float!]
+  amount_not_in: [Float!]
+  amount_lt: Float
+  amount_lte: Float
+  amount_gt: Float
+  amount_gte: Float
+  user: UserWhereInput
+  status: String
+  status_not: String
+  status_in: [String!]
+  status_not_in: [String!]
+  status_lt: String
+  status_lte: String
+  status_gt: String
+  status_gte: String
+  status_contains: String
+  status_not_contains: String
+  status_starts_with: String
+  status_not_starts_with: String
+  status_ends_with: String
+  status_not_ends_with: String
+  AND: [TradeWhereInput!]
+  OR: [TradeWhereInput!]
+  NOT: [TradeWhereInput!]
+}
+
+input TradeWhereUniqueInput {
+  id: ID
 }
 
 type University {

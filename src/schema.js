@@ -58,6 +58,7 @@ export const typeDefs = gql`
     bootInfo:BootCount
     visitCount:VisitCount
     advertisements:[Advertisement]
+    products:[Product]
   }
 
   type Mutation {
@@ -515,6 +516,22 @@ type Advertisement{
   startTime:DateTime
   endTime:DateTime
 
+}
+
+type Product{
+  id:ID! 
+  subject:String
+  info:String
+  price:Float
+}
+
+type Trade{
+  id:ID! 
+  product:Product
+  number:Int
+  amount:Float
+  user:User
+  status:String
 }
 
 
