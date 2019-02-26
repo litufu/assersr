@@ -2551,7 +2551,6 @@ export const Mutation = {
 
     // -------------------------
     
-    // 添加头像
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -2608,6 +2607,42 @@ export const Mutation = {
     }
 
     return newAdvertisement
+  },
+
+  newTrade:async (parent, { productId, number,amount }, ctx) => {
+
+    // -------------------------
+    if(!validator.isFloat(`${amount}`)){
+      throw new Error('amount格式错误')
+    }
+    if(!validator.isInt((`${number}`))){
+      throw new Error('amount格式错误')
+    }
+    checkId(productId)
+    // -------------------------
+    
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    const product = await ctx.db.product({id:productId})
+    const totalAmount = product.price * number
+    if(totalAmount!==amount){
+      throw new Error("金额计算错误")
+    }
+
+    return ctx.db.createTrade({
+      product: { connect: { id: productId } },
+      user: { connect: { uid: userId } },
+      number,
+      amount,
+      status:'0'
+    })
   },
 
  

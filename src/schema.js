@@ -96,7 +96,7 @@ export const typeDefs = gql`
     sendMessage(toId:String,text:String,image:String):Message
     sendGroupMessage(type:String,toId:String,text:String,image:String):GroupMessage
     addAdvertisement(url:String,startTime:String):Advertisement
-    
+    newTrade(productId:String,number:Int,amount:Float):Trade
   }
 
   type Subscription {
