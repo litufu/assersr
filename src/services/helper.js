@@ -1,15 +1,18 @@
 import xml2js from 'xml2js';
+import * as iconv from 'iconv-lite';
 
 export const parser = new xml2js.Parser()
 
 export const raw = (args)=>{
-        const keys = Object.keys(args).sort();
-        let string = '';
-        for (const k of keys) {
-            string += `&${k}=${args[k]}` 
+    const signStr = Object.keys(args).sort().map((key) => {
+        let data = args[key];
+        if (Array.prototype.toString.call(data) !== '[object String]') {
+          data = JSON.stringify(data);
         }
-        string = string.substr(1);
-        return string;
+        return `${key}=${iconv.encode(data, 'utf-8')}`;
+      }).join('&');
+
+    return signStr;
 }
 
 export const createNonceStr = ()=> {

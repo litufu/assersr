@@ -756,7 +756,9 @@ const signed =  (order)=> {
   signer.update(unsignedStr);  
   const sign = signer.sign(privateKey, 'base64');  
 
-  return `${qs.stringify(unsigned)}&sign=${encodeURIComponent(sign) }`
+  const signedStr = `${qs.stringify(unsigned)}&sign=${encodeURIComponent(sign) }`
+
+  return signedStr
 }
 
 // 收到支付宝异步通知进行验签
