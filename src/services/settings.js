@@ -17,3 +17,7 @@ export const ossClient = new OSS({
     accessKeySecret: aliyunOssConfig.accessKeySecret,
     bucket: aliyunOssConfig.bucket
   });
+
+export const HOST = '192.168.43.75'
+export const PORT = 4000
+export const AlipayTest = false

@@ -1,4 +1,9 @@
 import { verify } from 'jsonwebtoken'
+import crypto from 'crypto';
+import fs from 'fs';
+import path from 'path'
+import qs from 'querystring';
+import moment from 'moment';
 import { statusMap } from "../services/statusMap"
 import { 
   relationIntersection,
@@ -7,6 +12,8 @@ import {
   relationshipTOGender,
 } from "../services/relationship"
 import { pubsub } from '../subscriptions';
+import  {raw} from './helper'
+import {HOST,PORT,AlipayTest} from './settings'
 
 const FAMILYGROUP_CHANGED = 'familyGroupChanged'
 const APP_SECRET = 'appsecret321'
@@ -714,6 +721,59 @@ const _getNowFormatDate=()=> {
   return currentdate;
 }
 
+// 支付宝生成签名
+const signed =  (order)=> {
+  let appId
+  if(!AlipayTest){
+    appId = '2019022063305057'; 
+  }else{
+    appId = '2016092700606595'
+  }
+  
+  const bizContent ={
+    timeout_express:"60m",
+    product_code:"QUICK_MSECURITY_PAY",
+    total_amount:order.total_amount,
+    subject:order.subject,
+    body:order.body,
+    out_trade_no:order.out_trade_no
+  }
+
+  const unsigned = {
+      app_id: appId,
+      method: 'alipay.trade.app.pay',
+      charset: 'utf-8',
+      sign_type: 'RSA2',
+      version: '1.0',
+      timestamp: moment().format('YYYY-MM-DD HH:mm:ss'),
+      biz_content: JSON.stringify(bizContent),
+      notify_url: `http://${HOST}:${PORT}/alipay/notify_url` 
+  }
+  const unsignedStr = raw(unsigned);
+
+  const privateKey = fs.readFileSync(path.join(__dirname, './config/alipay_private_key.pem')); 
+  const signer = crypto.createSign('RSA-SHA256');  
+  signer.update(unsignedStr);  
+  const sign = signer.sign(privateKey, 'base64');  
+
+  return `${qs.stringify(unsigned)}&sign=${encodeURIComponent(sign) }`
+}
+
+// 收到支付宝异步通知进行验签
+const verified = (response, sign)=>{
+  let publicKeyPath
+  if(!AlipayTest){
+    publicKeyPath = './config/alipay_public_key.pem'
+  }else{
+    publicKeyPath = './config/alipay_public_key_test.pem'
+  }
+  
+  const publicKey = fs.readFileSync(path.join(__dirname, publicKeyPath));
+  const cryptoVerify = crypto.createVerify('RSA-SHA256');
+  cryptoVerify.update(response);
+  return cryptoVerify.verify(publicKey, sign, 'base64')
+}
+
 module.exports = {
   getUserId,
   checkeCtxUserExist,
@@ -730,4 +790,6 @@ module.exports = {
   getFileTypeByExt,
   getFileName,
   getFileExt,
+  signed,
+  verified
 }

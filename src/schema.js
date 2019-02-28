@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server';
+import { gql } from 'apollo-server-express';
 
 export const typeDefs = gql`
   scalar DateTime
@@ -532,6 +532,7 @@ type Trade{
   amount:Float
   user:User
   status:String
+  signedStr:String
 }
 
 

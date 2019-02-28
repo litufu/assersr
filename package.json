@@ -17,8 +17,9 @@
     "@babel/register": "^7.0.0",
     "ali-oss": "^6.1.0",
     "apollo-server": "^2.2.5",
-    "apollo-server-express": "^2.2.0",
+    "apollo-server-express": "^2.4.8",
     "bcrypt": "^3.0.2",
+    "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "dateformat": "^3.0.3",
     "express": "^4.16.4",
@@ -30,9 +31,11 @@
     "graphql-shield": "^4.1.0",
     "ioredis": "^4.3.0",
     "jsonwebtoken": "^8.3.0",
+    "moment": "^2.24.0",
     "prisma-client-lib": "^1.20.0",
     "uuid": "^3.3.2",
-    "validator": "^10.11.0"
+    "validator": "^10.11.0",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
