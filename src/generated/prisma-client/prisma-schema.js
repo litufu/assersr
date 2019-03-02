@@ -281,6 +281,18 @@ type AggregateLogs {
   count: Int!
 }
 
+type AggregateLoveMatching {
+  count: Int!
+}
+
+type AggregateLoveSetting {
+  count: Int!
+}
+
+type AggregateLoveSignUp {
+  count: Int!
+}
+
 type AggregateMajor {
   count: Int!
 }
@@ -4252,6 +4264,641 @@ input LogsWhereInput {
 
 scalar Long
 
+type LoveMatching {
+  id: ID!
+  period: String
+  city: City
+  woman: User
+  man: User
+}
+
+type LoveMatchingConnection {
+  pageInfo: PageInfo!
+  edges: [LoveMatchingEdge]!
+  aggregate: AggregateLoveMatching!
+}
+
+input LoveMatchingCreateInput {
+  period: String
+  city: CityCreateOneInput
+  woman: UserCreateOneWithoutLoveWomanInput
+  man: UserCreateOneWithoutLoveManInput
+}
+
+input LoveMatchingCreateOneWithoutManInput {
+  create: LoveMatchingCreateWithoutManInput
+  connect: LoveMatchingWhereUniqueInput
+}
+
+input LoveMatchingCreateOneWithoutWomanInput {
+  create: LoveMatchingCreateWithoutWomanInput
+  connect: LoveMatchingWhereUniqueInput
+}
+
+input LoveMatchingCreateWithoutManInput {
+  period: String
+  city: CityCreateOneInput
+  woman: UserCreateOneWithoutLoveWomanInput
+}
+
+input LoveMatchingCreateWithoutWomanInput {
+  period: String
+  city: CityCreateOneInput
+  man: UserCreateOneWithoutLoveManInput
+}
+
+type LoveMatchingEdge {
+  node: LoveMatching!
+  cursor: String!
+}
+
+enum LoveMatchingOrderByInput {
+  id_ASC
+  id_DESC
+  period_ASC
+  period_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type LoveMatchingPreviousValues {
+  id: ID!
+  period: String
+}
+
+type LoveMatchingSubscriptionPayload {
+  mutation: MutationType!
+  node: LoveMatching
+  updatedFields: [String!]
+  previousValues: LoveMatchingPreviousValues
+}
+
+input LoveMatchingSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: LoveMatchingWhereInput
+  AND: [LoveMatchingSubscriptionWhereInput!]
+  OR: [LoveMatchingSubscriptionWhereInput!]
+  NOT: [LoveMatchingSubscriptionWhereInput!]
+}
+
+input LoveMatchingUpdateInput {
+  period: String
+  city: CityUpdateOneInput
+  woman: UserUpdateOneWithoutLoveWomanInput
+  man: UserUpdateOneWithoutLoveManInput
+}
+
+input LoveMatchingUpdateManyMutationInput {
+  period: String
+}
+
+input LoveMatchingUpdateOneWithoutManInput {
+  create: LoveMatchingCreateWithoutManInput
+  update: LoveMatchingUpdateWithoutManDataInput
+  upsert: LoveMatchingUpsertWithoutManInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: LoveMatchingWhereUniqueInput
+}
+
+input LoveMatchingUpdateOneWithoutWomanInput {
+  create: LoveMatchingCreateWithoutWomanInput
+  update: LoveMatchingUpdateWithoutWomanDataInput
+  upsert: LoveMatchingUpsertWithoutWomanInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: LoveMatchingWhereUniqueInput
+}
+
+input LoveMatchingUpdateWithoutManDataInput {
+  period: String
+  city: CityUpdateOneInput
+  woman: UserUpdateOneWithoutLoveWomanInput
+}
+
+input LoveMatchingUpdateWithoutWomanDataInput {
+  period: String
+  city: CityUpdateOneInput
+  man: UserUpdateOneWithoutLoveManInput
+}
+
+input LoveMatchingUpsertWithoutManInput {
+  update: LoveMatchingUpdateWithoutManDataInput!
+  create: LoveMatchingCreateWithoutManInput!
+}
+
+input LoveMatchingUpsertWithoutWomanInput {
+  update: LoveMatchingUpdateWithoutWomanDataInput!
+  create: LoveMatchingCreateWithoutWomanInput!
+}
+
+input LoveMatchingWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  period: String
+  period_not: String
+  period_in: [String!]
+  period_not_in: [String!]
+  period_lt: String
+  period_lte: String
+  period_gt: String
+  period_gte: String
+  period_contains: String
+  period_not_contains: String
+  period_starts_with: String
+  period_not_starts_with: String
+  period_ends_with: String
+  period_not_ends_with: String
+  city: CityWhereInput
+  woman: UserWhereInput
+  man: UserWhereInput
+  AND: [LoveMatchingWhereInput!]
+  OR: [LoveMatchingWhereInput!]
+  NOT: [LoveMatchingWhereInput!]
+}
+
+input LoveMatchingWhereUniqueInput {
+  id: ID
+}
+
+type LoveSetting {
+  id: ID!
+  myHeight: Int
+  myWeight: Int
+  otherHeightMin: Int
+  otherHeightMax: Int
+  otherWeightMin: Int
+  otherWeightMax: Int
+  otherAgeMin: Int
+  otherAgeMax: Int
+  dateTime: String
+  datePlace: String
+  memeberGrade: Int
+  memeberGradeEndTime: DateTime
+  user: User!
+}
+
+type LoveSettingConnection {
+  pageInfo: PageInfo!
+  edges: [LoveSettingEdge]!
+  aggregate: AggregateLoveSetting!
+}
+
+input LoveSettingCreateInput {
+  myHeight: Int
+  myWeight: Int
+  otherHeightMin: Int
+  otherHeightMax: Int
+  otherWeightMin: Int
+  otherWeightMax: Int
+  otherAgeMin: Int
+  otherAgeMax: Int
+  dateTime: String
+  datePlace: String
+  memeberGrade: Int
+  memeberGradeEndTime: DateTime
+  user: UserCreateOneWithoutLoveSettingInput!
+}
+
+input LoveSettingCreateOneWithoutUserInput {
+  create: LoveSettingCreateWithoutUserInput
+  connect: LoveSettingWhereUniqueInput
+}
+
+input LoveSettingCreateWithoutUserInput {
+  myHeight: Int
+  myWeight: Int
+  otherHeightMin: Int
+  otherHeightMax: Int
+  otherWeightMin: Int
+  otherWeightMax: Int
+  otherAgeMin: Int
+  otherAgeMax: Int
+  dateTime: String
+  datePlace: String
+  memeberGrade: Int
+  memeberGradeEndTime: DateTime
+}
+
+type LoveSettingEdge {
+  node: LoveSetting!
+  cursor: String!
+}
+
+enum LoveSettingOrderByInput {
+  id_ASC
+  id_DESC
+  myHeight_ASC
+  myHeight_DESC
+  myWeight_ASC
+  myWeight_DESC
+  otherHeightMin_ASC
+  otherHeightMin_DESC
+  otherHeightMax_ASC
+  otherHeightMax_DESC
+  otherWeightMin_ASC
+  otherWeightMin_DESC
+  otherWeightMax_ASC
+  otherWeightMax_DESC
+  otherAgeMin_ASC
+  otherAgeMin_DESC
+  otherAgeMax_ASC
+  otherAgeMax_DESC
+  dateTime_ASC
+  dateTime_DESC
+  datePlace_ASC
+  datePlace_DESC
+  memeberGrade_ASC
+  memeberGrade_DESC
+  memeberGradeEndTime_ASC
+  memeberGradeEndTime_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type LoveSettingPreviousValues {
+  id: ID!
+  myHeight: Int
+  myWeight: Int
+  otherHeightMin: Int
+  otherHeightMax: Int
+  otherWeightMin: Int
+  otherWeightMax: Int
+  otherAgeMin: Int
+  otherAgeMax: Int
+  dateTime: String
+  datePlace: String
+  memeberGrade: Int
+  memeberGradeEndTime: DateTime
+}
+
+type LoveSettingSubscriptionPayload {
+  mutation: MutationType!
+  node: LoveSetting
+  updatedFields: [String!]
+  previousValues: LoveSettingPreviousValues
+}
+
+input LoveSettingSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: LoveSettingWhereInput
+  AND: [LoveSettingSubscriptionWhereInput!]
+  OR: [LoveSettingSubscriptionWhereInput!]
+  NOT: [LoveSettingSubscriptionWhereInput!]
+}
+
+input LoveSettingUpdateInput {
+  myHeight: Int
+  myWeight: Int
+  otherHeightMin: Int
+  otherHeightMax: Int
+  otherWeightMin: Int
+  otherWeightMax: Int
+  otherAgeMin: Int
+  otherAgeMax: Int
+  dateTime: String
+  datePlace: String
+  memeberGrade: Int
+  memeberGradeEndTime: DateTime
+  user: UserUpdateOneRequiredWithoutLoveSettingInput
+}
+
+input LoveSettingUpdateManyMutationInput {
+  myHeight: Int
+  myWeight: Int
+  otherHeightMin: Int
+  otherHeightMax: Int
+  otherWeightMin: Int
+  otherWeightMax: Int
+  otherAgeMin: Int
+  otherAgeMax: Int
+  dateTime: String
+  datePlace: String
+  memeberGrade: Int
+  memeberGradeEndTime: DateTime
+}
+
+input LoveSettingUpdateOneWithoutUserInput {
+  create: LoveSettingCreateWithoutUserInput
+  update: LoveSettingUpdateWithoutUserDataInput
+  upsert: LoveSettingUpsertWithoutUserInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: LoveSettingWhereUniqueInput
+}
+
+input LoveSettingUpdateWithoutUserDataInput {
+  myHeight: Int
+  myWeight: Int
+  otherHeightMin: Int
+  otherHeightMax: Int
+  otherWeightMin: Int
+  otherWeightMax: Int
+  otherAgeMin: Int
+  otherAgeMax: Int
+  dateTime: String
+  datePlace: String
+  memeberGrade: Int
+  memeberGradeEndTime: DateTime
+}
+
+input LoveSettingUpsertWithoutUserInput {
+  update: LoveSettingUpdateWithoutUserDataInput!
+  create: LoveSettingCreateWithoutUserInput!
+}
+
+input LoveSettingWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  myHeight: Int
+  myHeight_not: Int
+  myHeight_in: [Int!]
+  myHeight_not_in: [Int!]
+  myHeight_lt: Int
+  myHeight_lte: Int
+  myHeight_gt: Int
+  myHeight_gte: Int
+  myWeight: Int
+  myWeight_not: Int
+  myWeight_in: [Int!]
+  myWeight_not_in: [Int!]
+  myWeight_lt: Int
+  myWeight_lte: Int
+  myWeight_gt: Int
+  myWeight_gte: Int
+  otherHeightMin: Int
+  otherHeightMin_not: Int
+  otherHeightMin_in: [Int!]
+  otherHeightMin_not_in: [Int!]
+  otherHeightMin_lt: Int
+  otherHeightMin_lte: Int
+  otherHeightMin_gt: Int
+  otherHeightMin_gte: Int
+  otherHeightMax: Int
+  otherHeightMax_not: Int
+  otherHeightMax_in: [Int!]
+  otherHeightMax_not_in: [Int!]
+  otherHeightMax_lt: Int
+  otherHeightMax_lte: Int
+  otherHeightMax_gt: Int
+  otherHeightMax_gte: Int
+  otherWeightMin: Int
+  otherWeightMin_not: Int
+  otherWeightMin_in: [Int!]
+  otherWeightMin_not_in: [Int!]
+  otherWeightMin_lt: Int
+  otherWeightMin_lte: Int
+  otherWeightMin_gt: Int
+  otherWeightMin_gte: Int
+  otherWeightMax: Int
+  otherWeightMax_not: Int
+  otherWeightMax_in: [Int!]
+  otherWeightMax_not_in: [Int!]
+  otherWeightMax_lt: Int
+  otherWeightMax_lte: Int
+  otherWeightMax_gt: Int
+  otherWeightMax_gte: Int
+  otherAgeMin: Int
+  otherAgeMin_not: Int
+  otherAgeMin_in: [Int!]
+  otherAgeMin_not_in: [Int!]
+  otherAgeMin_lt: Int
+  otherAgeMin_lte: Int
+  otherAgeMin_gt: Int
+  otherAgeMin_gte: Int
+  otherAgeMax: Int
+  otherAgeMax_not: Int
+  otherAgeMax_in: [Int!]
+  otherAgeMax_not_in: [Int!]
+  otherAgeMax_lt: Int
+  otherAgeMax_lte: Int
+  otherAgeMax_gt: Int
+  otherAgeMax_gte: Int
+  dateTime: String
+  dateTime_not: String
+  dateTime_in: [String!]
+  dateTime_not_in: [String!]
+  dateTime_lt: String
+  dateTime_lte: String
+  dateTime_gt: String
+  dateTime_gte: String
+  dateTime_contains: String
+  dateTime_not_contains: String
+  dateTime_starts_with: String
+  dateTime_not_starts_with: String
+  dateTime_ends_with: String
+  dateTime_not_ends_with: String
+  datePlace: String
+  datePlace_not: String
+  datePlace_in: [String!]
+  datePlace_not_in: [String!]
+  datePlace_lt: String
+  datePlace_lte: String
+  datePlace_gt: String
+  datePlace_gte: String
+  datePlace_contains: String
+  datePlace_not_contains: String
+  datePlace_starts_with: String
+  datePlace_not_starts_with: String
+  datePlace_ends_with: String
+  datePlace_not_ends_with: String
+  memeberGrade: Int
+  memeberGrade_not: Int
+  memeberGrade_in: [Int!]
+  memeberGrade_not_in: [Int!]
+  memeberGrade_lt: Int
+  memeberGrade_lte: Int
+  memeberGrade_gt: Int
+  memeberGrade_gte: Int
+  memeberGradeEndTime: DateTime
+  memeberGradeEndTime_not: DateTime
+  memeberGradeEndTime_in: [DateTime!]
+  memeberGradeEndTime_not_in: [DateTime!]
+  memeberGradeEndTime_lt: DateTime
+  memeberGradeEndTime_lte: DateTime
+  memeberGradeEndTime_gt: DateTime
+  memeberGradeEndTime_gte: DateTime
+  user: UserWhereInput
+  AND: [LoveSettingWhereInput!]
+  OR: [LoveSettingWhereInput!]
+  NOT: [LoveSettingWhereInput!]
+}
+
+input LoveSettingWhereUniqueInput {
+  id: ID
+}
+
+type LoveSignUp {
+  id: ID!
+  period: String
+  city: City
+  person: User
+}
+
+type LoveSignUpConnection {
+  pageInfo: PageInfo!
+  edges: [LoveSignUpEdge]!
+  aggregate: AggregateLoveSignUp!
+}
+
+input LoveSignUpCreateInput {
+  period: String
+  city: CityCreateOneInput
+  person: UserCreateOneWithoutSignUpLoveInput
+}
+
+input LoveSignUpCreateOneWithoutPersonInput {
+  create: LoveSignUpCreateWithoutPersonInput
+  connect: LoveSignUpWhereUniqueInput
+}
+
+input LoveSignUpCreateWithoutPersonInput {
+  period: String
+  city: CityCreateOneInput
+}
+
+type LoveSignUpEdge {
+  node: LoveSignUp!
+  cursor: String!
+}
+
+enum LoveSignUpOrderByInput {
+  id_ASC
+  id_DESC
+  period_ASC
+  period_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type LoveSignUpPreviousValues {
+  id: ID!
+  period: String
+}
+
+type LoveSignUpSubscriptionPayload {
+  mutation: MutationType!
+  node: LoveSignUp
+  updatedFields: [String!]
+  previousValues: LoveSignUpPreviousValues
+}
+
+input LoveSignUpSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: LoveSignUpWhereInput
+  AND: [LoveSignUpSubscriptionWhereInput!]
+  OR: [LoveSignUpSubscriptionWhereInput!]
+  NOT: [LoveSignUpSubscriptionWhereInput!]
+}
+
+input LoveSignUpUpdateInput {
+  period: String
+  city: CityUpdateOneInput
+  person: UserUpdateOneWithoutSignUpLoveInput
+}
+
+input LoveSignUpUpdateManyMutationInput {
+  period: String
+}
+
+input LoveSignUpUpdateOneWithoutPersonInput {
+  create: LoveSignUpCreateWithoutPersonInput
+  update: LoveSignUpUpdateWithoutPersonDataInput
+  upsert: LoveSignUpUpsertWithoutPersonInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: LoveSignUpWhereUniqueInput
+}
+
+input LoveSignUpUpdateWithoutPersonDataInput {
+  period: String
+  city: CityUpdateOneInput
+}
+
+input LoveSignUpUpsertWithoutPersonInput {
+  update: LoveSignUpUpdateWithoutPersonDataInput!
+  create: LoveSignUpCreateWithoutPersonInput!
+}
+
+input LoveSignUpWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  period: String
+  period_not: String
+  period_in: [String!]
+  period_not_in: [String!]
+  period_lt: String
+  period_lte: String
+  period_gt: String
+  period_gte: String
+  period_contains: String
+  period_not_contains: String
+  period_starts_with: String
+  period_not_starts_with: String
+  period_ends_with: String
+  period_not_ends_with: String
+  city: CityWhereInput
+  person: UserWhereInput
+  AND: [LoveSignUpWhereInput!]
+  OR: [LoveSignUpWhereInput!]
+  NOT: [LoveSignUpWhereInput!]
+}
+
+input LoveSignUpWhereUniqueInput {
+  id: ID
+}
+
 type Major {
   id: ID!
   name: String!
@@ -4800,6 +5447,24 @@ type Mutation {
   createLogs(data: LogsCreateInput!): Logs!
   updateManyLogses(data: LogsUpdateManyMutationInput!, where: LogsWhereInput): BatchPayload!
   deleteManyLogses(where: LogsWhereInput): BatchPayload!
+  createLoveMatching(data: LoveMatchingCreateInput!): LoveMatching!
+  updateLoveMatching(data: LoveMatchingUpdateInput!, where: LoveMatchingWhereUniqueInput!): LoveMatching
+  updateManyLoveMatchings(data: LoveMatchingUpdateManyMutationInput!, where: LoveMatchingWhereInput): BatchPayload!
+  upsertLoveMatching(where: LoveMatchingWhereUniqueInput!, create: LoveMatchingCreateInput!, update: LoveMatchingUpdateInput!): LoveMatching!
+  deleteLoveMatching(where: LoveMatchingWhereUniqueInput!): LoveMatching
+  deleteManyLoveMatchings(where: LoveMatchingWhereInput): BatchPayload!
+  createLoveSetting(data: LoveSettingCreateInput!): LoveSetting!
+  updateLoveSetting(data: LoveSettingUpdateInput!, where: LoveSettingWhereUniqueInput!): LoveSetting
+  updateManyLoveSettings(data: LoveSettingUpdateManyMutationInput!, where: LoveSettingWhereInput): BatchPayload!
+  upsertLoveSetting(where: LoveSettingWhereUniqueInput!, create: LoveSettingCreateInput!, update: LoveSettingUpdateInput!): LoveSetting!
+  deleteLoveSetting(where: LoveSettingWhereUniqueInput!): LoveSetting
+  deleteManyLoveSettings(where: LoveSettingWhereInput): BatchPayload!
+  createLoveSignUp(data: LoveSignUpCreateInput!): LoveSignUp!
+  updateLoveSignUp(data: LoveSignUpUpdateInput!, where: LoveSignUpWhereUniqueInput!): LoveSignUp
+  updateManyLoveSignUps(data: LoveSignUpUpdateManyMutationInput!, where: LoveSignUpWhereInput): BatchPayload!
+  upsertLoveSignUp(where: LoveSignUpWhereUniqueInput!, create: LoveSignUpCreateInput!, update: LoveSignUpUpdateInput!): LoveSignUp!
+  deleteLoveSignUp(where: LoveSignUpWhereUniqueInput!): LoveSignUp
+  deleteManyLoveSignUps(where: LoveSignUpWhereInput): BatchPayload!
   createMajor(data: MajorCreateInput!): Major!
   updateMajor(data: MajorUpdateInput!, where: MajorWhereUniqueInput!): Major
   updateManyMajors(data: MajorUpdateManyMutationInput!, where: MajorWhereInput): BatchPayload!
@@ -6240,6 +6905,15 @@ type Query {
   locationGroupsConnection(where: LocationGroupWhereInput, orderBy: LocationGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LocationGroupConnection!
   logses(where: LogsWhereInput, orderBy: LogsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Logs]!
   logsesConnection(where: LogsWhereInput, orderBy: LogsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LogsConnection!
+  loveMatching(where: LoveMatchingWhereUniqueInput!): LoveMatching
+  loveMatchings(where: LoveMatchingWhereInput, orderBy: LoveMatchingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LoveMatching]!
+  loveMatchingsConnection(where: LoveMatchingWhereInput, orderBy: LoveMatchingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LoveMatchingConnection!
+  loveSetting(where: LoveSettingWhereUniqueInput!): LoveSetting
+  loveSettings(where: LoveSettingWhereInput, orderBy: LoveSettingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LoveSetting]!
+  loveSettingsConnection(where: LoveSettingWhereInput, orderBy: LoveSettingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LoveSettingConnection!
+  loveSignUp(where: LoveSignUpWhereUniqueInput!): LoveSignUp
+  loveSignUps(where: LoveSignUpWhereInput, orderBy: LoveSignUpOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LoveSignUp]!
+  loveSignUpsConnection(where: LoveSignUpWhereInput, orderBy: LoveSignUpOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LoveSignUpConnection!
   major(where: MajorWhereUniqueInput!): Major
   majors(where: MajorWhereInput, orderBy: MajorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Major]!
   majorsConnection(where: MajorWhereInput, orderBy: MajorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MajorConnection!
@@ -7502,6 +8176,9 @@ type Subscription {
   location(where: LocationSubscriptionWhereInput): LocationSubscriptionPayload
   locationGroup(where: LocationGroupSubscriptionWhereInput): LocationGroupSubscriptionPayload
   logs(where: LogsSubscriptionWhereInput): LogsSubscriptionPayload
+  loveMatching(where: LoveMatchingSubscriptionWhereInput): LoveMatchingSubscriptionPayload
+  loveSetting(where: LoveSettingSubscriptionWhereInput): LoveSettingSubscriptionPayload
+  loveSignUp(where: LoveSignUpSubscriptionWhereInput): LoveSignUpSubscriptionPayload
   major(where: MajorSubscriptionWhereInput): MajorSubscriptionPayload
   message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
   oldColleague(where: OldColleagueSubscriptionWhereInput): OldColleagueSubscriptionPayload
@@ -8022,6 +8699,10 @@ type User {
   locationGroups(where: LocationGroupWhereInput, orderBy: LocationGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LocationGroup!]
   forgetPassword: FindPassWord
   remmemberPassword: FindPassWord
+  loveSetting: LoveSetting
+  loveWoman: LoveMatching
+  loveMan: LoveMatching
+  signUpLove: LoveSignUp
 }
 
 type UserConnection {
@@ -8065,6 +8746,10 @@ input UserCreateInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateManyInput {
@@ -8162,6 +8847,21 @@ input UserCreateOneWithoutGroupMessagesInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutLoveManInput {
+  create: UserCreateWithoutLoveManInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutLoveSettingInput {
+  create: UserCreateWithoutLoveSettingInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutLoveWomanInput {
+  create: UserCreateWithoutLoveWomanInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   connect: UserWhereUniqueInput
@@ -8174,6 +8874,11 @@ input UserCreateOneWithoutReceiveMessagesInput {
 
 input UserCreateOneWithoutSentMessagesInput {
   create: UserCreateWithoutSentMessagesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutSignUpLoveInput {
+  create: UserCreateWithoutSignUpLoveInput
   connect: UserWhereUniqueInput
 }
 
@@ -8221,6 +8926,10 @@ input UserCreateWithoutAvatarInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutBirthplaceInput {
@@ -8257,6 +8966,10 @@ input UserCreateWithoutBirthplaceInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutClassMateInput {
@@ -8293,6 +9006,10 @@ input UserCreateWithoutClassMateInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutColleaguesInput {
@@ -8329,6 +9046,10 @@ input UserCreateWithoutColleaguesInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutCreaterInput {
@@ -8365,6 +9086,10 @@ input UserCreateWithoutCreaterInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutExamInput {
@@ -8401,6 +9126,10 @@ input UserCreateWithoutExamInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutFamiliesInput {
@@ -8437,6 +9166,10 @@ input UserCreateWithoutFamiliesInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutFamilyGroupInput {
@@ -8473,6 +9206,10 @@ input UserCreateWithoutFamilyGroupInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutForgetPasswordInput {
@@ -8509,6 +9246,10 @@ input UserCreateWithoutForgetPasswordInput {
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutFromOldColleaguesInput {
@@ -8545,6 +9286,10 @@ input UserCreateWithoutFromOldColleaguesInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutGroupMessagesInput {
@@ -8581,6 +9326,10 @@ input UserCreateWithoutGroupMessagesInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutGroupsInput {
@@ -8617,6 +9366,10 @@ input UserCreateWithoutGroupsInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutLocationGroupsInput {
@@ -8653,6 +9406,130 @@ input UserCreateWithoutLocationGroupsInput {
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
+}
+
+input UserCreateWithoutLoveManInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: PhotoCreateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneWithoutBornsInput
+  residence: LocationCreateOneWithoutLivesInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  sentMessages: MessageCreateManyWithoutFromInput
+  receiveMessages: MessageCreateManyWithoutToInput
+  groupMessages: GroupMessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+  locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
+}
+
+input UserCreateWithoutLoveSettingInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: PhotoCreateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneWithoutBornsInput
+  residence: LocationCreateOneWithoutLivesInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  sentMessages: MessageCreateManyWithoutFromInput
+  receiveMessages: MessageCreateManyWithoutToInput
+  groupMessages: GroupMessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+  locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
+}
+
+input UserCreateWithoutLoveWomanInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: PhotoCreateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneWithoutBornsInput
+  residence: LocationCreateOneWithoutLivesInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  sentMessages: MessageCreateManyWithoutFromInput
+  receiveMessages: MessageCreateManyWithoutToInput
+  groupMessages: GroupMessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+  locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutPostsInput {
@@ -8689,6 +9566,10 @@ input UserCreateWithoutPostsInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutReceiveMessagesInput {
@@ -8725,6 +9606,10 @@ input UserCreateWithoutReceiveMessagesInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutRegStatusInput {
@@ -8761,6 +9646,10 @@ input UserCreateWithoutRegStatusInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutRemmemberPasswordInput {
@@ -8797,6 +9686,10 @@ input UserCreateWithoutRemmemberPasswordInput {
   toOldColleagues: OldColleagueCreateManyWithoutToInput
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutResidenceInput {
@@ -8833,6 +9726,10 @@ input UserCreateWithoutResidenceInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutSentMessagesInput {
@@ -8869,6 +9766,50 @@ input UserCreateWithoutSentMessagesInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
+}
+
+input UserCreateWithoutSignUpLoveInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: PhotoCreateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneWithoutBornsInput
+  residence: LocationCreateOneWithoutLivesInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  sentMessages: MessageCreateManyWithoutFromInput
+  receiveMessages: MessageCreateManyWithoutToInput
+  groupMessages: GroupMessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+  locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
 }
 
 input UserCreateWithoutStudiesInput {
@@ -8905,6 +9846,10 @@ input UserCreateWithoutStudiesInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutToOldColleaguesInput {
@@ -8941,6 +9886,10 @@ input UserCreateWithoutToOldColleaguesInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 input UserCreateWithoutWorksInput {
@@ -8977,6 +9926,10 @@ input UserCreateWithoutWorksInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveMan: LoveMatchingCreateOneWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
 type UserEdge {
@@ -9240,6 +10193,10 @@ input UserUpdateDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateInput {
@@ -9277,6 +10234,10 @@ input UserUpdateInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateManyDataInput {
@@ -9439,6 +10400,13 @@ input UserUpdateOneRequiredWithoutGroupMessagesInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutLoveSettingInput {
+  create: UserCreateWithoutLoveSettingInput
+  update: UserUpdateWithoutLoveSettingDataInput
+  upsert: UserUpsertWithoutLoveSettingInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneRequiredWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   update: UserUpdateWithoutPostsDataInput
@@ -9514,6 +10482,33 @@ input UserUpdateOneWithoutFromOldColleaguesInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneWithoutLoveManInput {
+  create: UserCreateWithoutLoveManInput
+  update: UserUpdateWithoutLoveManDataInput
+  upsert: UserUpsertWithoutLoveManInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneWithoutLoveWomanInput {
+  create: UserCreateWithoutLoveWomanInput
+  update: UserUpdateWithoutLoveWomanDataInput
+  upsert: UserUpsertWithoutLoveWomanInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneWithoutSignUpLoveInput {
+  create: UserCreateWithoutSignUpLoveInput
+  update: UserUpdateWithoutSignUpLoveDataInput
+  upsert: UserUpsertWithoutSignUpLoveInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneWithoutToOldColleaguesInput {
   create: UserCreateWithoutToOldColleaguesInput
   update: UserUpdateWithoutToOldColleaguesDataInput
@@ -9566,6 +10561,10 @@ input UserUpdateWithoutAvatarDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutBirthplaceDataInput {
@@ -9602,6 +10601,10 @@ input UserUpdateWithoutBirthplaceDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutClassMateDataInput {
@@ -9638,6 +10641,10 @@ input UserUpdateWithoutClassMateDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutColleaguesDataInput {
@@ -9674,6 +10681,10 @@ input UserUpdateWithoutColleaguesDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutCreaterDataInput {
@@ -9710,6 +10721,10 @@ input UserUpdateWithoutCreaterDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutExamDataInput {
@@ -9746,6 +10761,10 @@ input UserUpdateWithoutExamDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutFamiliesDataInput {
@@ -9782,6 +10801,10 @@ input UserUpdateWithoutFamiliesDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutFamilyGroupDataInput {
@@ -9818,6 +10841,10 @@ input UserUpdateWithoutFamilyGroupDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutForgetPasswordDataInput {
@@ -9854,6 +10881,10 @@ input UserUpdateWithoutForgetPasswordDataInput {
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutFromOldColleaguesDataInput {
@@ -9890,6 +10921,10 @@ input UserUpdateWithoutFromOldColleaguesDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutGroupMessagesDataInput {
@@ -9926,6 +10961,10 @@ input UserUpdateWithoutGroupMessagesDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutGroupsDataInput {
@@ -9962,6 +11001,10 @@ input UserUpdateWithoutGroupsDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutLocationGroupsDataInput {
@@ -9998,6 +11041,130 @@ input UserUpdateWithoutLocationGroupsDataInput {
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+}
+
+input UserUpdateWithoutLoveManDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: PhotoUpdateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneWithoutBornsInput
+  residence: LocationUpdateOneWithoutLivesInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  sentMessages: MessageUpdateManyWithoutFromInput
+  receiveMessages: MessageUpdateManyWithoutToInput
+  groupMessages: GroupMessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+  locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+}
+
+input UserUpdateWithoutLoveSettingDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: PhotoUpdateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneWithoutBornsInput
+  residence: LocationUpdateOneWithoutLivesInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  sentMessages: MessageUpdateManyWithoutFromInput
+  receiveMessages: MessageUpdateManyWithoutToInput
+  groupMessages: GroupMessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+  locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+}
+
+input UserUpdateWithoutLoveWomanDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: PhotoUpdateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneWithoutBornsInput
+  residence: LocationUpdateOneWithoutLivesInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  sentMessages: MessageUpdateManyWithoutFromInput
+  receiveMessages: MessageUpdateManyWithoutToInput
+  groupMessages: GroupMessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+  locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -10034,6 +11201,10 @@ input UserUpdateWithoutPostsDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutReceiveMessagesDataInput {
@@ -10070,6 +11241,10 @@ input UserUpdateWithoutReceiveMessagesDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutRegStatusDataInput {
@@ -10106,6 +11281,10 @@ input UserUpdateWithoutRegStatusDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutRemmemberPasswordDataInput {
@@ -10142,6 +11321,10 @@ input UserUpdateWithoutRemmemberPasswordDataInput {
   toOldColleagues: OldColleagueUpdateManyWithoutToInput
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutResidenceDataInput {
@@ -10178,6 +11361,10 @@ input UserUpdateWithoutResidenceDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutSentMessagesDataInput {
@@ -10214,6 +11401,50 @@ input UserUpdateWithoutSentMessagesDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+}
+
+input UserUpdateWithoutSignUpLoveDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: PhotoUpdateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneWithoutBornsInput
+  residence: LocationUpdateOneWithoutLivesInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  sentMessages: MessageUpdateManyWithoutFromInput
+  receiveMessages: MessageUpdateManyWithoutToInput
+  groupMessages: GroupMessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+  locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
 }
 
 input UserUpdateWithoutStudiesDataInput {
@@ -10250,6 +11481,10 @@ input UserUpdateWithoutStudiesDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutToOldColleaguesDataInput {
@@ -10286,6 +11521,10 @@ input UserUpdateWithoutToOldColleaguesDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithoutWorksDataInput {
@@ -10322,6 +11561,10 @@ input UserUpdateWithoutWorksDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveMan: LoveMatchingUpdateOneWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
 input UserUpdateWithWhereUniqueNestedInput {
@@ -10419,6 +11662,21 @@ input UserUpsertWithoutGroupMessagesInput {
   create: UserCreateWithoutGroupMessagesInput!
 }
 
+input UserUpsertWithoutLoveManInput {
+  update: UserUpdateWithoutLoveManDataInput!
+  create: UserCreateWithoutLoveManInput!
+}
+
+input UserUpsertWithoutLoveSettingInput {
+  update: UserUpdateWithoutLoveSettingDataInput!
+  create: UserCreateWithoutLoveSettingInput!
+}
+
+input UserUpsertWithoutLoveWomanInput {
+  update: UserUpdateWithoutLoveWomanDataInput!
+  create: UserCreateWithoutLoveWomanInput!
+}
+
 input UserUpsertWithoutPostsInput {
   update: UserUpdateWithoutPostsDataInput!
   create: UserCreateWithoutPostsInput!
@@ -10432,6 +11690,11 @@ input UserUpsertWithoutReceiveMessagesInput {
 input UserUpsertWithoutSentMessagesInput {
   update: UserUpdateWithoutSentMessagesDataInput!
   create: UserCreateWithoutSentMessagesInput!
+}
+
+input UserUpsertWithoutSignUpLoveInput {
+  update: UserUpdateWithoutSignUpLoveDataInput!
+  create: UserCreateWithoutSignUpLoveInput!
 }
 
 input UserUpsertWithoutToOldColleaguesInput {
@@ -10703,6 +11966,10 @@ input UserWhereInput {
   locationGroups_none: LocationGroupWhereInput
   forgetPassword: FindPassWordWhereInput
   remmemberPassword: FindPassWordWhereInput
+  loveSetting: LoveSettingWhereInput
+  loveWoman: LoveMatchingWhereInput
+  loveMan: LoveMatchingWhereInput
+  signUpLove: LoveSignUpWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

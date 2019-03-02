@@ -85,6 +85,18 @@ var models = [
     embedded: false
   },
   {
+    name: "LoveMatching",
+    embedded: false
+  },
+  {
+    name: "LoveSetting",
+    embedded: false
+  },
+  {
+    name: "LoveSignUp",
+    embedded: false
+  },
+  {
     name: "Major",
     embedded: false
   },

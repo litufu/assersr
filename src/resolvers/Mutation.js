@@ -2645,5 +2645,89 @@ export const Mutation = {
     })
   },
 
- 
+  addOrUpdateLoveSetting:async (parent, { myHeight,myWeight,otherHeightMin,otherHeightMax,
+    otherWeightMin,otherWeightMax,otherAgeMin,otherAgeMax,dateTime,datePlace
+   }, ctx) => {
+
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    const userGender = await ctx.db.user({ uid: userId }).gender()
+
+    // -------------------------
+    if(!validator.isInt(`${myHeight}`)){
+      throw new Error('身高格式错误')
+    }
+    if(!validator.isInt((`${myWeight}`))){
+      throw new Error('体重格式错误')
+    }
+    if(!validator.isInt((`${otherHeightMin}`))){
+      throw new Error('对方最低身高格式错误')
+    }
+    if(!validator.isInt((`${otherHeightMax}`))){
+      throw new Error('对方最高身高格式错误')
+    }
+    if(!validator.isInt((`${otherWeightMin}`))){
+      throw new Error('对方最小体重格式错误')
+    }
+    if(!validator.isInt((`${otherWeightMax}`))){
+      throw new Error('对方最大体重格式错误')
+    }
+    if(!validator.isInt((`${otherAgeMin}`))){
+      throw new Error('对方最小年龄格式错误')
+    }
+    if(!validator.isInt((`${otherAgeMax}`))){
+      throw new Error('对方最大年龄格式错误')
+    }
+    if(userGender==='female'){
+      if (/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(dateTime)){
+        throw new Error('见面时间格式错误')
+      }
+      if (/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(datePlace)){
+        throw new Error('见面地点格式错误')
+      }
+    }
+    // -------------------------
+    const loveSettings = await ctx.db.loveSettings({
+      where:{user:{uid:userId}}
+    })
+    let loveSetting
+    if(loveSettings.length>0){
+      loveSetting =  await ctx.db.updateLoveSetting({
+        where:{id:loveSettings[0].id},
+        data:{
+          myHeight,
+          myWeight,
+          otherHeightMin,
+          otherHeightMax,
+          otherWeightMin,
+          otherWeightMax,
+          otherAgeMax,
+          otherAgeMin,
+          dateTime,
+          datePlace,
+        }
+      })
+    }else{
+      loveSetting =  await ctx.db.createLoveSetting({
+          myHeight,
+          myWeight,
+          otherHeightMin,
+          otherHeightMax,
+          otherWeightMin,
+          otherWeightMax,
+          otherAgeMax,
+          otherAgeMin,
+          dateTime,
+          datePlace,
+          user:{connect:{uid:userId}}
+      })
+    }
+    return loveSetting
+  },
 }

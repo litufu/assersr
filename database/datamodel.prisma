@@ -77,6 +77,10 @@ type User {
   locationGroups:[LocationGroup!]!
   forgetPassword:FindPassWord  @relation(name: "Forget")
   remmemberPassword:FindPassWord @relation(name: "Remmember")
+  loveSetting:LoveSetting
+  loveWoman:LoveMatching @relation(name: "Woman")
+  loveMan:LoveMatching @relation(name: "Man")
+  signUpLove:LoveSignUp
 }
 
 # 地理位置
@@ -401,4 +405,39 @@ type Trade{
   user:User
   status:String
 }
+
+type LoveSetting{
+  id:ID! @unique
+  myHeight:Int
+  myWeight:Int
+  otherHeightMin:Int
+  otherHeightMax:Int
+  otherWeightMin:Int
+  otherWeightMax:Int
+  otherAgeMin:Int
+  otherAgeMax:Int
+  dateTime:String
+  datePlace:String
+  memeberGrade:Int
+  memeberGradeEndTime:DateTime
+  user:User! @unique
+}
+
+# 报名情况
+type LoveSignUp{
+  id:ID! @unique
+  period:String
+  city:City
+  person:User @unique
+}
+
+# 匹配情况
+type LoveMatching{
+  id:ID! @unique
+  period:String
+  city:City
+  woman:User  @relation(name: "Woman") 
+  man:User @relation(name: "Man") 
+}
+
 

@@ -97,6 +97,9 @@ export const typeDefs = gql`
     sendGroupMessage(type:String,toId:String,text:String,image:String):GroupMessage
     addAdvertisement(url:String,startTime:String):Advertisement
     newTrade(productId:String,number:Int,amount:Float):Trade
+    addOrUpdateLoveSetting(myHeight:Int,myWeight:Int,otherHeightMin:Int,otherHeightMax:Int,
+      otherWeightMin:Int,otherWeightMax:Int,otherAgeMin:Int,otherAgeMax:Int,dateTime:String,datePlace:String
+    ):LoveSetting
   }
 
   type Subscription {
@@ -172,7 +175,11 @@ export const typeDefs = gql`
     classMate:[ClassMate]
     workGroups:[WorkGroup]
     colleagues:[Colleague]
+    loveWoman:LoveMatching
+    loveMan:LoveMatching
     locationGroups:[LocationGroup]
+    loveSetting:LoveSetting
+    signUpLove:LoveSignUp
   }
 
   type Photo {
@@ -533,6 +540,40 @@ type Trade{
   user:User
   status:String
   signedStr:String
+}
+
+type LoveSetting{
+  id:ID!
+  myHeight:Int
+  myWeight:Int
+  otherHeightMin:Int
+  otherHeightMax:Int
+  otherWeightMin:Int
+  otherWeightMax:Int
+  otherAgeMin:Int
+  otherAgeMax:Int
+  dateTime:String
+  datePlace:String
+  memeberGrade:Int
+  memeberGradeEndTime:DateTime
+  user:User!
+}
+
+# 报名情况
+type LoveSignUp{
+  id:ID!
+  period:String
+  city:City
+  person:User
+}
+
+# 匹配情况
+type LoveMatching{
+  id:ID!
+  period:String
+  city:City
+  woman:User
+  man:User
 }
 
 

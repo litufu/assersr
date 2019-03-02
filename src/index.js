@@ -55,9 +55,6 @@ server.applyMiddleware({ app });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.get('/alipayget',  (req, res) =>{
-  res.send('Hello World!')
-})
 
 app.post('/alipay/notify_url',  async (req, res)=> {
   const obj = req.body

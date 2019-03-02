@@ -26,6 +26,9 @@ import {GroupMessage} from './GroupMessage'
 import {FindPassWord} from './FindPassWord'
 import {VisitCount} from './VisitCount'
 import {Trade} from './Trade'
+import {LoveSetting} from './LoveSetting'
+import {LoveMatching} from './LoveMatching'
+import {LoveSignUp} from './LoveSignUp'
 
 export const resolvers = {
   Query,
@@ -55,5 +58,8 @@ export const resolvers = {
   GroupMessage,
   FindPassWord,
   VisitCount,
-  Trade
+  Trade,
+  LoveSetting,
+  LoveMatching,
+  LoveSignUp
 }
