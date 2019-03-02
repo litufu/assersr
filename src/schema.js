@@ -100,6 +100,7 @@ export const typeDefs = gql`
     addOrUpdateLoveSetting(myHeight:Int,myWeight:Int,otherHeightMin:Int,otherHeightMax:Int,
       otherWeightMin:Int,otherWeightMax:Int,otherAgeMin:Int,otherAgeMax:Int,dateTime:String,datePlace:String
     ):LoveSetting
+    addOrUpdateLoveSignUp:LoveSignUp
   }
 
   type Subscription {

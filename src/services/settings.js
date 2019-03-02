@@ -21,3 +21,5 @@ export const ossClient = new OSS({
 export const HOST = '192.168.43.75'
 export const PORT = 4000
 export const AlipayTest = false
+export const DateStartTime = new Date(2019,1,28)
+

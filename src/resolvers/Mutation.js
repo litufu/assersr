@@ -49,7 +49,7 @@ import {
   GMESSAGE_ADDED_TOPIC,
 } from './Subscription'
 import { pubsub } from '../subscriptions';
-import { fee, ossClient } from '../services/settings'
+import { fee, ossClient,DateStartTime } from '../services/settings'
 
 export const Mutation = {
   signup: async (parent, { username, password, deviceId }, ctx) => {
@@ -2729,5 +2729,59 @@ export const Mutation = {
       })
     }
     return loveSetting
+  },
+  addOrUpdateLoveSignUp:async (parent, args, ctx) => {
+
+    // -------------------------
+   
+    // -------------------------
+    
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    const residence = await ctx.db.user({ uid: userId }).residence()
+    let city
+    if(residence){
+      city = await ctx.db.user({ uid: userId }).residence().city()
+    }else{
+      throw new Error('尚未填写居住地')
+    }
+
+
+    const now = new Date()
+    const week = now.getDay()
+    if (week === 0 || week === 5 || week === 6) {
+        throw new Error('报名已截止')
+    } 
+    const phase = parseInt(`${(now.getTime() - DateStartTime.getTime()) / 1000 / 60 / 60 / 24 / 7}`,10) + 1
+    
+    const loveSignUps = await ctx.db.loveSignUps({
+      where:{person:{uid:userId}}
+    })
+    
+    let loveSignUp
+    if(loveSignUps.length>0){
+      loveSignUp = await ctx.db.updateLoveSignUp({
+        where:{id:loveSignUps[0].id},
+        data:{
+          period:`${phase}`,
+          city:{connect:{id:city.id}},
+          person:{connect:{id:user.id}}
+        }
+      })
+    }else{
+      loveSignUp = await ctx.db.createLoveSignUp({
+        period:`${phase}`,
+        city:{connect:{id:city.id}},
+        person:{connect:{id:user.id}}
+      })
+    }
+    return loveSignUp
   },
 }
