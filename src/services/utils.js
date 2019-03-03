@@ -776,6 +776,13 @@ const verified = (response, sign)=>{
   return cryptoVerify.verify(publicKey, sign, 'base64')
 }
 
+const birthdayToAge = (day)=>{
+  const birthday = new Date(day)
+  const d = new Date()
+  const age = d.getFullYear()-birthday.getFullYear()-((d.getMonth()<birthday.getMonth()|| d.getMonth()===birthday.getMonth() && d.getDate()<birthday.getDate())?1:0);
+  return age
+}
+
 module.exports = {
   getUserId,
   checkeCtxUserExist,
@@ -793,5 +800,6 @@ module.exports = {
   getFileName,
   getFileExt,
   signed,
-  verified
+  verified,
+  birthdayToAge
 }

@@ -18,7 +18,7 @@ export const ossClient = new OSS({
     bucket: aliyunOssConfig.bucket
   });
 
-export const HOST = '192.168.43.75'
+export const HOST = '192.168.0.102'
 export const PORT = 4000
 export const AlipayTest = false
 export const DateStartTime = new Date(2019,1,28)

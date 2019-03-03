@@ -7,6 +7,7 @@ import {
   checkPlaceCode,
   checkPhotoName
 } from '../validate'
+import {DateStartTime} from '../services/settings'
 
 export const Query = {
   me: (parent, args, ctx) => {
@@ -645,5 +646,45 @@ export const Query = {
     })
 
     return messages
+  },
+  loveMatch:async (parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    const city = await ctx.db.user({ uid: userId }).residence().city()
+
+    let loveMatches
+    const now = new Date()
+    const phase = parseInt(`${(now.getTime() - DateStartTime.getTime()) / 1000 / 60 / 60 / 24 / 7}`, 10) + 1
+    if(user.gender==="male"){
+      loveMatches = await ctx.db.loveMatchings({
+        where: {
+          AND: [
+            {period:`${phase}`},
+            {city:{code:city.code}},
+            { man: { id: user.id } },
+          ]
+        }
+      })
+    }else{
+      loveMatches = await ctx.db.loveMatchings({
+        where: {
+          AND: [
+            {period:`${phase}`},
+            {city:{code:city.code}},
+            { woman: { id: user.id } },
+          ]
+        }
+      })
+    }
+    if(loveMatches.length>0){
+      return loveMatches[0]
+    }
+    return null
   },
 }

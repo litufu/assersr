@@ -4285,14 +4285,14 @@ input LoveMatchingCreateInput {
   man: UserCreateOneWithoutLoveManInput
 }
 
-input LoveMatchingCreateOneWithoutManInput {
-  create: LoveMatchingCreateWithoutManInput
-  connect: LoveMatchingWhereUniqueInput
+input LoveMatchingCreateManyWithoutManInput {
+  create: [LoveMatchingCreateWithoutManInput!]
+  connect: [LoveMatchingWhereUniqueInput!]
 }
 
-input LoveMatchingCreateOneWithoutWomanInput {
-  create: LoveMatchingCreateWithoutWomanInput
-  connect: LoveMatchingWhereUniqueInput
+input LoveMatchingCreateManyWithoutWomanInput {
+  create: [LoveMatchingCreateWithoutWomanInput!]
+  connect: [LoveMatchingWhereUniqueInput!]
 }
 
 input LoveMatchingCreateWithoutManInput {
@@ -4328,6 +4328,40 @@ type LoveMatchingPreviousValues {
   period: String
 }
 
+input LoveMatchingScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  period: String
+  period_not: String
+  period_in: [String!]
+  period_not_in: [String!]
+  period_lt: String
+  period_lte: String
+  period_gt: String
+  period_gte: String
+  period_contains: String
+  period_not_contains: String
+  period_starts_with: String
+  period_not_starts_with: String
+  period_ends_with: String
+  period_not_ends_with: String
+  AND: [LoveMatchingScalarWhereInput!]
+  OR: [LoveMatchingScalarWhereInput!]
+  NOT: [LoveMatchingScalarWhereInput!]
+}
+
 type LoveMatchingSubscriptionPayload {
   mutation: MutationType!
   node: LoveMatching
@@ -4353,26 +4387,39 @@ input LoveMatchingUpdateInput {
   man: UserUpdateOneWithoutLoveManInput
 }
 
+input LoveMatchingUpdateManyDataInput {
+  period: String
+}
+
 input LoveMatchingUpdateManyMutationInput {
   period: String
 }
 
-input LoveMatchingUpdateOneWithoutManInput {
-  create: LoveMatchingCreateWithoutManInput
-  update: LoveMatchingUpdateWithoutManDataInput
-  upsert: LoveMatchingUpsertWithoutManInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: LoveMatchingWhereUniqueInput
+input LoveMatchingUpdateManyWithoutManInput {
+  create: [LoveMatchingCreateWithoutManInput!]
+  delete: [LoveMatchingWhereUniqueInput!]
+  connect: [LoveMatchingWhereUniqueInput!]
+  disconnect: [LoveMatchingWhereUniqueInput!]
+  update: [LoveMatchingUpdateWithWhereUniqueWithoutManInput!]
+  upsert: [LoveMatchingUpsertWithWhereUniqueWithoutManInput!]
+  deleteMany: [LoveMatchingScalarWhereInput!]
+  updateMany: [LoveMatchingUpdateManyWithWhereNestedInput!]
 }
 
-input LoveMatchingUpdateOneWithoutWomanInput {
-  create: LoveMatchingCreateWithoutWomanInput
-  update: LoveMatchingUpdateWithoutWomanDataInput
-  upsert: LoveMatchingUpsertWithoutWomanInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: LoveMatchingWhereUniqueInput
+input LoveMatchingUpdateManyWithoutWomanInput {
+  create: [LoveMatchingCreateWithoutWomanInput!]
+  delete: [LoveMatchingWhereUniqueInput!]
+  connect: [LoveMatchingWhereUniqueInput!]
+  disconnect: [LoveMatchingWhereUniqueInput!]
+  update: [LoveMatchingUpdateWithWhereUniqueWithoutWomanInput!]
+  upsert: [LoveMatchingUpsertWithWhereUniqueWithoutWomanInput!]
+  deleteMany: [LoveMatchingScalarWhereInput!]
+  updateMany: [LoveMatchingUpdateManyWithWhereNestedInput!]
+}
+
+input LoveMatchingUpdateManyWithWhereNestedInput {
+  where: LoveMatchingScalarWhereInput!
+  data: LoveMatchingUpdateManyDataInput!
 }
 
 input LoveMatchingUpdateWithoutManDataInput {
@@ -4387,12 +4434,24 @@ input LoveMatchingUpdateWithoutWomanDataInput {
   man: UserUpdateOneWithoutLoveManInput
 }
 
-input LoveMatchingUpsertWithoutManInput {
+input LoveMatchingUpdateWithWhereUniqueWithoutManInput {
+  where: LoveMatchingWhereUniqueInput!
+  data: LoveMatchingUpdateWithoutManDataInput!
+}
+
+input LoveMatchingUpdateWithWhereUniqueWithoutWomanInput {
+  where: LoveMatchingWhereUniqueInput!
+  data: LoveMatchingUpdateWithoutWomanDataInput!
+}
+
+input LoveMatchingUpsertWithWhereUniqueWithoutManInput {
+  where: LoveMatchingWhereUniqueInput!
   update: LoveMatchingUpdateWithoutManDataInput!
   create: LoveMatchingCreateWithoutManInput!
 }
 
-input LoveMatchingUpsertWithoutWomanInput {
+input LoveMatchingUpsertWithWhereUniqueWithoutWomanInput {
+  where: LoveMatchingWhereUniqueInput!
   update: LoveMatchingUpdateWithoutWomanDataInput!
   create: LoveMatchingCreateWithoutWomanInput!
 }
@@ -8700,8 +8759,8 @@ type User {
   forgetPassword: FindPassWord
   remmemberPassword: FindPassWord
   loveSetting: LoveSetting
-  loveWoman: LoveMatching
-  loveMan: LoveMatching
+  loveWoman(where: LoveMatchingWhereInput, orderBy: LoveMatchingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LoveMatching!]
+  loveMan(where: LoveMatchingWhereInput, orderBy: LoveMatchingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LoveMatching!]
   signUpLove: LoveSignUp
 }
 
@@ -8747,8 +8806,8 @@ input UserCreateInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -8927,8 +8986,8 @@ input UserCreateWithoutAvatarInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -8967,8 +9026,8 @@ input UserCreateWithoutBirthplaceInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9007,8 +9066,8 @@ input UserCreateWithoutClassMateInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9047,8 +9106,8 @@ input UserCreateWithoutColleaguesInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9087,8 +9146,8 @@ input UserCreateWithoutCreaterInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9127,8 +9186,8 @@ input UserCreateWithoutExamInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9167,8 +9226,8 @@ input UserCreateWithoutFamiliesInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9207,8 +9266,8 @@ input UserCreateWithoutFamilyGroupInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9247,8 +9306,8 @@ input UserCreateWithoutForgetPasswordInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9287,8 +9346,8 @@ input UserCreateWithoutFromOldColleaguesInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9327,8 +9386,8 @@ input UserCreateWithoutGroupMessagesInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9367,8 +9426,8 @@ input UserCreateWithoutGroupsInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9407,8 +9466,8 @@ input UserCreateWithoutLocationGroupsInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9448,7 +9507,7 @@ input UserCreateWithoutLoveManInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9487,8 +9546,8 @@ input UserCreateWithoutLoveSettingInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9528,7 +9587,7 @@ input UserCreateWithoutLoveWomanInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9567,8 +9626,8 @@ input UserCreateWithoutPostsInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9607,8 +9666,8 @@ input UserCreateWithoutReceiveMessagesInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9647,8 +9706,8 @@ input UserCreateWithoutRegStatusInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9687,8 +9746,8 @@ input UserCreateWithoutRemmemberPasswordInput {
   locationGroups: LocationGroupCreateManyWithoutUsersInput
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9727,8 +9786,8 @@ input UserCreateWithoutResidenceInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9767,8 +9826,8 @@ input UserCreateWithoutSentMessagesInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9808,8 +9867,8 @@ input UserCreateWithoutSignUpLoveInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
 }
 
 input UserCreateWithoutStudiesInput {
@@ -9847,8 +9906,8 @@ input UserCreateWithoutStudiesInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9887,8 +9946,8 @@ input UserCreateWithoutToOldColleaguesInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -9927,8 +9986,8 @@ input UserCreateWithoutWorksInput {
   forgetPassword: FindPassWordCreateOneWithoutForgetterInput
   remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
   loveSetting: LoveSettingCreateOneWithoutUserInput
-  loveWoman: LoveMatchingCreateOneWithoutWomanInput
-  loveMan: LoveMatchingCreateOneWithoutManInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
 }
 
@@ -10194,8 +10253,8 @@ input UserUpdateDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -10235,8 +10294,8 @@ input UserUpdateInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -10562,8 +10621,8 @@ input UserUpdateWithoutAvatarDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -10602,8 +10661,8 @@ input UserUpdateWithoutBirthplaceDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -10642,8 +10701,8 @@ input UserUpdateWithoutClassMateDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -10682,8 +10741,8 @@ input UserUpdateWithoutColleaguesDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -10722,8 +10781,8 @@ input UserUpdateWithoutCreaterDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -10762,8 +10821,8 @@ input UserUpdateWithoutExamDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -10802,8 +10861,8 @@ input UserUpdateWithoutFamiliesDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -10842,8 +10901,8 @@ input UserUpdateWithoutFamilyGroupDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -10882,8 +10941,8 @@ input UserUpdateWithoutForgetPasswordDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -10922,8 +10981,8 @@ input UserUpdateWithoutFromOldColleaguesDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -10962,8 +11021,8 @@ input UserUpdateWithoutGroupMessagesDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -11002,8 +11061,8 @@ input UserUpdateWithoutGroupsDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -11042,8 +11101,8 @@ input UserUpdateWithoutLocationGroupsDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -11083,7 +11142,7 @@ input UserUpdateWithoutLoveManDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -11122,8 +11181,8 @@ input UserUpdateWithoutLoveSettingDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -11163,7 +11222,7 @@ input UserUpdateWithoutLoveWomanDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -11202,8 +11261,8 @@ input UserUpdateWithoutPostsDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -11242,8 +11301,8 @@ input UserUpdateWithoutReceiveMessagesDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -11282,8 +11341,8 @@ input UserUpdateWithoutRegStatusDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -11322,8 +11381,8 @@ input UserUpdateWithoutRemmemberPasswordDataInput {
   locationGroups: LocationGroupUpdateManyWithoutUsersInput
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -11362,8 +11421,8 @@ input UserUpdateWithoutResidenceDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -11402,8 +11461,8 @@ input UserUpdateWithoutSentMessagesDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -11443,8 +11502,8 @@ input UserUpdateWithoutSignUpLoveDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
 }
 
 input UserUpdateWithoutStudiesDataInput {
@@ -11482,8 +11541,8 @@ input UserUpdateWithoutStudiesDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -11522,8 +11581,8 @@ input UserUpdateWithoutToOldColleaguesDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -11562,8 +11621,8 @@ input UserUpdateWithoutWorksDataInput {
   forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
   remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
   loveSetting: LoveSettingUpdateOneWithoutUserInput
-  loveWoman: LoveMatchingUpdateOneWithoutWomanInput
-  loveMan: LoveMatchingUpdateOneWithoutManInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
 }
 
@@ -11967,8 +12026,12 @@ input UserWhereInput {
   forgetPassword: FindPassWordWhereInput
   remmemberPassword: FindPassWordWhereInput
   loveSetting: LoveSettingWhereInput
-  loveWoman: LoveMatchingWhereInput
-  loveMan: LoveMatchingWhereInput
+  loveWoman_every: LoveMatchingWhereInput
+  loveWoman_some: LoveMatchingWhereInput
+  loveWoman_none: LoveMatchingWhereInput
+  loveMan_every: LoveMatchingWhereInput
+  loveMan_some: LoveMatchingWhereInput
+  loveMan_none: LoveMatchingWhereInput
   signUpLove: LoveSignUpWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]

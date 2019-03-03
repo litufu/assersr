@@ -5,7 +5,10 @@
   "license": "MIT",
   "scripts": {
     "start": "pm2 start lib/index.js",
-    "delete": "bode lib/schedule/delete.js",
+    "delete": "node lib/schedule/delete.js",
+    "delete_dev":"cross-env NODE_ENV=dev nodemon --exec babel-node src/schedule/delete.js",
+    "match":"node lib/schedule/match.js",
+    "match_dev":"cross-env NODE_ENV=dev nodemon --exec babel-node src/schedule/match.js",
     "build": "babel src --out-dir lib --presets=@babel/env --source-maps",
     "dev": "cross-env NODE_ENV=dev nodemon --exec babel-node --max-old-space-size=4096 src/index.js",
     "prettier": "prettier --single-quote --print-width 80 --trailing-comma all --write \"src/**/*.js\"",

@@ -14,6 +14,7 @@ import {
   checkExistFatherAndMother,
   getFileName,
   getFileExt,
+  birthdayToAge
 } from '../services/utils'
 
 import {
@@ -2744,6 +2745,9 @@ export const Mutation = {
     if (!user) {
       throw new Error("用户不存在")
     }
+    if(birthdayToAge(user.birthday)<18){
+      throw new Error('用户不满18周岁')
+    }
 
     const residence = await ctx.db.user({ uid: userId }).residence()
     let city
@@ -2758,7 +2762,8 @@ export const Mutation = {
     const week = now.getDay()
     if (week === 0 || week === 5 || week === 6) {
         throw new Error('报名已截止')
-    } 
+    }
+    
     const phase = parseInt(`${(now.getTime() - DateStartTime.getTime()) / 1000 / 60 / 60 / 24 / 7}`,10) + 1
     
     const loveSignUps = await ctx.db.loveSignUps({

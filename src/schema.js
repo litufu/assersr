@@ -59,6 +59,7 @@ export const typeDefs = gql`
     visitCount:VisitCount
     advertisements:[Advertisement]
     products:[Product]
+    loveMatch:LoveMatching
   }
 
   type Mutation {
