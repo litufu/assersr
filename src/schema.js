@@ -60,6 +60,9 @@ export const typeDefs = gql`
     advertisements:[Advertisement]
     products:[Product]
     loveMatch:LoveMatching
+    skills(name:String):[Skill]
+    projects:[Project]
+    partnerConditions(projectId:String):[PartnerCondition]
   }
 
   type Mutation {
@@ -102,6 +105,9 @@ export const typeDefs = gql`
       otherWeightMin:Int,otherWeightMax:Int,otherAgeMin:Int,otherAgeMax:Int,dateTime:String,datePlace:String
     ):LoveSetting
     addOrUpdateLoveSignUp:LoveSignUp
+    addSkill(name:String):Skill
+    createProject(name:String,content:String):Project
+    addPartnerCondition(skillName:String,number:Int,place:String,projectId:String):PartnerCondition
   }
 
   type Subscription {
@@ -182,6 +188,8 @@ export const typeDefs = gql`
     locationGroups:[LocationGroup]
     loveSetting:LoveSetting
     signUpLove:LoveSignUp
+    skills:[Skill]
+    project:[Project]
   }
 
   type Photo {
@@ -576,6 +584,31 @@ type LoveMatching{
   city:City
   woman:User
   man:User
+}
+
+type Skill{
+  id:ID!
+  name:String
+  persons:[User]
+}
+
+
+type Project{
+  id:ID!
+  name:String
+  place:City
+  content:String
+  conditions:[PartnerCondition]
+  starter:User
+}
+
+type PartnerCondition{
+  id:ID!
+  skillName:String
+  place:String
+  partners:[User]
+  passedPartners:[User] 
+  project:Project
 }
 
 

@@ -81,6 +81,10 @@ type User {
   loveWoman:[LoveMatching!]! @relation(name: "Woman")
   loveMan:[LoveMatching!]! @relation(name: "Man")
   signUpLove:LoveSignUp
+  skills:[Skill!]!
+  partnerFound:PartnerCondition @relation(name: "NowPartner") 
+  partnerPasted:PartnerCondition @relation(name: "PassedPartner") 
+  project:[Project!]!
 }
 
 # 地理位置
@@ -438,6 +442,31 @@ type LoveMatching{
   city:City
   woman:User  @relation(name: "Woman") 
   man:User @relation(name: "Man") 
+}
+
+# 技能列表
+type Skill{
+  id:ID! @unique
+  name:String @unique
+  persons:[User!]!
+}
+
+type Project{
+  id:ID! @unique
+  name:String
+  place:City
+  content:String
+  conditions:[PartnerCondition!]!
+  starter:User
+}
+
+type PartnerCondition{
+  id:ID! @unique
+  skillName:String
+  place:String
+  partners:[User!]! @relation(name: "NowPartner") 
+  passedPartners:[User!]! @relation(name: "PassedPartner") 
+  project:Project
 }
 
 

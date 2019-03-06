@@ -687,4 +687,58 @@ export const Query = {
     }
     return null
   },
+  skills: async (parent, {name}, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    if (!/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(name)){
+      throw new Error('技能名称错误')
+    }
+    return ctx.db.skills({
+      where:{name},
+      first:10
+    })
+  },
+  projects:async (parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    console.log(userId)
+
+    const projects = await ctx.db.projects({
+      where:{starter:{uid:userId}}
+    })
+
+    const projects1 = await ctx.db.projects()
+
+    console.log(projects)
+    console.log(projects1)
+    
+    return projects
+  },
+  partnerConditions:async (parent, {projectId}, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    
+    return ctx.db.partnerConditions({
+      where:{project:{id:projectId}}
+    })
+  },
 }

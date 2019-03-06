@@ -109,6 +109,10 @@ var models = [
     embedded: false
   },
   {
+    name: "PartnerCondition",
+    embedded: false
+  },
+  {
     name: "Person",
     embedded: false
   },
@@ -122,6 +126,10 @@ var models = [
   },
   {
     name: "Product",
+    embedded: false
+  },
+  {
+    name: "Project",
     embedded: false
   },
   {
@@ -142,6 +150,10 @@ var models = [
   },
   {
     name: "SchoolEdu",
+    embedded: false
+  },
+  {
+    name: "Skill",
     embedded: false
   },
   {

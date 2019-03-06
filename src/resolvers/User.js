@@ -164,4 +164,5 @@ export const User = {
   loveWoman:(parent, args, ctx) => ctx.db.user({ id: parent.id }).loveWoman(),
   loveMan:(parent, args, ctx) => ctx.db.user({ id: parent.id }).loveMan(),
   signUpLove:(parent, args, ctx) => ctx.db.user({ id: parent.id }).signUpLove(),
+  skills:(parent, args, ctx) => ctx.db.user({ id: parent.id }).skills(),
 }

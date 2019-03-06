@@ -29,6 +29,9 @@ import {Trade} from './Trade'
 import {LoveSetting} from './LoveSetting'
 import {LoveMatching} from './LoveMatching'
 import {LoveSignUp} from './LoveSignUp'
+import {Skill} from  './Skill'
+import {Project} from './Project'
+import {PartnerCondition} from './PartnerCondition'
 
 export const resolvers = {
   Query,
@@ -61,5 +64,8 @@ export const resolvers = {
   Trade,
   LoveSetting,
   LoveMatching,
-  LoveSignUp
+  LoveSignUp,
+  Skill,
+  Project,
+  PartnerCondition
 }

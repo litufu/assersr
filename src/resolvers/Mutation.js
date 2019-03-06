@@ -2686,10 +2686,10 @@ export const Mutation = {
       throw new Error('对方最大年龄格式错误')
     }
     if(userGender==='female'){
-      if (/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(dateTime)){
+      if (!/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(dateTime)){
         throw new Error('见面时间格式错误')
       }
-      if (/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(datePlace)){
+      if (!/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(datePlace)){
         throw new Error('见面地点格式错误')
       }
     }
@@ -2788,5 +2788,129 @@ export const Mutation = {
       })
     }
     return loveSignUp
+  },
+  addSkill:async (parent, { name }, ctx) => {
+
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    // -------------------------
+    if (!/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(name)){
+      throw new Error('技能名称错误')
+    }
+    // -------------------------
+
+    const skills = await ctx.db.skills({
+      where:{name}
+    })
+
+    let skill
+
+    if(skills.length>0){
+      skill = await ctx.db.createSkill({
+        skill:{
+          connect:{id:skills[0].id}
+        },
+        persons:{connect:{uid:userId}}
+      })
+    }else{
+      skill = await ctx.db.createSkill({
+        skill:{
+          create:{name}
+        },
+        persons:{connect:{uid:userId}}
+      })
+    }
+    
+    return skill
+  },
+  createProject:async (parent, { name, content }, ctx) => {
+
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    const city = await ctx.db.user({ uid: userId }).residence().city()
+
+    // -------------------------
+    if (!/^[_,.，。！!;；：:A-Za-z0-9\u4e00-\u9fa5]+/.test(name)){
+      throw new Error('项目名称格式错误')
+    }
+    if (!/^[_,.，。！!;；：:A-Za-z0-9\u4e00-\u9fa5]+/.test(content)){
+      throw new Error('项目内容格式错误')
+    }
+    // -------------------------
+    return ctx.db.createProject({
+      name,
+      content,
+      place:{connect:{id:city.id}},
+      starter:{connect:{id:user.id}}
+    })
+
+  },
+  addPartnerCondition:async (parent, { skillName, number,place,projectId }, ctx) => {
+
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+
+    // -------------------------
+     if (!/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(skillName)){
+      throw new Error('技能名称错误')
+    }
+    if(!validator.isInt(`${number}`)){
+      throw new Error('数字格式错误')
+    }
+    if(!~["0","1","2"].indexOf(place)){
+      throw new Error('未选择地址')
+    }
+    checkId(projectId)
+    // -------------------------
+    let persons
+    if(place==="0"){
+      const city = await ctx.db.user({ uid: userId }).residence().city()
+      persons = await ctx.db.skill({name:skillName}).persons({
+        where:{residence:{city:{code:city.code}}},
+        first:parseInt(number,10)
+      })
+    }else if(place==="1"){
+      const province = await ctx.db.user({ uid: userId }).residence().province()
+      persons = await ctx.db.skill({name:skillName}).persons({
+        where:{residence:{province:{code:province.code}}},
+        first:parseInt(number,10)
+      })
+    }else if(place === "2"){
+      persons = await ctx.db.skill({name:skillName}).persons({
+        first:parseInt(number,10)
+      })
+    }
+
+    const personsIds = persons.map(person=>({id:person.id}))
+   
+    const partnerCondition = await ctx.db.createPartnerCondition({
+      skillName,
+      place,
+      partners:{connect:personsIds},
+      project:{connect:{id:projectId}}
+    })
+    
+    return partnerCondition
   },
 }

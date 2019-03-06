@@ -305,6 +305,10 @@ type AggregateOldColleague {
   count: Int!
 }
 
+type AggregatePartnerCondition {
+  count: Int!
+}
+
 type AggregatePerson {
   count: Int!
 }
@@ -318,6 +322,10 @@ type AggregatePost {
 }
 
 type AggregateProduct {
+  count: Int!
+}
+
+type AggregateProject {
   count: Int!
 }
 
@@ -338,6 +346,10 @@ type AggregateSchool {
 }
 
 type AggregateSchoolEdu {
+  count: Int!
+}
+
+type AggregateSkill {
   count: Int!
 }
 
@@ -5542,6 +5554,12 @@ type Mutation {
   upsertOldColleague(where: OldColleagueWhereUniqueInput!, create: OldColleagueCreateInput!, update: OldColleagueUpdateInput!): OldColleague!
   deleteOldColleague(where: OldColleagueWhereUniqueInput!): OldColleague
   deleteManyOldColleagues(where: OldColleagueWhereInput): BatchPayload!
+  createPartnerCondition(data: PartnerConditionCreateInput!): PartnerCondition!
+  updatePartnerCondition(data: PartnerConditionUpdateInput!, where: PartnerConditionWhereUniqueInput!): PartnerCondition
+  updateManyPartnerConditions(data: PartnerConditionUpdateManyMutationInput!, where: PartnerConditionWhereInput): BatchPayload!
+  upsertPartnerCondition(where: PartnerConditionWhereUniqueInput!, create: PartnerConditionCreateInput!, update: PartnerConditionUpdateInput!): PartnerCondition!
+  deletePartnerCondition(where: PartnerConditionWhereUniqueInput!): PartnerCondition
+  deleteManyPartnerConditions(where: PartnerConditionWhereInput): BatchPayload!
   createPerson(data: PersonCreateInput!): Person!
   updatePerson(data: PersonUpdateInput!, where: PersonWhereUniqueInput!): Person
   updateManyPersons(data: PersonUpdateManyMutationInput!, where: PersonWhereInput): BatchPayload!
@@ -5566,6 +5584,12 @@ type Mutation {
   upsertProduct(where: ProductWhereUniqueInput!, create: ProductCreateInput!, update: ProductUpdateInput!): Product!
   deleteProduct(where: ProductWhereUniqueInput!): Product
   deleteManyProducts(where: ProductWhereInput): BatchPayload!
+  createProject(data: ProjectCreateInput!): Project!
+  updateProject(data: ProjectUpdateInput!, where: ProjectWhereUniqueInput!): Project
+  updateManyProjects(data: ProjectUpdateManyMutationInput!, where: ProjectWhereInput): BatchPayload!
+  upsertProject(where: ProjectWhereUniqueInput!, create: ProjectCreateInput!, update: ProjectUpdateInput!): Project!
+  deleteProject(where: ProjectWhereUniqueInput!): Project
+  deleteManyProjects(where: ProjectWhereInput): BatchPayload!
   createProvince(data: ProvinceCreateInput!): Province!
   updateProvince(data: ProvinceUpdateInput!, where: ProvinceWhereUniqueInput!): Province
   updateManyProvinces(data: ProvinceUpdateManyMutationInput!, where: ProvinceWhereInput): BatchPayload!
@@ -5596,6 +5620,12 @@ type Mutation {
   upsertSchoolEdu(where: SchoolEduWhereUniqueInput!, create: SchoolEduCreateInput!, update: SchoolEduUpdateInput!): SchoolEdu!
   deleteSchoolEdu(where: SchoolEduWhereUniqueInput!): SchoolEdu
   deleteManySchoolEdus(where: SchoolEduWhereInput): BatchPayload!
+  createSkill(data: SkillCreateInput!): Skill!
+  updateSkill(data: SkillUpdateInput!, where: SkillWhereUniqueInput!): Skill
+  updateManySkills(data: SkillUpdateManyMutationInput!, where: SkillWhereInput): BatchPayload!
+  upsertSkill(where: SkillWhereUniqueInput!, create: SkillCreateInput!, update: SkillUpdateInput!): Skill!
+  deleteSkill(where: SkillWhereUniqueInput!): Skill
+  deleteManySkills(where: SkillWhereInput): BatchPayload!
   createStation(data: StationCreateInput!): Station!
   updateStation(data: StationUpdateInput!, where: StationWhereUniqueInput!): Station
   updateManyStations(data: StationUpdateManyMutationInput!, where: StationWhereInput): BatchPayload!
@@ -5893,6 +5923,308 @@ type PageInfo {
   hasPreviousPage: Boolean!
   startCursor: String
   endCursor: String
+}
+
+type PartnerCondition {
+  id: ID!
+  skillName: String
+  place: String
+  partners(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  passedPartners(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  project: Project
+}
+
+type PartnerConditionConnection {
+  pageInfo: PageInfo!
+  edges: [PartnerConditionEdge]!
+  aggregate: AggregatePartnerCondition!
+}
+
+input PartnerConditionCreateInput {
+  skillName: String
+  place: String
+  partners: UserCreateManyWithoutPartnerFoundInput
+  passedPartners: UserCreateManyWithoutPartnerPastedInput
+  project: ProjectCreateOneWithoutConditionsInput
+}
+
+input PartnerConditionCreateManyWithoutProjectInput {
+  create: [PartnerConditionCreateWithoutProjectInput!]
+  connect: [PartnerConditionWhereUniqueInput!]
+}
+
+input PartnerConditionCreateOneWithoutPartnersInput {
+  create: PartnerConditionCreateWithoutPartnersInput
+  connect: PartnerConditionWhereUniqueInput
+}
+
+input PartnerConditionCreateOneWithoutPassedPartnersInput {
+  create: PartnerConditionCreateWithoutPassedPartnersInput
+  connect: PartnerConditionWhereUniqueInput
+}
+
+input PartnerConditionCreateWithoutPartnersInput {
+  skillName: String
+  place: String
+  passedPartners: UserCreateManyWithoutPartnerPastedInput
+  project: ProjectCreateOneWithoutConditionsInput
+}
+
+input PartnerConditionCreateWithoutPassedPartnersInput {
+  skillName: String
+  place: String
+  partners: UserCreateManyWithoutPartnerFoundInput
+  project: ProjectCreateOneWithoutConditionsInput
+}
+
+input PartnerConditionCreateWithoutProjectInput {
+  skillName: String
+  place: String
+  partners: UserCreateManyWithoutPartnerFoundInput
+  passedPartners: UserCreateManyWithoutPartnerPastedInput
+}
+
+type PartnerConditionEdge {
+  node: PartnerCondition!
+  cursor: String!
+}
+
+enum PartnerConditionOrderByInput {
+  id_ASC
+  id_DESC
+  skillName_ASC
+  skillName_DESC
+  place_ASC
+  place_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PartnerConditionPreviousValues {
+  id: ID!
+  skillName: String
+  place: String
+}
+
+input PartnerConditionScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  skillName: String
+  skillName_not: String
+  skillName_in: [String!]
+  skillName_not_in: [String!]
+  skillName_lt: String
+  skillName_lte: String
+  skillName_gt: String
+  skillName_gte: String
+  skillName_contains: String
+  skillName_not_contains: String
+  skillName_starts_with: String
+  skillName_not_starts_with: String
+  skillName_ends_with: String
+  skillName_not_ends_with: String
+  place: String
+  place_not: String
+  place_in: [String!]
+  place_not_in: [String!]
+  place_lt: String
+  place_lte: String
+  place_gt: String
+  place_gte: String
+  place_contains: String
+  place_not_contains: String
+  place_starts_with: String
+  place_not_starts_with: String
+  place_ends_with: String
+  place_not_ends_with: String
+  AND: [PartnerConditionScalarWhereInput!]
+  OR: [PartnerConditionScalarWhereInput!]
+  NOT: [PartnerConditionScalarWhereInput!]
+}
+
+type PartnerConditionSubscriptionPayload {
+  mutation: MutationType!
+  node: PartnerCondition
+  updatedFields: [String!]
+  previousValues: PartnerConditionPreviousValues
+}
+
+input PartnerConditionSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: PartnerConditionWhereInput
+  AND: [PartnerConditionSubscriptionWhereInput!]
+  OR: [PartnerConditionSubscriptionWhereInput!]
+  NOT: [PartnerConditionSubscriptionWhereInput!]
+}
+
+input PartnerConditionUpdateInput {
+  skillName: String
+  place: String
+  partners: UserUpdateManyWithoutPartnerFoundInput
+  passedPartners: UserUpdateManyWithoutPartnerPastedInput
+  project: ProjectUpdateOneWithoutConditionsInput
+}
+
+input PartnerConditionUpdateManyDataInput {
+  skillName: String
+  place: String
+}
+
+input PartnerConditionUpdateManyMutationInput {
+  skillName: String
+  place: String
+}
+
+input PartnerConditionUpdateManyWithoutProjectInput {
+  create: [PartnerConditionCreateWithoutProjectInput!]
+  delete: [PartnerConditionWhereUniqueInput!]
+  connect: [PartnerConditionWhereUniqueInput!]
+  disconnect: [PartnerConditionWhereUniqueInput!]
+  update: [PartnerConditionUpdateWithWhereUniqueWithoutProjectInput!]
+  upsert: [PartnerConditionUpsertWithWhereUniqueWithoutProjectInput!]
+  deleteMany: [PartnerConditionScalarWhereInput!]
+  updateMany: [PartnerConditionUpdateManyWithWhereNestedInput!]
+}
+
+input PartnerConditionUpdateManyWithWhereNestedInput {
+  where: PartnerConditionScalarWhereInput!
+  data: PartnerConditionUpdateManyDataInput!
+}
+
+input PartnerConditionUpdateOneWithoutPartnersInput {
+  create: PartnerConditionCreateWithoutPartnersInput
+  update: PartnerConditionUpdateWithoutPartnersDataInput
+  upsert: PartnerConditionUpsertWithoutPartnersInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: PartnerConditionWhereUniqueInput
+}
+
+input PartnerConditionUpdateOneWithoutPassedPartnersInput {
+  create: PartnerConditionCreateWithoutPassedPartnersInput
+  update: PartnerConditionUpdateWithoutPassedPartnersDataInput
+  upsert: PartnerConditionUpsertWithoutPassedPartnersInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: PartnerConditionWhereUniqueInput
+}
+
+input PartnerConditionUpdateWithoutPartnersDataInput {
+  skillName: String
+  place: String
+  passedPartners: UserUpdateManyWithoutPartnerPastedInput
+  project: ProjectUpdateOneWithoutConditionsInput
+}
+
+input PartnerConditionUpdateWithoutPassedPartnersDataInput {
+  skillName: String
+  place: String
+  partners: UserUpdateManyWithoutPartnerFoundInput
+  project: ProjectUpdateOneWithoutConditionsInput
+}
+
+input PartnerConditionUpdateWithoutProjectDataInput {
+  skillName: String
+  place: String
+  partners: UserUpdateManyWithoutPartnerFoundInput
+  passedPartners: UserUpdateManyWithoutPartnerPastedInput
+}
+
+input PartnerConditionUpdateWithWhereUniqueWithoutProjectInput {
+  where: PartnerConditionWhereUniqueInput!
+  data: PartnerConditionUpdateWithoutProjectDataInput!
+}
+
+input PartnerConditionUpsertWithoutPartnersInput {
+  update: PartnerConditionUpdateWithoutPartnersDataInput!
+  create: PartnerConditionCreateWithoutPartnersInput!
+}
+
+input PartnerConditionUpsertWithoutPassedPartnersInput {
+  update: PartnerConditionUpdateWithoutPassedPartnersDataInput!
+  create: PartnerConditionCreateWithoutPassedPartnersInput!
+}
+
+input PartnerConditionUpsertWithWhereUniqueWithoutProjectInput {
+  where: PartnerConditionWhereUniqueInput!
+  update: PartnerConditionUpdateWithoutProjectDataInput!
+  create: PartnerConditionCreateWithoutProjectInput!
+}
+
+input PartnerConditionWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  skillName: String
+  skillName_not: String
+  skillName_in: [String!]
+  skillName_not_in: [String!]
+  skillName_lt: String
+  skillName_lte: String
+  skillName_gt: String
+  skillName_gte: String
+  skillName_contains: String
+  skillName_not_contains: String
+  skillName_starts_with: String
+  skillName_not_starts_with: String
+  skillName_ends_with: String
+  skillName_not_ends_with: String
+  place: String
+  place_not: String
+  place_in: [String!]
+  place_not_in: [String!]
+  place_lt: String
+  place_lte: String
+  place_gt: String
+  place_gte: String
+  place_contains: String
+  place_not_contains: String
+  place_starts_with: String
+  place_not_starts_with: String
+  place_ends_with: String
+  place_not_ends_with: String
+  partners_every: UserWhereInput
+  partners_some: UserWhereInput
+  partners_none: UserWhereInput
+  passedPartners_every: UserWhereInput
+  passedPartners_some: UserWhereInput
+  passedPartners_none: UserWhereInput
+  project: ProjectWhereInput
+  AND: [PartnerConditionWhereInput!]
+  OR: [PartnerConditionWhereInput!]
+  NOT: [PartnerConditionWhereInput!]
+}
+
+input PartnerConditionWhereUniqueInput {
+  id: ID
 }
 
 type Person {
@@ -6725,6 +7057,273 @@ input ProductWhereUniqueInput {
   id: ID
 }
 
+type Project {
+  id: ID!
+  name: String
+  place: City
+  content: String
+  conditions(where: PartnerConditionWhereInput, orderBy: PartnerConditionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PartnerCondition!]
+  starter: User
+}
+
+type ProjectConnection {
+  pageInfo: PageInfo!
+  edges: [ProjectEdge]!
+  aggregate: AggregateProject!
+}
+
+input ProjectCreateInput {
+  name: String
+  place: CityCreateOneInput
+  content: String
+  conditions: PartnerConditionCreateManyWithoutProjectInput
+  starter: UserCreateOneWithoutProjectInput
+}
+
+input ProjectCreateManyWithoutStarterInput {
+  create: [ProjectCreateWithoutStarterInput!]
+  connect: [ProjectWhereUniqueInput!]
+}
+
+input ProjectCreateOneWithoutConditionsInput {
+  create: ProjectCreateWithoutConditionsInput
+  connect: ProjectWhereUniqueInput
+}
+
+input ProjectCreateWithoutConditionsInput {
+  name: String
+  place: CityCreateOneInput
+  content: String
+  starter: UserCreateOneWithoutProjectInput
+}
+
+input ProjectCreateWithoutStarterInput {
+  name: String
+  place: CityCreateOneInput
+  content: String
+  conditions: PartnerConditionCreateManyWithoutProjectInput
+}
+
+type ProjectEdge {
+  node: Project!
+  cursor: String!
+}
+
+enum ProjectOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  content_ASC
+  content_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ProjectPreviousValues {
+  id: ID!
+  name: String
+  content: String
+}
+
+input ProjectScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  AND: [ProjectScalarWhereInput!]
+  OR: [ProjectScalarWhereInput!]
+  NOT: [ProjectScalarWhereInput!]
+}
+
+type ProjectSubscriptionPayload {
+  mutation: MutationType!
+  node: Project
+  updatedFields: [String!]
+  previousValues: ProjectPreviousValues
+}
+
+input ProjectSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ProjectWhereInput
+  AND: [ProjectSubscriptionWhereInput!]
+  OR: [ProjectSubscriptionWhereInput!]
+  NOT: [ProjectSubscriptionWhereInput!]
+}
+
+input ProjectUpdateInput {
+  name: String
+  place: CityUpdateOneInput
+  content: String
+  conditions: PartnerConditionUpdateManyWithoutProjectInput
+  starter: UserUpdateOneWithoutProjectInput
+}
+
+input ProjectUpdateManyDataInput {
+  name: String
+  content: String
+}
+
+input ProjectUpdateManyMutationInput {
+  name: String
+  content: String
+}
+
+input ProjectUpdateManyWithoutStarterInput {
+  create: [ProjectCreateWithoutStarterInput!]
+  delete: [ProjectWhereUniqueInput!]
+  connect: [ProjectWhereUniqueInput!]
+  disconnect: [ProjectWhereUniqueInput!]
+  update: [ProjectUpdateWithWhereUniqueWithoutStarterInput!]
+  upsert: [ProjectUpsertWithWhereUniqueWithoutStarterInput!]
+  deleteMany: [ProjectScalarWhereInput!]
+  updateMany: [ProjectUpdateManyWithWhereNestedInput!]
+}
+
+input ProjectUpdateManyWithWhereNestedInput {
+  where: ProjectScalarWhereInput!
+  data: ProjectUpdateManyDataInput!
+}
+
+input ProjectUpdateOneWithoutConditionsInput {
+  create: ProjectCreateWithoutConditionsInput
+  update: ProjectUpdateWithoutConditionsDataInput
+  upsert: ProjectUpsertWithoutConditionsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: ProjectWhereUniqueInput
+}
+
+input ProjectUpdateWithoutConditionsDataInput {
+  name: String
+  place: CityUpdateOneInput
+  content: String
+  starter: UserUpdateOneWithoutProjectInput
+}
+
+input ProjectUpdateWithoutStarterDataInput {
+  name: String
+  place: CityUpdateOneInput
+  content: String
+  conditions: PartnerConditionUpdateManyWithoutProjectInput
+}
+
+input ProjectUpdateWithWhereUniqueWithoutStarterInput {
+  where: ProjectWhereUniqueInput!
+  data: ProjectUpdateWithoutStarterDataInput!
+}
+
+input ProjectUpsertWithoutConditionsInput {
+  update: ProjectUpdateWithoutConditionsDataInput!
+  create: ProjectCreateWithoutConditionsInput!
+}
+
+input ProjectUpsertWithWhereUniqueWithoutStarterInput {
+  where: ProjectWhereUniqueInput!
+  update: ProjectUpdateWithoutStarterDataInput!
+  create: ProjectCreateWithoutStarterInput!
+}
+
+input ProjectWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  place: CityWhereInput
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  conditions_every: PartnerConditionWhereInput
+  conditions_some: PartnerConditionWhereInput
+  conditions_none: PartnerConditionWhereInput
+  starter: UserWhereInput
+  AND: [ProjectWhereInput!]
+  OR: [ProjectWhereInput!]
+  NOT: [ProjectWhereInput!]
+}
+
+input ProjectWhereUniqueInput {
+  id: ID
+}
+
 type Province {
   id: ID!
   code: String!
@@ -6982,6 +7581,9 @@ type Query {
   oldColleague(where: OldColleagueWhereUniqueInput!): OldColleague
   oldColleagues(where: OldColleagueWhereInput, orderBy: OldColleagueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [OldColleague]!
   oldColleaguesConnection(where: OldColleagueWhereInput, orderBy: OldColleagueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): OldColleagueConnection!
+  partnerCondition(where: PartnerConditionWhereUniqueInput!): PartnerCondition
+  partnerConditions(where: PartnerConditionWhereInput, orderBy: PartnerConditionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PartnerCondition]!
+  partnerConditionsConnection(where: PartnerConditionWhereInput, orderBy: PartnerConditionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PartnerConditionConnection!
   person(where: PersonWhereUniqueInput!): Person
   persons(where: PersonWhereInput, orderBy: PersonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Person]!
   personsConnection(where: PersonWhereInput, orderBy: PersonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PersonConnection!
@@ -6994,6 +7596,9 @@ type Query {
   product(where: ProductWhereUniqueInput!): Product
   products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
   productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
+  project(where: ProjectWhereUniqueInput!): Project
+  projects(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Project]!
+  projectsConnection(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProjectConnection!
   province(where: ProvinceWhereUniqueInput!): Province
   provinces(where: ProvinceWhereInput, orderBy: ProvinceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Province]!
   provincesConnection(where: ProvinceWhereInput, orderBy: ProvinceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProvinceConnection!
@@ -7009,6 +7614,9 @@ type Query {
   schoolEdu(where: SchoolEduWhereUniqueInput!): SchoolEdu
   schoolEdus(where: SchoolEduWhereInput, orderBy: SchoolEduOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SchoolEdu]!
   schoolEdusConnection(where: SchoolEduWhereInput, orderBy: SchoolEduOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SchoolEduConnection!
+  skill(where: SkillWhereUniqueInput!): Skill
+  skills(where: SkillWhereInput, orderBy: SkillOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Skill]!
+  skillsConnection(where: SkillWhereInput, orderBy: SkillOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SkillConnection!
   station(where: StationWhereUniqueInput!): Station
   stations(where: StationWhereInput, orderBy: StationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Station]!
   stationsConnection(where: StationWhereInput, orderBy: StationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StationConnection!
@@ -7786,6 +8394,191 @@ input SchoolWhereUniqueInput {
   id: ID
 }
 
+type Skill {
+  id: ID!
+  name: String
+  persons(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+}
+
+type SkillConnection {
+  pageInfo: PageInfo!
+  edges: [SkillEdge]!
+  aggregate: AggregateSkill!
+}
+
+input SkillCreateInput {
+  name: String
+  persons: UserCreateManyWithoutSkillsInput
+}
+
+input SkillCreateManyWithoutPersonsInput {
+  create: [SkillCreateWithoutPersonsInput!]
+  connect: [SkillWhereUniqueInput!]
+}
+
+input SkillCreateWithoutPersonsInput {
+  name: String
+}
+
+type SkillEdge {
+  node: Skill!
+  cursor: String!
+}
+
+enum SkillOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type SkillPreviousValues {
+  id: ID!
+  name: String
+}
+
+input SkillScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [SkillScalarWhereInput!]
+  OR: [SkillScalarWhereInput!]
+  NOT: [SkillScalarWhereInput!]
+}
+
+type SkillSubscriptionPayload {
+  mutation: MutationType!
+  node: Skill
+  updatedFields: [String!]
+  previousValues: SkillPreviousValues
+}
+
+input SkillSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SkillWhereInput
+  AND: [SkillSubscriptionWhereInput!]
+  OR: [SkillSubscriptionWhereInput!]
+  NOT: [SkillSubscriptionWhereInput!]
+}
+
+input SkillUpdateInput {
+  name: String
+  persons: UserUpdateManyWithoutSkillsInput
+}
+
+input SkillUpdateManyDataInput {
+  name: String
+}
+
+input SkillUpdateManyMutationInput {
+  name: String
+}
+
+input SkillUpdateManyWithoutPersonsInput {
+  create: [SkillCreateWithoutPersonsInput!]
+  delete: [SkillWhereUniqueInput!]
+  connect: [SkillWhereUniqueInput!]
+  disconnect: [SkillWhereUniqueInput!]
+  update: [SkillUpdateWithWhereUniqueWithoutPersonsInput!]
+  upsert: [SkillUpsertWithWhereUniqueWithoutPersonsInput!]
+  deleteMany: [SkillScalarWhereInput!]
+  updateMany: [SkillUpdateManyWithWhereNestedInput!]
+}
+
+input SkillUpdateManyWithWhereNestedInput {
+  where: SkillScalarWhereInput!
+  data: SkillUpdateManyDataInput!
+}
+
+input SkillUpdateWithoutPersonsDataInput {
+  name: String
+}
+
+input SkillUpdateWithWhereUniqueWithoutPersonsInput {
+  where: SkillWhereUniqueInput!
+  data: SkillUpdateWithoutPersonsDataInput!
+}
+
+input SkillUpsertWithWhereUniqueWithoutPersonsInput {
+  where: SkillWhereUniqueInput!
+  update: SkillUpdateWithoutPersonsDataInput!
+  create: SkillCreateWithoutPersonsInput!
+}
+
+input SkillWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  persons_every: UserWhereInput
+  persons_some: UserWhereInput
+  persons_none: UserWhereInput
+  AND: [SkillWhereInput!]
+  OR: [SkillWhereInput!]
+  NOT: [SkillWhereInput!]
+}
+
+input SkillWhereUniqueInput {
+  id: ID
+  name: String
+}
+
 type Station {
   id: ID!
   code: String
@@ -8241,15 +9034,18 @@ type Subscription {
   major(where: MajorSubscriptionWhereInput): MajorSubscriptionPayload
   message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
   oldColleague(where: OldColleagueSubscriptionWhereInput): OldColleagueSubscriptionPayload
+  partnerCondition(where: PartnerConditionSubscriptionWhereInput): PartnerConditionSubscriptionPayload
   person(where: PersonSubscriptionWhereInput): PersonSubscriptionPayload
   photo(where: PhotoSubscriptionWhereInput): PhotoSubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
+  project(where: ProjectSubscriptionWhereInput): ProjectSubscriptionPayload
   province(where: ProvinceSubscriptionWhereInput): ProvinceSubscriptionPayload
   regStatus(where: RegStatusSubscriptionWhereInput): RegStatusSubscriptionPayload
   registerCount(where: RegisterCountSubscriptionWhereInput): RegisterCountSubscriptionPayload
   school(where: SchoolSubscriptionWhereInput): SchoolSubscriptionPayload
   schoolEdu(where: SchoolEduSubscriptionWhereInput): SchoolEduSubscriptionPayload
+  skill(where: SkillSubscriptionWhereInput): SkillSubscriptionPayload
   station(where: StationSubscriptionWhereInput): StationSubscriptionPayload
   street(where: StreetSubscriptionWhereInput): StreetSubscriptionPayload
   trade(where: TradeSubscriptionWhereInput): TradeSubscriptionPayload
@@ -8762,6 +9558,10 @@ type User {
   loveWoman(where: LoveMatchingWhereInput, orderBy: LoveMatchingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LoveMatching!]
   loveMan(where: LoveMatchingWhereInput, orderBy: LoveMatchingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LoveMatching!]
   signUpLove: LoveSignUp
+  skills(where: SkillWhereInput, orderBy: SkillOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Skill!]
+  partnerFound: PartnerCondition
+  partnerPasted: PartnerCondition
+  project(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Project!]
 }
 
 type UserConnection {
@@ -8809,6 +9609,10 @@ input UserCreateInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateManyInput {
@@ -8836,6 +9640,16 @@ input UserCreateManyWithoutLocationGroupsInput {
   connect: [UserWhereUniqueInput!]
 }
 
+input UserCreateManyWithoutPartnerFoundInput {
+  create: [UserCreateWithoutPartnerFoundInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutPartnerPastedInput {
+  create: [UserCreateWithoutPartnerPastedInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
 input UserCreateManyWithoutRegStatusInput {
   create: [UserCreateWithoutRegStatusInput!]
   connect: [UserWhereUniqueInput!]
@@ -8848,6 +9662,11 @@ input UserCreateManyWithoutRemmemberPasswordInput {
 
 input UserCreateManyWithoutResidenceInput {
   create: [UserCreateWithoutResidenceInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutSkillsInput {
+  create: [UserCreateWithoutSkillsInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -8926,6 +9745,11 @@ input UserCreateOneWithoutPostsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutProjectInput {
+  create: UserCreateWithoutProjectInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutReceiveMessagesInput {
   create: UserCreateWithoutReceiveMessagesInput
   connect: UserWhereUniqueInput
@@ -8989,6 +9813,10 @@ input UserCreateWithoutAvatarInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutBirthplaceInput {
@@ -9029,6 +9857,10 @@ input UserCreateWithoutBirthplaceInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutClassMateInput {
@@ -9069,6 +9901,10 @@ input UserCreateWithoutClassMateInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutColleaguesInput {
@@ -9109,6 +9945,10 @@ input UserCreateWithoutColleaguesInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutCreaterInput {
@@ -9149,6 +9989,10 @@ input UserCreateWithoutCreaterInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutExamInput {
@@ -9189,6 +10033,10 @@ input UserCreateWithoutExamInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutFamiliesInput {
@@ -9229,6 +10077,10 @@ input UserCreateWithoutFamiliesInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutFamilyGroupInput {
@@ -9269,6 +10121,10 @@ input UserCreateWithoutFamilyGroupInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutForgetPasswordInput {
@@ -9309,6 +10165,10 @@ input UserCreateWithoutForgetPasswordInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutFromOldColleaguesInput {
@@ -9349,6 +10209,10 @@ input UserCreateWithoutFromOldColleaguesInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutGroupMessagesInput {
@@ -9389,6 +10253,10 @@ input UserCreateWithoutGroupMessagesInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutGroupsInput {
@@ -9429,6 +10297,10 @@ input UserCreateWithoutGroupsInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutLocationGroupsInput {
@@ -9469,6 +10341,10 @@ input UserCreateWithoutLocationGroupsInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutLoveManInput {
@@ -9509,6 +10385,10 @@ input UserCreateWithoutLoveManInput {
   loveSetting: LoveSettingCreateOneWithoutUserInput
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutLoveSettingInput {
@@ -9549,6 +10429,10 @@ input UserCreateWithoutLoveSettingInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutLoveWomanInput {
@@ -9589,6 +10473,98 @@ input UserCreateWithoutLoveWomanInput {
   loveSetting: LoveSettingCreateOneWithoutUserInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
+}
+
+input UserCreateWithoutPartnerFoundInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: PhotoCreateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneWithoutBornsInput
+  residence: LocationCreateOneWithoutLivesInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  sentMessages: MessageCreateManyWithoutFromInput
+  receiveMessages: MessageCreateManyWithoutToInput
+  groupMessages: GroupMessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+  locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
+}
+
+input UserCreateWithoutPartnerPastedInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: PhotoCreateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneWithoutBornsInput
+  residence: LocationCreateOneWithoutLivesInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  sentMessages: MessageCreateManyWithoutFromInput
+  receiveMessages: MessageCreateManyWithoutToInput
+  groupMessages: GroupMessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+  locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutPostsInput {
@@ -9629,6 +10605,54 @@ input UserCreateWithoutPostsInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
+}
+
+input UserCreateWithoutProjectInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: PhotoCreateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneWithoutBornsInput
+  residence: LocationCreateOneWithoutLivesInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  sentMessages: MessageCreateManyWithoutFromInput
+  receiveMessages: MessageCreateManyWithoutToInput
+  groupMessages: GroupMessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+  locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
 }
 
 input UserCreateWithoutReceiveMessagesInput {
@@ -9669,6 +10693,10 @@ input UserCreateWithoutReceiveMessagesInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutRegStatusInput {
@@ -9709,6 +10737,10 @@ input UserCreateWithoutRegStatusInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutRemmemberPasswordInput {
@@ -9749,6 +10781,10 @@ input UserCreateWithoutRemmemberPasswordInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutResidenceInput {
@@ -9789,6 +10825,10 @@ input UserCreateWithoutResidenceInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutSentMessagesInput {
@@ -9829,6 +10869,10 @@ input UserCreateWithoutSentMessagesInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutSignUpLoveInput {
@@ -9869,6 +10913,54 @@ input UserCreateWithoutSignUpLoveInput {
   loveSetting: LoveSettingCreateOneWithoutUserInput
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
+}
+
+input UserCreateWithoutSkillsInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: PhotoCreateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneWithoutBornsInput
+  residence: LocationCreateOneWithoutLivesInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  sentMessages: MessageCreateManyWithoutFromInput
+  receiveMessages: MessageCreateManyWithoutToInput
+  groupMessages: GroupMessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+  locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateOneWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutStudiesInput {
@@ -9909,6 +11001,10 @@ input UserCreateWithoutStudiesInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutToOldColleaguesInput {
@@ -9949,6 +11045,10 @@ input UserCreateWithoutToOldColleaguesInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 input UserCreateWithoutWorksInput {
@@ -9989,6 +11089,10 @@ input UserCreateWithoutWorksInput {
   loveWoman: LoveMatchingCreateManyWithoutWomanInput
   loveMan: LoveMatchingCreateManyWithoutManInput
   signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  partnerFound: PartnerConditionCreateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionCreateOneWithoutPassedPartnersInput
+  project: ProjectCreateManyWithoutStarterInput
 }
 
 type UserEdge {
@@ -10256,6 +11360,10 @@ input UserUpdateDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateInput {
@@ -10297,6 +11405,10 @@ input UserUpdateInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateManyDataInput {
@@ -10380,6 +11492,28 @@ input UserUpdateManyWithoutLocationGroupsInput {
   updateMany: [UserUpdateManyWithWhereNestedInput!]
 }
 
+input UserUpdateManyWithoutPartnerFoundInput {
+  create: [UserCreateWithoutPartnerFoundInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutPartnerFoundInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutPartnerFoundInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
+input UserUpdateManyWithoutPartnerPastedInput {
+  create: [UserCreateWithoutPartnerPastedInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutPartnerPastedInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutPartnerPastedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
 input UserUpdateManyWithoutRegStatusInput {
   create: [UserCreateWithoutRegStatusInput!]
   delete: [UserWhereUniqueInput!]
@@ -10409,6 +11543,17 @@ input UserUpdateManyWithoutResidenceInput {
   disconnect: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutResidenceInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutResidenceInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
+input UserUpdateManyWithoutSkillsInput {
+  create: [UserCreateWithoutSkillsInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutSkillsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutSkillsInput!]
   deleteMany: [UserScalarWhereInput!]
   updateMany: [UserUpdateManyWithWhereNestedInput!]
 }
@@ -10559,6 +11704,15 @@ input UserUpdateOneWithoutLoveWomanInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneWithoutProjectInput {
+  create: UserCreateWithoutProjectInput
+  update: UserUpdateWithoutProjectDataInput
+  upsert: UserUpsertWithoutProjectInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneWithoutSignUpLoveInput {
   create: UserCreateWithoutSignUpLoveInput
   update: UserUpdateWithoutSignUpLoveDataInput
@@ -10624,6 +11778,10 @@ input UserUpdateWithoutAvatarDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutBirthplaceDataInput {
@@ -10664,6 +11822,10 @@ input UserUpdateWithoutBirthplaceDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutClassMateDataInput {
@@ -10704,6 +11866,10 @@ input UserUpdateWithoutClassMateDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutColleaguesDataInput {
@@ -10744,6 +11910,10 @@ input UserUpdateWithoutColleaguesDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutCreaterDataInput {
@@ -10784,6 +11954,10 @@ input UserUpdateWithoutCreaterDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutExamDataInput {
@@ -10824,6 +11998,10 @@ input UserUpdateWithoutExamDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutFamiliesDataInput {
@@ -10864,6 +12042,10 @@ input UserUpdateWithoutFamiliesDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutFamilyGroupDataInput {
@@ -10904,6 +12086,10 @@ input UserUpdateWithoutFamilyGroupDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutForgetPasswordDataInput {
@@ -10944,6 +12130,10 @@ input UserUpdateWithoutForgetPasswordDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutFromOldColleaguesDataInput {
@@ -10984,6 +12174,10 @@ input UserUpdateWithoutFromOldColleaguesDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutGroupMessagesDataInput {
@@ -11024,6 +12218,10 @@ input UserUpdateWithoutGroupMessagesDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutGroupsDataInput {
@@ -11064,6 +12262,10 @@ input UserUpdateWithoutGroupsDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutLocationGroupsDataInput {
@@ -11104,6 +12306,10 @@ input UserUpdateWithoutLocationGroupsDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutLoveManDataInput {
@@ -11144,6 +12350,10 @@ input UserUpdateWithoutLoveManDataInput {
   loveSetting: LoveSettingUpdateOneWithoutUserInput
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutLoveSettingDataInput {
@@ -11184,6 +12394,10 @@ input UserUpdateWithoutLoveSettingDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutLoveWomanDataInput {
@@ -11224,6 +12438,98 @@ input UserUpdateWithoutLoveWomanDataInput {
   loveSetting: LoveSettingUpdateOneWithoutUserInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
+}
+
+input UserUpdateWithoutPartnerFoundDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: PhotoUpdateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneWithoutBornsInput
+  residence: LocationUpdateOneWithoutLivesInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  sentMessages: MessageUpdateManyWithoutFromInput
+  receiveMessages: MessageUpdateManyWithoutToInput
+  groupMessages: GroupMessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+  locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
+}
+
+input UserUpdateWithoutPartnerPastedDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: PhotoUpdateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneWithoutBornsInput
+  residence: LocationUpdateOneWithoutLivesInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  sentMessages: MessageUpdateManyWithoutFromInput
+  receiveMessages: MessageUpdateManyWithoutToInput
+  groupMessages: GroupMessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+  locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -11264,6 +12570,54 @@ input UserUpdateWithoutPostsDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
+}
+
+input UserUpdateWithoutProjectDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: PhotoUpdateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneWithoutBornsInput
+  residence: LocationUpdateOneWithoutLivesInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  sentMessages: MessageUpdateManyWithoutFromInput
+  receiveMessages: MessageUpdateManyWithoutToInput
+  groupMessages: GroupMessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+  locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
 }
 
 input UserUpdateWithoutReceiveMessagesDataInput {
@@ -11304,6 +12658,10 @@ input UserUpdateWithoutReceiveMessagesDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutRegStatusDataInput {
@@ -11344,6 +12702,10 @@ input UserUpdateWithoutRegStatusDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutRemmemberPasswordDataInput {
@@ -11384,6 +12746,10 @@ input UserUpdateWithoutRemmemberPasswordDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutResidenceDataInput {
@@ -11424,6 +12790,10 @@ input UserUpdateWithoutResidenceDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutSentMessagesDataInput {
@@ -11464,6 +12834,10 @@ input UserUpdateWithoutSentMessagesDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutSignUpLoveDataInput {
@@ -11504,6 +12878,54 @@ input UserUpdateWithoutSignUpLoveDataInput {
   loveSetting: LoveSettingUpdateOneWithoutUserInput
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
+}
+
+input UserUpdateWithoutSkillsDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: PhotoUpdateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneWithoutBornsInput
+  residence: LocationUpdateOneWithoutLivesInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  sentMessages: MessageUpdateManyWithoutFromInput
+  receiveMessages: MessageUpdateManyWithoutToInput
+  groupMessages: GroupMessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+  locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateOneWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutStudiesDataInput {
@@ -11544,6 +12966,10 @@ input UserUpdateWithoutStudiesDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutToOldColleaguesDataInput {
@@ -11584,6 +13010,10 @@ input UserUpdateWithoutToOldColleaguesDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithoutWorksDataInput {
@@ -11624,6 +13054,10 @@ input UserUpdateWithoutWorksDataInput {
   loveWoman: LoveMatchingUpdateManyWithoutWomanInput
   loveMan: LoveMatchingUpdateManyWithoutManInput
   signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  partnerFound: PartnerConditionUpdateOneWithoutPartnersInput
+  partnerPasted: PartnerConditionUpdateOneWithoutPassedPartnersInput
+  project: ProjectUpdateManyWithoutStarterInput
 }
 
 input UserUpdateWithWhereUniqueNestedInput {
@@ -11651,6 +13085,16 @@ input UserUpdateWithWhereUniqueWithoutLocationGroupsInput {
   data: UserUpdateWithoutLocationGroupsDataInput!
 }
 
+input UserUpdateWithWhereUniqueWithoutPartnerFoundInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutPartnerFoundDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutPartnerPastedInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutPartnerPastedDataInput!
+}
+
 input UserUpdateWithWhereUniqueWithoutRegStatusInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutRegStatusDataInput!
@@ -11664,6 +13108,11 @@ input UserUpdateWithWhereUniqueWithoutRemmemberPasswordInput {
 input UserUpdateWithWhereUniqueWithoutResidenceInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutResidenceDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutSkillsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutSkillsDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutStudiesInput {
@@ -11741,6 +13190,11 @@ input UserUpsertWithoutPostsInput {
   create: UserCreateWithoutPostsInput!
 }
 
+input UserUpsertWithoutProjectInput {
+  update: UserUpdateWithoutProjectDataInput!
+  create: UserCreateWithoutProjectInput!
+}
+
 input UserUpsertWithoutReceiveMessagesInput {
   update: UserUpdateWithoutReceiveMessagesDataInput!
   create: UserCreateWithoutReceiveMessagesInput!
@@ -11796,6 +13250,18 @@ input UserUpsertWithWhereUniqueWithoutLocationGroupsInput {
   create: UserCreateWithoutLocationGroupsInput!
 }
 
+input UserUpsertWithWhereUniqueWithoutPartnerFoundInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutPartnerFoundDataInput!
+  create: UserCreateWithoutPartnerFoundInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutPartnerPastedInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutPartnerPastedDataInput!
+  create: UserCreateWithoutPartnerPastedInput!
+}
+
 input UserUpsertWithWhereUniqueWithoutRegStatusInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutRegStatusDataInput!
@@ -11812,6 +13278,12 @@ input UserUpsertWithWhereUniqueWithoutResidenceInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutResidenceDataInput!
   create: UserCreateWithoutResidenceInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutSkillsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutSkillsDataInput!
+  create: UserCreateWithoutSkillsInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutStudiesInput {
@@ -12033,6 +13505,14 @@ input UserWhereInput {
   loveMan_some: LoveMatchingWhereInput
   loveMan_none: LoveMatchingWhereInput
   signUpLove: LoveSignUpWhereInput
+  skills_every: SkillWhereInput
+  skills_some: SkillWhereInput
+  skills_none: SkillWhereInput
+  partnerFound: PartnerConditionWhereInput
+  partnerPasted: PartnerConditionWhereInput
+  project_every: ProjectWhereInput
+  project_some: ProjectWhereInput
+  project_none: ProjectWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
