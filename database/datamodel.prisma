@@ -82,9 +82,9 @@ type User {
   loveMan:[LoveMatching!]! @relation(name: "Man")
   signUpLove:LoveSignUp
   skills:[Skill!]!
-  partnerFound:PartnerCondition @relation(name: "NowPartner") 
-  partnerPasted:PartnerCondition @relation(name: "PassedPartner") 
-  project:[Project!]!
+  fitConditions:[PartnerCondition!]! @relation(name: "NowPartner") 
+  nofitConditions:[PartnerCondition!]! @relation(name: "PassedPartner") 
+  projects:[Project!]!
 }
 
 # 地理位置
@@ -464,6 +464,7 @@ type PartnerCondition{
   id:ID! @unique
   skillName:String
   place:String
+  number:Int
   partners:[User!]! @relation(name: "NowPartner") 
   passedPartners:[User!]! @relation(name: "PassedPartner") 
   project:Project

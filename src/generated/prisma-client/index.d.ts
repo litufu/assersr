@@ -2322,6 +2322,8 @@ export type PartnerConditionOrderByInput =
   | "skillName_DESC"
   | "place_ASC"
   | "place_DESC"
+  | "number_ASC"
+  | "number_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -2621,23 +2623,11 @@ export type PersonOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export interface GroupMessageCreateWithoutFromInput {
-  type?: GroupKind;
-  to: String;
-  text?: String;
-  image?: PhotoCreateOneInput;
-}
-
-export type AdvertisementWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface UserCreateWithoutToOldColleaguesInput {
+export interface UserCreateWithoutAvatarInput {
   username: String;
   password: String;
   name?: String;
   gender?: String;
-  avatar?: PhotoCreateOneWithoutUserInput;
   birthdaycalendar?: String;
   birthday?: DateTimeInput;
   birthplace?: LocationCreateOneWithoutBornsInput;
@@ -2663,6 +2653,7 @@ export interface UserCreateWithoutToOldColleaguesInput {
   workGroup?: WorkGroupCreateOneInput;
   colleagues?: ColleagueCreateManyWithoutWorkerInput;
   fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
   locationGroups?: LocationGroupCreateManyWithoutUsersInput;
   forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
   remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
@@ -2671,9 +2662,56 @@ export interface UserCreateWithoutToOldColleaguesInput {
   loveMan?: LoveMatchingCreateManyWithoutManInput;
   signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
   skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
+}
+
+export type AdvertisementWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface RegisterCountWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  addUser?: UserWhereInput;
+  deviceId?: String;
+  deviceId_not?: String;
+  deviceId_in?: String[] | String;
+  deviceId_not_in?: String[] | String;
+  deviceId_lt?: String;
+  deviceId_lte?: String;
+  deviceId_gt?: String;
+  deviceId_gte?: String;
+  deviceId_contains?: String;
+  deviceId_not_contains?: String;
+  deviceId_starts_with?: String;
+  deviceId_not_starts_with?: String;
+  deviceId_ends_with?: String;
+  deviceId_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: RegisterCountWhereInput[] | RegisterCountWhereInput;
+  OR?: RegisterCountWhereInput[] | RegisterCountWhereInput;
+  NOT?: RegisterCountWhereInput[] | RegisterCountWhereInput;
 }
 
 export interface LocationGroupWhereInput {
@@ -2731,10 +2769,10 @@ export interface LocationGroupWhereInput {
   NOT?: LocationGroupWhereInput[] | LocationGroupWhereInput;
 }
 
-export interface OldColleagueCreateWithoutFromInput {
-  to?: UserCreateOneWithoutToOldColleaguesInput;
-  company?: CompanyCreateOneInput;
-  status: String;
+export interface LocationGroupCreateWithoutUsersInput {
+  kind?: LocationGroupKind;
+  code?: String;
+  name?: String;
 }
 
 export interface FindPassWordWhereInput {
@@ -2769,8 +2807,48 @@ export interface FindPassWordWhereInput {
   NOT?: FindPassWordWhereInput[] | FindPassWordWhereInput;
 }
 
-export interface WorkGroupCreateWithoutColleaguesInput {
-  company?: CompanyCreateOneWithoutWorkGroupInput;
+export interface UserCreateWithoutToOldColleaguesInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoCreateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutBornsInput;
+  residence?: LocationCreateOneWithoutLivesInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  sentMessages?: MessageCreateManyWithoutFromInput;
+  receiveMessages?: MessageCreateManyWithoutToInput;
+  groupMessages?: GroupMessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingCreateOneWithoutUserInput;
+  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
+  loveMan?: LoveMatchingCreateManyWithoutManInput;
+  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
+  skills?: SkillCreateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
 export interface LoveMatchingWhereInput {
@@ -2810,59 +2888,10 @@ export interface LoveMatchingWhereInput {
   NOT?: LoveMatchingWhereInput[] | LoveMatchingWhereInput;
 }
 
-export interface PartnerConditionWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  skillName?: String;
-  skillName_not?: String;
-  skillName_in?: String[] | String;
-  skillName_not_in?: String[] | String;
-  skillName_lt?: String;
-  skillName_lte?: String;
-  skillName_gt?: String;
-  skillName_gte?: String;
-  skillName_contains?: String;
-  skillName_not_contains?: String;
-  skillName_starts_with?: String;
-  skillName_not_starts_with?: String;
-  skillName_ends_with?: String;
-  skillName_not_ends_with?: String;
-  place?: String;
-  place_not?: String;
-  place_in?: String[] | String;
-  place_not_in?: String[] | String;
-  place_lt?: String;
-  place_lte?: String;
-  place_gt?: String;
-  place_gte?: String;
-  place_contains?: String;
-  place_not_contains?: String;
-  place_starts_with?: String;
-  place_not_starts_with?: String;
-  place_ends_with?: String;
-  place_not_ends_with?: String;
-  partners_every?: UserWhereInput;
-  partners_some?: UserWhereInput;
-  partners_none?: UserWhereInput;
-  passedPartners_every?: UserWhereInput;
-  passedPartners_some?: UserWhereInput;
-  passedPartners_none?: UserWhereInput;
-  project?: ProjectWhereInput;
-  AND?: PartnerConditionWhereInput[] | PartnerConditionWhereInput;
-  OR?: PartnerConditionWhereInput[] | PartnerConditionWhereInput;
-  NOT?: PartnerConditionWhereInput[] | PartnerConditionWhereInput;
+export interface OldColleagueCreateWithoutFromInput {
+  to?: UserCreateOneWithoutToOldColleaguesInput;
+  company?: CompanyCreateOneInput;
+  status: String;
 }
 
 export interface SkillWhereInput {
@@ -2902,8 +2931,42 @@ export interface SkillWhereInput {
   NOT?: SkillWhereInput[] | SkillWhereInput;
 }
 
-export interface SkillCreateWithoutPersonsInput {
+export interface ClassGroupWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  study?: SchoolEduWhereInput;
   name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  members_every?: ClassMateWhereInput;
+  members_some?: ClassMateWhereInput;
+  members_none?: ClassMateWhereInput;
+  AND?: ClassGroupWhereInput[] | ClassGroupWhereInput;
+  OR?: ClassGroupWhereInput[] | ClassGroupWhereInput;
+  NOT?: ClassGroupWhereInput[] | ClassGroupWhereInput;
 }
 
 export interface ProjectWhereInput {
@@ -2959,48 +3022,12 @@ export interface ProjectWhereInput {
   NOT?: ProjectWhereInput[] | ProjectWhereInput;
 }
 
-export interface GroupWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  type?: GroupKind;
-  type_not?: GroupKind;
-  type_in?: GroupKind[] | GroupKind;
-  type_not_in?: GroupKind[] | GroupKind;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  users_every?: UserWhereInput;
-  users_some?: UserWhereInput;
-  users_none?: UserWhereInput;
-  messages_every?: MessageWhereInput;
-  messages_some?: MessageWhereInput;
-  messages_none?: MessageWhereInput;
-  AND?: GroupWhereInput[] | GroupWhereInput;
-  OR?: GroupWhereInput[] | GroupWhereInput;
-  NOT?: GroupWhereInput[] | GroupWhereInput;
+export interface PartnerConditionCreateWithoutPartnersInput {
+  skillName?: String;
+  place?: String;
+  number?: Int;
+  passedPartners?: UserCreateManyWithoutNofitConditionsInput;
+  project?: ProjectCreateOneWithoutConditionsInput;
 }
 
 export interface ClassMateWhereInput {
@@ -3039,11 +3066,9 @@ export interface ClassMateWhereInput {
   NOT?: ClassMateWhereInput[] | ClassMateWhereInput;
 }
 
-export interface ProjectCreateWithoutConditionsInput {
-  name?: String;
-  place?: CityCreateOneInput;
-  content?: String;
-  starter?: UserCreateOneWithoutProjectInput;
+export interface UserCreateOneWithoutProjectsInput {
+  create?: UserCreateWithoutProjectsInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface CompanyUpdateInput {
@@ -3057,9 +3082,48 @@ export interface CompanyUpdateInput {
   workGroup?: WorkGroupUpdateOneWithoutCompanyInput;
 }
 
-export interface UserCreateOneWithoutProjectInput {
-  create?: UserCreateWithoutProjectInput;
-  connect?: UserWhereUniqueInput;
+export interface UserCreateWithoutProjectsInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoCreateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutBornsInput;
+  residence?: LocationCreateOneWithoutLivesInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  sentMessages?: MessageCreateManyWithoutFromInput;
+  receiveMessages?: MessageCreateManyWithoutToInput;
+  groupMessages?: GroupMessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingCreateOneWithoutUserInput;
+  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
+  loveMan?: LoveMatchingCreateManyWithoutManInput;
+  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
+  skills?: SkillCreateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
 }
 
 export interface GroupMessageWhereInput {
@@ -3124,48 +3188,9 @@ export interface GroupMessageWhereInput {
   NOT?: GroupMessageWhereInput[] | GroupMessageWhereInput;
 }
 
-export interface UserCreateWithoutProjectInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoCreateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutBornsInput;
-  residence?: LocationCreateOneWithoutLivesInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  sentMessages?: MessageCreateManyWithoutFromInput;
-  receiveMessages?: MessageCreateManyWithoutToInput;
-  groupMessages?: GroupMessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneInput;
-  colleagues?: ColleagueCreateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
-  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingCreateOneWithoutUserInput;
-  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
-  loveMan?: LoveMatchingCreateManyWithoutManInput;
-  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
+export interface CompanyCreateOneInput {
+  create?: CompanyCreateInput;
+  connect?: CompanyWhereUniqueInput;
 }
 
 export interface MessageWhereInput {
@@ -3213,9 +3238,15 @@ export interface MessageWhereInput {
   NOT?: MessageWhereInput[] | MessageWhereInput;
 }
 
-export interface CompanyCreateOneInput {
-  create?: CompanyCreateInput;
-  connect?: CompanyWhereUniqueInput;
+export interface CompanyCreateInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  location?: LocationCreateOneWithoutCompaniesInput;
+  BusinessScope?: String;
+  works?: WorkCreateManyWithoutCompanyInput;
+  workGroup?: WorkGroupCreateOneWithoutCompanyInput;
 }
 
 export interface VillageSubscriptionWhereInput {
@@ -3229,15 +3260,11 @@ export interface VillageSubscriptionWhereInput {
   NOT?: VillageSubscriptionWhereInput[] | VillageSubscriptionWhereInput;
 }
 
-export interface CompanyCreateInput {
-  name?: String;
+export interface AreaUpdateInput {
   code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  location?: LocationCreateOneWithoutCompaniesInput;
-  BusinessScope?: String;
-  works?: WorkCreateManyWithoutCompanyInput;
-  workGroup?: WorkGroupCreateOneWithoutCompanyInput;
+  name?: String;
+  city?: CityUpdateOneRequiredWithoutAreasInput;
+  towns?: StreetUpdateManyWithoutAreaInput;
 }
 
 export interface UniversitySubscriptionWhereInput {
@@ -3251,11 +3278,11 @@ export interface UniversitySubscriptionWhereInput {
   NOT?: UniversitySubscriptionWhereInput[] | UniversitySubscriptionWhereInput;
 }
 
-export interface AreaUpdateInput {
-  code?: String;
-  name?: String;
-  city?: CityUpdateOneRequiredWithoutAreasInput;
-  towns?: StreetUpdateManyWithoutAreaInput;
+export interface CityUpdateOneRequiredWithoutAreasInput {
+  create?: CityCreateWithoutAreasInput;
+  update?: CityUpdateWithoutAreasDataInput;
+  upsert?: CityUpsertWithoutAreasInput;
+  connect?: CityWhereUniqueInput;
 }
 
 export interface CollegeEntranceExamWhereInput {
@@ -3332,11 +3359,10 @@ export interface CollegeEntranceExamWhereInput {
   NOT?: CollegeEntranceExamWhereInput[] | CollegeEntranceExamWhereInput;
 }
 
-export interface CityUpdateOneRequiredWithoutAreasInput {
-  create?: CityCreateWithoutAreasInput;
-  update?: CityUpdateWithoutAreasDataInput;
-  upsert?: CityUpsertWithoutAreasInput;
-  connect?: CityWhereUniqueInput;
+export interface CityUpdateWithoutAreasDataInput {
+  code?: String;
+  name?: String;
+  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
 }
 
 export interface SchoolEduWhereInput {
@@ -3394,10 +3420,11 @@ export interface SchoolEduWhereInput {
   NOT?: SchoolEduWhereInput[] | SchoolEduWhereInput;
 }
 
-export interface CityUpdateWithoutAreasDataInput {
-  code?: String;
-  name?: String;
-  province?: ProvinceUpdateOneRequiredWithoutCitiesInput;
+export interface ProvinceUpdateOneRequiredWithoutCitiesInput {
+  create?: ProvinceCreateWithoutCitiesInput;
+  update?: ProvinceUpdateWithoutCitiesDataInput;
+  upsert?: ProvinceUpsertWithoutCitiesInput;
+  connect?: ProvinceWhereUniqueInput;
 }
 
 export interface SkillSubscriptionWhereInput {
@@ -3411,11 +3438,9 @@ export interface SkillSubscriptionWhereInput {
   NOT?: SkillSubscriptionWhereInput[] | SkillSubscriptionWhereInput;
 }
 
-export interface ProvinceUpdateOneRequiredWithoutCitiesInput {
-  create?: ProvinceCreateWithoutCitiesInput;
-  update?: ProvinceUpdateWithoutCitiesDataInput;
-  upsert?: ProvinceUpsertWithoutCitiesInput;
-  connect?: ProvinceWhereUniqueInput;
+export interface ProvinceUpdateWithoutCitiesDataInput {
+  code?: String;
+  name?: String;
 }
 
 export interface FamilyGroupWhereInput {
@@ -3461,9 +3486,9 @@ export interface FamilyGroupWhereInput {
   NOT?: FamilyGroupWhereInput[] | FamilyGroupWhereInput;
 }
 
-export interface ProvinceUpdateWithoutCitiesDataInput {
-  code?: String;
-  name?: String;
+export interface ProvinceUpsertWithoutCitiesInput {
+  update: ProvinceUpdateWithoutCitiesDataInput;
+  create: ProvinceCreateWithoutCitiesInput;
 }
 
 export interface PersonWhereInput {
@@ -3510,9 +3535,9 @@ export interface PersonWhereInput {
   NOT?: PersonWhereInput[] | PersonWhereInput;
 }
 
-export interface ProvinceUpsertWithoutCitiesInput {
-  update: ProvinceUpdateWithoutCitiesDataInput;
-  create: ProvinceCreateWithoutCitiesInput;
+export interface CityUpsertWithoutAreasInput {
+  update: CityUpdateWithoutAreasDataInput;
+  create: CityCreateWithoutAreasInput;
 }
 
 export interface FamilyWhereInput {
@@ -3566,22 +3591,6 @@ export interface FamilyWhereInput {
   NOT?: FamilyWhereInput[] | FamilyWhereInput;
 }
 
-export interface CityUpsertWithoutAreasInput {
-  update: CityUpdateWithoutAreasDataInput;
-  create: CityCreateWithoutAreasInput;
-}
-
-export interface ProvinceSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: ProvinceWhereInput;
-  AND?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
-  OR?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
-  NOT?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
-}
-
 export interface StreetUpdateManyWithoutAreaInput {
   create?: StreetCreateWithoutAreaInput[] | StreetCreateWithoutAreaInput;
   delete?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
@@ -3597,6 +3606,22 @@ export interface StreetUpdateManyWithoutAreaInput {
   updateMany?:
     | StreetUpdateManyWithWhereNestedInput[]
     | StreetUpdateManyWithWhereNestedInput;
+}
+
+export interface ProvinceSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ProvinceWhereInput;
+  AND?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
+  OR?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
+  NOT?: ProvinceSubscriptionWhereInput[] | ProvinceSubscriptionWhereInput;
+}
+
+export interface StreetUpdateWithWhereUniqueWithoutAreaInput {
+  where: StreetWhereUniqueInput;
+  data: StreetUpdateWithoutAreaDataInput;
 }
 
 export interface MajorWhereInput {
@@ -3651,9 +3676,10 @@ export interface MajorWhereInput {
   NOT?: MajorWhereInput[] | MajorWhereInput;
 }
 
-export interface StreetUpdateWithWhereUniqueWithoutAreaInput {
-  where: StreetWhereUniqueInput;
-  data: StreetUpdateWithoutAreaDataInput;
+export interface StreetUpdateWithoutAreaDataInput {
+  code?: String;
+  name?: String;
+  villages?: VillageUpdateManyWithoutStreetInput;
 }
 
 export interface PostSubscriptionWhereInput {
@@ -3665,23 +3691,6 @@ export interface PostSubscriptionWhereInput {
   AND?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
   OR?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
   NOT?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
-}
-
-export interface StreetUpdateWithoutAreaDataInput {
-  code?: String;
-  name?: String;
-  villages?: VillageUpdateManyWithoutStreetInput;
-}
-
-export interface PhotoSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: PhotoWhereInput;
-  AND?: PhotoSubscriptionWhereInput[] | PhotoSubscriptionWhereInput;
-  OR?: PhotoSubscriptionWhereInput[] | PhotoSubscriptionWhereInput;
-  NOT?: PhotoSubscriptionWhereInput[] | PhotoSubscriptionWhereInput;
 }
 
 export interface VillageUpdateManyWithoutStreetInput {
@@ -3701,6 +3710,22 @@ export interface VillageUpdateManyWithoutStreetInput {
     | VillageUpdateManyWithWhereNestedInput;
 }
 
+export interface PhotoSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: PhotoWhereInput;
+  AND?: PhotoSubscriptionWhereInput[] | PhotoSubscriptionWhereInput;
+  OR?: PhotoSubscriptionWhereInput[] | PhotoSubscriptionWhereInput;
+  NOT?: PhotoSubscriptionWhereInput[] | PhotoSubscriptionWhereInput;
+}
+
+export interface VillageUpdateWithWhereUniqueWithoutStreetInput {
+  where: VillageWhereUniqueInput;
+  data: VillageUpdateWithoutStreetDataInput;
+}
+
 export interface PersonSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
@@ -3712,9 +3737,10 @@ export interface PersonSubscriptionWhereInput {
   NOT?: PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput;
 }
 
-export interface VillageUpdateWithWhereUniqueWithoutStreetInput {
-  where: VillageWhereUniqueInput;
-  data: VillageUpdateWithoutStreetDataInput;
+export interface VillageUpdateWithoutStreetDataInput {
+  code?: String;
+  name?: String;
+  people?: UserUpdateManyInput;
 }
 
 export interface UniversityWhereInput {
@@ -3797,10 +3823,21 @@ export interface UniversityWhereInput {
   NOT?: UniversityWhereInput[] | UniversityWhereInput;
 }
 
-export interface VillageUpdateWithoutStreetDataInput {
-  code?: String;
-  name?: String;
-  people?: UserUpdateManyInput;
+export interface UserUpdateManyInput {
+  create?: UserCreateInput[] | UserCreateInput;
+  update?:
+    | UserUpdateWithWhereUniqueNestedInput[]
+    | UserUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueNestedInput[]
+    | UserUpsertWithWhereUniqueNestedInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
 }
 
 export interface ColleagueWhereInput {
@@ -3839,21 +3876,9 @@ export interface ColleagueWhereInput {
   NOT?: ColleagueWhereInput[] | ColleagueWhereInput;
 }
 
-export interface UserUpdateManyInput {
-  create?: UserCreateInput[] | UserCreateInput;
-  update?:
-    | UserUpdateWithWhereUniqueNestedInput[]
-    | UserUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueNestedInput[]
-    | UserUpsertWithWhereUniqueNestedInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
-  updateMany?:
-    | UserUpdateManyWithWhereNestedInput[]
-    | UserUpdateManyWithWhereNestedInput;
+export interface UserUpdateWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateDataInput;
 }
 
 export interface WorkGroupWhereInput {
@@ -3880,9 +3905,49 @@ export interface WorkGroupWhereInput {
   NOT?: WorkGroupWhereInput[] | WorkGroupWhereInput;
 }
 
-export interface UserUpdateWithWhereUniqueNestedInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateDataInput;
+export interface UserUpdateDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoUpdateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutBornsInput;
+  residence?: LocationUpdateOneWithoutLivesInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  sentMessages?: MessageUpdateManyWithoutFromInput;
+  receiveMessages?: MessageUpdateManyWithoutToInput;
+  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
+  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
+  loveMan?: LoveMatchingUpdateManyWithoutManInput;
+  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
+  skills?: SkillUpdateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
 export interface StationWhereInput {
@@ -3933,49 +3998,13 @@ export interface StationWhereInput {
   NOT?: StationWhereInput[] | StationWhereInput;
 }
 
-export interface UserUpdateDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoUpdateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutBornsInput;
-  residence?: LocationUpdateOneWithoutLivesInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  sentMessages?: MessageUpdateManyWithoutFromInput;
-  receiveMessages?: MessageUpdateManyWithoutToInput;
-  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneInput;
-  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
-  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
-  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
-  loveMan?: LoveMatchingUpdateManyWithoutManInput;
-  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
-  skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+export interface PhotoUpdateOneWithoutUserInput {
+  create?: PhotoCreateWithoutUserInput;
+  update?: PhotoUpdateWithoutUserDataInput;
+  upsert?: PhotoUpsertWithoutUserInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: PhotoWhereUniqueInput;
 }
 
 export interface LoveSettingSubscriptionWhereInput {
@@ -3989,13 +4018,9 @@ export interface LoveSettingSubscriptionWhereInput {
   NOT?: LoveSettingSubscriptionWhereInput[] | LoveSettingSubscriptionWhereInput;
 }
 
-export interface PhotoUpdateOneWithoutUserInput {
-  create?: PhotoCreateWithoutUserInput;
-  update?: PhotoUpdateWithoutUserDataInput;
-  upsert?: PhotoUpsertWithoutUserInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: PhotoWhereUniqueInput;
+export interface PhotoUpdateWithoutUserDataInput {
+  name?: String;
+  url?: String;
 }
 
 export interface LoveMatchingSubscriptionWhereInput {
@@ -4015,9 +4040,9 @@ export interface LoveMatchingSubscriptionWhereInput {
     | LoveMatchingSubscriptionWhereInput;
 }
 
-export interface PhotoUpdateWithoutUserDataInput {
-  name?: String;
-  url?: String;
+export interface PhotoUpsertWithoutUserInput {
+  update: PhotoUpdateWithoutUserDataInput;
+  create: PhotoCreateWithoutUserInput;
 }
 
 export interface LogsSubscriptionWhereInput {
@@ -4031,9 +4056,13 @@ export interface LogsSubscriptionWhereInput {
   NOT?: LogsSubscriptionWhereInput[] | LogsSubscriptionWhereInput;
 }
 
-export interface PhotoUpsertWithoutUserInput {
-  update: PhotoUpdateWithoutUserDataInput;
-  create: PhotoCreateWithoutUserInput;
+export interface LocationUpdateOneWithoutBornsInput {
+  create?: LocationCreateWithoutBornsInput;
+  update?: LocationUpdateWithoutBornsDataInput;
+  upsert?: LocationUpsertWithoutBornsInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: LocationWhereUniqueInput;
 }
 
 export interface LocationSubscriptionWhereInput {
@@ -4047,13 +4076,17 @@ export interface LocationSubscriptionWhereInput {
   NOT?: LocationSubscriptionWhereInput[] | LocationSubscriptionWhereInput;
 }
 
-export interface LocationUpdateOneWithoutBornsInput {
-  create?: LocationCreateWithoutBornsInput;
-  update?: LocationUpdateWithoutBornsDataInput;
-  upsert?: LocationUpsertWithoutBornsInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: LocationWhereUniqueInput;
+export interface LocationUpdateWithoutBornsDataInput {
+  name?: String;
+  province?: ProvinceUpdateOneInput;
+  city?: CityUpdateOneInput;
+  area?: AreaUpdateOneInput;
+  street?: StreetUpdateOneInput;
+  village?: VillageUpdateOneInput;
+  schools?: SchoolUpdateManyWithoutLocationInput;
+  companies?: CompanyUpdateManyWithoutLocationInput;
+  universities?: UniversityUpdateManyInput;
+  lives?: UserUpdateManyWithoutResidenceInput;
 }
 
 export interface GroupMessageSubscriptionWhereInput {
@@ -4073,17 +4106,13 @@ export interface GroupMessageSubscriptionWhereInput {
     | GroupMessageSubscriptionWhereInput;
 }
 
-export interface LocationUpdateWithoutBornsDataInput {
-  name?: String;
-  province?: ProvinceUpdateOneInput;
-  city?: CityUpdateOneInput;
-  area?: AreaUpdateOneInput;
-  street?: StreetUpdateOneInput;
-  village?: VillageUpdateOneInput;
-  schools?: SchoolUpdateManyWithoutLocationInput;
-  companies?: CompanyUpdateManyWithoutLocationInput;
-  universities?: UniversityUpdateManyInput;
-  lives?: UserUpdateManyWithoutResidenceInput;
+export interface ProvinceUpdateOneInput {
+  create?: ProvinceCreateInput;
+  update?: ProvinceUpdateDataInput;
+  upsert?: ProvinceUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: ProvinceWhereUniqueInput;
 }
 
 export interface LocationWhereInput {
@@ -4138,26 +4167,6 @@ export interface LocationWhereInput {
   AND?: LocationWhereInput[] | LocationWhereInput;
   OR?: LocationWhereInput[] | LocationWhereInput;
   NOT?: LocationWhereInput[] | LocationWhereInput;
-}
-
-export interface ProvinceUpdateOneInput {
-  create?: ProvinceCreateInput;
-  update?: ProvinceUpdateDataInput;
-  upsert?: ProvinceUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: ProvinceWhereUniqueInput;
-}
-
-export interface FamilyGroupSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: FamilyGroupWhereInput;
-  AND?: FamilyGroupSubscriptionWhereInput[] | FamilyGroupSubscriptionWhereInput;
-  OR?: FamilyGroupSubscriptionWhereInput[] | FamilyGroupSubscriptionWhereInput;
-  NOT?: FamilyGroupSubscriptionWhereInput[] | FamilyGroupSubscriptionWhereInput;
 }
 
 export interface ProvinceUpdateDataInput {
@@ -4232,6 +4241,22 @@ export interface CityUpdateManyWithoutProvinceInput {
     | CityUpdateManyWithWhereNestedInput;
 }
 
+export interface FamilySubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: FamilyWhereInput;
+  AND?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
+  OR?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
+  NOT?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
+}
+
+export interface CityUpdateWithWhereUniqueWithoutProvinceInput {
+  where: CityWhereUniqueInput;
+  data: CityUpdateWithoutProvinceDataInput;
+}
+
 export interface CompanySubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
@@ -4243,9 +4268,10 @@ export interface CompanySubscriptionWhereInput {
   NOT?: CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput;
 }
 
-export interface CityUpdateWithWhereUniqueWithoutProvinceInput {
-  where: CityWhereUniqueInput;
-  data: CityUpdateWithoutProvinceDataInput;
+export interface CityUpdateWithoutProvinceDataInput {
+  code?: String;
+  name?: String;
+  areas?: AreaUpdateManyWithoutCityInput;
 }
 
 export interface ColleagueSubscriptionWhereInput {
@@ -4257,23 +4283,6 @@ export interface ColleagueSubscriptionWhereInput {
   AND?: ColleagueSubscriptionWhereInput[] | ColleagueSubscriptionWhereInput;
   OR?: ColleagueSubscriptionWhereInput[] | ColleagueSubscriptionWhereInput;
   NOT?: ColleagueSubscriptionWhereInput[] | ColleagueSubscriptionWhereInput;
-}
-
-export interface CityUpdateWithoutProvinceDataInput {
-  code?: String;
-  name?: String;
-  areas?: AreaUpdateManyWithoutCityInput;
-}
-
-export interface ClassMateSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: ClassMateWhereInput;
-  AND?: ClassMateSubscriptionWhereInput[] | ClassMateSubscriptionWhereInput;
-  OR?: ClassMateSubscriptionWhereInput[] | ClassMateSubscriptionWhereInput;
-  NOT?: ClassMateSubscriptionWhereInput[] | ClassMateSubscriptionWhereInput;
 }
 
 export interface AreaUpdateManyWithoutCityInput {
@@ -4291,6 +4300,22 @@ export interface AreaUpdateManyWithoutCityInput {
   updateMany?:
     | AreaUpdateManyWithWhereNestedInput[]
     | AreaUpdateManyWithWhereNestedInput;
+}
+
+export interface ClassMateSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ClassMateWhereInput;
+  AND?: ClassMateSubscriptionWhereInput[] | ClassMateSubscriptionWhereInput;
+  OR?: ClassMateSubscriptionWhereInput[] | ClassMateSubscriptionWhereInput;
+  NOT?: ClassMateSubscriptionWhereInput[] | ClassMateSubscriptionWhereInput;
+}
+
+export interface AreaUpdateWithWhereUniqueWithoutCityInput {
+  where: AreaWhereUniqueInput;
+  data: AreaUpdateWithoutCityDataInput;
 }
 
 export interface VillageWhereInput {
@@ -4345,9 +4370,10 @@ export interface VillageWhereInput {
   NOT?: VillageWhereInput[] | VillageWhereInput;
 }
 
-export interface AreaUpdateWithWhereUniqueWithoutCityInput {
-  where: AreaWhereUniqueInput;
-  data: AreaUpdateWithoutCityDataInput;
+export interface AreaUpdateWithoutCityDataInput {
+  code?: String;
+  name?: String;
+  towns?: StreetUpdateManyWithoutAreaInput;
 }
 
 export interface CitySubscriptionWhereInput {
@@ -4361,39 +4387,16 @@ export interface CitySubscriptionWhereInput {
   NOT?: CitySubscriptionWhereInput[] | CitySubscriptionWhereInput;
 }
 
-export interface AreaUpdateWithoutCityDataInput {
-  code?: String;
-  name?: String;
-  towns?: StreetUpdateManyWithoutAreaInput;
-}
-
-export type CityWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  code?: String;
-}>;
-
 export interface AreaUpsertWithWhereUniqueWithoutCityInput {
   where: AreaWhereUniqueInput;
   update: AreaUpdateWithoutCityDataInput;
   create: AreaCreateWithoutCityInput;
 }
 
-export interface AdvertisementSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: AdvertisementWhereInput;
-  AND?:
-    | AdvertisementSubscriptionWhereInput[]
-    | AdvertisementSubscriptionWhereInput;
-  OR?:
-    | AdvertisementSubscriptionWhereInput[]
-    | AdvertisementSubscriptionWhereInput;
-  NOT?:
-    | AdvertisementSubscriptionWhereInput[]
-    | AdvertisementSubscriptionWhereInput;
-}
+export type CityWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+}>;
 
 export interface AreaScalarWhereInput {
   id?: ID_Input;
@@ -4443,13 +4446,35 @@ export interface AreaScalarWhereInput {
   NOT?: AreaScalarWhereInput[] | AreaScalarWhereInput;
 }
 
-export type ClassGroupWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface AdvertisementSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: AdvertisementWhereInput;
+  AND?:
+    | AdvertisementSubscriptionWhereInput[]
+    | AdvertisementSubscriptionWhereInput;
+  OR?:
+    | AdvertisementSubscriptionWhereInput[]
+    | AdvertisementSubscriptionWhereInput;
+  NOT?:
+    | AdvertisementSubscriptionWhereInput[]
+    | AdvertisementSubscriptionWhereInput;
+}
 
 export interface AreaUpdateManyWithWhereNestedInput {
   where: AreaScalarWhereInput;
   data: AreaUpdateManyDataInput;
+}
+
+export type ClassGroupWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface AreaUpdateManyDataInput {
+  code?: String;
+  name?: String;
 }
 
 export interface WorkUpdateManyMutationInput {
@@ -4459,9 +4484,10 @@ export interface WorkUpdateManyMutationInput {
   jobContent?: String;
 }
 
-export interface AreaUpdateManyDataInput {
-  code?: String;
-  name?: String;
+export interface CityUpsertWithWhereUniqueWithoutProvinceInput {
+  where: CityWhereUniqueInput;
+  update: CityUpdateWithoutProvinceDataInput;
+  create: CityCreateWithoutProvinceInput;
 }
 
 export interface WorkCreateInput {
@@ -4472,17 +4498,6 @@ export interface WorkCreateInput {
   post?: StationCreateOneInput;
   jobContent?: String;
   worker?: UserCreateOneWithoutWorksInput;
-}
-
-export interface CityUpsertWithWhereUniqueWithoutProvinceInput {
-  where: CityWhereUniqueInput;
-  update: CityUpdateWithoutProvinceDataInput;
-  create: CityCreateWithoutProvinceInput;
-}
-
-export interface VillageUpdateManyMutationInput {
-  code?: String;
-  name?: String;
 }
 
 export interface CityScalarWhereInput {
@@ -4533,6 +4548,16 @@ export interface CityScalarWhereInput {
   NOT?: CityScalarWhereInput[] | CityScalarWhereInput;
 }
 
+export interface VillageUpdateManyMutationInput {
+  code?: String;
+  name?: String;
+}
+
+export interface CityUpdateManyWithWhereNestedInput {
+  where: CityScalarWhereInput;
+  data: CityUpdateManyDataInput;
+}
+
 export interface UserUpdateManyMutationInput {
   username?: String;
   password?: String;
@@ -4546,9 +4571,9 @@ export interface UserUpdateManyMutationInput {
   maxRegTimes?: Int;
 }
 
-export interface CityUpdateManyWithWhereNestedInput {
-  where: CityScalarWhereInput;
-  data: CityUpdateManyDataInput;
+export interface CityUpdateManyDataInput {
+  code?: String;
+  name?: String;
 }
 
 export interface UserUpdateInput {
@@ -4591,14 +4616,14 @@ export interface UserUpdateInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
-export interface CityUpdateManyDataInput {
-  code?: String;
-  name?: String;
+export interface ProvinceUpsertNestedInput {
+  update: ProvinceUpdateDataInput;
+  create: ProvinceCreateInput;
 }
 
 export interface UniversityUpdateInput {
@@ -4609,9 +4634,13 @@ export interface UniversityUpdateInput {
   desc?: String;
 }
 
-export interface ProvinceUpsertNestedInput {
-  update: ProvinceUpdateDataInput;
-  create: ProvinceCreateInput;
+export interface CityUpdateOneInput {
+  create?: CityCreateInput;
+  update?: CityUpdateDataInput;
+  upsert?: CityUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: CityWhereUniqueInput;
 }
 
 export interface AreaWhereInput {
@@ -4666,20 +4695,6 @@ export interface AreaWhereInput {
   NOT?: AreaWhereInput[] | AreaWhereInput;
 }
 
-export interface CityUpdateOneInput {
-  create?: CityCreateInput;
-  update?: CityUpdateDataInput;
-  upsert?: CityUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: CityWhereUniqueInput;
-}
-
-export interface ProductUpsertNestedInput {
-  update: ProductUpdateDataInput;
-  create: ProductCreateInput;
-}
-
 export interface CityUpdateDataInput {
   code?: String;
   name?: String;
@@ -4687,23 +4702,20 @@ export interface CityUpdateDataInput {
   areas?: AreaUpdateManyWithoutCityInput;
 }
 
-export type CompanyWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  name?: String;
-}>;
+export interface ProductUpsertNestedInput {
+  update: ProductUpdateDataInput;
+  create: ProductCreateInput;
+}
 
 export interface CityUpsertNestedInput {
   update: CityUpdateDataInput;
   create: CityCreateInput;
 }
 
-export interface TradeUpdateInput {
-  product?: ProductUpdateOneInput;
-  number?: Int;
-  amount?: Float;
-  user?: UserUpdateOneInput;
-  status?: String;
-}
+export type CompanyWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
 
 export interface AreaUpdateOneInput {
   create?: AreaCreateInput;
@@ -4714,9 +4726,13 @@ export interface AreaUpdateOneInput {
   connect?: AreaWhereUniqueInput;
 }
 
-export type FamilyWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface TradeUpdateInput {
+  product?: ProductUpdateOneInput;
+  number?: Int;
+  amount?: Float;
+  user?: UserUpdateOneInput;
+  status?: String;
+}
 
 export interface AreaUpdateDataInput {
   code?: String;
@@ -4725,19 +4741,19 @@ export interface AreaUpdateDataInput {
   towns?: StreetUpdateManyWithoutAreaInput;
 }
 
-export interface StreetUpdateManyMutationInput {
-  code?: String;
-  name?: String;
-}
+export type FamilyWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface AreaUpsertNestedInput {
   update: AreaUpdateDataInput;
   create: AreaCreateInput;
 }
 
-export type FamilyGroupWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface StreetUpdateManyMutationInput {
+  code?: String;
+  name?: String;
+}
 
 export interface StreetUpdateOneInput {
   create?: StreetCreateInput;
@@ -4748,10 +4764,9 @@ export interface StreetUpdateOneInput {
   connect?: StreetWhereUniqueInput;
 }
 
-export interface StationUpdateInput {
-  code?: String;
-  name?: String;
-}
+export type FamilyGroupWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface StreetUpdateDataInput {
   code?: String;
@@ -4760,9 +4775,10 @@ export interface StreetUpdateDataInput {
   villages?: VillageUpdateManyWithoutStreetInput;
 }
 
-export type FindPassWordWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface StationUpdateInput {
+  code?: String;
+  name?: String;
+}
 
 export interface AreaUpdateOneRequiredWithoutTownsInput {
   create?: AreaCreateWithoutTownsInput;
@@ -4771,11 +4787,9 @@ export interface AreaUpdateOneRequiredWithoutTownsInput {
   connect?: AreaWhereUniqueInput;
 }
 
-export interface UserUpsertWithWhereUniqueWithoutSkillsInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutSkillsDataInput;
-  create: UserCreateWithoutSkillsInput;
-}
+export type FindPassWordWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface AreaUpdateWithoutTownsDataInput {
   code?: String;
@@ -4783,14 +4797,25 @@ export interface AreaUpdateWithoutTownsDataInput {
   city?: CityUpdateOneRequiredWithoutAreasInput;
 }
 
-export interface UserUpdateWithWhereUniqueWithoutSkillsInput {
+export interface UserUpsertWithWhereUniqueWithoutSkillsInput {
   where: UserWhereUniqueInput;
-  data: UserUpdateWithoutSkillsDataInput;
+  update: UserUpdateWithoutSkillsDataInput;
+  create: UserCreateWithoutSkillsInput;
 }
 
 export interface AreaUpsertWithoutTownsInput {
   update: AreaUpdateWithoutTownsDataInput;
   create: AreaCreateWithoutTownsInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutSkillsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutSkillsDataInput;
+}
+
+export interface StreetUpsertNestedInput {
+  update: StreetUpdateDataInput;
+  create: StreetCreateInput;
 }
 
 export interface UserUpdateManyWithoutSkillsInput {
@@ -4810,9 +4835,13 @@ export interface UserUpdateManyWithoutSkillsInput {
     | UserUpdateManyWithWhereNestedInput;
 }
 
-export interface StreetUpsertNestedInput {
-  update: StreetUpdateDataInput;
-  create: StreetCreateInput;
+export interface VillageUpdateOneInput {
+  create?: VillageCreateInput;
+  update?: VillageUpdateDataInput;
+  upsert?: VillageUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: VillageWhereUniqueInput;
 }
 
 export interface UserCreateWithoutSkillsInput {
@@ -4854,23 +4883,9 @@ export interface UserCreateWithoutSkillsInput {
   loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
   loveMan?: LoveMatchingCreateManyWithoutManInput;
   signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface VillageUpdateOneInput {
-  create?: VillageCreateInput;
-  update?: VillageUpdateDataInput;
-  upsert?: VillageUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: VillageWhereUniqueInput;
-}
-
-export interface UserCreateManyWithoutSkillsInput {
-  create?: UserCreateWithoutSkillsInput[] | UserCreateWithoutSkillsInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
 export interface VillageUpdateDataInput {
@@ -4880,10 +4895,9 @@ export interface VillageUpdateDataInput {
   people?: UserUpdateManyInput;
 }
 
-export interface SchoolEduUpdateManyMutationInput {
-  startTime?: DateTimeInput;
-  grade?: Int;
-  className?: String;
+export interface UserCreateManyWithoutSkillsInput {
+  create?: UserCreateWithoutSkillsInput[] | UserCreateWithoutSkillsInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
 export interface StreetUpdateOneRequiredWithoutVillagesInput {
@@ -4891,6 +4905,18 @@ export interface StreetUpdateOneRequiredWithoutVillagesInput {
   update?: StreetUpdateWithoutVillagesDataInput;
   upsert?: StreetUpsertWithoutVillagesInput;
   connect?: StreetWhereUniqueInput;
+}
+
+export interface SchoolEduUpdateManyMutationInput {
+  startTime?: DateTimeInput;
+  grade?: Int;
+  className?: String;
+}
+
+export interface StreetUpdateWithoutVillagesDataInput {
+  code?: String;
+  name?: String;
+  Area?: AreaUpdateOneRequiredWithoutTownsInput;
 }
 
 export interface CityWhereInput {
@@ -4945,10 +4971,9 @@ export interface CityWhereInput {
   NOT?: CityWhereInput[] | CityWhereInput;
 }
 
-export interface StreetUpdateWithoutVillagesDataInput {
-  code?: String;
-  name?: String;
-  Area?: AreaUpdateOneRequiredWithoutTownsInput;
+export interface StreetUpsertWithoutVillagesInput {
+  update: StreetUpdateWithoutVillagesDataInput;
+  create: StreetCreateWithoutVillagesInput;
 }
 
 export interface SchoolUpdateManyMutationInput {
@@ -4956,25 +4981,15 @@ export interface SchoolUpdateManyMutationInput {
   kind?: Educationkind;
 }
 
-export interface StreetUpsertWithoutVillagesInput {
-  update: StreetUpdateWithoutVillagesDataInput;
-  create: StreetCreateWithoutVillagesInput;
+export interface VillageUpsertNestedInput {
+  update: VillageUpdateDataInput;
+  create: VillageCreateInput;
 }
 
 export type LocationGroupWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
   code?: String;
 }>;
-
-export interface VillageUpsertNestedInput {
-  update: VillageUpdateDataInput;
-  create: VillageCreateInput;
-}
-
-export interface RegisterCountUpdateInput {
-  addUser?: UserUpdateOneInput;
-  deviceId?: String;
-}
 
 export interface SchoolUpdateManyWithoutLocationInput {
   create?:
@@ -4995,6 +5010,16 @@ export interface SchoolUpdateManyWithoutLocationInput {
     | SchoolUpdateManyWithWhereNestedInput;
 }
 
+export interface RegisterCountUpdateInput {
+  addUser?: UserUpdateOneInput;
+  deviceId?: String;
+}
+
+export interface SchoolUpdateWithWhereUniqueWithoutLocationInput {
+  where: SchoolWhereUniqueInput;
+  data: SchoolUpdateWithoutLocationDataInput;
+}
+
 export interface LogsWhereInput {
   user?: UserWhereInput;
   createFamilyGroupTime?: DateTimeInput;
@@ -5010,9 +5035,9 @@ export interface LogsWhereInput {
   NOT?: LogsWhereInput[] | LogsWhereInput;
 }
 
-export interface SchoolUpdateWithWhereUniqueWithoutLocationInput {
-  where: SchoolWhereUniqueInput;
-  data: SchoolUpdateWithoutLocationDataInput;
+export interface SchoolUpdateWithoutLocationDataInput {
+  name?: String;
+  kind?: Educationkind;
 }
 
 export interface UserUpsertWithWhereUniqueWithoutRegStatusInput {
@@ -5021,25 +5046,16 @@ export interface UserUpsertWithWhereUniqueWithoutRegStatusInput {
   create: UserCreateWithoutRegStatusInput;
 }
 
-export interface SchoolUpdateWithoutLocationDataInput {
-  name?: String;
-  kind?: Educationkind;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutRegStatusInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutRegStatusDataInput;
-}
-
 export interface SchoolUpsertWithWhereUniqueWithoutLocationInput {
   where: SchoolWhereUniqueInput;
   update: SchoolUpdateWithoutLocationDataInput;
   create: SchoolCreateWithoutLocationInput;
 }
 
-export type LoveMatchingWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface UserUpdateWithWhereUniqueWithoutRegStatusInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutRegStatusDataInput;
+}
 
 export interface SchoolScalarWhereInput {
   id?: ID_Input;
@@ -5077,6 +5093,15 @@ export interface SchoolScalarWhereInput {
   AND?: SchoolScalarWhereInput[] | SchoolScalarWhereInput;
   OR?: SchoolScalarWhereInput[] | SchoolScalarWhereInput;
   NOT?: SchoolScalarWhereInput[] | SchoolScalarWhereInput;
+}
+
+export type LoveMatchingWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface SchoolUpdateManyWithWhereNestedInput {
+  where: SchoolScalarWhereInput;
+  data: SchoolUpdateManyDataInput;
 }
 
 export interface UserCreateWithoutRegStatusInput {
@@ -5118,29 +5143,19 @@ export interface UserCreateWithoutRegStatusInput {
   loveMan?: LoveMatchingCreateManyWithoutManInput;
   signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
   skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
-
-export interface SchoolUpdateManyWithWhereNestedInput {
-  where: SchoolScalarWhereInput;
-  data: SchoolUpdateManyDataInput;
-}
-
-export type LoveSettingWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
 
 export interface SchoolUpdateManyDataInput {
   name?: String;
   kind?: Educationkind;
 }
 
-export interface ProvinceUpdateManyMutationInput {
-  code?: String;
-  name?: String;
-}
+export type LoveSettingWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface CompanyUpdateManyWithoutLocationInput {
   create?:
@@ -5161,9 +5176,9 @@ export interface CompanyUpdateManyWithoutLocationInput {
     | CompanyUpdateManyWithWhereNestedInput;
 }
 
-export interface ProjectUpdateManyMutationInput {
+export interface ProvinceUpdateManyMutationInput {
+  code?: String;
   name?: String;
-  content?: String;
 }
 
 export interface CompanyUpdateWithWhereUniqueWithoutLocationInput {
@@ -5171,12 +5186,9 @@ export interface CompanyUpdateWithWhereUniqueWithoutLocationInput {
   data: CompanyUpdateWithoutLocationDataInput;
 }
 
-export interface ProjectUpdateInput {
+export interface ProjectUpdateManyMutationInput {
   name?: String;
-  place?: CityUpdateOneInput;
   content?: String;
-  conditions?: PartnerConditionUpdateManyWithoutProjectInput;
-  starter?: UserUpdateOneWithoutProjectInput;
 }
 
 export interface CompanyUpdateWithoutLocationDataInput {
@@ -5189,10 +5201,12 @@ export interface CompanyUpdateWithoutLocationDataInput {
   workGroup?: WorkGroupUpdateOneWithoutCompanyInput;
 }
 
-export interface ProductUpdateManyMutationInput {
-  subject?: String;
-  info?: String;
-  price?: Float;
+export interface ProjectUpdateInput {
+  name?: String;
+  place?: CityUpdateOneInput;
+  content?: String;
+  conditions?: PartnerConditionUpdateManyWithoutProjectInput;
+  starter?: UserUpdateOneWithoutProjectsInput;
 }
 
 export interface WorkUpdateManyWithoutCompanyInput {
@@ -5212,20 +5226,20 @@ export interface WorkUpdateManyWithoutCompanyInput {
     | WorkUpdateManyWithWhereNestedInput;
 }
 
-export type MajorWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface ProductUpdateManyMutationInput {
+  subject?: String;
+  info?: String;
+  price?: Float;
+}
 
 export interface WorkUpdateWithWhereUniqueWithoutCompanyInput {
   where: WorkWhereUniqueInput;
   data: WorkUpdateWithoutCompanyDataInput;
 }
 
-export interface ProductCreateInput {
-  subject?: String;
-  info?: String;
-  price?: Float;
-}
+export type MajorWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface WorkUpdateWithoutCompanyDataInput {
   startTime?: DateTimeInput;
@@ -5236,9 +5250,10 @@ export interface WorkUpdateWithoutCompanyDataInput {
   worker?: UserUpdateOneWithoutWorksInput;
 }
 
-export interface UserUpsertWithoutPostsInput {
-  update: UserUpdateWithoutPostsDataInput;
-  create: UserCreateWithoutPostsInput;
+export interface ProductCreateInput {
+  subject?: String;
+  info?: String;
+  price?: Float;
 }
 
 export interface StationUpdateOneInput {
@@ -5248,6 +5263,16 @@ export interface StationUpdateOneInput {
   delete?: Boolean;
   disconnect?: Boolean;
   connect?: StationWhereUniqueInput;
+}
+
+export interface UserUpsertWithoutPostsInput {
+  update: UserUpdateWithoutPostsDataInput;
+  create: UserCreateWithoutPostsInput;
+}
+
+export interface StationUpdateDataInput {
+  code?: String;
+  name?: String;
 }
 
 export interface UserUpdateWithoutPostsDataInput {
@@ -5289,14 +5314,14 @@ export interface UserUpdateWithoutPostsDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
-export interface StationUpdateDataInput {
-  code?: String;
-  name?: String;
+export interface StationUpsertNestedInput {
+  update: StationUpdateDataInput;
+  create: StationCreateInput;
 }
 
 export interface PostUpdateInput {
@@ -5306,9 +5331,13 @@ export interface PostUpdateInput {
   author?: UserUpdateOneRequiredWithoutPostsInput;
 }
 
-export interface StationUpsertNestedInput {
-  update: StationUpdateDataInput;
-  create: StationCreateInput;
+export interface UserUpdateOneWithoutWorksInput {
+  create?: UserCreateWithoutWorksInput;
+  update?: UserUpdateWithoutWorksDataInput;
+  upsert?: UserUpsertWithoutWorksInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface UserCreateWithoutPostsInput {
@@ -5350,25 +5379,9 @@ export interface UserCreateWithoutPostsInput {
   loveMan?: LoveMatchingCreateManyWithoutManInput;
   signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
   skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface UserUpdateOneWithoutWorksInput {
-  create?: UserCreateWithoutWorksInput;
-  update?: UserUpdateWithoutWorksDataInput;
-  upsert?: UserUpsertWithoutWorksInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface PostCreateInput {
-  isPublished?: Boolean;
-  title: String;
-  content: String;
-  author: UserCreateOneWithoutPostsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
 export interface UserUpdateWithoutWorksDataInput {
@@ -5410,14 +5423,16 @@ export interface UserUpdateWithoutWorksDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
-export interface PhotoUpdateManyMutationInput {
-  name?: String;
-  url?: String;
+export interface PostCreateInput {
+  isPublished?: Boolean;
+  title: String;
+  content: String;
+  author: UserCreateOneWithoutPostsInput;
 }
 
 export interface LocationUpdateOneWithoutLivesInput {
@@ -5429,8 +5444,9 @@ export interface LocationUpdateOneWithoutLivesInput {
   connect?: LocationWhereUniqueInput;
 }
 
-export interface PersonUpdateManyMutationInput {
+export interface PhotoUpdateManyMutationInput {
   name?: String;
+  url?: String;
 }
 
 export interface LocationUpdateWithoutLivesDataInput {
@@ -5446,12 +5462,8 @@ export interface LocationUpdateWithoutLivesDataInput {
   borns?: UserUpdateManyWithoutBirthplaceInput;
 }
 
-export interface PersonUpdateInput {
+export interface PersonUpdateManyMutationInput {
   name?: String;
-  user?: UserUpdateOneInput;
-  families?: FamilyUpdateManyWithoutToInput;
-  asFather?: FamilyGroupUpdateManyWithoutFatherInput;
-  asMother?: FamilyGroupUpdateManyWithoutMotherInput;
 }
 
 export interface UniversityUpdateManyInput {
@@ -5471,9 +5483,12 @@ export interface UniversityUpdateManyInput {
     | UniversityUpdateManyWithWhereNestedInput;
 }
 
-export interface PartnerConditionUpdateManyMutationInput {
-  skillName?: String;
-  place?: String;
+export interface PersonUpdateInput {
+  name?: String;
+  user?: UserUpdateOneInput;
+  families?: FamilyUpdateManyWithoutToInput;
+  asFather?: FamilyGroupUpdateManyWithoutFatherInput;
+  asMother?: FamilyGroupUpdateManyWithoutMotherInput;
 }
 
 export interface UniversityUpdateWithWhereUniqueNestedInput {
@@ -5481,10 +5496,11 @@ export interface UniversityUpdateWithWhereUniqueNestedInput {
   data: UniversityUpdateDataInput;
 }
 
-export type PhotoWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  name?: String;
-}>;
+export interface PartnerConditionUpdateManyMutationInput {
+  skillName?: String;
+  place?: String;
+  number?: Int;
+}
 
 export interface UniversityUpdateDataInput {
   name?: String;
@@ -5494,9 +5510,10 @@ export interface UniversityUpdateDataInput {
   desc?: String;
 }
 
-export interface OldColleagueUpdateManyMutationInput {
-  status?: String;
-}
+export type PhotoWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
 
 export interface UniversityUpsertWithWhereUniqueNestedInput {
   where: UniversityWhereUniqueInput;
@@ -5504,11 +5521,8 @@ export interface UniversityUpsertWithWhereUniqueNestedInput {
   create: UniversityCreateInput;
 }
 
-export interface OldColleagueCreateInput {
-  from?: UserCreateOneWithoutFromOldColleaguesInput;
-  to?: UserCreateOneWithoutToOldColleaguesInput;
-  company?: CompanyCreateOneInput;
-  status: String;
+export interface OldColleagueUpdateManyMutationInput {
+  status?: String;
 }
 
 export interface UniversityScalarWhereInput {
@@ -5591,8 +5605,11 @@ export interface UniversityScalarWhereInput {
   NOT?: UniversityScalarWhereInput[] | UniversityScalarWhereInput;
 }
 
-export interface MessageUpdateManyMutationInput {
-  text?: String;
+export interface OldColleagueCreateInput {
+  from?: UserCreateOneWithoutFromOldColleaguesInput;
+  to?: UserCreateOneWithoutToOldColleaguesInput;
+  company?: CompanyCreateOneInput;
+  status: String;
 }
 
 export interface UniversityUpdateManyWithWhereNestedInput {
@@ -5600,10 +5617,8 @@ export interface UniversityUpdateManyWithWhereNestedInput {
   data: UniversityUpdateManyDataInput;
 }
 
-export interface MajorUpdateManyMutationInput {
-  name?: String;
-  category?: String;
-  education?: Educationkind;
+export interface MessageUpdateManyMutationInput {
+  text?: String;
 }
 
 export interface UniversityUpdateManyDataInput {
@@ -5614,7 +5629,7 @@ export interface UniversityUpdateManyDataInput {
   desc?: String;
 }
 
-export interface MajorUpdateInput {
+export interface MajorUpdateManyMutationInput {
   name?: String;
   category?: String;
   education?: Educationkind;
@@ -5639,8 +5654,10 @@ export interface UserUpdateManyWithoutBirthplaceInput {
     | UserUpdateManyWithWhereNestedInput;
 }
 
-export interface LoveSignUpUpdateManyMutationInput {
-  period?: String;
+export interface MajorUpdateInput {
+  name?: String;
+  category?: String;
+  education?: Educationkind;
 }
 
 export interface UserUpdateWithWhereUniqueWithoutBirthplaceInput {
@@ -5648,48 +5665,8 @@ export interface UserUpdateWithWhereUniqueWithoutBirthplaceInput {
   data: UserUpdateWithoutBirthplaceDataInput;
 }
 
-export interface UserUpdateWithoutSignUpLoveDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoUpdateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutBornsInput;
-  residence?: LocationUpdateOneWithoutLivesInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  sentMessages?: MessageUpdateManyWithoutFromInput;
-  receiveMessages?: MessageUpdateManyWithoutToInput;
-  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneInput;
-  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
-  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
-  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
-  loveMan?: LoveMatchingUpdateManyWithoutManInput;
-  skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+export interface LoveSignUpUpdateManyMutationInput {
+  period?: String;
 }
 
 export interface UserUpdateWithoutBirthplaceDataInput {
@@ -5731,14 +5708,54 @@ export interface UserUpdateWithoutBirthplaceDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
-export type ProjectWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface UserUpdateWithoutSignUpLoveDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoUpdateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutBornsInput;
+  residence?: LocationUpdateOneWithoutLivesInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  sentMessages?: MessageUpdateManyWithoutFromInput;
+  receiveMessages?: MessageUpdateManyWithoutToInput;
+  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
+  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
+  loveMan?: LoveMatchingUpdateManyWithoutManInput;
+  skills?: SkillUpdateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
+}
 
 export interface PostUpdateManyWithoutAuthorInput {
   create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput;
@@ -5755,6 +5772,15 @@ export interface PostUpdateManyWithoutAuthorInput {
   updateMany?:
     | PostUpdateManyWithWhereNestedInput[]
     | PostUpdateManyWithWhereNestedInput;
+}
+
+export type ProjectWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
+  where: PostWhereUniqueInput;
+  data: PostUpdateWithoutAuthorDataInput;
 }
 
 export interface UserCreateWithoutSignUpLoveInput {
@@ -5796,14 +5822,15 @@ export interface UserCreateWithoutSignUpLoveInput {
   loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
   loveMan?: LoveMatchingCreateManyWithoutManInput;
   skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
-export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput;
-  data: PostUpdateWithoutAuthorDataInput;
+export interface PostUpdateWithoutAuthorDataInput {
+  isPublished?: Boolean;
+  title?: String;
+  content?: String;
 }
 
 export type ProvinceWhereUniqueInput = AtLeastOne<{
@@ -5812,10 +5839,10 @@ export type ProvinceWhereUniqueInput = AtLeastOne<{
   name?: String;
 }>;
 
-export interface PostUpdateWithoutAuthorDataInput {
-  isPublished?: Boolean;
-  title?: String;
-  content?: String;
+export interface PostUpsertWithWhereUniqueWithoutAuthorInput {
+  where: PostWhereUniqueInput;
+  update: PostUpdateWithoutAuthorDataInput;
+  create: PostCreateWithoutAuthorInput;
 }
 
 export interface LoveSettingUpdateManyMutationInput {
@@ -5831,56 +5858,6 @@ export interface LoveSettingUpdateManyMutationInput {
   datePlace?: String;
   memeberGrade?: Int;
   memeberGradeEndTime?: DateTimeInput;
-}
-
-export interface PostUpsertWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput;
-  update: PostUpdateWithoutAuthorDataInput;
-  create: PostCreateWithoutAuthorInput;
-}
-
-export interface UserUpdateWithoutLoveSettingDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoUpdateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutBornsInput;
-  residence?: LocationUpdateOneWithoutLivesInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  sentMessages?: MessageUpdateManyWithoutFromInput;
-  receiveMessages?: MessageUpdateManyWithoutToInput;
-  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneInput;
-  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
-  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
-  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
-  loveMan?: LoveMatchingUpdateManyWithoutManInput;
-  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
-  skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
 }
 
 export interface PostScalarWhereInput {
@@ -5949,6 +5926,55 @@ export interface PostScalarWhereInput {
   NOT?: PostScalarWhereInput[] | PostScalarWhereInput;
 }
 
+export interface UserUpdateWithoutLoveSettingDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoUpdateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutBornsInput;
+  residence?: LocationUpdateOneWithoutLivesInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  sentMessages?: MessageUpdateManyWithoutFromInput;
+  receiveMessages?: MessageUpdateManyWithoutToInput;
+  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
+  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
+  loveMan?: LoveMatchingUpdateManyWithoutManInput;
+  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
+  skills?: SkillUpdateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
+}
+
+export interface PostUpdateManyWithWhereNestedInput {
+  where: PostScalarWhereInput;
+  data: PostUpdateManyDataInput;
+}
+
 export interface UserUpdateOneRequiredWithoutLoveSettingInput {
   create?: UserCreateWithoutLoveSettingInput;
   update?: UserUpdateWithoutLoveSettingDataInput;
@@ -5956,9 +5982,10 @@ export interface UserUpdateOneRequiredWithoutLoveSettingInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface PostUpdateManyWithWhereNestedInput {
-  where: PostScalarWhereInput;
-  data: PostUpdateManyDataInput;
+export interface PostUpdateManyDataInput {
+  isPublished?: Boolean;
+  title?: String;
+  content?: String;
 }
 
 export interface UserCreateWithoutLoveSettingInput {
@@ -6000,20 +6027,10 @@ export interface UserCreateWithoutLoveSettingInput {
   loveMan?: LoveMatchingCreateManyWithoutManInput;
   signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
   skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
-
-export interface PostUpdateManyDataInput {
-  isPublished?: Boolean;
-  title?: String;
-  content?: String;
-}
-
-export type RegisterCountWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
 
 export interface RegStatusUpdateOneWithoutApplicantsInput {
   create?: RegStatusCreateWithoutApplicantsInput;
@@ -6024,7 +6041,17 @@ export interface RegStatusUpdateOneWithoutApplicantsInput {
   connect?: RegStatusWhereUniqueInput;
 }
 
-export interface RegisterCountWhereInput {
+export type RegisterCountWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface RegStatusUpdateWithoutApplicantsDataInput {
+  education?: Educationkind;
+  university?: UniversityUpdateOneInput;
+  major?: MajorUpdateOneRequiredInput;
+}
+
+export interface OldColleagueWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -6039,45 +6066,26 @@ export interface RegisterCountWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  addUser?: UserWhereInput;
-  deviceId?: String;
-  deviceId_not?: String;
-  deviceId_in?: String[] | String;
-  deviceId_not_in?: String[] | String;
-  deviceId_lt?: String;
-  deviceId_lte?: String;
-  deviceId_gt?: String;
-  deviceId_gte?: String;
-  deviceId_contains?: String;
-  deviceId_not_contains?: String;
-  deviceId_starts_with?: String;
-  deviceId_not_starts_with?: String;
-  deviceId_ends_with?: String;
-  deviceId_not_ends_with?: String;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  AND?: RegisterCountWhereInput[] | RegisterCountWhereInput;
-  OR?: RegisterCountWhereInput[] | RegisterCountWhereInput;
-  NOT?: RegisterCountWhereInput[] | RegisterCountWhereInput;
-}
-
-export interface RegStatusUpdateWithoutApplicantsDataInput {
-  education?: Educationkind;
-  university?: UniversityUpdateOneInput;
-  major?: MajorUpdateOneRequiredInput;
-}
-
-export interface LoveMatchingUpdateInput {
-  period?: String;
-  city?: CityUpdateOneInput;
-  woman?: UserUpdateOneWithoutLoveWomanInput;
-  man?: UserUpdateOneWithoutLoveManInput;
+  from?: UserWhereInput;
+  to?: UserWhereInput;
+  company?: CompanyWhereInput;
+  status?: String;
+  status_not?: String;
+  status_in?: String[] | String;
+  status_not_in?: String[] | String;
+  status_lt?: String;
+  status_lte?: String;
+  status_gt?: String;
+  status_gte?: String;
+  status_contains?: String;
+  status_not_contains?: String;
+  status_starts_with?: String;
+  status_not_starts_with?: String;
+  status_ends_with?: String;
+  status_not_ends_with?: String;
+  AND?: OldColleagueWhereInput[] | OldColleagueWhereInput;
+  OR?: OldColleagueWhereInput[] | OldColleagueWhereInput;
+  NOT?: OldColleagueWhereInput[] | OldColleagueWhereInput;
 }
 
 export interface UniversityUpdateOneInput {
@@ -6089,8 +6097,11 @@ export interface UniversityUpdateOneInput {
   connect?: UniversityWhereUniqueInput;
 }
 
-export interface LogsUpdateManyMutationInput {
-  createFamilyGroupTime?: DateTimeInput;
+export interface LoveMatchingUpdateInput {
+  period?: String;
+  city?: CityUpdateOneInput;
+  woman?: UserUpdateOneWithoutLoveWomanInput;
+  man?: UserUpdateOneWithoutLoveManInput;
 }
 
 export interface UniversityUpsertNestedInput {
@@ -6098,8 +6109,7 @@ export interface UniversityUpsertNestedInput {
   create: UniversityCreateInput;
 }
 
-export interface LogsCreateInput {
-  user?: UserCreateOneInput;
+export interface LogsUpdateManyMutationInput {
   createFamilyGroupTime?: DateTimeInput;
 }
 
@@ -6110,16 +6120,26 @@ export interface MajorUpdateOneRequiredInput {
   connect?: MajorWhereUniqueInput;
 }
 
-export interface UserUpsertWithWhereUniqueWithoutLocationGroupsInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutLocationGroupsDataInput;
-  create: UserCreateWithoutLocationGroupsInput;
+export interface LogsCreateInput {
+  user?: UserCreateOneInput;
+  createFamilyGroupTime?: DateTimeInput;
 }
 
 export interface MajorUpdateDataInput {
   name?: String;
   category?: String;
   education?: Educationkind;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutLocationGroupsInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutLocationGroupsDataInput;
+  create: UserCreateWithoutLocationGroupsInput;
+}
+
+export interface MajorUpsertNestedInput {
+  update: MajorUpdateDataInput;
+  create: MajorCreateInput;
 }
 
 export interface UserUpdateWithoutLocationGroupsDataInput {
@@ -6161,14 +6181,14 @@ export interface UserUpdateWithoutLocationGroupsDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
-export interface MajorUpsertNestedInput {
-  update: MajorUpdateDataInput;
-  create: MajorCreateInput;
+export interface RegStatusUpsertWithoutApplicantsInput {
+  update: RegStatusUpdateWithoutApplicantsDataInput;
+  create: RegStatusCreateWithoutApplicantsInput;
 }
 
 export interface UserUpdateManyWithoutLocationGroupsInput {
@@ -6190,18 +6210,6 @@ export interface UserUpdateManyWithoutLocationGroupsInput {
     | UserUpdateManyWithWhereNestedInput;
 }
 
-export interface RegStatusUpsertWithoutApplicantsInput {
-  update: RegStatusUpdateWithoutApplicantsDataInput;
-  create: RegStatusCreateWithoutApplicantsInput;
-}
-
-export interface LocationGroupUpdateInput {
-  kind?: LocationGroupKind;
-  code?: String;
-  name?: String;
-  users?: UserUpdateManyWithoutLocationGroupsInput;
-}
-
 export interface FamilyUpdateManyWithoutFromInput {
   create?: FamilyCreateWithoutFromInput[] | FamilyCreateWithoutFromInput;
   delete?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
@@ -6219,6 +6227,18 @@ export interface FamilyUpdateManyWithoutFromInput {
     | FamilyUpdateManyWithWhereNestedInput;
 }
 
+export interface LocationGroupUpdateInput {
+  kind?: LocationGroupKind;
+  code?: String;
+  name?: String;
+  users?: UserUpdateManyWithoutLocationGroupsInput;
+}
+
+export interface FamilyUpdateWithWhereUniqueWithoutFromInput {
+  where: FamilyWhereUniqueInput;
+  data: FamilyUpdateWithoutFromDataInput;
+}
+
 export interface UserCreateManyWithoutLocationGroupsInput {
   create?:
     | UserCreateWithoutLocationGroupsInput[]
@@ -6226,9 +6246,11 @@ export interface UserCreateManyWithoutLocationGroupsInput {
   connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
-export interface FamilyUpdateWithWhereUniqueWithoutFromInput {
-  where: FamilyWhereUniqueInput;
-  data: FamilyUpdateWithoutFromDataInput;
+export interface FamilyUpdateWithoutFromDataInput {
+  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
+  relationship?: String;
+  spouse?: FamilyUpdateOneInput;
+  status?: String;
 }
 
 export interface AdvertisementWhereInput {
@@ -6337,17 +6359,6 @@ export interface AdvertisementWhereInput {
   NOT?: AdvertisementWhereInput[] | AdvertisementWhereInput;
 }
 
-export interface FamilyUpdateWithoutFromDataInput {
-  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
-  relationship?: String;
-  spouse?: FamilyUpdateOneInput;
-  status?: String;
-}
-
-export interface LocationUpdateManyMutationInput {
-  name?: String;
-}
-
 export interface PersonUpdateOneRequiredWithoutFamiliesInput {
   create?: PersonCreateWithoutFamiliesInput;
   update?: PersonUpdateWithoutFamiliesDataInput;
@@ -6355,10 +6366,9 @@ export interface PersonUpdateOneRequiredWithoutFamiliesInput {
   connect?: PersonWhereUniqueInput;
 }
 
-export type StreetWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  code?: String;
-}>;
+export interface LocationUpdateManyMutationInput {
+  name?: String;
+}
 
 export interface PersonUpdateWithoutFamiliesDataInput {
   name?: String;
@@ -6367,11 +6377,10 @@ export interface PersonUpdateWithoutFamiliesDataInput {
   asMother?: FamilyGroupUpdateManyWithoutMotherInput;
 }
 
-export interface GroupMessageUpdateManyMutationInput {
-  type?: GroupKind;
-  to?: String;
-  text?: String;
-}
+export type StreetWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+}>;
 
 export interface UserUpdateOneInput {
   create?: UserCreateInput;
@@ -6382,13 +6391,38 @@ export interface UserUpdateOneInput {
   connect?: UserWhereUniqueInput;
 }
 
-export type TradeWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface GroupMessageUpdateManyMutationInput {
+  type?: GroupKind;
+  to?: String;
+  text?: String;
+}
 
 export interface UserUpsertNestedInput {
   update: UserUpdateDataInput;
   create: UserCreateInput;
+}
+
+export type TradeWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface FamilyGroupUpdateManyWithoutFatherInput {
+  create?:
+    | FamilyGroupCreateWithoutFatherInput[]
+    | FamilyGroupCreateWithoutFatherInput;
+  delete?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
+  connect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
+  disconnect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
+  update?:
+    | FamilyGroupUpdateWithWhereUniqueWithoutFatherInput[]
+    | FamilyGroupUpdateWithWhereUniqueWithoutFatherInput;
+  upsert?:
+    | FamilyGroupUpsertWithWhereUniqueWithoutFatherInput[]
+    | FamilyGroupUpsertWithWhereUniqueWithoutFatherInput;
+  deleteMany?: FamilyGroupScalarWhereInput[] | FamilyGroupScalarWhereInput;
+  updateMany?:
+    | FamilyGroupUpdateManyWithWhereNestedInput[]
+    | FamilyGroupUpdateManyWithWhereNestedInput;
 }
 
 export interface TradeWhereInput {
@@ -6443,23 +6477,9 @@ export interface TradeWhereInput {
   NOT?: TradeWhereInput[] | TradeWhereInput;
 }
 
-export interface FamilyGroupUpdateManyWithoutFatherInput {
-  create?:
-    | FamilyGroupCreateWithoutFatherInput[]
-    | FamilyGroupCreateWithoutFatherInput;
-  delete?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
-  connect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
-  disconnect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
-  update?:
-    | FamilyGroupUpdateWithWhereUniqueWithoutFatherInput[]
-    | FamilyGroupUpdateWithWhereUniqueWithoutFatherInput;
-  upsert?:
-    | FamilyGroupUpsertWithWhereUniqueWithoutFatherInput[]
-    | FamilyGroupUpsertWithWhereUniqueWithoutFatherInput;
-  deleteMany?: FamilyGroupScalarWhereInput[] | FamilyGroupScalarWhereInput;
-  updateMany?:
-    | FamilyGroupUpdateManyWithWhereNestedInput[]
-    | FamilyGroupUpdateManyWithWhereNestedInput;
+export interface FamilyGroupUpdateWithWhereUniqueWithoutFatherInput {
+  where: FamilyGroupWhereUniqueInput;
+  data: FamilyGroupUpdateWithoutFatherDataInput;
 }
 
 export interface GroupMessageUpdateInput {
@@ -6470,16 +6490,6 @@ export interface GroupMessageUpdateInput {
   image?: PhotoUpdateOneInput;
 }
 
-export interface FamilyGroupUpdateWithWhereUniqueWithoutFatherInput {
-  where: FamilyGroupWhereUniqueInput;
-  data: FamilyGroupUpdateWithoutFatherDataInput;
-}
-
-export interface UserCreateOneWithoutGroupMessagesInput {
-  create?: UserCreateWithoutGroupMessagesInput;
-  connect?: UserWhereUniqueInput;
-}
-
 export interface FamilyGroupUpdateWithoutFatherDataInput {
   mother?: PersonUpdateOneWithoutAsMotherInput;
   creater?: UserUpdateOneWithoutCreaterInput;
@@ -6488,12 +6498,9 @@ export interface FamilyGroupUpdateWithoutFatherDataInput {
   users?: UserUpdateManyWithoutFamilyGroupInput;
 }
 
-export interface GroupMessageCreateInput {
-  type?: GroupKind;
-  to: String;
-  from: UserCreateOneWithoutGroupMessagesInput;
-  text?: String;
-  image?: PhotoCreateOneInput;
+export interface UserCreateOneWithoutGroupMessagesInput {
+  create?: UserCreateWithoutGroupMessagesInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface PersonUpdateOneWithoutAsMotherInput {
@@ -6505,10 +6512,12 @@ export interface PersonUpdateOneWithoutAsMotherInput {
   connect?: PersonWhereUniqueInput;
 }
 
-export interface UserUpsertWithWhereUniqueWithoutGroupsInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutGroupsDataInput;
-  create: UserCreateWithoutGroupsInput;
+export interface GroupMessageCreateInput {
+  type?: GroupKind;
+  to: String;
+  from: UserCreateOneWithoutGroupMessagesInput;
+  text?: String;
+  image?: PhotoCreateOneInput;
 }
 
 export interface PersonUpdateWithoutAsMotherDataInput {
@@ -6516,6 +6525,29 @@ export interface PersonUpdateWithoutAsMotherDataInput {
   user?: UserUpdateOneInput;
   families?: FamilyUpdateManyWithoutToInput;
   asFather?: FamilyGroupUpdateManyWithoutFatherInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutGroupsInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutGroupsDataInput;
+  create: UserCreateWithoutGroupsInput;
+}
+
+export interface FamilyUpdateManyWithoutToInput {
+  create?: FamilyCreateWithoutToInput[] | FamilyCreateWithoutToInput;
+  delete?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+  disconnect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+  update?:
+    | FamilyUpdateWithWhereUniqueWithoutToInput[]
+    | FamilyUpdateWithWhereUniqueWithoutToInput;
+  upsert?:
+    | FamilyUpsertWithWhereUniqueWithoutToInput[]
+    | FamilyUpsertWithWhereUniqueWithoutToInput;
+  deleteMany?: FamilyScalarWhereInput[] | FamilyScalarWhereInput;
+  updateMany?:
+    | FamilyUpdateManyWithWhereNestedInput[]
+    | FamilyUpdateManyWithWhereNestedInput;
 }
 
 export interface UserUpdateWithoutGroupsDataInput {
@@ -6557,26 +6589,14 @@ export interface UserUpdateWithoutGroupsDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
-export interface FamilyUpdateManyWithoutToInput {
-  create?: FamilyCreateWithoutToInput[] | FamilyCreateWithoutToInput;
-  delete?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-  disconnect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-  update?:
-    | FamilyUpdateWithWhereUniqueWithoutToInput[]
-    | FamilyUpdateWithWhereUniqueWithoutToInput;
-  upsert?:
-    | FamilyUpsertWithWhereUniqueWithoutToInput[]
-    | FamilyUpsertWithWhereUniqueWithoutToInput;
-  deleteMany?: FamilyScalarWhereInput[] | FamilyScalarWhereInput;
-  updateMany?:
-    | FamilyUpdateManyWithWhereNestedInput[]
-    | FamilyUpdateManyWithWhereNestedInput;
+export interface FamilyUpdateWithWhereUniqueWithoutToInput {
+  where: FamilyWhereUniqueInput;
+  data: FamilyUpdateWithoutToDataInput;
 }
 
 export interface UserUpdateManyWithoutGroupsInput {
@@ -6596,9 +6616,11 @@ export interface UserUpdateManyWithoutGroupsInput {
     | UserUpdateManyWithWhereNestedInput;
 }
 
-export interface FamilyUpdateWithWhereUniqueWithoutToInput {
-  where: FamilyWhereUniqueInput;
-  data: FamilyUpdateWithoutToDataInput;
+export interface FamilyUpdateWithoutToDataInput {
+  from?: UserUpdateOneRequiredWithoutFamiliesInput;
+  relationship?: String;
+  spouse?: FamilyUpdateOneInput;
+  status?: String;
 }
 
 export interface GroupUpdateInput {
@@ -6608,18 +6630,6 @@ export interface GroupUpdateInput {
   messages?: MessageUpdateManyInput;
 }
 
-export interface FamilyUpdateWithoutToDataInput {
-  from?: UserUpdateOneRequiredWithoutFamiliesInput;
-  relationship?: String;
-  spouse?: FamilyUpdateOneInput;
-  status?: String;
-}
-
-export interface UserCreateManyWithoutGroupsInput {
-  create?: UserCreateWithoutGroupsInput[] | UserCreateWithoutGroupsInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
 export interface UserUpdateOneRequiredWithoutFamiliesInput {
   create?: UserCreateWithoutFamiliesInput;
   update?: UserUpdateWithoutFamiliesDataInput;
@@ -6627,11 +6637,9 @@ export interface UserUpdateOneRequiredWithoutFamiliesInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface GroupCreateInput {
-  type?: GroupKind;
-  name?: String;
-  users?: UserCreateManyWithoutGroupsInput;
-  messages?: MessageCreateManyInput;
+export interface UserCreateManyWithoutGroupsInput {
+  create?: UserCreateWithoutGroupsInput[] | UserCreateWithoutGroupsInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
 export interface UserUpdateWithoutFamiliesDataInput {
@@ -6673,15 +6681,16 @@ export interface UserUpdateWithoutFamiliesDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
-export interface FindPassWordUpdateInput {
-  times?: Int;
-  forgetter?: UserUpdateOneWithoutForgetPasswordInput;
-  remmember?: UserUpdateManyWithoutRemmemberPasswordInput;
+export interface GroupCreateInput {
+  type?: GroupKind;
+  name?: String;
+  users?: UserCreateManyWithoutGroupsInput;
+  messages?: MessageCreateManyInput;
 }
 
 export interface SchoolEduUpdateManyWithoutStudentsInput {
@@ -6703,15 +6712,29 @@ export interface SchoolEduUpdateManyWithoutStudentsInput {
     | SchoolEduUpdateManyWithWhereNestedInput;
 }
 
+export interface FindPassWordUpdateInput {
+  times?: Int;
+  forgetter?: UserUpdateOneWithoutForgetPasswordInput;
+  remmember?: UserUpdateManyWithoutRemmemberPasswordInput;
+}
+
+export interface SchoolEduUpdateWithWhereUniqueWithoutStudentsInput {
+  where: SchoolEduWhereUniqueInput;
+  data: SchoolEduUpdateWithoutStudentsDataInput;
+}
+
 export interface FindPassWordCreateInput {
   times?: Int;
   forgetter?: UserCreateOneWithoutForgetPasswordInput;
   remmember?: UserCreateManyWithoutRemmemberPasswordInput;
 }
 
-export interface SchoolEduUpdateWithWhereUniqueWithoutStudentsInput {
-  where: SchoolEduWhereUniqueInput;
-  data: SchoolEduUpdateWithoutStudentsDataInput;
+export interface SchoolEduUpdateWithoutStudentsDataInput {
+  school?: SchoolUpdateOneInput;
+  startTime?: DateTimeInput;
+  major?: MajorUpdateOneInput;
+  grade?: Int;
+  className?: String;
 }
 
 export interface FamilyGroupUpdateInput {
@@ -6723,12 +6746,13 @@ export interface FamilyGroupUpdateInput {
   users?: UserUpdateManyWithoutFamilyGroupInput;
 }
 
-export interface SchoolEduUpdateWithoutStudentsDataInput {
-  school?: SchoolUpdateOneInput;
-  startTime?: DateTimeInput;
-  major?: MajorUpdateOneInput;
-  grade?: Int;
-  className?: String;
+export interface SchoolUpdateOneInput {
+  create?: SchoolCreateInput;
+  update?: SchoolUpdateDataInput;
+  upsert?: SchoolUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: SchoolWhereUniqueInput;
 }
 
 export interface AdvertisementUpdateInput {
@@ -6741,31 +6765,15 @@ export interface AdvertisementUpdateInput {
   endTime?: DateTimeInput;
 }
 
-export interface SchoolUpdateOneInput {
-  create?: SchoolCreateInput;
-  update?: SchoolUpdateDataInput;
-  upsert?: SchoolUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: SchoolWhereUniqueInput;
-}
-
-export interface FamilyUpdateManyMutationInput {
-  relationship?: String;
-  status?: String;
-}
-
 export interface SchoolUpdateDataInput {
   name?: String;
   kind?: Educationkind;
   location?: LocationUpdateOneWithoutSchoolsInput;
 }
 
-export interface AreaCreateInput {
-  code: String;
-  name: String;
-  city: CityCreateOneWithoutAreasInput;
-  towns?: StreetCreateManyWithoutAreaInput;
+export interface FamilyUpdateManyMutationInput {
+  relationship?: String;
+  status?: String;
 }
 
 export interface LocationUpdateOneWithoutSchoolsInput {
@@ -6777,10 +6785,11 @@ export interface LocationUpdateOneWithoutSchoolsInput {
   connect?: LocationWhereUniqueInput;
 }
 
-export interface CityCreateWithoutAreasInput {
+export interface AreaCreateInput {
   code: String;
   name: String;
-  province: ProvinceCreateOneWithoutCitiesInput;
+  city: CityCreateOneWithoutAreasInput;
+  towns?: StreetCreateManyWithoutAreaInput;
 }
 
 export interface LocationUpdateWithoutSchoolsDataInput {
@@ -6796,9 +6805,10 @@ export interface LocationUpdateWithoutSchoolsDataInput {
   lives?: UserUpdateManyWithoutResidenceInput;
 }
 
-export interface ProvinceCreateWithoutCitiesInput {
+export interface CityCreateWithoutAreasInput {
   code: String;
   name: String;
+  province: ProvinceCreateOneWithoutCitiesInput;
 }
 
 export interface UserUpdateManyWithoutResidenceInput {
@@ -6818,10 +6828,9 @@ export interface UserUpdateManyWithoutResidenceInput {
     | UserUpdateManyWithWhereNestedInput;
 }
 
-export interface StreetCreateWithoutAreaInput {
+export interface ProvinceCreateWithoutCitiesInput {
   code: String;
   name: String;
-  villages?: VillageCreateManyWithoutStreetInput;
 }
 
 export interface UserUpdateWithWhereUniqueWithoutResidenceInput {
@@ -6829,10 +6838,10 @@ export interface UserUpdateWithWhereUniqueWithoutResidenceInput {
   data: UserUpdateWithoutResidenceDataInput;
 }
 
-export interface VillageCreateWithoutStreetInput {
+export interface StreetCreateWithoutAreaInput {
   code: String;
   name: String;
-  people?: UserCreateManyInput;
+  villages?: VillageCreateManyWithoutStreetInput;
 }
 
 export interface UserUpdateWithoutResidenceDataInput {
@@ -6874,9 +6883,32 @@ export interface UserUpdateWithoutResidenceDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
+}
+
+export interface VillageCreateWithoutStreetInput {
+  code: String;
+  name: String;
+  people?: UserCreateManyInput;
+}
+
+export interface WorkUpdateManyWithoutWorkerInput {
+  create?: WorkCreateWithoutWorkerInput[] | WorkCreateWithoutWorkerInput;
+  delete?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
+  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
+  disconnect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
+  update?:
+    | WorkUpdateWithWhereUniqueWithoutWorkerInput[]
+    | WorkUpdateWithWhereUniqueWithoutWorkerInput;
+  upsert?:
+    | WorkUpsertWithWhereUniqueWithoutWorkerInput[]
+    | WorkUpsertWithWhereUniqueWithoutWorkerInput;
+  deleteMany?: WorkScalarWhereInput[] | WorkScalarWhereInput;
+  updateMany?:
+    | WorkUpdateManyWithWhereNestedInput[]
+    | WorkUpdateManyWithWhereNestedInput;
 }
 
 export interface UserCreateInput {
@@ -6919,26 +6951,14 @@ export interface UserCreateInput {
   loveMan?: LoveMatchingCreateManyWithoutManInput;
   signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
   skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
-export interface WorkUpdateManyWithoutWorkerInput {
-  create?: WorkCreateWithoutWorkerInput[] | WorkCreateWithoutWorkerInput;
-  delete?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
-  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
-  disconnect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
-  update?:
-    | WorkUpdateWithWhereUniqueWithoutWorkerInput[]
-    | WorkUpdateWithWhereUniqueWithoutWorkerInput;
-  upsert?:
-    | WorkUpsertWithWhereUniqueWithoutWorkerInput[]
-    | WorkUpsertWithWhereUniqueWithoutWorkerInput;
-  deleteMany?: WorkScalarWhereInput[] | WorkScalarWhereInput;
-  updateMany?:
-    | WorkUpdateManyWithWhereNestedInput[]
-    | WorkUpdateManyWithWhereNestedInput;
+export interface WorkUpdateWithWhereUniqueWithoutWorkerInput {
+  where: WorkWhereUniqueInput;
+  data: WorkUpdateWithoutWorkerDataInput;
 }
 
 export interface PhotoCreateWithoutUserInput {
@@ -6946,9 +6966,13 @@ export interface PhotoCreateWithoutUserInput {
   url?: String;
 }
 
-export interface WorkUpdateWithWhereUniqueWithoutWorkerInput {
-  where: WorkWhereUniqueInput;
-  data: WorkUpdateWithoutWorkerDataInput;
+export interface WorkUpdateWithoutWorkerDataInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  company?: CompanyUpdateOneWithoutWorksInput;
+  department?: String;
+  post?: StationUpdateOneInput;
+  jobContent?: String;
 }
 
 export interface LocationCreateWithoutBornsInput {
@@ -6964,21 +6988,6 @@ export interface LocationCreateWithoutBornsInput {
   lives?: UserCreateManyWithoutResidenceInput;
 }
 
-export interface WorkUpdateWithoutWorkerDataInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  company?: CompanyUpdateOneWithoutWorksInput;
-  department?: String;
-  post?: StationUpdateOneInput;
-  jobContent?: String;
-}
-
-export interface ProvinceCreateInput {
-  code: String;
-  name: String;
-  cities?: CityCreateManyWithoutProvinceInput;
-}
-
 export interface CompanyUpdateOneWithoutWorksInput {
   create?: CompanyCreateWithoutWorksInput;
   update?: CompanyUpdateWithoutWorksDataInput;
@@ -6988,10 +6997,10 @@ export interface CompanyUpdateOneWithoutWorksInput {
   connect?: CompanyWhereUniqueInput;
 }
 
-export interface CityCreateWithoutProvinceInput {
+export interface ProvinceCreateInput {
   code: String;
   name: String;
-  areas?: AreaCreateManyWithoutCityInput;
+  cities?: CityCreateManyWithoutProvinceInput;
 }
 
 export interface CompanyUpdateWithoutWorksDataInput {
@@ -7004,10 +7013,10 @@ export interface CompanyUpdateWithoutWorksDataInput {
   workGroup?: WorkGroupUpdateOneWithoutCompanyInput;
 }
 
-export interface AreaCreateWithoutCityInput {
+export interface CityCreateWithoutProvinceInput {
   code: String;
   name: String;
-  towns?: StreetCreateManyWithoutAreaInput;
+  areas?: AreaCreateManyWithoutCityInput;
 }
 
 export interface LocationUpdateOneWithoutCompaniesInput {
@@ -7019,11 +7028,10 @@ export interface LocationUpdateOneWithoutCompaniesInput {
   connect?: LocationWhereUniqueInput;
 }
 
-export interface CityCreateInput {
+export interface AreaCreateWithoutCityInput {
   code: String;
   name: String;
-  province: ProvinceCreateOneWithoutCitiesInput;
-  areas?: AreaCreateManyWithoutCityInput;
+  towns?: StreetCreateManyWithoutAreaInput;
 }
 
 export interface LocationUpdateWithoutCompaniesDataInput {
@@ -7039,9 +7047,11 @@ export interface LocationUpdateWithoutCompaniesDataInput {
   lives?: UserUpdateManyWithoutResidenceInput;
 }
 
-export interface StreetCreateOneInput {
-  create?: StreetCreateInput;
-  connect?: StreetWhereUniqueInput;
+export interface CityCreateInput {
+  code: String;
+  name: String;
+  province: ProvinceCreateOneWithoutCitiesInput;
+  areas?: AreaCreateManyWithoutCityInput;
 }
 
 export interface LocationUpsertWithoutCompaniesInput {
@@ -7049,9 +7059,9 @@ export interface LocationUpsertWithoutCompaniesInput {
   create: LocationCreateWithoutCompaniesInput;
 }
 
-export interface AreaCreateOneWithoutTownsInput {
-  create?: AreaCreateWithoutTownsInput;
-  connect?: AreaWhereUniqueInput;
+export interface StreetCreateOneInput {
+  create?: StreetCreateInput;
+  connect?: StreetWhereUniqueInput;
 }
 
 export interface WorkGroupUpdateOneWithoutCompanyInput {
@@ -7063,18 +7073,18 @@ export interface WorkGroupUpdateOneWithoutCompanyInput {
   connect?: WorkGroupWhereUniqueInput;
 }
 
-export interface VillageCreateOneInput {
-  create?: VillageCreateInput;
-  connect?: VillageWhereUniqueInput;
+export interface AreaCreateOneWithoutTownsInput {
+  create?: AreaCreateWithoutTownsInput;
+  connect?: AreaWhereUniqueInput;
 }
 
 export interface WorkGroupUpdateWithoutCompanyDataInput {
   colleagues?: ColleagueUpdateManyWithoutGroupInput;
 }
 
-export interface StreetCreateOneWithoutVillagesInput {
-  create?: StreetCreateWithoutVillagesInput;
-  connect?: StreetWhereUniqueInput;
+export interface VillageCreateOneInput {
+  create?: VillageCreateInput;
+  connect?: VillageWhereUniqueInput;
 }
 
 export interface ColleagueUpdateManyWithoutGroupInput {
@@ -7096,11 +7106,9 @@ export interface ColleagueUpdateManyWithoutGroupInput {
     | ColleagueUpdateManyWithWhereNestedInput;
 }
 
-export interface SchoolCreateManyWithoutLocationInput {
-  create?:
-    | SchoolCreateWithoutLocationInput[]
-    | SchoolCreateWithoutLocationInput;
-  connect?: SchoolWhereUniqueInput[] | SchoolWhereUniqueInput;
+export interface StreetCreateOneWithoutVillagesInput {
+  create?: StreetCreateWithoutVillagesInput;
+  connect?: StreetWhereUniqueInput;
 }
 
 export interface ColleagueUpdateWithWhereUniqueWithoutGroupInput {
@@ -7108,11 +7116,11 @@ export interface ColleagueUpdateWithWhereUniqueWithoutGroupInput {
   data: ColleagueUpdateWithoutGroupDataInput;
 }
 
-export interface CompanyCreateManyWithoutLocationInput {
+export interface SchoolCreateManyWithoutLocationInput {
   create?:
-    | CompanyCreateWithoutLocationInput[]
-    | CompanyCreateWithoutLocationInput;
-  connect?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
+    | SchoolCreateWithoutLocationInput[]
+    | SchoolCreateWithoutLocationInput;
+  connect?: SchoolWhereUniqueInput[] | SchoolWhereUniqueInput;
 }
 
 export interface ColleagueUpdateWithoutGroupDataInput {
@@ -7120,9 +7128,11 @@ export interface ColleagueUpdateWithoutGroupDataInput {
   status?: String;
 }
 
-export interface WorkCreateManyWithoutCompanyInput {
-  create?: WorkCreateWithoutCompanyInput[] | WorkCreateWithoutCompanyInput;
-  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
+export interface CompanyCreateManyWithoutLocationInput {
+  create?:
+    | CompanyCreateWithoutLocationInput[]
+    | CompanyCreateWithoutLocationInput;
+  connect?: CompanyWhereUniqueInput[] | CompanyWhereUniqueInput;
 }
 
 export interface UserUpdateOneWithoutColleaguesInput {
@@ -7134,9 +7144,9 @@ export interface UserUpdateOneWithoutColleaguesInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface StationCreateOneInput {
-  create?: StationCreateInput;
-  connect?: StationWhereUniqueInput;
+export interface WorkCreateManyWithoutCompanyInput {
+  create?: WorkCreateWithoutCompanyInput[] | WorkCreateWithoutCompanyInput;
+  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
 }
 
 export interface UserUpdateWithoutColleaguesDataInput {
@@ -7178,14 +7188,14 @@ export interface UserUpdateWithoutColleaguesDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
-export interface UserCreateOneWithoutWorksInput {
-  create?: UserCreateWithoutWorksInput;
-  connect?: UserWhereUniqueInput;
+export interface StationCreateOneInput {
+  create?: StationCreateInput;
+  connect?: StationWhereUniqueInput;
 }
 
 export interface CollegeEntranceExamUpdateOneWithoutStudentInput {
@@ -7197,9 +7207,9 @@ export interface CollegeEntranceExamUpdateOneWithoutStudentInput {
   connect?: CollegeEntranceExamWhereUniqueInput;
 }
 
-export interface LocationCreateOneWithoutLivesInput {
-  create?: LocationCreateWithoutLivesInput;
-  connect?: LocationWhereUniqueInput;
+export interface UserCreateOneWithoutWorksInput {
+  create?: UserCreateWithoutWorksInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface CollegeEntranceExamUpdateWithoutStudentDataInput {
@@ -7211,9 +7221,9 @@ export interface CollegeEntranceExamUpdateWithoutStudentDataInput {
   times?: Int;
 }
 
-export interface UniversityCreateManyInput {
-  create?: UniversityCreateInput[] | UniversityCreateInput;
-  connect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
+export interface LocationCreateOneWithoutLivesInput {
+  create?: LocationCreateWithoutLivesInput;
+  connect?: LocationWhereUniqueInput;
 }
 
 export interface ProvinceUpdateOneRequiredInput {
@@ -7223,11 +7233,9 @@ export interface ProvinceUpdateOneRequiredInput {
   connect?: ProvinceWhereUniqueInput;
 }
 
-export interface UserCreateManyWithoutBirthplaceInput {
-  create?:
-    | UserCreateWithoutBirthplaceInput[]
-    | UserCreateWithoutBirthplaceInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+export interface UniversityCreateManyInput {
+  create?: UniversityCreateInput[] | UniversityCreateInput;
+  connect?: UniversityWhereUniqueInput[] | UniversityWhereUniqueInput;
 }
 
 export interface CollegeEntranceExamUpsertWithoutStudentInput {
@@ -7235,9 +7243,11 @@ export interface CollegeEntranceExamUpsertWithoutStudentInput {
   create: CollegeEntranceExamCreateWithoutStudentInput;
 }
 
-export interface PostCreateManyWithoutAuthorInput {
-  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput;
-  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput;
+export interface UserCreateManyWithoutBirthplaceInput {
+  create?:
+    | UserCreateWithoutBirthplaceInput[]
+    | UserCreateWithoutBirthplaceInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
 export interface MessageUpdateManyWithoutFromInput {
@@ -7257,9 +7267,9 @@ export interface MessageUpdateManyWithoutFromInput {
     | MessageUpdateManyWithWhereNestedInput;
 }
 
-export interface RegStatusCreateOneWithoutApplicantsInput {
-  create?: RegStatusCreateWithoutApplicantsInput;
-  connect?: RegStatusWhereUniqueInput;
+export interface PostCreateManyWithoutAuthorInput {
+  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput;
+  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput;
 }
 
 export interface MessageUpdateWithWhereUniqueWithoutFromInput {
@@ -7267,9 +7277,9 @@ export interface MessageUpdateWithWhereUniqueWithoutFromInput {
   data: MessageUpdateWithoutFromDataInput;
 }
 
-export interface UniversityCreateOneInput {
-  create?: UniversityCreateInput;
-  connect?: UniversityWhereUniqueInput;
+export interface RegStatusCreateOneWithoutApplicantsInput {
+  create?: RegStatusCreateWithoutApplicantsInput;
+  connect?: RegStatusWhereUniqueInput;
 }
 
 export interface MessageUpdateWithoutFromDataInput {
@@ -7278,10 +7288,9 @@ export interface MessageUpdateWithoutFromDataInput {
   image?: PhotoUpdateOneInput;
 }
 
-export interface MajorCreateInput {
-  name: String;
-  category: String;
-  education: Educationkind;
+export interface UniversityCreateOneInput {
+  create?: UniversityCreateInput;
+  connect?: UniversityWhereUniqueInput;
 }
 
 export interface UserUpdateOneRequiredWithoutReceiveMessagesInput {
@@ -7291,11 +7300,10 @@ export interface UserUpdateOneRequiredWithoutReceiveMessagesInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface FamilyCreateWithoutFromInput {
-  to: PersonCreateOneWithoutFamiliesInput;
-  relationship: String;
-  spouse?: FamilyCreateOneInput;
-  status: String;
+export interface MajorCreateInput {
+  name: String;
+  category: String;
+  education: Educationkind;
 }
 
 export interface UserUpdateWithoutReceiveMessagesDataInput {
@@ -7337,16 +7345,16 @@ export interface UserUpdateWithoutReceiveMessagesDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
-export interface PersonCreateWithoutFamiliesInput {
-  name: String;
-  user?: UserCreateOneInput;
-  asFather?: FamilyGroupCreateManyWithoutFatherInput;
-  asMother?: FamilyGroupCreateManyWithoutMotherInput;
+export interface FamilyCreateWithoutFromInput {
+  to: PersonCreateOneWithoutFamiliesInput;
+  relationship: String;
+  spouse?: FamilyCreateOneInput;
+  status: String;
 }
 
 export interface GroupMessageUpdateManyWithoutFromInput {
@@ -7368,11 +7376,11 @@ export interface GroupMessageUpdateManyWithoutFromInput {
     | GroupMessageUpdateManyWithWhereNestedInput;
 }
 
-export interface FamilyGroupCreateManyWithoutFatherInput {
-  create?:
-    | FamilyGroupCreateWithoutFatherInput[]
-    | FamilyGroupCreateWithoutFatherInput;
-  connect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
+export interface PersonCreateWithoutFamiliesInput {
+  name: String;
+  user?: UserCreateOneInput;
+  asFather?: FamilyGroupCreateManyWithoutFatherInput;
+  asMother?: FamilyGroupCreateManyWithoutMotherInput;
 }
 
 export interface GroupMessageUpdateWithWhereUniqueWithoutFromInput {
@@ -7380,9 +7388,11 @@ export interface GroupMessageUpdateWithWhereUniqueWithoutFromInput {
   data: GroupMessageUpdateWithoutFromDataInput;
 }
 
-export interface PersonCreateOneWithoutAsMotherInput {
-  create?: PersonCreateWithoutAsMotherInput;
-  connect?: PersonWhereUniqueInput;
+export interface FamilyGroupCreateManyWithoutFatherInput {
+  create?:
+    | FamilyGroupCreateWithoutFatherInput[]
+    | FamilyGroupCreateWithoutFatherInput;
+  connect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
 }
 
 export interface GroupMessageUpdateWithoutFromDataInput {
@@ -7392,9 +7402,9 @@ export interface GroupMessageUpdateWithoutFromDataInput {
   image?: PhotoUpdateOneInput;
 }
 
-export interface FamilyCreateManyWithoutToInput {
-  create?: FamilyCreateWithoutToInput[] | FamilyCreateWithoutToInput;
-  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+export interface PersonCreateOneWithoutAsMotherInput {
+  create?: PersonCreateWithoutAsMotherInput;
+  connect?: PersonWhereUniqueInput;
 }
 
 export interface PhotoUpdateOneInput {
@@ -7406,9 +7416,9 @@ export interface PhotoUpdateOneInput {
   connect?: PhotoWhereUniqueInput;
 }
 
-export interface UserCreateOneWithoutFamiliesInput {
-  create?: UserCreateWithoutFamiliesInput;
-  connect?: UserWhereUniqueInput;
+export interface FamilyCreateManyWithoutToInput {
+  create?: FamilyCreateWithoutToInput[] | FamilyCreateWithoutToInput;
+  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
 }
 
 export interface PhotoUpdateDataInput {
@@ -7417,11 +7427,9 @@ export interface PhotoUpdateDataInput {
   user?: UserUpdateOneWithoutAvatarInput;
 }
 
-export interface SchoolEduCreateManyWithoutStudentsInput {
-  create?:
-    | SchoolEduCreateWithoutStudentsInput[]
-    | SchoolEduCreateWithoutStudentsInput;
-  connect?: SchoolEduWhereUniqueInput[] | SchoolEduWhereUniqueInput;
+export interface UserCreateOneWithoutFamiliesInput {
+  create?: UserCreateWithoutFamiliesInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface UserUpdateOneWithoutAvatarInput {
@@ -7433,9 +7441,11 @@ export interface UserUpdateOneWithoutAvatarInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface SchoolCreateOneInput {
-  create?: SchoolCreateInput;
-  connect?: SchoolWhereUniqueInput;
+export interface SchoolEduCreateManyWithoutStudentsInput {
+  create?:
+    | SchoolEduCreateWithoutStudentsInput[]
+    | SchoolEduCreateWithoutStudentsInput;
+  connect?: SchoolEduWhereUniqueInput[] | SchoolEduWhereUniqueInput;
 }
 
 export interface UserUpdateWithoutAvatarDataInput {
@@ -7477,14 +7487,14 @@ export interface UserUpdateWithoutAvatarDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
-export interface LocationCreateOneWithoutSchoolsInput {
-  create?: LocationCreateWithoutSchoolsInput;
-  connect?: LocationWhereUniqueInput;
+export interface SchoolCreateOneInput {
+  create?: SchoolCreateInput;
+  connect?: SchoolWhereUniqueInput;
 }
 
 export interface MessageUpdateManyWithoutToInput {
@@ -7504,9 +7514,9 @@ export interface MessageUpdateManyWithoutToInput {
     | MessageUpdateManyWithWhereNestedInput;
 }
 
-export interface UserCreateManyWithoutResidenceInput {
-  create?: UserCreateWithoutResidenceInput[] | UserCreateWithoutResidenceInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+export interface LocationCreateOneWithoutSchoolsInput {
+  create?: LocationCreateWithoutSchoolsInput;
+  connect?: LocationWhereUniqueInput;
 }
 
 export interface MessageUpdateWithWhereUniqueWithoutToInput {
@@ -7514,9 +7524,9 @@ export interface MessageUpdateWithWhereUniqueWithoutToInput {
   data: MessageUpdateWithoutToDataInput;
 }
 
-export interface WorkCreateManyWithoutWorkerInput {
-  create?: WorkCreateWithoutWorkerInput[] | WorkCreateWithoutWorkerInput;
-  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
+export interface UserCreateManyWithoutResidenceInput {
+  create?: UserCreateWithoutResidenceInput[] | UserCreateWithoutResidenceInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
 export interface MessageUpdateWithoutToDataInput {
@@ -7525,9 +7535,9 @@ export interface MessageUpdateWithoutToDataInput {
   image?: PhotoUpdateOneInput;
 }
 
-export interface CompanyCreateOneWithoutWorksInput {
-  create?: CompanyCreateWithoutWorksInput;
-  connect?: CompanyWhereUniqueInput;
+export interface WorkCreateManyWithoutWorkerInput {
+  create?: WorkCreateWithoutWorkerInput[] | WorkCreateWithoutWorkerInput;
+  connect?: WorkWhereUniqueInput[] | WorkWhereUniqueInput;
 }
 
 export interface UserUpdateOneRequiredWithoutSentMessagesInput {
@@ -7537,9 +7547,9 @@ export interface UserUpdateOneRequiredWithoutSentMessagesInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface LocationCreateOneWithoutCompaniesInput {
-  create?: LocationCreateWithoutCompaniesInput;
-  connect?: LocationWhereUniqueInput;
+export interface CompanyCreateOneWithoutWorksInput {
+  create?: CompanyCreateWithoutWorksInput;
+  connect?: CompanyWhereUniqueInput;
 }
 
 export interface UserUpdateWithoutSentMessagesDataInput {
@@ -7581,14 +7591,14 @@ export interface UserUpdateWithoutSentMessagesDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
-export interface WorkGroupCreateOneWithoutCompanyInput {
-  create?: WorkGroupCreateWithoutCompanyInput;
-  connect?: WorkGroupWhereUniqueInput;
+export interface LocationCreateOneWithoutCompaniesInput {
+  create?: LocationCreateWithoutCompaniesInput;
+  connect?: LocationWhereUniqueInput;
 }
 
 export interface GroupUpdateManyWithoutUsersInput {
@@ -7608,11 +7618,9 @@ export interface GroupUpdateManyWithoutUsersInput {
     | GroupUpdateManyWithWhereNestedInput;
 }
 
-export interface ColleagueCreateManyWithoutGroupInput {
-  create?:
-    | ColleagueCreateWithoutGroupInput[]
-    | ColleagueCreateWithoutGroupInput;
-  connect?: ColleagueWhereUniqueInput[] | ColleagueWhereUniqueInput;
+export interface WorkGroupCreateOneWithoutCompanyInput {
+  create?: WorkGroupCreateWithoutCompanyInput;
+  connect?: WorkGroupWhereUniqueInput;
 }
 
 export interface GroupUpdateWithWhereUniqueWithoutUsersInput {
@@ -7620,9 +7628,11 @@ export interface GroupUpdateWithWhereUniqueWithoutUsersInput {
   data: GroupUpdateWithoutUsersDataInput;
 }
 
-export interface UserCreateOneWithoutColleaguesInput {
-  create?: UserCreateWithoutColleaguesInput;
-  connect?: UserWhereUniqueInput;
+export interface ColleagueCreateManyWithoutGroupInput {
+  create?:
+    | ColleagueCreateWithoutGroupInput[]
+    | ColleagueCreateWithoutGroupInput;
+  connect?: ColleagueWhereUniqueInput[] | ColleagueWhereUniqueInput;
 }
 
 export interface GroupUpdateWithoutUsersDataInput {
@@ -7631,9 +7641,9 @@ export interface GroupUpdateWithoutUsersDataInput {
   messages?: MessageUpdateManyInput;
 }
 
-export interface CollegeEntranceExamCreateOneWithoutStudentInput {
-  create?: CollegeEntranceExamCreateWithoutStudentInput;
-  connect?: CollegeEntranceExamWhereUniqueInput;
+export interface UserCreateOneWithoutColleaguesInput {
+  create?: UserCreateWithoutColleaguesInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface MessageUpdateManyInput {
@@ -7653,9 +7663,9 @@ export interface MessageUpdateManyInput {
     | MessageUpdateManyWithWhereNestedInput;
 }
 
-export interface MessageCreateManyWithoutFromInput {
-  create?: MessageCreateWithoutFromInput[] | MessageCreateWithoutFromInput;
-  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+export interface CollegeEntranceExamCreateOneWithoutStudentInput {
+  create?: CollegeEntranceExamCreateWithoutStudentInput;
+  connect?: CollegeEntranceExamWhereUniqueInput;
 }
 
 export interface MessageUpdateWithWhereUniqueNestedInput {
@@ -7663,9 +7673,9 @@ export interface MessageUpdateWithWhereUniqueNestedInput {
   data: MessageUpdateDataInput;
 }
 
-export interface UserCreateOneWithoutReceiveMessagesInput {
-  create?: UserCreateWithoutReceiveMessagesInput;
-  connect?: UserWhereUniqueInput;
+export interface MessageCreateManyWithoutFromInput {
+  create?: MessageCreateWithoutFromInput[] | MessageCreateWithoutFromInput;
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
 }
 
 export interface MessageUpdateDataInput {
@@ -7675,11 +7685,9 @@ export interface MessageUpdateDataInput {
   image?: PhotoUpdateOneInput;
 }
 
-export interface GroupMessageCreateManyWithoutFromInput {
-  create?:
-    | GroupMessageCreateWithoutFromInput[]
-    | GroupMessageCreateWithoutFromInput;
-  connect?: GroupMessageWhereUniqueInput[] | GroupMessageWhereUniqueInput;
+export interface UserCreateOneWithoutReceiveMessagesInput {
+  create?: UserCreateWithoutReceiveMessagesInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface MessageUpsertWithWhereUniqueNestedInput {
@@ -7688,9 +7696,11 @@ export interface MessageUpsertWithWhereUniqueNestedInput {
   create: MessageCreateInput;
 }
 
-export interface PhotoCreateOneInput {
-  create?: PhotoCreateInput;
-  connect?: PhotoWhereUniqueInput;
+export interface GroupMessageCreateManyWithoutFromInput {
+  create?:
+    | GroupMessageCreateWithoutFromInput[]
+    | GroupMessageCreateWithoutFromInput;
+  connect?: GroupMessageWhereUniqueInput[] | GroupMessageWhereUniqueInput;
 }
 
 export interface MessageScalarWhereInput {
@@ -7735,9 +7745,9 @@ export interface MessageScalarWhereInput {
   NOT?: MessageScalarWhereInput[] | MessageScalarWhereInput;
 }
 
-export interface UserCreateOneWithoutAvatarInput {
-  create?: UserCreateWithoutAvatarInput;
-  connect?: UserWhereUniqueInput;
+export interface PhotoCreateOneInput {
+  create?: PhotoCreateInput;
+  connect?: PhotoWhereUniqueInput;
 }
 
 export interface MessageUpdateManyWithWhereNestedInput {
@@ -7745,18 +7755,18 @@ export interface MessageUpdateManyWithWhereNestedInput {
   data: MessageUpdateManyDataInput;
 }
 
-export interface MessageCreateManyWithoutToInput {
-  create?: MessageCreateWithoutToInput[] | MessageCreateWithoutToInput;
-  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+export interface UserCreateOneWithoutAvatarInput {
+  create?: UserCreateWithoutAvatarInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface MessageUpdateManyDataInput {
   text?: String;
 }
 
-export interface UserCreateOneWithoutSentMessagesInput {
-  create?: UserCreateWithoutSentMessagesInput;
-  connect?: UserWhereUniqueInput;
+export interface MessageCreateManyWithoutToInput {
+  create?: MessageCreateWithoutToInput[] | MessageCreateWithoutToInput;
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
 }
 
 export interface GroupUpsertWithWhereUniqueWithoutUsersInput {
@@ -7765,9 +7775,9 @@ export interface GroupUpsertWithWhereUniqueWithoutUsersInput {
   create: GroupCreateWithoutUsersInput;
 }
 
-export interface GroupCreateManyWithoutUsersInput {
-  create?: GroupCreateWithoutUsersInput[] | GroupCreateWithoutUsersInput;
-  connect?: GroupWhereUniqueInput[] | GroupWhereUniqueInput;
+export interface UserCreateOneWithoutSentMessagesInput {
+  create?: UserCreateWithoutSentMessagesInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface GroupScalarWhereInput {
@@ -7808,9 +7818,9 @@ export interface GroupScalarWhereInput {
   NOT?: GroupScalarWhereInput[] | GroupScalarWhereInput;
 }
 
-export interface MessageCreateManyInput {
-  create?: MessageCreateInput[] | MessageCreateInput;
-  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
+export interface GroupCreateManyWithoutUsersInput {
+  create?: GroupCreateWithoutUsersInput[] | GroupCreateWithoutUsersInput;
+  connect?: GroupWhereUniqueInput[] | GroupWhereUniqueInput;
 }
 
 export interface GroupUpdateManyWithWhereNestedInput {
@@ -7818,9 +7828,9 @@ export interface GroupUpdateManyWithWhereNestedInput {
   data: GroupUpdateManyDataInput;
 }
 
-export interface FamilyGroupCreateOneWithoutUsersInput {
-  create?: FamilyGroupCreateWithoutUsersInput;
-  connect?: FamilyGroupWhereUniqueInput;
+export interface MessageCreateManyInput {
+  create?: MessageCreateInput[] | MessageCreateInput;
+  connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
 }
 
 export interface GroupUpdateManyDataInput {
@@ -7828,9 +7838,9 @@ export interface GroupUpdateManyDataInput {
   name?: String;
 }
 
-export interface PersonCreateOneWithoutAsFatherInput {
-  create?: PersonCreateWithoutAsFatherInput;
-  connect?: PersonWhereUniqueInput;
+export interface FamilyGroupCreateOneWithoutUsersInput {
+  create?: FamilyGroupCreateWithoutUsersInput;
+  connect?: FamilyGroupWhereUniqueInput;
 }
 
 export interface FamilyGroupUpdateOneWithoutUsersInput {
@@ -7842,11 +7852,9 @@ export interface FamilyGroupUpdateOneWithoutUsersInput {
   connect?: FamilyGroupWhereUniqueInput;
 }
 
-export interface FamilyGroupCreateManyWithoutMotherInput {
-  create?:
-    | FamilyGroupCreateWithoutMotherInput[]
-    | FamilyGroupCreateWithoutMotherInput;
-  connect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
+export interface PersonCreateOneWithoutAsFatherInput {
+  create?: PersonCreateWithoutAsFatherInput;
+  connect?: PersonWhereUniqueInput;
 }
 
 export interface FamilyGroupUpdateWithoutUsersDataInput {
@@ -7857,9 +7865,11 @@ export interface FamilyGroupUpdateWithoutUsersDataInput {
   families?: FamilyUpdateManyInput;
 }
 
-export interface UserCreateOneWithoutCreaterInput {
-  create?: UserCreateWithoutCreaterInput;
-  connect?: UserWhereUniqueInput;
+export interface FamilyGroupCreateManyWithoutMotherInput {
+  create?:
+    | FamilyGroupCreateWithoutMotherInput[]
+    | FamilyGroupCreateWithoutMotherInput;
+  connect?: FamilyGroupWhereUniqueInput[] | FamilyGroupWhereUniqueInput;
 }
 
 export interface PersonUpdateOneWithoutAsFatherInput {
@@ -7871,11 +7881,9 @@ export interface PersonUpdateOneWithoutAsFatherInput {
   connect?: PersonWhereUniqueInput;
 }
 
-export interface ClassMateCreateManyWithoutStudentInput {
-  create?:
-    | ClassMateCreateWithoutStudentInput[]
-    | ClassMateCreateWithoutStudentInput;
-  connect?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
+export interface UserCreateOneWithoutCreaterInput {
+  create?: UserCreateWithoutCreaterInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface PersonUpdateWithoutAsFatherDataInput {
@@ -7885,9 +7893,11 @@ export interface PersonUpdateWithoutAsFatherDataInput {
   asMother?: FamilyGroupUpdateManyWithoutMotherInput;
 }
 
-export interface ClassGroupCreateOneWithoutMembersInput {
-  create?: ClassGroupCreateWithoutMembersInput;
-  connect?: ClassGroupWhereUniqueInput;
+export interface ClassMateCreateManyWithoutStudentInput {
+  create?:
+    | ClassMateCreateWithoutStudentInput[]
+    | ClassMateCreateWithoutStudentInput;
+  connect?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
 }
 
 export interface FamilyGroupUpdateManyWithoutMotherInput {
@@ -7909,9 +7919,9 @@ export interface FamilyGroupUpdateManyWithoutMotherInput {
     | FamilyGroupUpdateManyWithWhereNestedInput;
 }
 
-export interface SchoolEduCreateOneInput {
-  create?: SchoolEduCreateInput;
-  connect?: SchoolEduWhereUniqueInput;
+export interface ClassGroupCreateOneWithoutMembersInput {
+  create?: ClassGroupCreateWithoutMembersInput;
+  connect?: ClassGroupWhereUniqueInput;
 }
 
 export interface FamilyGroupUpdateWithWhereUniqueWithoutMotherInput {
@@ -7919,9 +7929,9 @@ export interface FamilyGroupUpdateWithWhereUniqueWithoutMotherInput {
   data: FamilyGroupUpdateWithoutMotherDataInput;
 }
 
-export interface UserCreateManyWithoutStudiesInput {
-  create?: UserCreateWithoutStudiesInput[] | UserCreateWithoutStudiesInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+export interface SchoolEduCreateOneInput {
+  create?: SchoolEduCreateInput;
+  connect?: SchoolEduWhereUniqueInput;
 }
 
 export interface FamilyGroupUpdateWithoutMotherDataInput {
@@ -7932,9 +7942,9 @@ export interface FamilyGroupUpdateWithoutMotherDataInput {
   users?: UserUpdateManyWithoutFamilyGroupInput;
 }
 
-export interface FamilyGroupCreateOneWithoutCreaterInput {
-  create?: FamilyGroupCreateWithoutCreaterInput;
-  connect?: FamilyGroupWhereUniqueInput;
+export interface UserCreateManyWithoutStudiesInput {
+  create?: UserCreateWithoutStudiesInput[] | UserCreateWithoutStudiesInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
 }
 
 export interface UserUpdateOneWithoutCreaterInput {
@@ -7946,9 +7956,9 @@ export interface UserUpdateOneWithoutCreaterInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface FamilyCreateManyInput {
-  create?: FamilyCreateInput[] | FamilyCreateInput;
-  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
+export interface FamilyGroupCreateOneWithoutCreaterInput {
+  create?: FamilyGroupCreateWithoutCreaterInput;
+  connect?: FamilyGroupWhereUniqueInput;
 }
 
 export interface UserUpdateWithoutCreaterDataInput {
@@ -7990,14 +8000,14 @@ export interface UserUpdateWithoutCreaterDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
-export interface FamilyCreateOneInput {
-  create?: FamilyCreateInput;
-  connect?: FamilyWhereUniqueInput;
+export interface FamilyCreateManyInput {
+  create?: FamilyCreateInput[] | FamilyCreateInput;
+  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
 }
 
 export interface ClassMateUpdateManyWithoutStudentInput {
@@ -8017,6 +8027,16 @@ export interface ClassMateUpdateManyWithoutStudentInput {
   updateMany?:
     | ClassMateUpdateManyWithWhereNestedInput[]
     | ClassMateUpdateManyWithWhereNestedInput;
+}
+
+export interface FamilyCreateOneInput {
+  create?: FamilyCreateInput;
+  connect?: FamilyWhereUniqueInput;
+}
+
+export interface ClassMateUpdateWithWhereUniqueWithoutStudentInput {
+  where: ClassMateWhereUniqueInput;
+  data: ClassMateUpdateWithoutStudentDataInput;
 }
 
 export interface UserCreateWithoutFamilyGroupInput {
@@ -8058,14 +8078,14 @@ export interface UserCreateWithoutFamilyGroupInput {
   loveMan?: LoveMatchingCreateManyWithoutManInput;
   signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
   skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
-export interface ClassMateUpdateWithWhereUniqueWithoutStudentInput {
-  where: ClassMateWhereUniqueInput;
-  data: ClassMateUpdateWithoutStudentDataInput;
+export interface ClassMateUpdateWithoutStudentDataInput {
+  status?: String;
+  group?: ClassGroupUpdateOneRequiredWithoutMembersInput;
 }
 
 export interface WorkGroupCreateInput {
@@ -8073,9 +8093,11 @@ export interface WorkGroupCreateInput {
   colleagues?: ColleagueCreateManyWithoutGroupInput;
 }
 
-export interface ClassMateUpdateWithoutStudentDataInput {
-  status?: String;
-  group?: ClassGroupUpdateOneRequiredWithoutMembersInput;
+export interface ClassGroupUpdateOneRequiredWithoutMembersInput {
+  create?: ClassGroupCreateWithoutMembersInput;
+  update?: ClassGroupUpdateWithoutMembersDataInput;
+  upsert?: ClassGroupUpsertWithoutMembersInput;
+  connect?: ClassGroupWhereUniqueInput;
 }
 
 export interface CompanyCreateWithoutWorkGroupInput {
@@ -8088,11 +8110,9 @@ export interface CompanyCreateWithoutWorkGroupInput {
   works?: WorkCreateManyWithoutCompanyInput;
 }
 
-export interface ClassGroupUpdateOneRequiredWithoutMembersInput {
-  create?: ClassGroupCreateWithoutMembersInput;
-  update?: ClassGroupUpdateWithoutMembersDataInput;
-  upsert?: ClassGroupUpsertWithoutMembersInput;
-  connect?: ClassGroupWhereUniqueInput;
+export interface ClassGroupUpdateWithoutMembersDataInput {
+  study?: SchoolEduUpdateOneInput;
+  name?: String;
 }
 
 export interface ColleagueCreateWithoutWorkerInput {
@@ -8100,9 +8120,98 @@ export interface ColleagueCreateWithoutWorkerInput {
   group?: WorkGroupCreateOneWithoutColleaguesInput;
 }
 
-export interface ClassGroupUpdateWithoutMembersDataInput {
-  study?: SchoolEduUpdateOneInput;
-  name?: String;
+export interface SchoolEduUpdateOneInput {
+  create?: SchoolEduCreateInput;
+  update?: SchoolEduUpdateDataInput;
+  upsert?: SchoolEduUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: SchoolEduWhereUniqueInput;
+}
+
+export interface WorkGroupCreateWithoutColleaguesInput {
+  company?: CompanyCreateOneWithoutWorkGroupInput;
+}
+
+export interface SchoolEduUpdateDataInput {
+  school?: SchoolUpdateOneInput;
+  startTime?: DateTimeInput;
+  major?: MajorUpdateOneInput;
+  grade?: Int;
+  className?: String;
+  students?: UserUpdateManyWithoutStudiesInput;
+}
+
+export interface PartnerConditionWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  skillName?: String;
+  skillName_not?: String;
+  skillName_in?: String[] | String;
+  skillName_not_in?: String[] | String;
+  skillName_lt?: String;
+  skillName_lte?: String;
+  skillName_gt?: String;
+  skillName_gte?: String;
+  skillName_contains?: String;
+  skillName_not_contains?: String;
+  skillName_starts_with?: String;
+  skillName_not_starts_with?: String;
+  skillName_ends_with?: String;
+  skillName_not_ends_with?: String;
+  place?: String;
+  place_not?: String;
+  place_in?: String[] | String;
+  place_not_in?: String[] | String;
+  place_lt?: String;
+  place_lte?: String;
+  place_gt?: String;
+  place_gte?: String;
+  place_contains?: String;
+  place_not_contains?: String;
+  place_starts_with?: String;
+  place_not_starts_with?: String;
+  place_ends_with?: String;
+  place_not_ends_with?: String;
+  number?: Int;
+  number_not?: Int;
+  number_in?: Int[] | Int;
+  number_not_in?: Int[] | Int;
+  number_lt?: Int;
+  number_lte?: Int;
+  number_gt?: Int;
+  number_gte?: Int;
+  partners_every?: UserWhereInput;
+  partners_some?: UserWhereInput;
+  partners_none?: UserWhereInput;
+  passedPartners_every?: UserWhereInput;
+  passedPartners_some?: UserWhereInput;
+  passedPartners_none?: UserWhereInput;
+  project?: ProjectWhereInput;
+  AND?: PartnerConditionWhereInput[] | PartnerConditionWhereInput;
+  OR?: PartnerConditionWhereInput[] | PartnerConditionWhereInput;
+  NOT?: PartnerConditionWhereInput[] | PartnerConditionWhereInput;
+}
+
+export interface MajorUpdateOneInput {
+  create?: MajorCreateInput;
+  update?: MajorUpdateDataInput;
+  upsert?: MajorUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: MajorWhereUniqueInput;
 }
 
 export interface LoveSignUpWhereInput {
@@ -8141,13 +8250,21 @@ export interface LoveSignUpWhereInput {
   NOT?: LoveSignUpWhereInput[] | LoveSignUpWhereInput;
 }
 
-export interface SchoolEduUpdateOneInput {
-  create?: SchoolEduCreateInput;
-  update?: SchoolEduUpdateDataInput;
-  upsert?: SchoolEduUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: SchoolEduWhereUniqueInput;
+export interface UserUpdateManyWithoutStudiesInput {
+  create?: UserCreateWithoutStudiesInput[] | UserCreateWithoutStudiesInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutStudiesInput[]
+    | UserUpdateWithWhereUniqueWithoutStudiesInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutStudiesInput[]
+    | UserUpsertWithWhereUniqueWithoutStudiesInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
 }
 
 export interface LoveSettingWhereInput {
@@ -8279,136 +8396,14 @@ export interface LoveSettingWhereInput {
   NOT?: LoveSettingWhereInput[] | LoveSettingWhereInput;
 }
 
-export interface SchoolEduUpdateDataInput {
-  school?: SchoolUpdateOneInput;
-  startTime?: DateTimeInput;
-  major?: MajorUpdateOneInput;
-  grade?: Int;
-  className?: String;
-  students?: UserUpdateManyWithoutStudiesInput;
-}
-
-export interface OldColleagueWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  from?: UserWhereInput;
-  to?: UserWhereInput;
-  company?: CompanyWhereInput;
-  status?: String;
-  status_not?: String;
-  status_in?: String[] | String;
-  status_not_in?: String[] | String;
-  status_lt?: String;
-  status_lte?: String;
-  status_gt?: String;
-  status_gte?: String;
-  status_contains?: String;
-  status_not_contains?: String;
-  status_starts_with?: String;
-  status_not_starts_with?: String;
-  status_ends_with?: String;
-  status_not_ends_with?: String;
-  AND?: OldColleagueWhereInput[] | OldColleagueWhereInput;
-  OR?: OldColleagueWhereInput[] | OldColleagueWhereInput;
-  NOT?: OldColleagueWhereInput[] | OldColleagueWhereInput;
-}
-
-export interface MajorUpdateOneInput {
-  create?: MajorCreateInput;
-  update?: MajorUpdateDataInput;
-  upsert?: MajorUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: MajorWhereUniqueInput;
-}
-
-export interface LocationGroupCreateWithoutUsersInput {
-  kind?: LocationGroupKind;
-  code?: String;
-  name?: String;
-}
-
-export interface UserUpdateManyWithoutStudiesInput {
-  create?: UserCreateWithoutStudiesInput[] | UserCreateWithoutStudiesInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutStudiesInput[]
-    | UserUpdateWithWhereUniqueWithoutStudiesInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutStudiesInput[]
-    | UserUpsertWithWhereUniqueWithoutStudiesInput;
-  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
-  updateMany?:
-    | UserUpdateManyWithWhereNestedInput[]
-    | UserUpdateManyWithWhereNestedInput;
-}
-
-export interface FindPassWordCreateWithoutForgetterInput {
-  times?: Int;
-  remmember?: UserCreateManyWithoutRemmemberPasswordInput;
-}
-
 export interface UserUpdateWithWhereUniqueWithoutStudiesInput {
   where: UserWhereUniqueInput;
   data: UserUpdateWithoutStudiesDataInput;
 }
 
-export interface UserCreateWithoutRemmemberPasswordInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoCreateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutBornsInput;
-  residence?: LocationCreateOneWithoutLivesInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  sentMessages?: MessageCreateManyWithoutFromInput;
-  receiveMessages?: MessageCreateManyWithoutToInput;
-  groupMessages?: GroupMessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneInput;
-  colleagues?: ColleagueCreateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
-  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
-  loveSetting?: LoveSettingCreateOneWithoutUserInput;
-  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
-  loveMan?: LoveMatchingCreateManyWithoutManInput;
-  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
+export interface FindPassWordCreateWithoutForgetterInput {
+  times?: Int;
+  remmember?: UserCreateManyWithoutRemmemberPasswordInput;
 }
 
 export interface UserUpdateWithoutStudiesDataInput {
@@ -8450,15 +8445,53 @@ export interface UserUpdateWithoutStudiesDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
-export interface OldColleagueCreateWithoutToInput {
-  from?: UserCreateOneWithoutFromOldColleaguesInput;
-  company?: CompanyCreateOneInput;
-  status: String;
+export interface UserCreateWithoutRemmemberPasswordInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoCreateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutBornsInput;
+  residence?: LocationCreateOneWithoutLivesInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  sentMessages?: MessageCreateManyWithoutFromInput;
+  receiveMessages?: MessageCreateManyWithoutToInput;
+  groupMessages?: GroupMessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
+  loveSetting?: LoveSettingCreateOneWithoutUserInput;
+  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
+  loveMan?: LoveMatchingCreateManyWithoutManInput;
+  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
+  skills?: SkillCreateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
 export interface FamilyGroupUpdateOneWithoutCreaterInput {
@@ -8468,6 +8501,20 @@ export interface FamilyGroupUpdateOneWithoutCreaterInput {
   delete?: Boolean;
   disconnect?: Boolean;
   connect?: FamilyGroupWhereUniqueInput;
+}
+
+export interface OldColleagueCreateWithoutToInput {
+  from?: UserCreateOneWithoutFromOldColleaguesInput;
+  company?: CompanyCreateOneInput;
+  status: String;
+}
+
+export interface FamilyGroupUpdateWithoutCreaterDataInput {
+  father?: PersonUpdateOneWithoutAsFatherInput;
+  mother?: PersonUpdateOneWithoutAsMotherInput;
+  name?: String;
+  families?: FamilyUpdateManyInput;
+  users?: UserUpdateManyWithoutFamilyGroupInput;
 }
 
 export interface UserCreateWithoutFromOldColleaguesInput {
@@ -8509,22 +8556,9 @@ export interface UserCreateWithoutFromOldColleaguesInput {
   loveMan?: LoveMatchingCreateManyWithoutManInput;
   signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
   skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface FamilyGroupUpdateWithoutCreaterDataInput {
-  father?: PersonUpdateOneWithoutAsFatherInput;
-  mother?: PersonUpdateOneWithoutAsMotherInput;
-  name?: String;
-  families?: FamilyUpdateManyInput;
-  users?: UserUpdateManyWithoutFamilyGroupInput;
-}
-
-export interface FindPassWordCreateWithoutRemmemberInput {
-  times?: Int;
-  forgetter?: UserCreateOneWithoutForgetPasswordInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
 export interface FamilyUpdateManyInput {
@@ -8542,6 +8576,16 @@ export interface FamilyUpdateManyInput {
   updateMany?:
     | FamilyUpdateManyWithWhereNestedInput[]
     | FamilyUpdateManyWithWhereNestedInput;
+}
+
+export interface FindPassWordCreateWithoutRemmemberInput {
+  times?: Int;
+  forgetter?: UserCreateOneWithoutForgetPasswordInput;
+}
+
+export interface FamilyUpdateWithWhereUniqueNestedInput {
+  where: FamilyWhereUniqueInput;
+  data: FamilyUpdateDataInput;
 }
 
 export interface UserCreateWithoutForgetPasswordInput {
@@ -8583,14 +8627,17 @@ export interface UserCreateWithoutForgetPasswordInput {
   loveMan?: LoveMatchingCreateManyWithoutManInput;
   signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
   skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
-export interface FamilyUpdateWithWhereUniqueNestedInput {
-  where: FamilyWhereUniqueInput;
-  data: FamilyUpdateDataInput;
+export interface FamilyUpdateDataInput {
+  from?: UserUpdateOneRequiredWithoutFamiliesInput;
+  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
+  relationship?: String;
+  spouse?: FamilyUpdateOneInput;
+  status?: String;
 }
 
 export interface LoveSettingCreateWithoutUserInput {
@@ -8608,12 +8655,13 @@ export interface LoveSettingCreateWithoutUserInput {
   memeberGradeEndTime?: DateTimeInput;
 }
 
-export interface FamilyUpdateDataInput {
-  from?: UserUpdateOneRequiredWithoutFamiliesInput;
-  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
-  relationship?: String;
-  spouse?: FamilyUpdateOneInput;
-  status?: String;
+export interface FamilyUpdateOneInput {
+  create?: FamilyCreateInput;
+  update?: FamilyUpdateDataInput;
+  upsert?: FamilyUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: FamilyWhereUniqueInput;
 }
 
 export interface LoveMatchingCreateWithoutWomanInput {
@@ -8622,13 +8670,9 @@ export interface LoveMatchingCreateWithoutWomanInput {
   man?: UserCreateOneWithoutLoveManInput;
 }
 
-export interface FamilyUpdateOneInput {
-  create?: FamilyCreateInput;
-  update?: FamilyUpdateDataInput;
-  upsert?: FamilyUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: FamilyWhereUniqueInput;
+export interface FamilyUpsertNestedInput {
+  update: FamilyUpdateDataInput;
+  create: FamilyCreateInput;
 }
 
 export interface UserCreateWithoutLoveManInput {
@@ -8670,19 +8714,9 @@ export interface UserCreateWithoutLoveManInput {
   loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
   signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
   skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface FamilyUpsertNestedInput {
-  update: FamilyUpdateDataInput;
-  create: FamilyCreateInput;
-}
-
-export interface LoveSignUpCreateWithoutPersonInput {
-  period?: String;
-  city?: CityCreateOneInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
 export interface FamilyUpsertWithWhereUniqueNestedInput {
@@ -8691,42 +8725,9 @@ export interface FamilyUpsertWithWhereUniqueNestedInput {
   create: FamilyCreateInput;
 }
 
-export interface ClassGroupWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  study?: SchoolEduWhereInput;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  members_every?: ClassMateWhereInput;
-  members_some?: ClassMateWhereInput;
-  members_none?: ClassMateWhereInput;
-  AND?: ClassGroupWhereInput[] | ClassGroupWhereInput;
-  OR?: ClassGroupWhereInput[] | ClassGroupWhereInput;
-  NOT?: ClassGroupWhereInput[] | ClassGroupWhereInput;
+export interface LoveSignUpCreateWithoutPersonInput {
+  period?: String;
+  city?: CityCreateOneInput;
 }
 
 export interface FamilyScalarWhereInput {
@@ -8777,11 +8778,8 @@ export interface FamilyScalarWhereInput {
   NOT?: FamilyScalarWhereInput[] | FamilyScalarWhereInput;
 }
 
-export interface PartnerConditionCreateWithoutPartnersInput {
-  skillName?: String;
-  place?: String;
-  passedPartners?: UserCreateManyWithoutPartnerPastedInput;
-  project?: ProjectCreateOneWithoutConditionsInput;
+export interface SkillCreateWithoutPersonsInput {
+  name?: String;
 }
 
 export interface FamilyUpdateManyWithWhereNestedInput {
@@ -8789,7 +8787,56 @@ export interface FamilyUpdateManyWithWhereNestedInput {
   data: FamilyUpdateManyDataInput;
 }
 
-export interface UserCreateWithoutPartnerPastedInput {
+export interface GroupWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  type?: GroupKind;
+  type_not?: GroupKind;
+  type_in?: GroupKind[] | GroupKind;
+  type_not_in?: GroupKind[] | GroupKind;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  users_every?: UserWhereInput;
+  users_some?: UserWhereInput;
+  users_none?: UserWhereInput;
+  messages_every?: MessageWhereInput;
+  messages_some?: MessageWhereInput;
+  messages_none?: MessageWhereInput;
+  AND?: GroupWhereInput[] | GroupWhereInput;
+  OR?: GroupWhereInput[] | GroupWhereInput;
+  NOT?: GroupWhereInput[] | GroupWhereInput;
+}
+
+export interface FamilyUpdateManyDataInput {
+  relationship?: String;
+  status?: String;
+}
+
+export interface UserCreateWithoutNofitConditionsInput {
   username: String;
   password: String;
   name?: String;
@@ -8829,19 +8876,8 @@ export interface UserCreateWithoutPartnerPastedInput {
   loveMan?: LoveMatchingCreateManyWithoutManInput;
   signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
   skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface FamilyUpdateManyDataInput {
-  relationship?: String;
-  status?: String;
-}
-
-export interface LoveMatchingCreateWithoutManInput {
-  period?: String;
-  city?: CityCreateOneInput;
-  woman?: UserCreateOneWithoutLoveWomanInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
 export interface UserUpdateManyWithoutFamilyGroupInput {
@@ -8861,6 +8897,17 @@ export interface UserUpdateManyWithoutFamilyGroupInput {
   updateMany?:
     | UserUpdateManyWithWhereNestedInput[]
     | UserUpdateManyWithWhereNestedInput;
+}
+
+export interface LoveMatchingCreateWithoutManInput {
+  period?: String;
+  city?: CityCreateOneInput;
+  woman?: UserCreateOneWithoutLoveWomanInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutFamilyGroupInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutFamilyGroupDataInput;
 }
 
 export interface UserCreateWithoutLoveWomanInput {
@@ -8902,21 +8949,9 @@ export interface UserCreateWithoutLoveWomanInput {
   loveMan?: LoveMatchingCreateManyWithoutManInput;
   signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
   skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutFamilyGroupInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutFamilyGroupDataInput;
-}
-
-export interface PartnerConditionCreateWithoutPassedPartnersInput {
-  skillName?: String;
-  place?: String;
-  partners?: UserCreateManyWithoutPartnerFoundInput;
-  project?: ProjectCreateOneWithoutConditionsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
 export interface UserUpdateWithoutFamilyGroupDataInput {
@@ -8958,12 +8993,29 @@ export interface UserUpdateWithoutFamilyGroupDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
-export interface UserCreateWithoutPartnerFoundInput {
+export interface PartnerConditionCreateWithoutPassedPartnersInput {
+  skillName?: String;
+  place?: String;
+  number?: Int;
+  partners?: UserCreateManyWithoutFitConditionsInput;
+  project?: ProjectCreateOneWithoutConditionsInput;
+}
+
+export interface WorkGroupUpdateOneInput {
+  create?: WorkGroupCreateInput;
+  update?: WorkGroupUpdateDataInput;
+  upsert?: WorkGroupUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: WorkGroupWhereUniqueInput;
+}
+
+export interface UserCreateWithoutFitConditionsInput {
   username: String;
   password: String;
   name?: String;
@@ -9003,24 +9055,8 @@ export interface UserCreateWithoutPartnerFoundInput {
   loveMan?: LoveMatchingCreateManyWithoutManInput;
   signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
   skills?: SkillCreateManyWithoutPersonsInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface WorkGroupUpdateOneInput {
-  create?: WorkGroupCreateInput;
-  update?: WorkGroupUpdateDataInput;
-  upsert?: WorkGroupUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: WorkGroupWhereUniqueInput;
-}
-
-export interface ProjectCreateWithoutStarterInput {
-  name?: String;
-  place?: CityCreateOneInput;
-  content?: String;
-  conditions?: PartnerConditionCreateManyWithoutProjectInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
 export interface WorkGroupUpdateDataInput {
@@ -9028,11 +9064,11 @@ export interface WorkGroupUpdateDataInput {
   colleagues?: ColleagueUpdateManyWithoutGroupInput;
 }
 
-export interface PartnerConditionCreateWithoutProjectInput {
-  skillName?: String;
-  place?: String;
-  partners?: UserCreateManyWithoutPartnerFoundInput;
-  passedPartners?: UserCreateManyWithoutPartnerPastedInput;
+export interface ProjectCreateWithoutStarterInput {
+  name?: String;
+  place?: CityCreateOneInput;
+  content?: String;
+  conditions?: PartnerConditionCreateManyWithoutProjectInput;
 }
 
 export interface CompanyUpdateOneWithoutWorkGroupInput {
@@ -9044,15 +9080,12 @@ export interface CompanyUpdateOneWithoutWorkGroupInput {
   connect?: CompanyWhereUniqueInput;
 }
 
-export interface WorkGroupSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: WorkGroupWhereInput;
-  AND?: WorkGroupSubscriptionWhereInput[] | WorkGroupSubscriptionWhereInput;
-  OR?: WorkGroupSubscriptionWhereInput[] | WorkGroupSubscriptionWhereInput;
-  NOT?: WorkGroupSubscriptionWhereInput[] | WorkGroupSubscriptionWhereInput;
+export interface PartnerConditionCreateWithoutProjectInput {
+  skillName?: String;
+  place?: String;
+  number?: Int;
+  partners?: UserCreateManyWithoutFitConditionsInput;
+  passedPartners?: UserCreateManyWithoutNofitConditionsInput;
 }
 
 export interface CompanyUpdateWithoutWorkGroupDataInput {
@@ -9065,15 +9098,11 @@ export interface CompanyUpdateWithoutWorkGroupDataInput {
   works?: WorkUpdateManyWithoutCompanyInput;
 }
 
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+export interface ProjectCreateWithoutConditionsInput {
+  name?: String;
+  place?: CityCreateOneInput;
+  content?: String;
+  starter?: UserCreateOneWithoutProjectsInput;
 }
 
 export interface CompanyUpsertWithoutWorkGroupInput {
@@ -9081,15 +9110,15 @@ export interface CompanyUpsertWithoutWorkGroupInput {
   create: CompanyCreateWithoutWorkGroupInput;
 }
 
-export interface StreetSubscriptionWhereInput {
+export interface WorkSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: StreetWhereInput;
-  AND?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
-  OR?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
-  NOT?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
+  node?: WorkWhereInput;
+  AND?: WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput;
+  OR?: WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput;
+  NOT?: WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput;
 }
 
 export interface WorkGroupUpsertNestedInput {
@@ -9097,15 +9126,15 @@ export interface WorkGroupUpsertNestedInput {
   create: WorkGroupCreateInput;
 }
 
-export interface SchoolEduSubscriptionWhereInput {
+export interface TradeSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: SchoolEduWhereInput;
-  AND?: SchoolEduSubscriptionWhereInput[] | SchoolEduSubscriptionWhereInput;
-  OR?: SchoolEduSubscriptionWhereInput[] | SchoolEduSubscriptionWhereInput;
-  NOT?: SchoolEduSubscriptionWhereInput[] | SchoolEduSubscriptionWhereInput;
+  node?: TradeWhereInput;
+  AND?: TradeSubscriptionWhereInput[] | TradeSubscriptionWhereInput;
+  OR?: TradeSubscriptionWhereInput[] | TradeSubscriptionWhereInput;
+  NOT?: TradeSubscriptionWhereInput[] | TradeSubscriptionWhereInput;
 }
 
 export interface ColleagueUpdateManyWithoutWorkerInput {
@@ -9127,6 +9156,2662 @@ export interface ColleagueUpdateManyWithoutWorkerInput {
     | ColleagueUpdateManyWithWhereNestedInput;
 }
 
+export interface StationSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: StationWhereInput;
+  AND?: StationSubscriptionWhereInput[] | StationSubscriptionWhereInput;
+  OR?: StationSubscriptionWhereInput[] | StationSubscriptionWhereInput;
+  NOT?: StationSubscriptionWhereInput[] | StationSubscriptionWhereInput;
+}
+
+export interface ColleagueUpdateWithWhereUniqueWithoutWorkerInput {
+  where: ColleagueWhereUniqueInput;
+  data: ColleagueUpdateWithoutWorkerDataInput;
+}
+
+export interface SchoolSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: SchoolWhereInput;
+  AND?: SchoolSubscriptionWhereInput[] | SchoolSubscriptionWhereInput;
+  OR?: SchoolSubscriptionWhereInput[] | SchoolSubscriptionWhereInput;
+  NOT?: SchoolSubscriptionWhereInput[] | SchoolSubscriptionWhereInput;
+}
+
+export interface ColleagueUpdateWithoutWorkerDataInput {
+  status?: String;
+  group?: WorkGroupUpdateOneWithoutColleaguesInput;
+}
+
+export interface RegStatusSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: RegStatusWhereInput;
+  AND?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
+  OR?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
+  NOT?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
+}
+
+export interface WorkGroupUpdateOneWithoutColleaguesInput {
+  create?: WorkGroupCreateWithoutColleaguesInput;
+  update?: WorkGroupUpdateWithoutColleaguesDataInput;
+  upsert?: WorkGroupUpsertWithoutColleaguesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: WorkGroupWhereUniqueInput;
+}
+
+export interface ProductSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ProductWhereInput;
+  AND?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput;
+  OR?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput;
+  NOT?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput;
+}
+
+export interface WorkGroupUpdateWithoutColleaguesDataInput {
+  company?: CompanyUpdateOneWithoutWorkGroupInput;
+}
+
+export interface PostWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  isPublished?: Boolean;
+  isPublished_not?: Boolean;
+  title?: String;
+  title_not?: String;
+  title_in?: String[] | String;
+  title_not_in?: String[] | String;
+  title_lt?: String;
+  title_lte?: String;
+  title_gt?: String;
+  title_gte?: String;
+  title_contains?: String;
+  title_not_contains?: String;
+  title_starts_with?: String;
+  title_not_starts_with?: String;
+  title_ends_with?: String;
+  title_not_ends_with?: String;
+  content?: String;
+  content_not?: String;
+  content_in?: String[] | String;
+  content_not_in?: String[] | String;
+  content_lt?: String;
+  content_lte?: String;
+  content_gt?: String;
+  content_gte?: String;
+  content_contains?: String;
+  content_not_contains?: String;
+  content_starts_with?: String;
+  content_not_starts_with?: String;
+  content_ends_with?: String;
+  content_not_ends_with?: String;
+  author?: UserWhereInput;
+  AND?: PostWhereInput[] | PostWhereInput;
+  OR?: PostWhereInput[] | PostWhereInput;
+  NOT?: PostWhereInput[] | PostWhereInput;
+}
+
+export interface WorkGroupUpsertWithoutColleaguesInput {
+  update: WorkGroupUpdateWithoutColleaguesDataInput;
+  create: WorkGroupCreateWithoutColleaguesInput;
+}
+
+export interface OldColleagueSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: OldColleagueWhereInput;
+  AND?:
+    | OldColleagueSubscriptionWhereInput[]
+    | OldColleagueSubscriptionWhereInput;
+  OR?:
+    | OldColleagueSubscriptionWhereInput[]
+    | OldColleagueSubscriptionWhereInput;
+  NOT?:
+    | OldColleagueSubscriptionWhereInput[]
+    | OldColleagueSubscriptionWhereInput;
+}
+
+export interface ColleagueUpsertWithWhereUniqueWithoutWorkerInput {
+  where: ColleagueWhereUniqueInput;
+  update: ColleagueUpdateWithoutWorkerDataInput;
+  create: ColleagueCreateWithoutWorkerInput;
+}
+
+export interface MajorSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: MajorWhereInput;
+  AND?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
+  OR?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
+  NOT?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
+}
+
+export interface ColleagueScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  status?: String;
+  status_not?: String;
+  status_in?: String[] | String;
+  status_not_in?: String[] | String;
+  status_lt?: String;
+  status_lte?: String;
+  status_gt?: String;
+  status_gte?: String;
+  status_contains?: String;
+  status_not_contains?: String;
+  status_starts_with?: String;
+  status_not_starts_with?: String;
+  status_ends_with?: String;
+  status_not_ends_with?: String;
+  AND?: ColleagueScalarWhereInput[] | ColleagueScalarWhereInput;
+  OR?: ColleagueScalarWhereInput[] | ColleagueScalarWhereInput;
+  NOT?: ColleagueScalarWhereInput[] | ColleagueScalarWhereInput;
+}
+
+export interface WorkWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  startTime?: DateTimeInput;
+  startTime_not?: DateTimeInput;
+  startTime_in?: DateTimeInput[] | DateTimeInput;
+  startTime_not_in?: DateTimeInput[] | DateTimeInput;
+  startTime_lt?: DateTimeInput;
+  startTime_lte?: DateTimeInput;
+  startTime_gt?: DateTimeInput;
+  startTime_gte?: DateTimeInput;
+  endTime?: DateTimeInput;
+  endTime_not?: DateTimeInput;
+  endTime_in?: DateTimeInput[] | DateTimeInput;
+  endTime_not_in?: DateTimeInput[] | DateTimeInput;
+  endTime_lt?: DateTimeInput;
+  endTime_lte?: DateTimeInput;
+  endTime_gt?: DateTimeInput;
+  endTime_gte?: DateTimeInput;
+  company?: CompanyWhereInput;
+  department?: String;
+  department_not?: String;
+  department_in?: String[] | String;
+  department_not_in?: String[] | String;
+  department_lt?: String;
+  department_lte?: String;
+  department_gt?: String;
+  department_gte?: String;
+  department_contains?: String;
+  department_not_contains?: String;
+  department_starts_with?: String;
+  department_not_starts_with?: String;
+  department_ends_with?: String;
+  department_not_ends_with?: String;
+  post?: StationWhereInput;
+  jobContent?: String;
+  jobContent_not?: String;
+  jobContent_in?: String[] | String;
+  jobContent_not_in?: String[] | String;
+  jobContent_lt?: String;
+  jobContent_lte?: String;
+  jobContent_gt?: String;
+  jobContent_gte?: String;
+  jobContent_contains?: String;
+  jobContent_not_contains?: String;
+  jobContent_starts_with?: String;
+  jobContent_not_starts_with?: String;
+  jobContent_ends_with?: String;
+  jobContent_not_ends_with?: String;
+  worker?: UserWhereInput;
+  AND?: WorkWhereInput[] | WorkWhereInput;
+  OR?: WorkWhereInput[] | WorkWhereInput;
+  NOT?: WorkWhereInput[] | WorkWhereInput;
+}
+
+export interface ColleagueUpdateManyWithWhereNestedInput {
+  where: ColleagueScalarWhereInput;
+  data: ColleagueUpdateManyDataInput;
+}
+
+export interface LocationGroupSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: LocationGroupWhereInput;
+  AND?:
+    | LocationGroupSubscriptionWhereInput[]
+    | LocationGroupSubscriptionWhereInput;
+  OR?:
+    | LocationGroupSubscriptionWhereInput[]
+    | LocationGroupSubscriptionWhereInput;
+  NOT?:
+    | LocationGroupSubscriptionWhereInput[]
+    | LocationGroupSubscriptionWhereInput;
+}
+
+export interface ColleagueUpdateManyDataInput {
+  status?: String;
+}
+
+export interface GroupSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: GroupWhereInput;
+  AND?: GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput;
+  OR?: GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput;
+  NOT?: GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput;
+}
+
+export interface OldColleagueUpdateManyWithoutFromInput {
+  create?:
+    | OldColleagueCreateWithoutFromInput[]
+    | OldColleagueCreateWithoutFromInput;
+  delete?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+  connect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+  disconnect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+  update?:
+    | OldColleagueUpdateWithWhereUniqueWithoutFromInput[]
+    | OldColleagueUpdateWithWhereUniqueWithoutFromInput;
+  upsert?:
+    | OldColleagueUpsertWithWhereUniqueWithoutFromInput[]
+    | OldColleagueUpsertWithWhereUniqueWithoutFromInput;
+  deleteMany?: OldColleagueScalarWhereInput[] | OldColleagueScalarWhereInput;
+  updateMany?:
+    | OldColleagueUpdateManyWithWhereNestedInput[]
+    | OldColleagueUpdateManyWithWhereNestedInput;
+}
+
+export interface FamilyGroupSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: FamilyGroupWhereInput;
+  AND?: FamilyGroupSubscriptionWhereInput[] | FamilyGroupSubscriptionWhereInput;
+  OR?: FamilyGroupSubscriptionWhereInput[] | FamilyGroupSubscriptionWhereInput;
+  NOT?: FamilyGroupSubscriptionWhereInput[] | FamilyGroupSubscriptionWhereInput;
+}
+
+export interface OldColleagueUpdateWithWhereUniqueWithoutFromInput {
+  where: OldColleagueWhereUniqueInput;
+  data: OldColleagueUpdateWithoutFromDataInput;
+}
+
+export interface CollegeEntranceExamSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: CollegeEntranceExamWhereInput;
+  AND?:
+    | CollegeEntranceExamSubscriptionWhereInput[]
+    | CollegeEntranceExamSubscriptionWhereInput;
+  OR?:
+    | CollegeEntranceExamSubscriptionWhereInput[]
+    | CollegeEntranceExamSubscriptionWhereInput;
+  NOT?:
+    | CollegeEntranceExamSubscriptionWhereInput[]
+    | CollegeEntranceExamSubscriptionWhereInput;
+}
+
+export interface OldColleagueUpdateWithoutFromDataInput {
+  to?: UserUpdateOneWithoutToOldColleaguesInput;
+  company?: CompanyUpdateOneInput;
+  status?: String;
+}
+
+export interface BootCountWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  bootUser?: UserWhereInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: BootCountWhereInput[] | BootCountWhereInput;
+  OR?: BootCountWhereInput[] | BootCountWhereInput;
+  NOT?: BootCountWhereInput[] | BootCountWhereInput;
+}
+
+export interface UserUpdateOneWithoutToOldColleaguesInput {
+  create?: UserCreateWithoutToOldColleaguesInput;
+  update?: UserUpdateWithoutToOldColleaguesDataInput;
+  upsert?: UserUpsertWithoutToOldColleaguesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface BootCountSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: BootCountWhereInput;
+  AND?: BootCountSubscriptionWhereInput[] | BootCountSubscriptionWhereInput;
+  OR?: BootCountSubscriptionWhereInput[] | BootCountSubscriptionWhereInput;
+  NOT?: BootCountSubscriptionWhereInput[] | BootCountSubscriptionWhereInput;
+}
+
+export interface UserUpdateWithoutToOldColleaguesDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoUpdateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutBornsInput;
+  residence?: LocationUpdateOneWithoutLivesInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  sentMessages?: MessageUpdateManyWithoutFromInput;
+  receiveMessages?: MessageUpdateManyWithoutToInput;
+  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
+  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
+  loveMan?: LoveMatchingUpdateManyWithoutManInput;
+  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
+  skills?: SkillUpdateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
+}
+
+export interface WorkGroupUpdateInput {
+  company?: CompanyUpdateOneWithoutWorkGroupInput;
+  colleagues?: ColleagueUpdateManyWithoutGroupInput;
+}
+
+export interface LocationGroupUpdateManyWithoutUsersInput {
+  create?:
+    | LocationGroupCreateWithoutUsersInput[]
+    | LocationGroupCreateWithoutUsersInput;
+  delete?: LocationGroupWhereUniqueInput[] | LocationGroupWhereUniqueInput;
+  connect?: LocationGroupWhereUniqueInput[] | LocationGroupWhereUniqueInput;
+  disconnect?: LocationGroupWhereUniqueInput[] | LocationGroupWhereUniqueInput;
+  update?:
+    | LocationGroupUpdateWithWhereUniqueWithoutUsersInput[]
+    | LocationGroupUpdateWithWhereUniqueWithoutUsersInput;
+  upsert?:
+    | LocationGroupUpsertWithWhereUniqueWithoutUsersInput[]
+    | LocationGroupUpsertWithWhereUniqueWithoutUsersInput;
+  deleteMany?: LocationGroupScalarWhereInput[] | LocationGroupScalarWhereInput;
+  updateMany?:
+    | LocationGroupUpdateManyWithWhereNestedInput[]
+    | LocationGroupUpdateManyWithWhereNestedInput;
+}
+
+export interface WorkUpdateInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  company?: CompanyUpdateOneWithoutWorksInput;
+  department?: String;
+  post?: StationUpdateOneInput;
+  jobContent?: String;
+  worker?: UserUpdateOneWithoutWorksInput;
+}
+
+export interface LocationGroupUpdateWithWhereUniqueWithoutUsersInput {
+  where: LocationGroupWhereUniqueInput;
+  data: LocationGroupUpdateWithoutUsersDataInput;
+}
+
+export interface VillageUpdateInput {
+  code?: String;
+  name?: String;
+  street?: StreetUpdateOneRequiredWithoutVillagesInput;
+  people?: UserUpdateManyInput;
+}
+
+export interface LocationGroupUpdateWithoutUsersDataInput {
+  kind?: LocationGroupKind;
+  code?: String;
+  name?: String;
+}
+
+export interface UniversityUpdateManyMutationInput {
+  name?: String;
+  education?: Educationkind;
+  department?: String;
+  location?: String;
+  desc?: String;
+}
+
+export interface LocationGroupUpsertWithWhereUniqueWithoutUsersInput {
+  where: LocationGroupWhereUniqueInput;
+  update: LocationGroupUpdateWithoutUsersDataInput;
+  create: LocationGroupCreateWithoutUsersInput;
+}
+
+export interface TradeUpdateManyMutationInput {
+  number?: Int;
+  amount?: Float;
+  status?: String;
+}
+
+export interface LocationGroupScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  kind?: LocationGroupKind;
+  kind_not?: LocationGroupKind;
+  kind_in?: LocationGroupKind[] | LocationGroupKind;
+  kind_not_in?: LocationGroupKind[] | LocationGroupKind;
+  code?: String;
+  code_not?: String;
+  code_in?: String[] | String;
+  code_not_in?: String[] | String;
+  code_lt?: String;
+  code_lte?: String;
+  code_gt?: String;
+  code_gte?: String;
+  code_contains?: String;
+  code_not_contains?: String;
+  code_starts_with?: String;
+  code_not_starts_with?: String;
+  code_ends_with?: String;
+  code_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  AND?: LocationGroupScalarWhereInput[] | LocationGroupScalarWhereInput;
+  OR?: LocationGroupScalarWhereInput[] | LocationGroupScalarWhereInput;
+  NOT?: LocationGroupScalarWhereInput[] | LocationGroupScalarWhereInput;
+}
+
+export interface ProductUpdateOneInput {
+  create?: ProductCreateInput;
+  update?: ProductUpdateDataInput;
+  upsert?: ProductUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: ProductWhereUniqueInput;
+}
+
+export interface LocationGroupUpdateManyWithWhereNestedInput {
+  where: LocationGroupScalarWhereInput;
+  data: LocationGroupUpdateManyDataInput;
+}
+
+export interface TradeCreateInput {
+  product?: ProductCreateOneInput;
+  number?: Int;
+  amount?: Float;
+  user?: UserCreateOneInput;
+  status?: String;
+}
+
+export interface LocationGroupUpdateManyDataInput {
+  kind?: LocationGroupKind;
+  code?: String;
+  name?: String;
+}
+
+export interface StationUpdateManyMutationInput {
+  code?: String;
+  name?: String;
+}
+
+export interface FindPassWordUpdateOneWithoutForgetterInput {
+  create?: FindPassWordCreateWithoutForgetterInput;
+  update?: FindPassWordUpdateWithoutForgetterDataInput;
+  upsert?: FindPassWordUpsertWithoutForgetterInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: FindPassWordWhereUniqueInput;
+}
+
+export interface ProvinceWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  code?: String;
+  code_not?: String;
+  code_in?: String[] | String;
+  code_not_in?: String[] | String;
+  code_lt?: String;
+  code_lte?: String;
+  code_gt?: String;
+  code_gte?: String;
+  code_contains?: String;
+  code_not_contains?: String;
+  code_starts_with?: String;
+  code_not_starts_with?: String;
+  code_ends_with?: String;
+  code_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  cities_every?: CityWhereInput;
+  cities_some?: CityWhereInput;
+  cities_none?: CityWhereInput;
+  AND?: ProvinceWhereInput[] | ProvinceWhereInput;
+  OR?: ProvinceWhereInput[] | ProvinceWhereInput;
+  NOT?: ProvinceWhereInput[] | ProvinceWhereInput;
+}
+
+export interface FindPassWordUpdateWithoutForgetterDataInput {
+  times?: Int;
+  remmember?: UserUpdateManyWithoutRemmemberPasswordInput;
+}
+
+export type GroupWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpdateManyWithoutRemmemberPasswordInput {
+  create?:
+    | UserCreateWithoutRemmemberPasswordInput[]
+    | UserCreateWithoutRemmemberPasswordInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutRemmemberPasswordInput[]
+    | UserUpdateWithWhereUniqueWithoutRemmemberPasswordInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutRemmemberPasswordInput[]
+    | UserUpsertWithWhereUniqueWithoutRemmemberPasswordInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
+}
+
+export type GroupMessageWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpdateWithWhereUniqueWithoutRemmemberPasswordInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutRemmemberPasswordDataInput;
+}
+
+export type LocationWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
+
+export interface UserUpdateWithoutRemmemberPasswordDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoUpdateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutBornsInput;
+  residence?: LocationUpdateOneWithoutLivesInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  sentMessages?: MessageUpdateManyWithoutFromInput;
+  receiveMessages?: MessageUpdateManyWithoutToInput;
+  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
+  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
+  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
+  loveMan?: LoveMatchingUpdateManyWithoutManInput;
+  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
+  skills?: SkillUpdateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
+}
+
+export interface SchoolUpdateInput {
+  name?: String;
+  kind?: Educationkind;
+  location?: LocationUpdateOneWithoutSchoolsInput;
+}
+
+export interface OldColleagueUpdateManyWithoutToInput {
+  create?:
+    | OldColleagueCreateWithoutToInput[]
+    | OldColleagueCreateWithoutToInput;
+  delete?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+  connect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+  disconnect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+  update?:
+    | OldColleagueUpdateWithWhereUniqueWithoutToInput[]
+    | OldColleagueUpdateWithWhereUniqueWithoutToInput;
+  upsert?:
+    | OldColleagueUpsertWithWhereUniqueWithoutToInput[]
+    | OldColleagueUpsertWithWhereUniqueWithoutToInput;
+  deleteMany?: OldColleagueScalarWhereInput[] | OldColleagueScalarWhereInput;
+  updateMany?:
+    | OldColleagueUpdateManyWithWhereNestedInput[]
+    | OldColleagueUpdateManyWithWhereNestedInput;
+}
+
+export interface RegisterCountCreateInput {
+  addUser?: UserCreateOneInput;
+  deviceId?: String;
+}
+
+export interface OldColleagueUpdateWithWhereUniqueWithoutToInput {
+  where: OldColleagueWhereUniqueInput;
+  data: OldColleagueUpdateWithoutToDataInput;
+}
+
+export interface UserUpdateWithoutRegStatusDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoUpdateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutBornsInput;
+  residence?: LocationUpdateOneWithoutLivesInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  sentMessages?: MessageUpdateManyWithoutFromInput;
+  receiveMessages?: MessageUpdateManyWithoutToInput;
+  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
+  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
+  loveMan?: LoveMatchingUpdateManyWithoutManInput;
+  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
+  skills?: SkillUpdateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
+}
+
+export interface OldColleagueUpdateWithoutToDataInput {
+  from?: UserUpdateOneWithoutFromOldColleaguesInput;
+  company?: CompanyUpdateOneInput;
+  status?: String;
+}
+
+export interface RegStatusUpdateInput {
+  education?: Educationkind;
+  university?: UniversityUpdateOneInput;
+  major?: MajorUpdateOneRequiredInput;
+  applicants?: UserUpdateManyWithoutRegStatusInput;
+}
+
+export interface UserUpdateOneWithoutFromOldColleaguesInput {
+  create?: UserCreateWithoutFromOldColleaguesInput;
+  update?: UserUpdateWithoutFromOldColleaguesDataInput;
+  upsert?: UserUpsertWithoutFromOldColleaguesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface RegStatusCreateInput {
+  education: Educationkind;
+  university?: UniversityCreateOneInput;
+  major: MajorCreateOneInput;
+  applicants?: UserCreateManyWithoutRegStatusInput;
+}
+
+export interface UserUpdateWithoutFromOldColleaguesDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoUpdateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutBornsInput;
+  residence?: LocationUpdateOneWithoutLivesInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  sentMessages?: MessageUpdateManyWithoutFromInput;
+  receiveMessages?: MessageUpdateManyWithoutToInput;
+  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
+  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
+  loveMan?: LoveMatchingUpdateManyWithoutManInput;
+  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
+  skills?: SkillUpdateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
+}
+
+export type LoveSignUpWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface FindPassWordUpdateOneWithoutRemmemberInput {
+  create?: FindPassWordCreateWithoutRemmemberInput;
+  update?: FindPassWordUpdateWithoutRemmemberDataInput;
+  upsert?: FindPassWordUpsertWithoutRemmemberInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: FindPassWordWhereUniqueInput;
+}
+
+export interface ProductUpdateInput {
+  subject?: String;
+  info?: String;
+  price?: Float;
+}
+
+export interface FindPassWordUpdateWithoutRemmemberDataInput {
+  times?: Int;
+  forgetter?: UserUpdateOneWithoutForgetPasswordInput;
+}
+
+export interface PostUpdateManyMutationInput {
+  isPublished?: Boolean;
+  title?: String;
+  content?: String;
+}
+
+export interface UserUpdateOneWithoutForgetPasswordInput {
+  create?: UserCreateWithoutForgetPasswordInput;
+  update?: UserUpdateWithoutForgetPasswordDataInput;
+  upsert?: UserUpsertWithoutForgetPasswordInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpdateOneRequiredWithoutPostsInput {
+  create?: UserCreateWithoutPostsInput;
+  update?: UserUpdateWithoutPostsDataInput;
+  upsert?: UserUpsertWithoutPostsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpdateWithoutForgetPasswordDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoUpdateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutBornsInput;
+  residence?: LocationUpdateOneWithoutLivesInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  sentMessages?: MessageUpdateManyWithoutFromInput;
+  receiveMessages?: MessageUpdateManyWithoutToInput;
+  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
+  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
+  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
+  loveMan?: LoveMatchingUpdateManyWithoutManInput;
+  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
+  skills?: SkillUpdateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
+}
+
+export interface UserCreateOneWithoutPostsInput {
+  create?: UserCreateWithoutPostsInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface LoveSettingUpdateOneWithoutUserInput {
+  create?: LoveSettingCreateWithoutUserInput;
+  update?: LoveSettingUpdateWithoutUserDataInput;
+  upsert?: LoveSettingUpsertWithoutUserInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: LoveSettingWhereUniqueInput;
+}
+
+export interface PhotoUpdateInput {
+  name?: String;
+  url?: String;
+  user?: UserUpdateOneWithoutAvatarInput;
+}
+
+export interface LoveSettingUpdateWithoutUserDataInput {
+  myHeight?: Int;
+  myWeight?: Int;
+  otherHeightMin?: Int;
+  otherHeightMax?: Int;
+  otherWeightMin?: Int;
+  otherWeightMax?: Int;
+  otherAgeMin?: Int;
+  otherAgeMax?: Int;
+  dateTime?: String;
+  datePlace?: String;
+  memeberGrade?: Int;
+  memeberGradeEndTime?: DateTimeInput;
+}
+
+export interface PersonCreateInput {
+  name: String;
+  user?: UserCreateOneInput;
+  families?: FamilyCreateManyWithoutToInput;
+  asFather?: FamilyGroupCreateManyWithoutFatherInput;
+  asMother?: FamilyGroupCreateManyWithoutMotherInput;
+}
+
+export interface LoveSettingUpsertWithoutUserInput {
+  update: LoveSettingUpdateWithoutUserDataInput;
+  create: LoveSettingCreateWithoutUserInput;
+}
+
+export interface PartnerConditionCreateInput {
+  skillName?: String;
+  place?: String;
+  number?: Int;
+  partners?: UserCreateManyWithoutFitConditionsInput;
+  passedPartners?: UserCreateManyWithoutNofitConditionsInput;
+  project?: ProjectCreateOneWithoutConditionsInput;
+}
+
+export interface LoveMatchingUpdateManyWithoutWomanInput {
+  create?:
+    | LoveMatchingCreateWithoutWomanInput[]
+    | LoveMatchingCreateWithoutWomanInput;
+  delete?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
+  connect?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
+  disconnect?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
+  update?:
+    | LoveMatchingUpdateWithWhereUniqueWithoutWomanInput[]
+    | LoveMatchingUpdateWithWhereUniqueWithoutWomanInput;
+  upsert?:
+    | LoveMatchingUpsertWithWhereUniqueWithoutWomanInput[]
+    | LoveMatchingUpsertWithWhereUniqueWithoutWomanInput;
+  deleteMany?: LoveMatchingScalarWhereInput[] | LoveMatchingScalarWhereInput;
+  updateMany?:
+    | LoveMatchingUpdateManyWithWhereNestedInput[]
+    | LoveMatchingUpdateManyWithWhereNestedInput;
+}
+
+export type PostWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface LoveMatchingUpdateWithWhereUniqueWithoutWomanInput {
+  where: LoveMatchingWhereUniqueInput;
+  data: LoveMatchingUpdateWithoutWomanDataInput;
+}
+
+export type ProductWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface LoveMatchingUpdateWithoutWomanDataInput {
+  period?: String;
+  city?: CityUpdateOneInput;
+  man?: UserUpdateOneWithoutLoveManInput;
+}
+
+export interface UserUpsertWithoutSignUpLoveInput {
+  update: UserUpdateWithoutSignUpLoveDataInput;
+  create: UserCreateWithoutSignUpLoveInput;
+}
+
+export interface UserUpdateOneWithoutLoveManInput {
+  create?: UserCreateWithoutLoveManInput;
+  update?: UserUpdateWithoutLoveManDataInput;
+  upsert?: UserUpsertWithoutLoveManInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface LoveSignUpUpdateInput {
+  period?: String;
+  city?: CityUpdateOneInput;
+  person?: UserUpdateOneWithoutSignUpLoveInput;
+}
+
+export interface UserUpdateWithoutLoveManDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoUpdateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutBornsInput;
+  residence?: LocationUpdateOneWithoutLivesInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  sentMessages?: MessageUpdateManyWithoutFromInput;
+  receiveMessages?: MessageUpdateManyWithoutToInput;
+  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
+  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
+  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
+  skills?: SkillUpdateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
+}
+
+export interface LoveSignUpCreateInput {
+  period?: String;
+  city?: CityCreateOneInput;
+  person?: UserCreateOneWithoutSignUpLoveInput;
+}
+
+export interface LoveSignUpUpdateOneWithoutPersonInput {
+  create?: LoveSignUpCreateWithoutPersonInput;
+  update?: LoveSignUpUpdateWithoutPersonDataInput;
+  upsert?: LoveSignUpUpsertWithoutPersonInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: LoveSignUpWhereUniqueInput;
+}
+
+export type RegStatusWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface LoveSignUpUpdateWithoutPersonDataInput {
+  period?: String;
+  city?: CityUpdateOneInput;
+}
+
+export interface UserCreateOneWithoutLoveSettingInput {
+  create?: UserCreateWithoutLoveSettingInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface LoveSignUpUpsertWithoutPersonInput {
+  update: LoveSignUpUpdateWithoutPersonDataInput;
+  create: LoveSignUpCreateWithoutPersonInput;
+}
+
+export interface LoveMatchingUpdateManyMutationInput {
+  period?: String;
+}
+
+export interface SkillUpdateManyWithoutPersonsInput {
+  create?: SkillCreateWithoutPersonsInput[] | SkillCreateWithoutPersonsInput;
+  delete?: SkillWhereUniqueInput[] | SkillWhereUniqueInput;
+  connect?: SkillWhereUniqueInput[] | SkillWhereUniqueInput;
+  disconnect?: SkillWhereUniqueInput[] | SkillWhereUniqueInput;
+  update?:
+    | SkillUpdateWithWhereUniqueWithoutPersonsInput[]
+    | SkillUpdateWithWhereUniqueWithoutPersonsInput;
+  upsert?:
+    | SkillUpsertWithWhereUniqueWithoutPersonsInput[]
+    | SkillUpsertWithWhereUniqueWithoutPersonsInput;
+  deleteMany?: SkillScalarWhereInput[] | SkillScalarWhereInput;
+  updateMany?:
+    | SkillUpdateManyWithWhereNestedInput[]
+    | SkillUpdateManyWithWhereNestedInput;
+}
+
+export type SchoolWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface SkillUpdateWithWhereUniqueWithoutPersonsInput {
+  where: SkillWhereUniqueInput;
+  data: SkillUpdateWithoutPersonsDataInput;
+}
+
+export type SchoolEduWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface SkillUpdateWithoutPersonsDataInput {
+  name?: String;
+}
+
+export type SkillWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
+
+export interface SkillUpsertWithWhereUniqueWithoutPersonsInput {
+  where: SkillWhereUniqueInput;
+  update: SkillUpdateWithoutPersonsDataInput;
+  create: SkillCreateWithoutPersonsInput;
+}
+
+export type StationWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+  name?: String;
+}>;
+
+export interface SkillScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  AND?: SkillScalarWhereInput[] | SkillScalarWhereInput;
+  OR?: SkillScalarWhereInput[] | SkillScalarWhereInput;
+  NOT?: SkillScalarWhereInput[] | SkillScalarWhereInput;
+}
+
+export interface LocationUpdateInput {
+  name?: String;
+  province?: ProvinceUpdateOneInput;
+  city?: CityUpdateOneInput;
+  area?: AreaUpdateOneInput;
+  street?: StreetUpdateOneInput;
+  village?: VillageUpdateOneInput;
+  schools?: SchoolUpdateManyWithoutLocationInput;
+  companies?: CompanyUpdateManyWithoutLocationInput;
+  universities?: UniversityUpdateManyInput;
+  borns?: UserUpdateManyWithoutBirthplaceInput;
+  lives?: UserUpdateManyWithoutResidenceInput;
+}
+
+export interface SkillUpdateManyWithWhereNestedInput {
+  where: SkillScalarWhereInput;
+  data: SkillUpdateManyDataInput;
+}
+
+export interface UserUpsertWithoutGroupMessagesInput {
+  update: UserUpdateWithoutGroupMessagesDataInput;
+  create: UserCreateWithoutGroupMessagesInput;
+}
+
+export interface SkillUpdateManyDataInput {
+  name?: String;
+}
+
+export interface UserUpdateOneRequiredWithoutGroupMessagesInput {
+  create?: UserCreateWithoutGroupMessagesInput;
+  update?: UserUpdateWithoutGroupMessagesDataInput;
+  upsert?: UserUpsertWithoutGroupMessagesInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface PartnerConditionUpdateManyWithoutPartnersInput {
+  create?:
+    | PartnerConditionCreateWithoutPartnersInput[]
+    | PartnerConditionCreateWithoutPartnersInput;
+  delete?:
+    | PartnerConditionWhereUniqueInput[]
+    | PartnerConditionWhereUniqueInput;
+  connect?:
+    | PartnerConditionWhereUniqueInput[]
+    | PartnerConditionWhereUniqueInput;
+  disconnect?:
+    | PartnerConditionWhereUniqueInput[]
+    | PartnerConditionWhereUniqueInput;
+  update?:
+    | PartnerConditionUpdateWithWhereUniqueWithoutPartnersInput[]
+    | PartnerConditionUpdateWithWhereUniqueWithoutPartnersInput;
+  upsert?:
+    | PartnerConditionUpsertWithWhereUniqueWithoutPartnersInput[]
+    | PartnerConditionUpsertWithWhereUniqueWithoutPartnersInput;
+  deleteMany?:
+    | PartnerConditionScalarWhereInput[]
+    | PartnerConditionScalarWhereInput;
+  updateMany?:
+    | PartnerConditionUpdateManyWithWhereNestedInput[]
+    | PartnerConditionUpdateManyWithWhereNestedInput;
+}
+
+export type UniversityWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: String;
+}>;
+
+export interface PartnerConditionUpdateWithWhereUniqueWithoutPartnersInput {
+  where: PartnerConditionWhereUniqueInput;
+  data: PartnerConditionUpdateWithoutPartnersDataInput;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  username?: String;
+  uid?: String;
+  token?: String;
+}>;
+
+export interface PartnerConditionUpdateWithoutPartnersDataInput {
+  skillName?: String;
+  place?: String;
+  number?: Int;
+  passedPartners?: UserUpdateManyWithoutNofitConditionsInput;
+  project?: ProjectUpdateOneWithoutConditionsInput;
+}
+
+export type VillageWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+}>;
+
+export interface UserUpdateManyWithoutNofitConditionsInput {
+  create?:
+    | UserCreateWithoutNofitConditionsInput[]
+    | UserCreateWithoutNofitConditionsInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutNofitConditionsInput[]
+    | UserUpdateWithWhereUniqueWithoutNofitConditionsInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutNofitConditionsInput[]
+    | UserUpsertWithWhereUniqueWithoutNofitConditionsInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
+}
+
+export type WorkWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpdateWithWhereUniqueWithoutNofitConditionsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutNofitConditionsDataInput;
+}
+
+export type WorkGroupWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpdateWithoutNofitConditionsDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoUpdateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutBornsInput;
+  residence?: LocationUpdateOneWithoutLivesInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  sentMessages?: MessageUpdateManyWithoutFromInput;
+  receiveMessages?: MessageUpdateManyWithoutToInput;
+  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
+  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
+  loveMan?: LoveMatchingUpdateManyWithoutManInput;
+  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
+  skills?: SkillUpdateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
+}
+
+export interface FamilyGroupCreateInput {
+  father?: PersonCreateOneWithoutAsFatherInput;
+  mother?: PersonCreateOneWithoutAsMotherInput;
+  creater?: UserCreateOneWithoutCreaterInput;
+  name?: String;
+  families?: FamilyCreateManyInput;
+  users?: UserCreateManyWithoutFamilyGroupInput;
+}
+
+export interface LoveMatchingUpdateManyWithoutManInput {
+  create?:
+    | LoveMatchingCreateWithoutManInput[]
+    | LoveMatchingCreateWithoutManInput;
+  delete?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
+  connect?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
+  disconnect?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
+  update?:
+    | LoveMatchingUpdateWithWhereUniqueWithoutManInput[]
+    | LoveMatchingUpdateWithWhereUniqueWithoutManInput;
+  upsert?:
+    | LoveMatchingUpsertWithWhereUniqueWithoutManInput[]
+    | LoveMatchingUpsertWithWhereUniqueWithoutManInput;
+  deleteMany?: LoveMatchingScalarWhereInput[] | LoveMatchingScalarWhereInput;
+  updateMany?:
+    | LoveMatchingUpdateManyWithWhereNestedInput[]
+    | LoveMatchingUpdateManyWithWhereNestedInput;
+}
+
+export interface AdvertisementUpdateManyMutationInput {
+  image1?: String;
+  image2?: String;
+  image3?: String;
+  image4?: String;
+  image5?: String;
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+}
+
+export interface LoveMatchingUpdateWithWhereUniqueWithoutManInput {
+  where: LoveMatchingWhereUniqueInput;
+  data: LoveMatchingUpdateWithoutManDataInput;
+}
+
+export interface CityCreateOneWithoutAreasInput {
+  create?: CityCreateWithoutAreasInput;
+  connect?: CityWhereUniqueInput;
+}
+
+export interface LoveMatchingUpdateWithoutManDataInput {
+  period?: String;
+  city?: CityUpdateOneInput;
+  woman?: UserUpdateOneWithoutLoveWomanInput;
+}
+
+export interface StreetCreateManyWithoutAreaInput {
+  create?: StreetCreateWithoutAreaInput[] | StreetCreateWithoutAreaInput;
+  connect?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
+}
+
+export interface UserUpdateOneWithoutLoveWomanInput {
+  create?: UserCreateWithoutLoveWomanInput;
+  update?: UserUpdateWithoutLoveWomanDataInput;
+  upsert?: UserUpsertWithoutLoveWomanInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserCreateManyInput {
+  create?: UserCreateInput[] | UserCreateInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface UserUpdateWithoutLoveWomanDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoUpdateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutBornsInput;
+  residence?: LocationUpdateOneWithoutLivesInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  sentMessages?: MessageUpdateManyWithoutFromInput;
+  receiveMessages?: MessageUpdateManyWithoutToInput;
+  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
+  loveMan?: LoveMatchingUpdateManyWithoutManInput;
+  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
+  skills?: SkillUpdateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
+}
+
+export interface LocationCreateOneWithoutBornsInput {
+  create?: LocationCreateWithoutBornsInput;
+  connect?: LocationWhereUniqueInput;
+}
+
+export interface PartnerConditionUpdateManyWithoutPassedPartnersInput {
+  create?:
+    | PartnerConditionCreateWithoutPassedPartnersInput[]
+    | PartnerConditionCreateWithoutPassedPartnersInput;
+  delete?:
+    | PartnerConditionWhereUniqueInput[]
+    | PartnerConditionWhereUniqueInput;
+  connect?:
+    | PartnerConditionWhereUniqueInput[]
+    | PartnerConditionWhereUniqueInput;
+  disconnect?:
+    | PartnerConditionWhereUniqueInput[]
+    | PartnerConditionWhereUniqueInput;
+  update?:
+    | PartnerConditionUpdateWithWhereUniqueWithoutPassedPartnersInput[]
+    | PartnerConditionUpdateWithWhereUniqueWithoutPassedPartnersInput;
+  upsert?:
+    | PartnerConditionUpsertWithWhereUniqueWithoutPassedPartnersInput[]
+    | PartnerConditionUpsertWithWhereUniqueWithoutPassedPartnersInput;
+  deleteMany?:
+    | PartnerConditionScalarWhereInput[]
+    | PartnerConditionScalarWhereInput;
+  updateMany?:
+    | PartnerConditionUpdateManyWithWhereNestedInput[]
+    | PartnerConditionUpdateManyWithWhereNestedInput;
+}
+
+export interface CityCreateManyWithoutProvinceInput {
+  create?: CityCreateWithoutProvinceInput[] | CityCreateWithoutProvinceInput;
+  connect?: CityWhereUniqueInput[] | CityWhereUniqueInput;
+}
+
+export interface PartnerConditionUpdateWithWhereUniqueWithoutPassedPartnersInput {
+  where: PartnerConditionWhereUniqueInput;
+  data: PartnerConditionUpdateWithoutPassedPartnersDataInput;
+}
+
+export interface CityCreateOneInput {
+  create?: CityCreateInput;
+  connect?: CityWhereUniqueInput;
+}
+
+export interface PartnerConditionUpdateWithoutPassedPartnersDataInput {
+  skillName?: String;
+  place?: String;
+  number?: Int;
+  partners?: UserUpdateManyWithoutFitConditionsInput;
+  project?: ProjectUpdateOneWithoutConditionsInput;
+}
+
+export interface StreetCreateInput {
+  code: String;
+  name: String;
+  Area: AreaCreateOneWithoutTownsInput;
+  villages?: VillageCreateManyWithoutStreetInput;
+}
+
+export interface UserUpdateManyWithoutFitConditionsInput {
+  create?:
+    | UserCreateWithoutFitConditionsInput[]
+    | UserCreateWithoutFitConditionsInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutFitConditionsInput[]
+    | UserUpdateWithWhereUniqueWithoutFitConditionsInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutFitConditionsInput[]
+    | UserUpsertWithWhereUniqueWithoutFitConditionsInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
+}
+
+export interface VillageCreateInput {
+  code: String;
+  name: String;
+  street: StreetCreateOneWithoutVillagesInput;
+  people?: UserCreateManyInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutFitConditionsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutFitConditionsDataInput;
+}
+
+export interface SchoolCreateWithoutLocationInput {
+  name?: String;
+  kind?: Educationkind;
+}
+
+export interface UserUpdateWithoutFitConditionsDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoUpdateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutBornsInput;
+  residence?: LocationUpdateOneWithoutLivesInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  sentMessages?: MessageUpdateManyWithoutFromInput;
+  receiveMessages?: MessageUpdateManyWithoutToInput;
+  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
+  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
+  loveMan?: LoveMatchingUpdateManyWithoutManInput;
+  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
+  skills?: SkillUpdateManyWithoutPersonsInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
+}
+
+export interface WorkCreateWithoutCompanyInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  department?: String;
+  post?: StationCreateOneInput;
+  jobContent?: String;
+  worker?: UserCreateOneWithoutWorksInput;
+}
+
+export interface ProjectUpdateManyWithoutStarterInput {
+  create?:
+    | ProjectCreateWithoutStarterInput[]
+    | ProjectCreateWithoutStarterInput;
+  delete?: ProjectWhereUniqueInput[] | ProjectWhereUniqueInput;
+  connect?: ProjectWhereUniqueInput[] | ProjectWhereUniqueInput;
+  disconnect?: ProjectWhereUniqueInput[] | ProjectWhereUniqueInput;
+  update?:
+    | ProjectUpdateWithWhereUniqueWithoutStarterInput[]
+    | ProjectUpdateWithWhereUniqueWithoutStarterInput;
+  upsert?:
+    | ProjectUpsertWithWhereUniqueWithoutStarterInput[]
+    | ProjectUpsertWithWhereUniqueWithoutStarterInput;
+  deleteMany?: ProjectScalarWhereInput[] | ProjectScalarWhereInput;
+  updateMany?:
+    | ProjectUpdateManyWithWhereNestedInput[]
+    | ProjectUpdateManyWithWhereNestedInput;
+}
+
+export interface UserCreateWithoutWorksInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoCreateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutBornsInput;
+  residence?: LocationCreateOneWithoutLivesInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  sentMessages?: MessageCreateManyWithoutFromInput;
+  receiveMessages?: MessageCreateManyWithoutToInput;
+  groupMessages?: GroupMessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingCreateOneWithoutUserInput;
+  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
+  loveMan?: LoveMatchingCreateManyWithoutManInput;
+  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
+  skills?: SkillCreateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
+}
+
+export interface ProjectUpdateWithWhereUniqueWithoutStarterInput {
+  where: ProjectWhereUniqueInput;
+  data: ProjectUpdateWithoutStarterDataInput;
+}
+
+export interface UniversityCreateInput {
+  name: String;
+  education: Educationkind;
+  department?: String;
+  location?: String;
+  desc?: String;
+}
+
+export interface ProjectUpdateWithoutStarterDataInput {
+  name?: String;
+  place?: CityUpdateOneInput;
+  content?: String;
+  conditions?: PartnerConditionUpdateManyWithoutProjectInput;
+}
+
+export interface PostCreateWithoutAuthorInput {
+  isPublished?: Boolean;
+  title: String;
+  content: String;
+}
+
+export interface PartnerConditionUpdateManyWithoutProjectInput {
+  create?:
+    | PartnerConditionCreateWithoutProjectInput[]
+    | PartnerConditionCreateWithoutProjectInput;
+  delete?:
+    | PartnerConditionWhereUniqueInput[]
+    | PartnerConditionWhereUniqueInput;
+  connect?:
+    | PartnerConditionWhereUniqueInput[]
+    | PartnerConditionWhereUniqueInput;
+  disconnect?:
+    | PartnerConditionWhereUniqueInput[]
+    | PartnerConditionWhereUniqueInput;
+  update?:
+    | PartnerConditionUpdateWithWhereUniqueWithoutProjectInput[]
+    | PartnerConditionUpdateWithWhereUniqueWithoutProjectInput;
+  upsert?:
+    | PartnerConditionUpsertWithWhereUniqueWithoutProjectInput[]
+    | PartnerConditionUpsertWithWhereUniqueWithoutProjectInput;
+  deleteMany?:
+    | PartnerConditionScalarWhereInput[]
+    | PartnerConditionScalarWhereInput;
+  updateMany?:
+    | PartnerConditionUpdateManyWithWhereNestedInput[]
+    | PartnerConditionUpdateManyWithWhereNestedInput;
+}
+
+export interface MajorCreateOneInput {
+  create?: MajorCreateInput;
+  connect?: MajorWhereUniqueInput;
+}
+
+export interface PartnerConditionUpdateWithWhereUniqueWithoutProjectInput {
+  where: PartnerConditionWhereUniqueInput;
+  data: PartnerConditionUpdateWithoutProjectDataInput;
+}
+
+export interface PersonCreateOneWithoutFamiliesInput {
+  create?: PersonCreateWithoutFamiliesInput;
+  connect?: PersonWhereUniqueInput;
+}
+
+export interface PartnerConditionUpdateWithoutProjectDataInput {
+  skillName?: String;
+  place?: String;
+  number?: Int;
+  partners?: UserUpdateManyWithoutFitConditionsInput;
+  passedPartners?: UserUpdateManyWithoutNofitConditionsInput;
+}
+
+export interface FamilyGroupCreateWithoutFatherInput {
+  mother?: PersonCreateOneWithoutAsMotherInput;
+  creater?: UserCreateOneWithoutCreaterInput;
+  name?: String;
+  families?: FamilyCreateManyInput;
+  users?: UserCreateManyWithoutFamilyGroupInput;
+}
+
+export interface PartnerConditionUpsertWithWhereUniqueWithoutProjectInput {
+  where: PartnerConditionWhereUniqueInput;
+  update: PartnerConditionUpdateWithoutProjectDataInput;
+  create: PartnerConditionCreateWithoutProjectInput;
+}
+
+export interface FamilyCreateWithoutToInput {
+  from: UserCreateOneWithoutFamiliesInput;
+  relationship: String;
+  spouse?: FamilyCreateOneInput;
+  status: String;
+}
+
+export interface PartnerConditionScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  skillName?: String;
+  skillName_not?: String;
+  skillName_in?: String[] | String;
+  skillName_not_in?: String[] | String;
+  skillName_lt?: String;
+  skillName_lte?: String;
+  skillName_gt?: String;
+  skillName_gte?: String;
+  skillName_contains?: String;
+  skillName_not_contains?: String;
+  skillName_starts_with?: String;
+  skillName_not_starts_with?: String;
+  skillName_ends_with?: String;
+  skillName_not_ends_with?: String;
+  place?: String;
+  place_not?: String;
+  place_in?: String[] | String;
+  place_not_in?: String[] | String;
+  place_lt?: String;
+  place_lte?: String;
+  place_gt?: String;
+  place_gte?: String;
+  place_contains?: String;
+  place_not_contains?: String;
+  place_starts_with?: String;
+  place_not_starts_with?: String;
+  place_ends_with?: String;
+  place_not_ends_with?: String;
+  number?: Int;
+  number_not?: Int;
+  number_in?: Int[] | Int;
+  number_not_in?: Int[] | Int;
+  number_lt?: Int;
+  number_lte?: Int;
+  number_gt?: Int;
+  number_gte?: Int;
+  AND?: PartnerConditionScalarWhereInput[] | PartnerConditionScalarWhereInput;
+  OR?: PartnerConditionScalarWhereInput[] | PartnerConditionScalarWhereInput;
+  NOT?: PartnerConditionScalarWhereInput[] | PartnerConditionScalarWhereInput;
+}
+
+export interface SchoolEduCreateWithoutStudentsInput {
+  school?: SchoolCreateOneInput;
+  startTime?: DateTimeInput;
+  major?: MajorCreateOneInput;
+  grade?: Int;
+  className?: String;
+}
+
+export interface PartnerConditionUpdateManyWithWhereNestedInput {
+  where: PartnerConditionScalarWhereInput;
+  data: PartnerConditionUpdateManyDataInput;
+}
+
+export interface LocationCreateWithoutSchoolsInput {
+  name?: String;
+  province?: ProvinceCreateOneInput;
+  city?: CityCreateOneInput;
+  area?: AreaCreateOneInput;
+  street?: StreetCreateOneInput;
+  village?: VillageCreateOneInput;
+  companies?: CompanyCreateManyWithoutLocationInput;
+  universities?: UniversityCreateManyInput;
+  borns?: UserCreateManyWithoutBirthplaceInput;
+  lives?: UserCreateManyWithoutResidenceInput;
+}
+
+export interface PartnerConditionUpdateManyDataInput {
+  skillName?: String;
+  place?: String;
+  number?: Int;
+}
+
+export interface WorkCreateWithoutWorkerInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  company?: CompanyCreateOneWithoutWorksInput;
+  department?: String;
+  post?: StationCreateOneInput;
+  jobContent?: String;
+}
+
+export interface ProjectUpsertWithWhereUniqueWithoutStarterInput {
+  where: ProjectWhereUniqueInput;
+  update: ProjectUpdateWithoutStarterDataInput;
+  create: ProjectCreateWithoutStarterInput;
+}
+
+export interface LocationCreateWithoutCompaniesInput {
+  name?: String;
+  province?: ProvinceCreateOneInput;
+  city?: CityCreateOneInput;
+  area?: AreaCreateOneInput;
+  street?: StreetCreateOneInput;
+  village?: VillageCreateOneInput;
+  schools?: SchoolCreateManyWithoutLocationInput;
+  universities?: UniversityCreateManyInput;
+  borns?: UserCreateManyWithoutBirthplaceInput;
+  lives?: UserCreateManyWithoutResidenceInput;
+}
+
+export interface ProjectScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  content?: String;
+  content_not?: String;
+  content_in?: String[] | String;
+  content_not_in?: String[] | String;
+  content_lt?: String;
+  content_lte?: String;
+  content_gt?: String;
+  content_gte?: String;
+  content_contains?: String;
+  content_not_contains?: String;
+  content_starts_with?: String;
+  content_not_starts_with?: String;
+  content_ends_with?: String;
+  content_not_ends_with?: String;
+  AND?: ProjectScalarWhereInput[] | ProjectScalarWhereInput;
+  OR?: ProjectScalarWhereInput[] | ProjectScalarWhereInput;
+  NOT?: ProjectScalarWhereInput[] | ProjectScalarWhereInput;
+}
+
+export interface ColleagueCreateWithoutGroupInput {
+  worker?: UserCreateOneWithoutColleaguesInput;
+  status: String;
+}
+
+export interface ProjectUpdateManyWithWhereNestedInput {
+  where: ProjectScalarWhereInput;
+  data: ProjectUpdateManyDataInput;
+}
+
+export interface CollegeEntranceExamCreateWithoutStudentInput {
+  province: ProvinceCreateOneInput;
+  subject: String;
+  culscore: Float;
+  proscore?: Float;
+  candidatenum: String;
+  times?: Int;
+}
+
+export interface ProjectUpdateManyDataInput {
+  name?: String;
+  content?: String;
+}
+
+export interface UserCreateWithoutReceiveMessagesInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoCreateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutBornsInput;
+  residence?: LocationCreateOneWithoutLivesInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  sentMessages?: MessageCreateManyWithoutFromInput;
+  groupMessages?: GroupMessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingCreateOneWithoutUserInput;
+  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
+  loveMan?: LoveMatchingCreateManyWithoutManInput;
+  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
+  skills?: SkillCreateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutFitConditionsInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutFitConditionsDataInput;
+  create: UserCreateWithoutFitConditionsInput;
+}
+
+export interface PhotoCreateInput {
+  name?: String;
+  url?: String;
+  user?: UserCreateOneWithoutAvatarInput;
+}
+
+export interface UserScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  username?: String;
+  username_not?: String;
+  username_in?: String[] | String;
+  username_not_in?: String[] | String;
+  username_lt?: String;
+  username_lte?: String;
+  username_gt?: String;
+  username_gte?: String;
+  username_contains?: String;
+  username_not_contains?: String;
+  username_starts_with?: String;
+  username_not_starts_with?: String;
+  username_ends_with?: String;
+  username_not_ends_with?: String;
+  password?: String;
+  password_not?: String;
+  password_in?: String[] | String;
+  password_not_in?: String[] | String;
+  password_lt?: String;
+  password_lte?: String;
+  password_gt?: String;
+  password_gte?: String;
+  password_contains?: String;
+  password_not_contains?: String;
+  password_starts_with?: String;
+  password_not_starts_with?: String;
+  password_ends_with?: String;
+  password_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  gender?: String;
+  gender_not?: String;
+  gender_in?: String[] | String;
+  gender_not_in?: String[] | String;
+  gender_lt?: String;
+  gender_lte?: String;
+  gender_gt?: String;
+  gender_gte?: String;
+  gender_contains?: String;
+  gender_not_contains?: String;
+  gender_starts_with?: String;
+  gender_not_starts_with?: String;
+  gender_ends_with?: String;
+  gender_not_ends_with?: String;
+  birthdaycalendar?: String;
+  birthdaycalendar_not?: String;
+  birthdaycalendar_in?: String[] | String;
+  birthdaycalendar_not_in?: String[] | String;
+  birthdaycalendar_lt?: String;
+  birthdaycalendar_lte?: String;
+  birthdaycalendar_gt?: String;
+  birthdaycalendar_gte?: String;
+  birthdaycalendar_contains?: String;
+  birthdaycalendar_not_contains?: String;
+  birthdaycalendar_starts_with?: String;
+  birthdaycalendar_not_starts_with?: String;
+  birthdaycalendar_ends_with?: String;
+  birthdaycalendar_not_ends_with?: String;
+  birthday?: DateTimeInput;
+  birthday_not?: DateTimeInput;
+  birthday_in?: DateTimeInput[] | DateTimeInput;
+  birthday_not_in?: DateTimeInput[] | DateTimeInput;
+  birthday_lt?: DateTimeInput;
+  birthday_lte?: DateTimeInput;
+  birthday_gt?: DateTimeInput;
+  birthday_gte?: DateTimeInput;
+  uid?: String;
+  uid_not?: String;
+  uid_in?: String[] | String;
+  uid_not_in?: String[] | String;
+  uid_lt?: String;
+  uid_lte?: String;
+  uid_gt?: String;
+  uid_gte?: String;
+  uid_contains?: String;
+  uid_not_contains?: String;
+  uid_starts_with?: String;
+  uid_not_starts_with?: String;
+  uid_ends_with?: String;
+  uid_not_ends_with?: String;
+  token?: String;
+  token_not?: String;
+  token_in?: String[] | String;
+  token_not_in?: String[] | String;
+  token_lt?: String;
+  token_lte?: String;
+  token_gt?: String;
+  token_gte?: String;
+  token_contains?: String;
+  token_not_contains?: String;
+  token_starts_with?: String;
+  token_not_starts_with?: String;
+  token_ends_with?: String;
+  token_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  regTimes?: Int;
+  regTimes_not?: Int;
+  regTimes_in?: Int[] | Int;
+  regTimes_not_in?: Int[] | Int;
+  regTimes_lt?: Int;
+  regTimes_lte?: Int;
+  regTimes_gt?: Int;
+  regTimes_gte?: Int;
+  maxRegTimes?: Int;
+  maxRegTimes_not?: Int;
+  maxRegTimes_in?: Int[] | Int;
+  maxRegTimes_not_in?: Int[] | Int;
+  maxRegTimes_lt?: Int;
+  maxRegTimes_lte?: Int;
+  maxRegTimes_gt?: Int;
+  maxRegTimes_gte?: Int;
+  AND?: UserScalarWhereInput[] | UserScalarWhereInput;
+  OR?: UserScalarWhereInput[] | UserScalarWhereInput;
+  NOT?: UserScalarWhereInput[] | UserScalarWhereInput;
+}
+
+export interface MessageCreateWithoutToInput {
+  from: UserCreateOneWithoutSentMessagesInput;
+  text?: String;
+  image?: PhotoCreateOneInput;
+}
+
+export interface UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput;
+  data: UserUpdateManyDataInput;
+}
+
+export interface GroupCreateWithoutUsersInput {
+  type?: GroupKind;
+  name?: String;
+  messages?: MessageCreateManyInput;
+}
+
+export interface UserUpdateManyDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  uid?: String;
+  token?: String;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+}
+
+export interface FamilyGroupCreateWithoutUsersInput {
+  father?: PersonCreateOneWithoutAsFatherInput;
+  mother?: PersonCreateOneWithoutAsMotherInput;
+  creater?: UserCreateOneWithoutCreaterInput;
+  name?: String;
+  families?: FamilyCreateManyInput;
+}
+
+export interface ProjectUpdateOneWithoutConditionsInput {
+  create?: ProjectCreateWithoutConditionsInput;
+  update?: ProjectUpdateWithoutConditionsDataInput;
+  upsert?: ProjectUpsertWithoutConditionsInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: ProjectWhereUniqueInput;
+}
+
+export interface FamilyGroupCreateWithoutMotherInput {
+  father?: PersonCreateOneWithoutAsFatherInput;
+  creater?: UserCreateOneWithoutCreaterInput;
+  name?: String;
+  families?: FamilyCreateManyInput;
+  users?: UserCreateManyWithoutFamilyGroupInput;
+}
+
+export interface ProjectUpdateWithoutConditionsDataInput {
+  name?: String;
+  place?: CityUpdateOneInput;
+  content?: String;
+  starter?: UserUpdateOneWithoutProjectsInput;
+}
+
+export interface ClassMateCreateWithoutStudentInput {
+  status: String;
+  group: ClassGroupCreateOneWithoutMembersInput;
+}
+
+export interface UserUpdateOneWithoutProjectsInput {
+  create?: UserCreateWithoutProjectsInput;
+  update?: UserUpdateWithoutProjectsDataInput;
+  upsert?: UserUpsertWithoutProjectsInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface SchoolEduCreateInput {
+  school?: SchoolCreateOneInput;
+  startTime?: DateTimeInput;
+  major?: MajorCreateOneInput;
+  grade?: Int;
+  className?: String;
+  students?: UserCreateManyWithoutStudiesInput;
+}
+
+export interface UserUpdateWithoutProjectsDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoUpdateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutBornsInput;
+  residence?: LocationUpdateOneWithoutLivesInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  sentMessages?: MessageUpdateManyWithoutFromInput;
+  receiveMessages?: MessageUpdateManyWithoutToInput;
+  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
+  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
+  loveMan?: LoveMatchingUpdateManyWithoutManInput;
+  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
+  skills?: SkillUpdateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+}
+
+export interface FamilyGroupCreateWithoutCreaterInput {
+  father?: PersonCreateOneWithoutAsFatherInput;
+  mother?: PersonCreateOneWithoutAsMotherInput;
+  name?: String;
+  families?: FamilyCreateManyInput;
+  users?: UserCreateManyWithoutFamilyGroupInput;
+}
+
+export interface UserUpsertWithoutProjectsInput {
+  update: UserUpdateWithoutProjectsDataInput;
+  create: UserCreateWithoutProjectsInput;
+}
+
+export interface UserCreateManyWithoutFamilyGroupInput {
+  create?:
+    | UserCreateWithoutFamilyGroupInput[]
+    | UserCreateWithoutFamilyGroupInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface ProjectUpsertWithoutConditionsInput {
+  update: ProjectUpdateWithoutConditionsDataInput;
+  create: ProjectCreateWithoutConditionsInput;
+}
+
+export interface CompanyCreateOneWithoutWorkGroupInput {
+  create?: CompanyCreateWithoutWorkGroupInput;
+  connect?: CompanyWhereUniqueInput;
+}
+
+export interface PartnerConditionUpsertWithWhereUniqueWithoutPassedPartnersInput {
+  where: PartnerConditionWhereUniqueInput;
+  update: PartnerConditionUpdateWithoutPassedPartnersDataInput;
+  create: PartnerConditionCreateWithoutPassedPartnersInput;
+}
+
+export interface WorkGroupCreateOneWithoutColleaguesInput {
+  create?: WorkGroupCreateWithoutColleaguesInput;
+  connect?: WorkGroupWhereUniqueInput;
+}
+
+export interface UserUpsertWithoutLoveWomanInput {
+  update: UserUpdateWithoutLoveWomanDataInput;
+  create: UserCreateWithoutLoveWomanInput;
+}
+
+export interface UserCreateOneWithoutToOldColleaguesInput {
+  create?: UserCreateWithoutToOldColleaguesInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface LoveMatchingUpsertWithWhereUniqueWithoutManInput {
+  where: LoveMatchingWhereUniqueInput;
+  update: LoveMatchingUpdateWithoutManDataInput;
+  create: LoveMatchingCreateWithoutManInput;
+}
+
+export interface FindPassWordCreateOneWithoutForgetterInput {
+  create?: FindPassWordCreateWithoutForgetterInput;
+  connect?: FindPassWordWhereUniqueInput;
+}
+
+export interface LoveMatchingScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  period?: String;
+  period_not?: String;
+  period_in?: String[] | String;
+  period_not_in?: String[] | String;
+  period_lt?: String;
+  period_lte?: String;
+  period_gt?: String;
+  period_gte?: String;
+  period_contains?: String;
+  period_not_contains?: String;
+  period_starts_with?: String;
+  period_not_starts_with?: String;
+  period_ends_with?: String;
+  period_not_ends_with?: String;
+  AND?: LoveMatchingScalarWhereInput[] | LoveMatchingScalarWhereInput;
+  OR?: LoveMatchingScalarWhereInput[] | LoveMatchingScalarWhereInput;
+  NOT?: LoveMatchingScalarWhereInput[] | LoveMatchingScalarWhereInput;
+}
+
+export interface OldColleagueCreateManyWithoutToInput {
+  create?:
+    | OldColleagueCreateWithoutToInput[]
+    | OldColleagueCreateWithoutToInput;
+  connect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+}
+
+export interface LoveMatchingUpdateManyWithWhereNestedInput {
+  where: LoveMatchingScalarWhereInput;
+  data: LoveMatchingUpdateManyDataInput;
+}
+
+export interface FindPassWordCreateOneWithoutRemmemberInput {
+  create?: FindPassWordCreateWithoutRemmemberInput;
+  connect?: FindPassWordWhereUniqueInput;
+}
+
+export interface LoveMatchingUpdateManyDataInput {
+  period?: String;
+}
+
+export interface LoveSettingCreateOneWithoutUserInput {
+  create?: LoveSettingCreateWithoutUserInput;
+  connect?: LoveSettingWhereUniqueInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutNofitConditionsInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutNofitConditionsDataInput;
+  create: UserCreateWithoutNofitConditionsInput;
+}
+
+export interface UserCreateOneWithoutLoveManInput {
+  create?: UserCreateWithoutLoveManInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface PartnerConditionUpsertWithWhereUniqueWithoutPartnersInput {
+  where: PartnerConditionWhereUniqueInput;
+  update: PartnerConditionUpdateWithoutPartnersDataInput;
+  create: PartnerConditionCreateWithoutPartnersInput;
+}
+
+export interface SkillCreateManyWithoutPersonsInput {
+  create?: SkillCreateWithoutPersonsInput[] | SkillCreateWithoutPersonsInput;
+  connect?: SkillWhereUniqueInput[] | SkillWhereUniqueInput;
+}
+
+export interface UserUpsertWithoutLoveManInput {
+  update: UserUpdateWithoutLoveManDataInput;
+  create: UserCreateWithoutLoveManInput;
+}
+
+export interface UserCreateManyWithoutNofitConditionsInput {
+  create?:
+    | UserCreateWithoutNofitConditionsInput[]
+    | UserCreateWithoutNofitConditionsInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface LoveMatchingUpsertWithWhereUniqueWithoutWomanInput {
+  where: LoveMatchingWhereUniqueInput;
+  update: LoveMatchingUpdateWithoutWomanDataInput;
+  create: LoveMatchingCreateWithoutWomanInput;
+}
+
+export interface UserCreateOneWithoutLoveWomanInput {
+  create?: UserCreateWithoutLoveWomanInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpsertWithoutForgetPasswordInput {
+  update: UserUpdateWithoutForgetPasswordDataInput;
+  create: UserCreateWithoutForgetPasswordInput;
+}
+
+export interface UserCreateManyWithoutFitConditionsInput {
+  create?:
+    | UserCreateWithoutFitConditionsInput[]
+    | UserCreateWithoutFitConditionsInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface FindPassWordUpsertWithoutRemmemberInput {
+  update: FindPassWordUpdateWithoutRemmemberDataInput;
+  create: FindPassWordCreateWithoutRemmemberInput;
+}
+
+export interface PartnerConditionCreateManyWithoutProjectInput {
+  create?:
+    | PartnerConditionCreateWithoutProjectInput[]
+    | PartnerConditionCreateWithoutProjectInput;
+  connect?:
+    | PartnerConditionWhereUniqueInput[]
+    | PartnerConditionWhereUniqueInput;
+}
+
+export interface UserUpsertWithoutFromOldColleaguesInput {
+  update: UserUpdateWithoutFromOldColleaguesDataInput;
+  create: UserCreateWithoutFromOldColleaguesInput;
+}
+
+export interface WorkGroupSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: WorkGroupWhereInput;
+  AND?: WorkGroupSubscriptionWhereInput[] | WorkGroupSubscriptionWhereInput;
+  OR?: WorkGroupSubscriptionWhereInput[] | WorkGroupSubscriptionWhereInput;
+  NOT?: WorkGroupSubscriptionWhereInput[] | WorkGroupSubscriptionWhereInput;
+}
+
+export interface CompanyUpdateOneInput {
+  create?: CompanyCreateInput;
+  update?: CompanyUpdateDataInput;
+  upsert?: CompanyUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: CompanyWhereUniqueInput;
+}
+
+export interface StreetSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: StreetWhereInput;
+  AND?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
+  OR?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
+  NOT?: StreetSubscriptionWhereInput[] | StreetSubscriptionWhereInput;
+}
+
+export interface CompanyUpdateDataInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  location?: LocationUpdateOneWithoutCompaniesInput;
+  BusinessScope?: String;
+  works?: WorkUpdateManyWithoutCompanyInput;
+  workGroup?: WorkGroupUpdateOneWithoutCompanyInput;
+}
+
 export interface RegisterCountSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
@@ -9144,25 +11829,9 @@ export interface RegisterCountSubscriptionWhereInput {
     | RegisterCountSubscriptionWhereInput;
 }
 
-export interface ColleagueUpdateWithWhereUniqueWithoutWorkerInput {
-  where: ColleagueWhereUniqueInput;
-  data: ColleagueUpdateWithoutWorkerDataInput;
-}
-
-export interface ProjectSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: ProjectWhereInput;
-  AND?: ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput;
-  OR?: ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput;
-  NOT?: ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput;
-}
-
-export interface ColleagueUpdateWithoutWorkerDataInput {
-  status?: String;
-  group?: WorkGroupUpdateOneWithoutColleaguesInput;
+export interface CompanyUpsertNestedInput {
+  update: CompanyUpdateDataInput;
+  create: CompanyCreateInput;
 }
 
 export interface RegStatusWhereInput {
@@ -9194,34 +11863,10 @@ export interface RegStatusWhereInput {
   NOT?: RegStatusWhereInput[] | RegStatusWhereInput;
 }
 
-export interface WorkGroupUpdateOneWithoutColleaguesInput {
-  create?: WorkGroupCreateWithoutColleaguesInput;
-  update?: WorkGroupUpdateWithoutColleaguesDataInput;
-  upsert?: WorkGroupUpsertWithoutColleaguesInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: WorkGroupWhereUniqueInput;
-}
-
-export interface PartnerConditionSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: PartnerConditionWhereInput;
-  AND?:
-    | PartnerConditionSubscriptionWhereInput[]
-    | PartnerConditionSubscriptionWhereInput;
-  OR?:
-    | PartnerConditionSubscriptionWhereInput[]
-    | PartnerConditionSubscriptionWhereInput;
-  NOT?:
-    | PartnerConditionSubscriptionWhereInput[]
-    | PartnerConditionSubscriptionWhereInput;
-}
-
-export interface WorkGroupUpdateWithoutColleaguesDataInput {
-  company?: CompanyUpdateOneWithoutWorkGroupInput;
+export interface OldColleagueUpsertWithWhereUniqueWithoutToInput {
+  where: OldColleagueWhereUniqueInput;
+  update: OldColleagueUpdateWithoutToDataInput;
+  create: OldColleagueCreateWithoutToInput;
 }
 
 export interface MessageSubscriptionWhereInput {
@@ -9235,26 +11880,38 @@ export interface MessageSubscriptionWhereInput {
   NOT?: MessageSubscriptionWhereInput[] | MessageSubscriptionWhereInput;
 }
 
-export interface WorkGroupUpsertWithoutColleaguesInput {
-  update: WorkGroupUpdateWithoutColleaguesDataInput;
-  create: WorkGroupCreateWithoutColleaguesInput;
-}
-
-export interface LoveSignUpSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: LoveSignUpWhereInput;
-  AND?: LoveSignUpSubscriptionWhereInput[] | LoveSignUpSubscriptionWhereInput;
-  OR?: LoveSignUpSubscriptionWhereInput[] | LoveSignUpSubscriptionWhereInput;
-  NOT?: LoveSignUpSubscriptionWhereInput[] | LoveSignUpSubscriptionWhereInput;
-}
-
-export interface ColleagueUpsertWithWhereUniqueWithoutWorkerInput {
-  where: ColleagueWhereUniqueInput;
-  update: ColleagueUpdateWithoutWorkerDataInput;
-  create: ColleagueCreateWithoutWorkerInput;
+export interface OldColleagueScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  status?: String;
+  status_not?: String;
+  status_in?: String[] | String;
+  status_not_in?: String[] | String;
+  status_lt?: String;
+  status_lte?: String;
+  status_gt?: String;
+  status_gte?: String;
+  status_contains?: String;
+  status_not_contains?: String;
+  status_starts_with?: String;
+  status_not_starts_with?: String;
+  status_ends_with?: String;
+  status_not_ends_with?: String;
+  AND?: OldColleagueScalarWhereInput[] | OldColleagueScalarWhereInput;
+  OR?: OldColleagueScalarWhereInput[] | OldColleagueScalarWhereInput;
+  NOT?: OldColleagueScalarWhereInput[] | OldColleagueScalarWhereInput;
 }
 
 export interface CompanyWhereInput {
@@ -9346,7 +12003,152 @@ export interface CompanyWhereInput {
   NOT?: CompanyWhereInput[] | CompanyWhereInput;
 }
 
-export interface ColleagueScalarWhereInput {
+export interface OldColleagueUpdateManyWithWhereNestedInput {
+  where: OldColleagueScalarWhereInput;
+  data: OldColleagueUpdateManyDataInput;
+}
+
+export interface FindPassWordSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: FindPassWordWhereInput;
+  AND?:
+    | FindPassWordSubscriptionWhereInput[]
+    | FindPassWordSubscriptionWhereInput;
+  OR?:
+    | FindPassWordSubscriptionWhereInput[]
+    | FindPassWordSubscriptionWhereInput;
+  NOT?:
+    | FindPassWordSubscriptionWhereInput[]
+    | FindPassWordSubscriptionWhereInput;
+}
+
+export interface OldColleagueUpdateManyDataInput {
+  status?: String;
+}
+
+export type BootCountWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpsertWithWhereUniqueWithoutRemmemberPasswordInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutRemmemberPasswordDataInput;
+  create: UserCreateWithoutRemmemberPasswordInput;
+}
+
+export interface AreaSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: AreaWhereInput;
+  AND?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
+  OR?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
+  NOT?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
+}
+
+export interface FindPassWordUpsertWithoutForgetterInput {
+  update: FindPassWordUpdateWithoutForgetterDataInput;
+  create: FindPassWordCreateWithoutForgetterInput;
+}
+
+export type ClassMateWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpsertWithoutToOldColleaguesInput {
+  update: UserUpdateWithoutToOldColleaguesDataInput;
+  create: UserCreateWithoutToOldColleaguesInput;
+}
+
+export type CollegeEntranceExamWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  candidatenum?: String;
+}>;
+
+export interface OldColleagueUpsertWithWhereUniqueWithoutFromInput {
+  where: OldColleagueWhereUniqueInput;
+  update: OldColleagueUpdateWithoutFromDataInput;
+  create: OldColleagueCreateWithoutFromInput;
+}
+
+export interface ProductCreateOneInput {
+  create?: ProductCreateInput;
+  connect?: ProductWhereUniqueInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutFamilyGroupInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutFamilyGroupDataInput;
+  create: UserCreateWithoutFamilyGroupInput;
+}
+
+export interface SkillUpdateManyMutationInput {
+  name?: String;
+}
+
+export interface FamilyGroupUpsertWithoutCreaterInput {
+  update: FamilyGroupUpdateWithoutCreaterDataInput;
+  create: FamilyGroupCreateWithoutCreaterInput;
+}
+
+export interface SkillUpdateInput {
+  name?: String;
+  persons?: UserUpdateManyWithoutSkillsInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutStudiesInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutStudiesDataInput;
+  create: UserCreateWithoutStudiesInput;
+}
+
+export interface SchoolEduUpdateInput {
+  school?: SchoolUpdateOneInput;
+  startTime?: DateTimeInput;
+  major?: MajorUpdateOneInput;
+  grade?: Int;
+  className?: String;
+  students?: UserUpdateManyWithoutStudiesInput;
+}
+
+export interface SchoolEduUpsertNestedInput {
+  update: SchoolEduUpdateDataInput;
+  create: SchoolEduCreateInput;
+}
+
+export interface RegStatusUpdateManyMutationInput {
+  education?: Educationkind;
+}
+
+export interface ClassGroupUpsertWithoutMembersInput {
+  update: ClassGroupUpdateWithoutMembersDataInput;
+  create: ClassGroupCreateWithoutMembersInput;
+}
+
+export interface UserCreateManyWithoutRegStatusInput {
+  create?: UserCreateWithoutRegStatusInput[] | UserCreateWithoutRegStatusInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface ClassMateUpsertWithWhereUniqueWithoutStudentInput {
+  where: ClassMateWhereUniqueInput;
+  update: ClassMateUpdateWithoutStudentDataInput;
+  create: ClassMateCreateWithoutStudentInput;
+}
+
+export interface ProjectCreateInput {
+  name?: String;
+  place?: CityCreateOneInput;
+  content?: String;
+  conditions?: PartnerConditionCreateManyWithoutProjectInput;
+  starter?: UserCreateOneWithoutProjectsInput;
+}
+
+export interface ClassMateScalarWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -9375,12 +12177,65 @@ export interface ColleagueScalarWhereInput {
   status_not_starts_with?: String;
   status_ends_with?: String;
   status_not_ends_with?: String;
-  AND?: ColleagueScalarWhereInput[] | ColleagueScalarWhereInput;
-  OR?: ColleagueScalarWhereInput[] | ColleagueScalarWhereInput;
-  NOT?: ColleagueScalarWhereInput[] | ColleagueScalarWhereInput;
+  AND?: ClassMateScalarWhereInput[] | ClassMateScalarWhereInput;
+  OR?: ClassMateScalarWhereInput[] | ClassMateScalarWhereInput;
+  NOT?: ClassMateScalarWhereInput[] | ClassMateScalarWhereInput;
 }
 
-export interface SchoolWhereInput {
+export type MessageWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface ClassMateUpdateManyWithWhereNestedInput {
+  where: ClassMateScalarWhereInput;
+  data: ClassMateUpdateManyDataInput;
+}
+
+export type PartnerConditionWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface ClassMateUpdateManyDataInput {
+  status?: String;
+}
+
+export interface PartnerConditionUpdateInput {
+  skillName?: String;
+  place?: String;
+  number?: Int;
+  partners?: UserUpdateManyWithoutFitConditionsInput;
+  passedPartners?: UserUpdateManyWithoutNofitConditionsInput;
+  project?: ProjectUpdateOneWithoutConditionsInput;
+}
+
+export interface UserUpsertWithoutCreaterInput {
+  update: UserUpdateWithoutCreaterDataInput;
+  create: UserCreateWithoutCreaterInput;
+}
+
+export interface MessageUpdateInput {
+  to?: UserUpdateOneRequiredWithoutReceiveMessagesInput;
+  from?: UserUpdateOneRequiredWithoutSentMessagesInput;
+  text?: String;
+  image?: PhotoUpdateOneInput;
+}
+
+export interface FamilyGroupUpsertWithWhereUniqueWithoutMotherInput {
+  where: FamilyGroupWhereUniqueInput;
+  update: FamilyGroupUpdateWithoutMotherDataInput;
+  create: FamilyGroupCreateWithoutMotherInput;
+}
+
+export interface UserUpdateOneWithoutSignUpLoveInput {
+  create?: UserCreateWithoutSignUpLoveInput;
+  update?: UserUpdateWithoutSignUpLoveDataInput;
+  upsert?: UserUpsertWithoutSignUpLoveInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface FamilyGroupScalarWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -9409,40 +12264,836 @@ export interface SchoolWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
-  kind?: Educationkind;
-  kind_not?: Educationkind;
-  kind_in?: Educationkind[] | Educationkind;
-  kind_not_in?: Educationkind[] | Educationkind;
-  location?: LocationWhereInput;
-  AND?: SchoolWhereInput[] | SchoolWhereInput;
-  OR?: SchoolWhereInput[] | SchoolWhereInput;
-  NOT?: SchoolWhereInput[] | SchoolWhereInput;
+  AND?: FamilyGroupScalarWhereInput[] | FamilyGroupScalarWhereInput;
+  OR?: FamilyGroupScalarWhereInput[] | FamilyGroupScalarWhereInput;
+  NOT?: FamilyGroupScalarWhereInput[] | FamilyGroupScalarWhereInput;
 }
 
-export interface ColleagueUpdateManyWithWhereNestedInput {
-  where: ColleagueScalarWhereInput;
-  data: ColleagueUpdateManyDataInput;
+export interface UserUpsertWithoutLoveSettingInput {
+  update: UserUpdateWithoutLoveSettingDataInput;
+  create: UserCreateWithoutLoveSettingInput;
 }
 
-export interface FindPassWordSubscriptionWhereInput {
+export interface FamilyGroupUpdateManyWithWhereNestedInput {
+  where: FamilyGroupScalarWhereInput;
+  data: FamilyGroupUpdateManyDataInput;
+}
+
+export interface LoveSettingCreateInput {
+  myHeight?: Int;
+  myWeight?: Int;
+  otherHeightMin?: Int;
+  otherHeightMax?: Int;
+  otherWeightMin?: Int;
+  otherWeightMax?: Int;
+  otherAgeMin?: Int;
+  otherAgeMax?: Int;
+  dateTime?: String;
+  datePlace?: String;
+  memeberGrade?: Int;
+  memeberGradeEndTime?: DateTimeInput;
+  user: UserCreateOneWithoutLoveSettingInput;
+}
+
+export interface FamilyGroupUpdateManyDataInput {
+  name?: String;
+}
+
+export interface LocationGroupUpdateManyMutationInput {
+  kind?: LocationGroupKind;
+  code?: String;
+  name?: String;
+}
+
+export interface PersonUpsertWithoutAsFatherInput {
+  update: PersonUpdateWithoutAsFatherDataInput;
+  create: PersonCreateWithoutAsFatherInput;
+}
+
+export interface UserCreateWithoutLocationGroupsInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoCreateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutBornsInput;
+  residence?: LocationCreateOneWithoutLivesInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  sentMessages?: MessageCreateManyWithoutFromInput;
+  receiveMessages?: MessageCreateManyWithoutToInput;
+  groupMessages?: GroupMessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingCreateOneWithoutUserInput;
+  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
+  loveMan?: LoveMatchingCreateManyWithoutManInput;
+  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
+  skills?: SkillCreateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
+}
+
+export interface FamilyGroupUpsertWithoutUsersInput {
+  update: FamilyGroupUpdateWithoutUsersDataInput;
+  create: FamilyGroupCreateWithoutUsersInput;
+}
+
+export interface LocationCreateInput {
+  name?: String;
+  province?: ProvinceCreateOneInput;
+  city?: CityCreateOneInput;
+  area?: AreaCreateOneInput;
+  street?: StreetCreateOneInput;
+  village?: VillageCreateOneInput;
+  schools?: SchoolCreateManyWithoutLocationInput;
+  companies?: CompanyCreateManyWithoutLocationInput;
+  universities?: UniversityCreateManyInput;
+  borns?: UserCreateManyWithoutBirthplaceInput;
+  lives?: UserCreateManyWithoutResidenceInput;
+}
+
+export interface UserUpsertWithoutSentMessagesInput {
+  update: UserUpdateWithoutSentMessagesDataInput;
+  create: UserCreateWithoutSentMessagesInput;
+}
+
+export interface UserCreateWithoutGroupMessagesInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoCreateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutBornsInput;
+  residence?: LocationCreateOneWithoutLivesInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  sentMessages?: MessageCreateManyWithoutFromInput;
+  receiveMessages?: MessageCreateManyWithoutToInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingCreateOneWithoutUserInput;
+  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
+  loveMan?: LoveMatchingCreateManyWithoutManInput;
+  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
+  skills?: SkillCreateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
+}
+
+export interface MessageUpsertWithWhereUniqueWithoutToInput {
+  where: MessageWhereUniqueInput;
+  update: MessageUpdateWithoutToDataInput;
+  create: MessageCreateWithoutToInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutGroupsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutGroupsDataInput;
+}
+
+export interface UserUpsertWithoutAvatarInput {
+  update: UserUpdateWithoutAvatarDataInput;
+  create: UserCreateWithoutAvatarInput;
+}
+
+export interface FindPassWordUpdateManyMutationInput {
+  times?: Int;
+}
+
+export interface PhotoUpsertNestedInput {
+  update: PhotoUpdateDataInput;
+  create: PhotoCreateInput;
+}
+
+export interface AdvertisementCreateInput {
+  image1?: String;
+  image2?: String;
+  image3?: String;
+  image4?: String;
+  image5?: String;
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+}
+
+export interface GroupMessageUpsertWithWhereUniqueWithoutFromInput {
+  where: GroupMessageWhereUniqueInput;
+  update: GroupMessageUpdateWithoutFromDataInput;
+  create: GroupMessageCreateWithoutFromInput;
+}
+
+export interface ProvinceCreateOneWithoutCitiesInput {
+  create?: ProvinceCreateWithoutCitiesInput;
+  connect?: ProvinceWhereUniqueInput;
+}
+
+export interface GroupMessageScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  type?: GroupKind;
+  type_not?: GroupKind;
+  type_in?: GroupKind[] | GroupKind;
+  type_not_in?: GroupKind[] | GroupKind;
+  to?: String;
+  to_not?: String;
+  to_in?: String[] | String;
+  to_not_in?: String[] | String;
+  to_lt?: String;
+  to_lte?: String;
+  to_gt?: String;
+  to_gte?: String;
+  to_contains?: String;
+  to_not_contains?: String;
+  to_starts_with?: String;
+  to_not_starts_with?: String;
+  to_ends_with?: String;
+  to_not_ends_with?: String;
+  text?: String;
+  text_not?: String;
+  text_in?: String[] | String;
+  text_not_in?: String[] | String;
+  text_lt?: String;
+  text_lte?: String;
+  text_gt?: String;
+  text_gte?: String;
+  text_contains?: String;
+  text_not_contains?: String;
+  text_starts_with?: String;
+  text_not_starts_with?: String;
+  text_ends_with?: String;
+  text_not_ends_with?: String;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  AND?: GroupMessageScalarWhereInput[] | GroupMessageScalarWhereInput;
+  OR?: GroupMessageScalarWhereInput[] | GroupMessageScalarWhereInput;
+  NOT?: GroupMessageScalarWhereInput[] | GroupMessageScalarWhereInput;
+}
+
+export interface PhotoCreateOneWithoutUserInput {
+  create?: PhotoCreateWithoutUserInput;
+  connect?: PhotoWhereUniqueInput;
+}
+
+export interface GroupMessageUpdateManyWithWhereNestedInput {
+  where: GroupMessageScalarWhereInput;
+  data: GroupMessageUpdateManyDataInput;
+}
+
+export interface AreaCreateManyWithoutCityInput {
+  create?: AreaCreateWithoutCityInput[] | AreaCreateWithoutCityInput;
+  connect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
+}
+
+export interface GroupMessageUpdateManyDataInput {
+  type?: GroupKind;
+  to?: String;
+  text?: String;
+}
+
+export interface AreaCreateWithoutTownsInput {
+  code: String;
+  name: String;
+  city: CityCreateOneWithoutAreasInput;
+}
+
+export interface UserUpsertWithoutReceiveMessagesInput {
+  update: UserUpdateWithoutReceiveMessagesDataInput;
+  create: UserCreateWithoutReceiveMessagesInput;
+}
+
+export interface CompanyCreateWithoutLocationInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  BusinessScope?: String;
+  works?: WorkCreateManyWithoutCompanyInput;
+  workGroup?: WorkGroupCreateOneWithoutCompanyInput;
+}
+
+export interface MessageUpsertWithWhereUniqueWithoutFromInput {
+  where: MessageWhereUniqueInput;
+  update: MessageUpdateWithoutFromDataInput;
+  create: MessageCreateWithoutFromInput;
+}
+
+export interface LocationCreateWithoutLivesInput {
+  name?: String;
+  province?: ProvinceCreateOneInput;
+  city?: CityCreateOneInput;
+  area?: AreaCreateOneInput;
+  street?: StreetCreateOneInput;
+  village?: VillageCreateOneInput;
+  schools?: SchoolCreateManyWithoutLocationInput;
+  companies?: CompanyCreateManyWithoutLocationInput;
+  universities?: UniversityCreateManyInput;
+  borns?: UserCreateManyWithoutBirthplaceInput;
+}
+
+export interface UserUpsertWithoutColleaguesInput {
+  update: UserUpdateWithoutColleaguesDataInput;
+  create: UserCreateWithoutColleaguesInput;
+}
+
+export interface RegStatusCreateWithoutApplicantsInput {
+  education: Educationkind;
+  university?: UniversityCreateOneInput;
+  major: MajorCreateOneInput;
+}
+
+export interface ColleagueUpsertWithWhereUniqueWithoutGroupInput {
+  where: ColleagueWhereUniqueInput;
+  update: ColleagueUpdateWithoutGroupDataInput;
+  create: ColleagueCreateWithoutGroupInput;
+}
+
+export interface UserCreateOneInput {
+  create?: UserCreateInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface WorkGroupUpsertWithoutCompanyInput {
+  update: WorkGroupUpdateWithoutCompanyDataInput;
+  create: WorkGroupCreateWithoutCompanyInput;
+}
+
+export interface UserCreateWithoutFamiliesInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoCreateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutBornsInput;
+  residence?: LocationCreateOneWithoutLivesInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  sentMessages?: MessageCreateManyWithoutFromInput;
+  receiveMessages?: MessageCreateManyWithoutToInput;
+  groupMessages?: GroupMessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingCreateOneWithoutUserInput;
+  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
+  loveMan?: LoveMatchingCreateManyWithoutManInput;
+  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
+  skills?: SkillCreateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
+}
+
+export interface CompanyUpsertWithoutWorksInput {
+  update: CompanyUpdateWithoutWorksDataInput;
+  create: CompanyCreateWithoutWorksInput;
+}
+
+export interface UserCreateWithoutResidenceInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoCreateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutBornsInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  sentMessages?: MessageCreateManyWithoutFromInput;
+  receiveMessages?: MessageCreateManyWithoutToInput;
+  groupMessages?: GroupMessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingCreateOneWithoutUserInput;
+  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
+  loveMan?: LoveMatchingCreateManyWithoutManInput;
+  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
+  skills?: SkillCreateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
+}
+
+export interface WorkUpsertWithWhereUniqueWithoutWorkerInput {
+  where: WorkWhereUniqueInput;
+  update: WorkUpdateWithoutWorkerDataInput;
+  create: WorkCreateWithoutWorkerInput;
+}
+
+export interface WorkGroupCreateWithoutCompanyInput {
+  colleagues?: ColleagueCreateManyWithoutGroupInput;
+}
+
+export interface WorkScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  startTime?: DateTimeInput;
+  startTime_not?: DateTimeInput;
+  startTime_in?: DateTimeInput[] | DateTimeInput;
+  startTime_not_in?: DateTimeInput[] | DateTimeInput;
+  startTime_lt?: DateTimeInput;
+  startTime_lte?: DateTimeInput;
+  startTime_gt?: DateTimeInput;
+  startTime_gte?: DateTimeInput;
+  endTime?: DateTimeInput;
+  endTime_not?: DateTimeInput;
+  endTime_in?: DateTimeInput[] | DateTimeInput;
+  endTime_not_in?: DateTimeInput[] | DateTimeInput;
+  endTime_lt?: DateTimeInput;
+  endTime_lte?: DateTimeInput;
+  endTime_gt?: DateTimeInput;
+  endTime_gte?: DateTimeInput;
+  department?: String;
+  department_not?: String;
+  department_in?: String[] | String;
+  department_not_in?: String[] | String;
+  department_lt?: String;
+  department_lte?: String;
+  department_gt?: String;
+  department_gte?: String;
+  department_contains?: String;
+  department_not_contains?: String;
+  department_starts_with?: String;
+  department_not_starts_with?: String;
+  department_ends_with?: String;
+  department_not_ends_with?: String;
+  jobContent?: String;
+  jobContent_not?: String;
+  jobContent_in?: String[] | String;
+  jobContent_not_in?: String[] | String;
+  jobContent_lt?: String;
+  jobContent_lte?: String;
+  jobContent_gt?: String;
+  jobContent_gte?: String;
+  jobContent_contains?: String;
+  jobContent_not_contains?: String;
+  jobContent_starts_with?: String;
+  jobContent_not_starts_with?: String;
+  jobContent_ends_with?: String;
+  jobContent_not_ends_with?: String;
+  AND?: WorkScalarWhereInput[] | WorkScalarWhereInput;
+  OR?: WorkScalarWhereInput[] | WorkScalarWhereInput;
+  NOT?: WorkScalarWhereInput[] | WorkScalarWhereInput;
+}
+
+export interface MessageCreateWithoutFromInput {
+  to: UserCreateOneWithoutReceiveMessagesInput;
+  text?: String;
+  image?: PhotoCreateOneInput;
+}
+
+export interface WorkUpdateManyWithWhereNestedInput {
+  where: WorkScalarWhereInput;
+  data: WorkUpdateManyDataInput;
+}
+
+export interface CompanyUpdateManyMutationInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  BusinessScope?: String;
+}
+
+export interface WorkUpdateManyDataInput {
+  startTime?: DateTimeInput;
+  endTime?: DateTimeInput;
+  department?: String;
+  jobContent?: String;
+}
+
+export interface MessageCreateInput {
+  to: UserCreateOneWithoutReceiveMessagesInput;
+  from: UserCreateOneWithoutSentMessagesInput;
+  text?: String;
+  image?: PhotoCreateOneInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutResidenceInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutResidenceDataInput;
+  create: UserCreateWithoutResidenceInput;
+}
+
+export interface UserCreateWithoutCreaterInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoCreateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutBornsInput;
+  residence?: LocationCreateOneWithoutLivesInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  sentMessages?: MessageCreateManyWithoutFromInput;
+  receiveMessages?: MessageCreateManyWithoutToInput;
+  groupMessages?: GroupMessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingCreateOneWithoutUserInput;
+  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
+  loveMan?: LoveMatchingCreateManyWithoutManInput;
+  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
+  skills?: SkillCreateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
+}
+
+export interface LocationUpsertWithoutSchoolsInput {
+  update: LocationUpdateWithoutSchoolsDataInput;
+  create: LocationCreateWithoutSchoolsInput;
+}
+
+export interface UserCreateWithoutStudiesInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoCreateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutBornsInput;
+  residence?: LocationCreateOneWithoutLivesInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  sentMessages?: MessageCreateManyWithoutFromInput;
+  receiveMessages?: MessageCreateManyWithoutToInput;
+  groupMessages?: GroupMessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingCreateOneWithoutUserInput;
+  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
+  loveMan?: LoveMatchingCreateManyWithoutManInput;
+  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
+  skills?: SkillCreateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
+}
+
+export interface SchoolUpsertNestedInput {
+  update: SchoolUpdateDataInput;
+  create: SchoolCreateInput;
+}
+
+export interface WorkGroupCreateOneInput {
+  create?: WorkGroupCreateInput;
+  connect?: WorkGroupWhereUniqueInput;
+}
+
+export interface SchoolEduUpsertWithWhereUniqueWithoutStudentsInput {
+  where: SchoolEduWhereUniqueInput;
+  update: SchoolEduUpdateWithoutStudentsDataInput;
+  create: SchoolEduCreateWithoutStudentsInput;
+}
+
+export interface OldColleagueCreateManyWithoutFromInput {
+  create?:
+    | OldColleagueCreateWithoutFromInput[]
+    | OldColleagueCreateWithoutFromInput;
+  connect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+}
+
+export interface SchoolEduScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  startTime?: DateTimeInput;
+  startTime_not?: DateTimeInput;
+  startTime_in?: DateTimeInput[] | DateTimeInput;
+  startTime_not_in?: DateTimeInput[] | DateTimeInput;
+  startTime_lt?: DateTimeInput;
+  startTime_lte?: DateTimeInput;
+  startTime_gt?: DateTimeInput;
+  startTime_gte?: DateTimeInput;
+  grade?: Int;
+  grade_not?: Int;
+  grade_in?: Int[] | Int;
+  grade_not_in?: Int[] | Int;
+  grade_lt?: Int;
+  grade_lte?: Int;
+  grade_gt?: Int;
+  grade_gte?: Int;
+  className?: String;
+  className_not?: String;
+  className_in?: String[] | String;
+  className_not_in?: String[] | String;
+  className_lt?: String;
+  className_lte?: String;
+  className_gt?: String;
+  className_gte?: String;
+  className_contains?: String;
+  className_not_contains?: String;
+  className_starts_with?: String;
+  className_not_starts_with?: String;
+  className_ends_with?: String;
+  className_not_ends_with?: String;
+  AND?: SchoolEduScalarWhereInput[] | SchoolEduScalarWhereInput;
+  OR?: SchoolEduScalarWhereInput[] | SchoolEduScalarWhereInput;
+  NOT?: SchoolEduScalarWhereInput[] | SchoolEduScalarWhereInput;
+}
+
+export interface UserCreateManyWithoutRemmemberPasswordInput {
+  create?:
+    | UserCreateWithoutRemmemberPasswordInput[]
+    | UserCreateWithoutRemmemberPasswordInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface SchoolEduUpdateManyWithWhereNestedInput {
+  where: SchoolEduScalarWhereInput;
+  data: SchoolEduUpdateManyDataInput;
+}
+
+export interface UserCreateOneWithoutForgetPasswordInput {
+  create?: UserCreateWithoutForgetPasswordInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface SchoolEduUpdateManyDataInput {
+  startTime?: DateTimeInput;
+  grade?: Int;
+  className?: String;
+}
+
+export interface LoveSignUpCreateOneWithoutPersonInput {
+  create?: LoveSignUpCreateWithoutPersonInput;
+  connect?: LoveSignUpWhereUniqueInput;
+}
+
+export interface UserUpsertWithoutFamiliesInput {
+  update: UserUpdateWithoutFamiliesDataInput;
+  create: UserCreateWithoutFamiliesInput;
+}
+
+export interface LoveMatchingCreateManyWithoutManInput {
+  create?:
+    | LoveMatchingCreateWithoutManInput[]
+    | LoveMatchingCreateWithoutManInput;
+  connect?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
+}
+
+export interface FamilyUpsertWithWhereUniqueWithoutToInput {
+  where: FamilyWhereUniqueInput;
+  update: FamilyUpdateWithoutToDataInput;
+  create: FamilyCreateWithoutToInput;
+}
+
+export interface ProjectCreateManyWithoutStarterInput {
+  create?:
+    | ProjectCreateWithoutStarterInput[]
+    | ProjectCreateWithoutStarterInput;
+  connect?: ProjectWhereUniqueInput[] | ProjectWhereUniqueInput;
+}
+
+export interface PersonUpsertWithoutAsMotherInput {
+  update: PersonUpdateWithoutAsMotherDataInput;
+  create: PersonCreateWithoutAsMotherInput;
+}
+
+export interface UserSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: FindPassWordWhereInput;
-  AND?:
-    | FindPassWordSubscriptionWhereInput[]
-    | FindPassWordSubscriptionWhereInput;
-  OR?:
-    | FindPassWordSubscriptionWhereInput[]
-    | FindPassWordSubscriptionWhereInput;
-  NOT?:
-    | FindPassWordSubscriptionWhereInput[]
-    | FindPassWordSubscriptionWhereInput;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
 }
 
-export interface ColleagueUpdateManyDataInput {
-  status?: String;
+export interface FamilyGroupUpsertWithWhereUniqueWithoutFatherInput {
+  where: FamilyGroupWhereUniqueInput;
+  update: FamilyGroupUpdateWithoutFatherDataInput;
+  create: FamilyGroupCreateWithoutFatherInput;
+}
+
+export interface ProjectSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ProjectWhereInput;
+  AND?: ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput;
+  OR?: ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput;
+  NOT?: ProjectSubscriptionWhereInput[] | ProjectSubscriptionWhereInput;
+}
+
+export interface PersonUpsertWithoutFamiliesInput {
+  update: PersonUpdateWithoutFamiliesDataInput;
+  create: PersonCreateWithoutFamiliesInput;
+}
+
+export interface LoveSignUpSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: LoveSignUpWhereInput;
+  AND?: LoveSignUpSubscriptionWhereInput[] | LoveSignUpSubscriptionWhereInput;
+  OR?: LoveSignUpSubscriptionWhereInput[] | LoveSignUpSubscriptionWhereInput;
+  NOT?: LoveSignUpSubscriptionWhereInput[] | LoveSignUpSubscriptionWhereInput;
+}
+
+export interface FamilyUpsertWithWhereUniqueWithoutFromInput {
+  where: FamilyWhereUniqueInput;
+  update: FamilyUpdateWithoutFromDataInput;
+  create: FamilyCreateWithoutFromInput;
 }
 
 export interface UserWhereInput {
@@ -9661,79 +13312,24 @@ export interface UserWhereInput {
   skills_every?: SkillWhereInput;
   skills_some?: SkillWhereInput;
   skills_none?: SkillWhereInput;
-  partnerFound?: PartnerConditionWhereInput;
-  partnerPasted?: PartnerConditionWhereInput;
-  project_every?: ProjectWhereInput;
-  project_some?: ProjectWhereInput;
-  project_none?: ProjectWhereInput;
+  fitConditions_every?: PartnerConditionWhereInput;
+  fitConditions_some?: PartnerConditionWhereInput;
+  fitConditions_none?: PartnerConditionWhereInput;
+  nofitConditions_every?: PartnerConditionWhereInput;
+  nofitConditions_some?: PartnerConditionWhereInput;
+  nofitConditions_none?: PartnerConditionWhereInput;
+  projects_every?: ProjectWhereInput;
+  projects_some?: ProjectWhereInput;
+  projects_none?: ProjectWhereInput;
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface OldColleagueUpdateManyWithoutFromInput {
-  create?:
-    | OldColleagueCreateWithoutFromInput[]
-    | OldColleagueCreateWithoutFromInput;
-  delete?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
-  connect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
-  disconnect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
-  update?:
-    | OldColleagueUpdateWithWhereUniqueWithoutFromInput[]
-    | OldColleagueUpdateWithWhereUniqueWithoutFromInput;
-  upsert?:
-    | OldColleagueUpsertWithWhereUniqueWithoutFromInput[]
-    | OldColleagueUpsertWithWhereUniqueWithoutFromInput;
-  deleteMany?: OldColleagueScalarWhereInput[] | OldColleagueScalarWhereInput;
-  updateMany?:
-    | OldColleagueUpdateManyWithWhereNestedInput[]
-    | OldColleagueUpdateManyWithWhereNestedInput;
-}
-
-export type BootCountWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface OldColleagueUpdateWithWhereUniqueWithoutFromInput {
-  where: OldColleagueWhereUniqueInput;
-  data: OldColleagueUpdateWithoutFromDataInput;
-}
-
-export interface ClassGroupSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: ClassGroupWhereInput;
-  AND?: ClassGroupSubscriptionWhereInput[] | ClassGroupSubscriptionWhereInput;
-  OR?: ClassGroupSubscriptionWhereInput[] | ClassGroupSubscriptionWhereInput;
-  NOT?: ClassGroupSubscriptionWhereInput[] | ClassGroupSubscriptionWhereInput;
-}
-
-export interface OldColleagueUpdateWithoutFromDataInput {
-  to?: UserUpdateOneWithoutToOldColleaguesInput;
-  company?: CompanyUpdateOneInput;
-  status?: String;
-}
-
-export interface AreaSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: AreaWhereInput;
-  AND?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
-  OR?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
-  NOT?: AreaSubscriptionWhereInput[] | AreaSubscriptionWhereInput;
-}
-
-export interface UserUpdateOneWithoutToOldColleaguesInput {
-  create?: UserCreateWithoutToOldColleaguesInput;
-  update?: UserUpdateWithoutToOldColleaguesDataInput;
-  upsert?: UserUpsertWithoutToOldColleaguesInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
+export interface UserUpsertWithWhereUniqueWithoutBirthplaceInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutBirthplaceDataInput;
+  create: UserCreateWithoutBirthplaceInput;
 }
 
 export interface StreetWhereInput {
@@ -9788,91 +13384,9 @@ export interface StreetWhereInput {
   NOT?: StreetWhereInput[] | StreetWhereInput;
 }
 
-export interface UserUpdateWithoutToOldColleaguesDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoUpdateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutBornsInput;
-  residence?: LocationUpdateOneWithoutLivesInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  sentMessages?: MessageUpdateManyWithoutFromInput;
-  receiveMessages?: MessageUpdateManyWithoutToInput;
-  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneInput;
-  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
-  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
-  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
-  loveMan?: LoveMatchingUpdateManyWithoutManInput;
-  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
-  skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
-}
-
-export type ClassMateWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface LocationGroupUpdateManyWithoutUsersInput {
-  create?:
-    | LocationGroupCreateWithoutUsersInput[]
-    | LocationGroupCreateWithoutUsersInput;
-  delete?: LocationGroupWhereUniqueInput[] | LocationGroupWhereUniqueInput;
-  connect?: LocationGroupWhereUniqueInput[] | LocationGroupWhereUniqueInput;
-  disconnect?: LocationGroupWhereUniqueInput[] | LocationGroupWhereUniqueInput;
-  update?:
-    | LocationGroupUpdateWithWhereUniqueWithoutUsersInput[]
-    | LocationGroupUpdateWithWhereUniqueWithoutUsersInput;
-  upsert?:
-    | LocationGroupUpsertWithWhereUniqueWithoutUsersInput[]
-    | LocationGroupUpsertWithWhereUniqueWithoutUsersInput;
-  deleteMany?: LocationGroupScalarWhereInput[] | LocationGroupScalarWhereInput;
-  updateMany?:
-    | LocationGroupUpdateManyWithWhereNestedInput[]
-    | LocationGroupUpdateManyWithWhereNestedInput;
-}
-
-export type ColleagueWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface LocationGroupUpdateWithWhereUniqueWithoutUsersInput {
-  where: LocationGroupWhereUniqueInput;
-  data: LocationGroupUpdateWithoutUsersDataInput;
-}
-
-export type CollegeEntranceExamWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  candidatenum?: String;
-}>;
-
-export interface LocationGroupUpdateWithoutUsersDataInput {
-  kind?: LocationGroupKind;
-  code?: String;
-  name?: String;
+export interface LocationUpsertWithoutLivesInput {
+  update: LocationUpdateWithoutLivesDataInput;
+  create: LocationCreateWithoutLivesInput;
 }
 
 export interface ProductUpdateDataInput {
@@ -9881,89 +13395,9 @@ export interface ProductUpdateDataInput {
   price?: Float;
 }
 
-export interface LocationGroupUpsertWithWhereUniqueWithoutUsersInput {
-  where: LocationGroupWhereUniqueInput;
-  update: LocationGroupUpdateWithoutUsersDataInput;
-  create: LocationGroupCreateWithoutUsersInput;
-}
-
-export interface ProductCreateOneInput {
-  create?: ProductCreateInput;
-  connect?: ProductWhereUniqueInput;
-}
-
-export interface LocationGroupScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  kind?: LocationGroupKind;
-  kind_not?: LocationGroupKind;
-  kind_in?: LocationGroupKind[] | LocationGroupKind;
-  kind_not_in?: LocationGroupKind[] | LocationGroupKind;
-  code?: String;
-  code_not?: String;
-  code_in?: String[] | String;
-  code_not_in?: String[] | String;
-  code_lt?: String;
-  code_lte?: String;
-  code_gt?: String;
-  code_gte?: String;
-  code_contains?: String;
-  code_not_contains?: String;
-  code_starts_with?: String;
-  code_not_starts_with?: String;
-  code_ends_with?: String;
-  code_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  AND?: LocationGroupScalarWhereInput[] | LocationGroupScalarWhereInput;
-  OR?: LocationGroupScalarWhereInput[] | LocationGroupScalarWhereInput;
-  NOT?: LocationGroupScalarWhereInput[] | LocationGroupScalarWhereInput;
-}
-
-export interface StreetUpdateInput {
-  code?: String;
-  name?: String;
-  Area?: AreaUpdateOneRequiredWithoutTownsInput;
-  villages?: VillageUpdateManyWithoutStreetInput;
-}
-
-export interface LocationGroupUpdateManyWithWhereNestedInput {
-  where: LocationGroupScalarWhereInput;
-  data: LocationGroupUpdateManyDataInput;
-}
-
-export interface SkillUpdateManyMutationInput {
-  name?: String;
-}
-
-export interface LocationGroupUpdateManyDataInput {
-  kind?: LocationGroupKind;
-  code?: String;
-  name?: String;
+export interface UserUpsertWithoutWorksInput {
+  update: UserUpdateWithoutWorksDataInput;
+  create: UserCreateWithoutWorksInput;
 }
 
 export interface UserUpdateWithoutSkillsDataInput {
@@ -10005,3489 +13439,9 @@ export interface UserUpdateWithoutSkillsDataInput {
   loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
-}
-
-export interface FindPassWordUpdateOneWithoutForgetterInput {
-  create?: FindPassWordCreateWithoutForgetterInput;
-  update?: FindPassWordUpdateWithoutForgetterDataInput;
-  upsert?: FindPassWordUpsertWithoutForgetterInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: FindPassWordWhereUniqueInput;
-}
-
-export interface SkillUpdateInput {
-  name?: String;
-  persons?: UserUpdateManyWithoutSkillsInput;
-}
-
-export interface FindPassWordUpdateWithoutForgetterDataInput {
-  times?: Int;
-  remmember?: UserUpdateManyWithoutRemmemberPasswordInput;
-}
-
-export interface SkillCreateInput {
-  name?: String;
-  persons?: UserCreateManyWithoutSkillsInput;
-}
-
-export interface UserUpdateManyWithoutRemmemberPasswordInput {
-  create?:
-    | UserCreateWithoutRemmemberPasswordInput[]
-    | UserCreateWithoutRemmemberPasswordInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutRemmemberPasswordInput[]
-    | UserUpdateWithWhereUniqueWithoutRemmemberPasswordInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutRemmemberPasswordInput[]
-    | UserUpsertWithWhereUniqueWithoutRemmemberPasswordInput;
-  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
-  updateMany?:
-    | UserUpdateManyWithWhereNestedInput[]
-    | UserUpdateManyWithWhereNestedInput;
-}
-
-export interface SchoolEduUpdateInput {
-  school?: SchoolUpdateOneInput;
-  startTime?: DateTimeInput;
-  major?: MajorUpdateOneInput;
-  grade?: Int;
-  className?: String;
-  students?: UserUpdateManyWithoutStudiesInput;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutRemmemberPasswordInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutRemmemberPasswordDataInput;
-}
-
-export interface RegisterCountUpdateManyMutationInput {
-  deviceId?: String;
-}
-
-export interface UserUpdateWithoutRemmemberPasswordDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoUpdateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutBornsInput;
-  residence?: LocationUpdateOneWithoutLivesInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  sentMessages?: MessageUpdateManyWithoutFromInput;
-  receiveMessages?: MessageUpdateManyWithoutToInput;
-  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneInput;
-  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
-  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
-  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
-  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
-  loveMan?: LoveMatchingUpdateManyWithoutManInput;
-  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
-  skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
-}
-
-export interface RegStatusUpdateManyMutationInput {
-  education?: Educationkind;
-}
-
-export interface OldColleagueUpdateManyWithoutToInput {
-  create?:
-    | OldColleagueCreateWithoutToInput[]
-    | OldColleagueCreateWithoutToInput;
-  delete?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
-  connect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
-  disconnect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
-  update?:
-    | OldColleagueUpdateWithWhereUniqueWithoutToInput[]
-    | OldColleagueUpdateWithWhereUniqueWithoutToInput;
-  upsert?:
-    | OldColleagueUpsertWithWhereUniqueWithoutToInput[]
-    | OldColleagueUpsertWithWhereUniqueWithoutToInput;
-  deleteMany?: OldColleagueScalarWhereInput[] | OldColleagueScalarWhereInput;
-  updateMany?:
-    | OldColleagueUpdateManyWithWhereNestedInput[]
-    | OldColleagueUpdateManyWithWhereNestedInput;
-}
-
-export interface UserUpdateManyWithoutRegStatusInput {
-  create?: UserCreateWithoutRegStatusInput[] | UserCreateWithoutRegStatusInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutRegStatusInput[]
-    | UserUpdateWithWhereUniqueWithoutRegStatusInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutRegStatusInput[]
-    | UserUpsertWithWhereUniqueWithoutRegStatusInput;
-  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
-  updateMany?:
-    | UserUpdateManyWithWhereNestedInput[]
-    | UserUpdateManyWithWhereNestedInput;
-}
-
-export interface OldColleagueUpdateWithWhereUniqueWithoutToInput {
-  where: OldColleagueWhereUniqueInput;
-  data: OldColleagueUpdateWithoutToDataInput;
-}
-
-export interface UserCreateManyWithoutRegStatusInput {
-  create?: UserCreateWithoutRegStatusInput[] | UserCreateWithoutRegStatusInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface OldColleagueUpdateWithoutToDataInput {
-  from?: UserUpdateOneWithoutFromOldColleaguesInput;
-  company?: CompanyUpdateOneInput;
-  status?: String;
-}
-
-export interface ProvinceUpdateInput {
-  code?: String;
-  name?: String;
-  cities?: CityUpdateManyWithoutProvinceInput;
-}
-
-export interface UserUpdateOneWithoutFromOldColleaguesInput {
-  create?: UserCreateWithoutFromOldColleaguesInput;
-  update?: UserUpdateWithoutFromOldColleaguesDataInput;
-  upsert?: UserUpsertWithoutFromOldColleaguesInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface ProjectCreateInput {
-  name?: String;
-  place?: CityCreateOneInput;
-  content?: String;
-  conditions?: PartnerConditionCreateManyWithoutProjectInput;
-  starter?: UserCreateOneWithoutProjectInput;
-}
-
-export interface UserUpdateWithoutFromOldColleaguesDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoUpdateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutBornsInput;
-  residence?: LocationUpdateOneWithoutLivesInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  sentMessages?: MessageUpdateManyWithoutFromInput;
-  receiveMessages?: MessageUpdateManyWithoutToInput;
-  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneInput;
-  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
-  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
-  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
-  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
-  loveMan?: LoveMatchingUpdateManyWithoutManInput;
-  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
-  skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
-}
-
-export type AreaWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  code?: String;
-}>;
-
-export interface FindPassWordUpdateOneWithoutRemmemberInput {
-  create?: FindPassWordCreateWithoutRemmemberInput;
-  update?: FindPassWordUpdateWithoutRemmemberDataInput;
-  upsert?: FindPassWordUpsertWithoutRemmemberInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: FindPassWordWhereUniqueInput;
-}
-
-export type MessageWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface FindPassWordUpdateWithoutRemmemberDataInput {
-  times?: Int;
-  forgetter?: UserUpdateOneWithoutForgetPasswordInput;
-}
-
-export type OldColleagueWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface UserUpdateOneWithoutForgetPasswordInput {
-  create?: UserCreateWithoutForgetPasswordInput;
-  update?: UserUpdateWithoutForgetPasswordDataInput;
-  upsert?: UserUpsertWithoutForgetPasswordInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
-}
-
-export type PartnerConditionWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface UserUpdateWithoutForgetPasswordDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoUpdateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutBornsInput;
-  residence?: LocationUpdateOneWithoutLivesInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  sentMessages?: MessageUpdateManyWithoutFromInput;
-  receiveMessages?: MessageUpdateManyWithoutToInput;
-  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneInput;
-  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
-  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
-  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
-  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
-  loveMan?: LoveMatchingUpdateManyWithoutManInput;
-  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
-  skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
-}
-
-export type PersonWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface LoveSettingUpdateOneWithoutUserInput {
-  create?: LoveSettingCreateWithoutUserInput;
-  update?: LoveSettingUpdateWithoutUserDataInput;
-  upsert?: LoveSettingUpsertWithoutUserInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: LoveSettingWhereUniqueInput;
-}
-
-export interface PartnerConditionUpdateInput {
-  skillName?: String;
-  place?: String;
-  partners?: UserUpdateManyWithoutPartnerFoundInput;
-  passedPartners?: UserUpdateManyWithoutPartnerPastedInput;
-  project?: ProjectUpdateOneWithoutConditionsInput;
-}
-
-export interface LoveSettingUpdateWithoutUserDataInput {
-  myHeight?: Int;
-  myWeight?: Int;
-  otherHeightMin?: Int;
-  otherHeightMax?: Int;
-  otherWeightMin?: Int;
-  otherWeightMax?: Int;
-  otherAgeMin?: Int;
-  otherAgeMax?: Int;
-  dateTime?: String;
-  datePlace?: String;
-  memeberGrade?: Int;
-  memeberGradeEndTime?: DateTimeInput;
-}
-
-export interface OldColleagueUpdateInput {
-  from?: UserUpdateOneWithoutFromOldColleaguesInput;
-  to?: UserUpdateOneWithoutToOldColleaguesInput;
-  company?: CompanyUpdateOneInput;
-  status?: String;
-}
-
-export interface LoveSettingUpsertWithoutUserInput {
-  update: LoveSettingUpdateWithoutUserDataInput;
-  create: LoveSettingCreateWithoutUserInput;
-}
-
-export interface MessageUpdateInput {
-  to?: UserUpdateOneRequiredWithoutReceiveMessagesInput;
-  from?: UserUpdateOneRequiredWithoutSentMessagesInput;
-  text?: String;
-  image?: PhotoUpdateOneInput;
-}
-
-export interface LoveMatchingUpdateManyWithoutWomanInput {
-  create?:
-    | LoveMatchingCreateWithoutWomanInput[]
-    | LoveMatchingCreateWithoutWomanInput;
-  delete?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
-  connect?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
-  disconnect?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
-  update?:
-    | LoveMatchingUpdateWithWhereUniqueWithoutWomanInput[]
-    | LoveMatchingUpdateWithWhereUniqueWithoutWomanInput;
-  upsert?:
-    | LoveMatchingUpsertWithWhereUniqueWithoutWomanInput[]
-    | LoveMatchingUpsertWithWhereUniqueWithoutWomanInput;
-  deleteMany?: LoveMatchingScalarWhereInput[] | LoveMatchingScalarWhereInput;
-  updateMany?:
-    | LoveMatchingUpdateManyWithWhereNestedInput[]
-    | LoveMatchingUpdateManyWithWhereNestedInput;
-}
-
-export interface ProductWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  subject?: String;
-  subject_not?: String;
-  subject_in?: String[] | String;
-  subject_not_in?: String[] | String;
-  subject_lt?: String;
-  subject_lte?: String;
-  subject_gt?: String;
-  subject_gte?: String;
-  subject_contains?: String;
-  subject_not_contains?: String;
-  subject_starts_with?: String;
-  subject_not_starts_with?: String;
-  subject_ends_with?: String;
-  subject_not_ends_with?: String;
-  info?: String;
-  info_not?: String;
-  info_in?: String[] | String;
-  info_not_in?: String[] | String;
-  info_lt?: String;
-  info_lte?: String;
-  info_gt?: String;
-  info_gte?: String;
-  info_contains?: String;
-  info_not_contains?: String;
-  info_starts_with?: String;
-  info_not_starts_with?: String;
-  info_ends_with?: String;
-  info_not_ends_with?: String;
-  price?: Float;
-  price_not?: Float;
-  price_in?: Float[] | Float;
-  price_not_in?: Float[] | Float;
-  price_lt?: Float;
-  price_lte?: Float;
-  price_gt?: Float;
-  price_gte?: Float;
-  AND?: ProductWhereInput[] | ProductWhereInput;
-  OR?: ProductWhereInput[] | ProductWhereInput;
-  NOT?: ProductWhereInput[] | ProductWhereInput;
-}
-
-export interface LoveMatchingUpdateWithWhereUniqueWithoutWomanInput {
-  where: LoveMatchingWhereUniqueInput;
-  data: LoveMatchingUpdateWithoutWomanDataInput;
-}
-
-export interface UserUpdateOneWithoutSignUpLoveInput {
-  create?: UserCreateWithoutSignUpLoveInput;
-  update?: UserUpdateWithoutSignUpLoveDataInput;
-  upsert?: UserUpsertWithoutSignUpLoveInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface LoveMatchingUpdateWithoutWomanDataInput {
-  period?: String;
-  city?: CityUpdateOneInput;
-  man?: UserUpdateOneWithoutLoveManInput;
-}
-
-export interface UserCreateOneWithoutSignUpLoveInput {
-  create?: UserCreateWithoutSignUpLoveInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface UserUpdateOneWithoutLoveManInput {
-  create?: UserCreateWithoutLoveManInput;
-  update?: UserUpdateWithoutLoveManDataInput;
-  upsert?: UserUpsertWithoutLoveManInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface UserUpsertWithoutLoveSettingInput {
-  update: UserUpdateWithoutLoveSettingDataInput;
-  create: UserCreateWithoutLoveSettingInput;
-}
-
-export interface UserUpdateWithoutLoveManDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoUpdateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutBornsInput;
-  residence?: LocationUpdateOneWithoutLivesInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  sentMessages?: MessageUpdateManyWithoutFromInput;
-  receiveMessages?: MessageUpdateManyWithoutToInput;
-  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneInput;
-  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
-  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
-  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
-  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
-  skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
-}
-
-export interface LoveSettingUpdateInput {
-  myHeight?: Int;
-  myWeight?: Int;
-  otherHeightMin?: Int;
-  otherHeightMax?: Int;
-  otherWeightMin?: Int;
-  otherWeightMax?: Int;
-  otherAgeMin?: Int;
-  otherAgeMax?: Int;
-  dateTime?: String;
-  datePlace?: String;
-  memeberGrade?: Int;
-  memeberGradeEndTime?: DateTimeInput;
-  user?: UserUpdateOneRequiredWithoutLoveSettingInput;
-}
-
-export interface LoveSignUpUpdateOneWithoutPersonInput {
-  create?: LoveSignUpCreateWithoutPersonInput;
-  update?: LoveSignUpUpdateWithoutPersonDataInput;
-  upsert?: LoveSignUpUpsertWithoutPersonInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: LoveSignUpWhereUniqueInput;
-}
-
-export interface LoveSettingCreateInput {
-  myHeight?: Int;
-  myWeight?: Int;
-  otherHeightMin?: Int;
-  otherHeightMax?: Int;
-  otherWeightMin?: Int;
-  otherWeightMax?: Int;
-  otherAgeMin?: Int;
-  otherAgeMax?: Int;
-  dateTime?: String;
-  datePlace?: String;
-  memeberGrade?: Int;
-  memeberGradeEndTime?: DateTimeInput;
-  user: UserCreateOneWithoutLoveSettingInput;
-}
-
-export interface LoveSignUpUpdateWithoutPersonDataInput {
-  period?: String;
-  city?: CityUpdateOneInput;
-}
-
-export interface LoveMatchingCreateInput {
-  period?: String;
-  city?: CityCreateOneInput;
-  woman?: UserCreateOneWithoutLoveWomanInput;
-  man?: UserCreateOneWithoutLoveManInput;
-}
-
-export interface LoveSignUpUpsertWithoutPersonInput {
-  update: LoveSignUpUpdateWithoutPersonDataInput;
-  create: LoveSignUpCreateWithoutPersonInput;
-}
-
-export interface LocationGroupUpdateManyMutationInput {
-  kind?: LocationGroupKind;
-  code?: String;
-  name?: String;
-}
-
-export interface SkillUpdateManyWithoutPersonsInput {
-  create?: SkillCreateWithoutPersonsInput[] | SkillCreateWithoutPersonsInput;
-  delete?: SkillWhereUniqueInput[] | SkillWhereUniqueInput;
-  connect?: SkillWhereUniqueInput[] | SkillWhereUniqueInput;
-  disconnect?: SkillWhereUniqueInput[] | SkillWhereUniqueInput;
-  update?:
-    | SkillUpdateWithWhereUniqueWithoutPersonsInput[]
-    | SkillUpdateWithWhereUniqueWithoutPersonsInput;
-  upsert?:
-    | SkillUpsertWithWhereUniqueWithoutPersonsInput[]
-    | SkillUpsertWithWhereUniqueWithoutPersonsInput;
-  deleteMany?: SkillScalarWhereInput[] | SkillScalarWhereInput;
-  updateMany?:
-    | SkillUpdateManyWithWhereNestedInput[]
-    | SkillUpdateManyWithWhereNestedInput;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutLocationGroupsInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutLocationGroupsDataInput;
-}
-
-export interface SkillUpdateWithWhereUniqueWithoutPersonsInput {
-  where: SkillWhereUniqueInput;
-  data: SkillUpdateWithoutPersonsDataInput;
-}
-
-export interface UserCreateWithoutLocationGroupsInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoCreateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutBornsInput;
-  residence?: LocationCreateOneWithoutLivesInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  sentMessages?: MessageCreateManyWithoutFromInput;
-  receiveMessages?: MessageCreateManyWithoutToInput;
-  groupMessages?: GroupMessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneInput;
-  colleagues?: ColleagueCreateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
-  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingCreateOneWithoutUserInput;
-  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
-  loveMan?: LoveMatchingCreateManyWithoutManInput;
-  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface SkillUpdateWithoutPersonsDataInput {
-  name?: String;
-}
-
-export interface LocationGroupCreateInput {
-  kind?: LocationGroupKind;
-  code?: String;
-  name?: String;
-  users?: UserCreateManyWithoutLocationGroupsInput;
-}
-
-export interface SkillUpsertWithWhereUniqueWithoutPersonsInput {
-  where: SkillWhereUniqueInput;
-  update: SkillUpdateWithoutPersonsDataInput;
-  create: SkillCreateWithoutPersonsInput;
-}
-
-export interface LocationCreateInput {
-  name?: String;
-  province?: ProvinceCreateOneInput;
-  city?: CityCreateOneInput;
-  area?: AreaCreateOneInput;
-  street?: StreetCreateOneInput;
-  village?: VillageCreateOneInput;
-  schools?: SchoolCreateManyWithoutLocationInput;
-  companies?: CompanyCreateManyWithoutLocationInput;
-  universities?: UniversityCreateManyInput;
-  borns?: UserCreateManyWithoutBirthplaceInput;
-  lives?: UserCreateManyWithoutResidenceInput;
-}
-
-export interface SkillScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  AND?: SkillScalarWhereInput[] | SkillScalarWhereInput;
-  OR?: SkillScalarWhereInput[] | SkillScalarWhereInput;
-  NOT?: SkillScalarWhereInput[] | SkillScalarWhereInput;
-}
-
-export interface UserUpdateWithoutGroupMessagesDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoUpdateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutBornsInput;
-  residence?: LocationUpdateOneWithoutLivesInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  sentMessages?: MessageUpdateManyWithoutFromInput;
-  receiveMessages?: MessageUpdateManyWithoutToInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneInput;
-  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
-  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
-  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
-  loveMan?: LoveMatchingUpdateManyWithoutManInput;
-  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
-  skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
-}
-
-export interface SkillUpdateManyWithWhereNestedInput {
-  where: SkillScalarWhereInput;
-  data: SkillUpdateManyDataInput;
-}
-
-export interface UserCreateWithoutGroupMessagesInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoCreateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutBornsInput;
-  residence?: LocationCreateOneWithoutLivesInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  sentMessages?: MessageCreateManyWithoutFromInput;
-  receiveMessages?: MessageCreateManyWithoutToInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneInput;
-  colleagues?: ColleagueCreateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
-  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingCreateOneWithoutUserInput;
-  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
-  loveMan?: LoveMatchingCreateManyWithoutManInput;
-  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface SkillUpdateManyDataInput {
-  name?: String;
-}
-
-export interface GroupUpdateManyMutationInput {
-  type?: GroupKind;
-  name?: String;
-}
-
-export interface PartnerConditionUpdateOneWithoutPartnersInput {
-  create?: PartnerConditionCreateWithoutPartnersInput;
-  update?: PartnerConditionUpdateWithoutPartnersDataInput;
-  upsert?: PartnerConditionUpsertWithoutPartnersInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: PartnerConditionWhereUniqueInput;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutGroupsInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutGroupsDataInput;
-}
-
-export interface PartnerConditionUpdateWithoutPartnersDataInput {
-  skillName?: String;
-  place?: String;
-  passedPartners?: UserUpdateManyWithoutPartnerPastedInput;
-  project?: ProjectUpdateOneWithoutConditionsInput;
-}
-
-export interface UserCreateWithoutGroupsInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoCreateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutBornsInput;
-  residence?: LocationCreateOneWithoutLivesInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  sentMessages?: MessageCreateManyWithoutFromInput;
-  receiveMessages?: MessageCreateManyWithoutToInput;
-  groupMessages?: GroupMessageCreateManyWithoutFromInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneInput;
-  colleagues?: ColleagueCreateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
-  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingCreateOneWithoutUserInput;
-  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
-  loveMan?: LoveMatchingCreateManyWithoutManInput;
-  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface UserUpdateManyWithoutPartnerPastedInput {
-  create?:
-    | UserCreateWithoutPartnerPastedInput[]
-    | UserCreateWithoutPartnerPastedInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutPartnerPastedInput[]
-    | UserUpdateWithWhereUniqueWithoutPartnerPastedInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutPartnerPastedInput[]
-    | UserUpsertWithWhereUniqueWithoutPartnerPastedInput;
-  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
-  updateMany?:
-    | UserUpdateManyWithWhereNestedInput[]
-    | UserUpdateManyWithWhereNestedInput;
-}
-
-export interface FindPassWordUpdateManyMutationInput {
-  times?: Int;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutPartnerPastedInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutPartnerPastedDataInput;
-}
-
-export interface FamilyGroupUpdateManyMutationInput {
-  name?: String;
-}
-
-export interface UserUpdateWithoutPartnerPastedDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoUpdateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutBornsInput;
-  residence?: LocationUpdateOneWithoutLivesInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  sentMessages?: MessageUpdateManyWithoutFromInput;
-  receiveMessages?: MessageUpdateManyWithoutToInput;
-  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneInput;
-  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
-  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
-  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
-  loveMan?: LoveMatchingUpdateManyWithoutManInput;
-  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
-  skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
-}
-
-export interface AdvertisementCreateInput {
-  image1?: String;
-  image2?: String;
-  image3?: String;
-  image4?: String;
-  image5?: String;
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-}
-
-export interface LoveMatchingUpdateManyWithoutManInput {
-  create?:
-    | LoveMatchingCreateWithoutManInput[]
-    | LoveMatchingCreateWithoutManInput;
-  delete?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
-  connect?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
-  disconnect?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
-  update?:
-    | LoveMatchingUpdateWithWhereUniqueWithoutManInput[]
-    | LoveMatchingUpdateWithWhereUniqueWithoutManInput;
-  upsert?:
-    | LoveMatchingUpsertWithWhereUniqueWithoutManInput[]
-    | LoveMatchingUpsertWithWhereUniqueWithoutManInput;
-  deleteMany?: LoveMatchingScalarWhereInput[] | LoveMatchingScalarWhereInput;
-  updateMany?:
-    | LoveMatchingUpdateManyWithWhereNestedInput[]
-    | LoveMatchingUpdateManyWithWhereNestedInput;
-}
-
-export interface FamilyUpdateInput {
-  from?: UserUpdateOneRequiredWithoutFamiliesInput;
-  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
-  relationship?: String;
-  spouse?: FamilyUpdateOneInput;
-  status?: String;
-}
-
-export interface LoveMatchingUpdateWithWhereUniqueWithoutManInput {
-  where: LoveMatchingWhereUniqueInput;
-  data: LoveMatchingUpdateWithoutManDataInput;
-}
-
-export interface ProvinceCreateOneWithoutCitiesInput {
-  create?: ProvinceCreateWithoutCitiesInput;
-  connect?: ProvinceWhereUniqueInput;
-}
-
-export interface LoveMatchingUpdateWithoutManDataInput {
-  period?: String;
-  city?: CityUpdateOneInput;
-  woman?: UserUpdateOneWithoutLoveWomanInput;
-}
-
-export interface VillageCreateManyWithoutStreetInput {
-  create?: VillageCreateWithoutStreetInput[] | VillageCreateWithoutStreetInput;
-  connect?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
-}
-
-export interface UserUpdateOneWithoutLoveWomanInput {
-  create?: UserCreateWithoutLoveWomanInput;
-  update?: UserUpdateWithoutLoveWomanDataInput;
-  upsert?: UserUpsertWithoutLoveWomanInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface PhotoCreateOneWithoutUserInput {
-  create?: PhotoCreateWithoutUserInput;
-  connect?: PhotoWhereUniqueInput;
-}
-
-export interface UserUpdateWithoutLoveWomanDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoUpdateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutBornsInput;
-  residence?: LocationUpdateOneWithoutLivesInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  sentMessages?: MessageUpdateManyWithoutFromInput;
-  receiveMessages?: MessageUpdateManyWithoutToInput;
-  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneInput;
-  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
-  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
-  loveMan?: LoveMatchingUpdateManyWithoutManInput;
-  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
-  skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
-}
-
-export interface ProvinceCreateOneInput {
-  create?: ProvinceCreateInput;
-  connect?: ProvinceWhereUniqueInput;
-}
-
-export interface PartnerConditionUpdateOneWithoutPassedPartnersInput {
-  create?: PartnerConditionCreateWithoutPassedPartnersInput;
-  update?: PartnerConditionUpdateWithoutPassedPartnersDataInput;
-  upsert?: PartnerConditionUpsertWithoutPassedPartnersInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: PartnerConditionWhereUniqueInput;
-}
-
-export interface AreaCreateManyWithoutCityInput {
-  create?: AreaCreateWithoutCityInput[] | AreaCreateWithoutCityInput;
-  connect?: AreaWhereUniqueInput[] | AreaWhereUniqueInput;
-}
-
-export interface PartnerConditionUpdateWithoutPassedPartnersDataInput {
-  skillName?: String;
-  place?: String;
-  partners?: UserUpdateManyWithoutPartnerFoundInput;
-  project?: ProjectUpdateOneWithoutConditionsInput;
-}
-
-export interface AreaCreateOneInput {
-  create?: AreaCreateInput;
-  connect?: AreaWhereUniqueInput;
-}
-
-export interface UserUpdateManyWithoutPartnerFoundInput {
-  create?:
-    | UserCreateWithoutPartnerFoundInput[]
-    | UserCreateWithoutPartnerFoundInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutPartnerFoundInput[]
-    | UserUpdateWithWhereUniqueWithoutPartnerFoundInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutPartnerFoundInput[]
-    | UserUpsertWithWhereUniqueWithoutPartnerFoundInput;
-  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
-  updateMany?:
-    | UserUpdateManyWithWhereNestedInput[]
-    | UserUpdateManyWithWhereNestedInput;
-}
-
-export interface AreaCreateWithoutTownsInput {
-  code: String;
-  name: String;
-  city: CityCreateOneWithoutAreasInput;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutPartnerFoundInput {
-  where: UserWhereUniqueInput;
-  data: UserUpdateWithoutPartnerFoundDataInput;
-}
-
-export interface StreetCreateWithoutVillagesInput {
-  code: String;
-  name: String;
-  Area: AreaCreateOneWithoutTownsInput;
-}
-
-export interface UserUpdateWithoutPartnerFoundDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoUpdateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutBornsInput;
-  residence?: LocationUpdateOneWithoutLivesInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  sentMessages?: MessageUpdateManyWithoutFromInput;
-  receiveMessages?: MessageUpdateManyWithoutToInput;
-  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneInput;
-  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
-  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
-  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
-  loveMan?: LoveMatchingUpdateManyWithoutManInput;
-  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
-  skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
-}
-
-export interface CompanyCreateWithoutLocationInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  BusinessScope?: String;
-  works?: WorkCreateManyWithoutCompanyInput;
-  workGroup?: WorkGroupCreateOneWithoutCompanyInput;
-}
-
-export interface ProjectUpdateManyWithoutStarterInput {
-  create?:
-    | ProjectCreateWithoutStarterInput[]
-    | ProjectCreateWithoutStarterInput;
-  delete?: ProjectWhereUniqueInput[] | ProjectWhereUniqueInput;
-  connect?: ProjectWhereUniqueInput[] | ProjectWhereUniqueInput;
-  disconnect?: ProjectWhereUniqueInput[] | ProjectWhereUniqueInput;
-  update?:
-    | ProjectUpdateWithWhereUniqueWithoutStarterInput[]
-    | ProjectUpdateWithWhereUniqueWithoutStarterInput;
-  upsert?:
-    | ProjectUpsertWithWhereUniqueWithoutStarterInput[]
-    | ProjectUpsertWithWhereUniqueWithoutStarterInput;
-  deleteMany?: ProjectScalarWhereInput[] | ProjectScalarWhereInput;
-  updateMany?:
-    | ProjectUpdateManyWithWhereNestedInput[]
-    | ProjectUpdateManyWithWhereNestedInput;
-}
-
-export interface StationCreateInput {
-  code?: String;
-  name?: String;
-}
-
-export interface ProjectUpdateWithWhereUniqueWithoutStarterInput {
-  where: ProjectWhereUniqueInput;
-  data: ProjectUpdateWithoutStarterDataInput;
-}
-
-export interface LocationCreateWithoutLivesInput {
-  name?: String;
-  province?: ProvinceCreateOneInput;
-  city?: CityCreateOneInput;
-  area?: AreaCreateOneInput;
-  street?: StreetCreateOneInput;
-  village?: VillageCreateOneInput;
-  schools?: SchoolCreateManyWithoutLocationInput;
-  companies?: CompanyCreateManyWithoutLocationInput;
-  universities?: UniversityCreateManyInput;
-  borns?: UserCreateManyWithoutBirthplaceInput;
-}
-
-export interface ProjectUpdateWithoutStarterDataInput {
-  name?: String;
-  place?: CityUpdateOneInput;
-  content?: String;
-  conditions?: PartnerConditionUpdateManyWithoutProjectInput;
-}
-
-export interface UserCreateWithoutBirthplaceInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoCreateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  residence?: LocationCreateOneWithoutLivesInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  sentMessages?: MessageCreateManyWithoutFromInput;
-  receiveMessages?: MessageCreateManyWithoutToInput;
-  groupMessages?: GroupMessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneInput;
-  colleagues?: ColleagueCreateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
-  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingCreateOneWithoutUserInput;
-  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
-  loveMan?: LoveMatchingCreateManyWithoutManInput;
-  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface PartnerConditionUpdateManyWithoutProjectInput {
-  create?:
-    | PartnerConditionCreateWithoutProjectInput[]
-    | PartnerConditionCreateWithoutProjectInput;
-  delete?:
-    | PartnerConditionWhereUniqueInput[]
-    | PartnerConditionWhereUniqueInput;
-  connect?:
-    | PartnerConditionWhereUniqueInput[]
-    | PartnerConditionWhereUniqueInput;
-  disconnect?:
-    | PartnerConditionWhereUniqueInput[]
-    | PartnerConditionWhereUniqueInput;
-  update?:
-    | PartnerConditionUpdateWithWhereUniqueWithoutProjectInput[]
-    | PartnerConditionUpdateWithWhereUniqueWithoutProjectInput;
-  upsert?:
-    | PartnerConditionUpsertWithWhereUniqueWithoutProjectInput[]
-    | PartnerConditionUpsertWithWhereUniqueWithoutProjectInput;
-  deleteMany?:
-    | PartnerConditionScalarWhereInput[]
-    | PartnerConditionScalarWhereInput;
-  updateMany?:
-    | PartnerConditionUpdateManyWithWhereNestedInput[]
-    | PartnerConditionUpdateManyWithWhereNestedInput;
-}
-
-export interface RegStatusCreateWithoutApplicantsInput {
-  education: Educationkind;
-  university?: UniversityCreateOneInput;
-  major: MajorCreateOneInput;
-}
-
-export interface PartnerConditionUpdateWithWhereUniqueWithoutProjectInput {
-  where: PartnerConditionWhereUniqueInput;
-  data: PartnerConditionUpdateWithoutProjectDataInput;
-}
-
-export interface FamilyCreateManyWithoutFromInput {
-  create?: FamilyCreateWithoutFromInput[] | FamilyCreateWithoutFromInput;
-  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
-}
-
-export interface PartnerConditionUpdateWithoutProjectDataInput {
-  skillName?: String;
-  place?: String;
-  partners?: UserUpdateManyWithoutPartnerFoundInput;
-  passedPartners?: UserUpdateManyWithoutPartnerPastedInput;
-}
-
-export interface UserCreateOneInput {
-  create?: UserCreateInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface PartnerConditionUpsertWithWhereUniqueWithoutProjectInput {
-  where: PartnerConditionWhereUniqueInput;
-  update: PartnerConditionUpdateWithoutProjectDataInput;
-  create: PartnerConditionCreateWithoutProjectInput;
-}
-
-export interface PersonCreateWithoutAsMotherInput {
-  name: String;
-  user?: UserCreateOneInput;
-  families?: FamilyCreateManyWithoutToInput;
-  asFather?: FamilyGroupCreateManyWithoutFatherInput;
-}
-
-export interface PartnerConditionScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  skillName?: String;
-  skillName_not?: String;
-  skillName_in?: String[] | String;
-  skillName_not_in?: String[] | String;
-  skillName_lt?: String;
-  skillName_lte?: String;
-  skillName_gt?: String;
-  skillName_gte?: String;
-  skillName_contains?: String;
-  skillName_not_contains?: String;
-  skillName_starts_with?: String;
-  skillName_not_starts_with?: String;
-  skillName_ends_with?: String;
-  skillName_not_ends_with?: String;
-  place?: String;
-  place_not?: String;
-  place_in?: String[] | String;
-  place_not_in?: String[] | String;
-  place_lt?: String;
-  place_lte?: String;
-  place_gt?: String;
-  place_gte?: String;
-  place_contains?: String;
-  place_not_contains?: String;
-  place_starts_with?: String;
-  place_not_starts_with?: String;
-  place_ends_with?: String;
-  place_not_ends_with?: String;
-  AND?: PartnerConditionScalarWhereInput[] | PartnerConditionScalarWhereInput;
-  OR?: PartnerConditionScalarWhereInput[] | PartnerConditionScalarWhereInput;
-  NOT?: PartnerConditionScalarWhereInput[] | PartnerConditionScalarWhereInput;
-}
-
-export interface UserCreateWithoutFamiliesInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoCreateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutBornsInput;
-  residence?: LocationCreateOneWithoutLivesInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  sentMessages?: MessageCreateManyWithoutFromInput;
-  receiveMessages?: MessageCreateManyWithoutToInput;
-  groupMessages?: GroupMessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneInput;
-  colleagues?: ColleagueCreateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
-  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingCreateOneWithoutUserInput;
-  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
-  loveMan?: LoveMatchingCreateManyWithoutManInput;
-  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface PartnerConditionUpdateManyWithWhereNestedInput {
-  where: PartnerConditionScalarWhereInput;
-  data: PartnerConditionUpdateManyDataInput;
-}
-
-export interface SchoolCreateInput {
-  name?: String;
-  kind?: Educationkind;
-  location?: LocationCreateOneWithoutSchoolsInput;
-}
-
-export interface PartnerConditionUpdateManyDataInput {
-  skillName?: String;
-  place?: String;
-}
-
-export interface UserCreateWithoutResidenceInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoCreateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutBornsInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  sentMessages?: MessageCreateManyWithoutFromInput;
-  receiveMessages?: MessageCreateManyWithoutToInput;
-  groupMessages?: GroupMessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneInput;
-  colleagues?: ColleagueCreateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
-  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingCreateOneWithoutUserInput;
-  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
-  loveMan?: LoveMatchingCreateManyWithoutManInput;
-  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface ProjectUpsertWithWhereUniqueWithoutStarterInput {
-  where: ProjectWhereUniqueInput;
-  update: ProjectUpdateWithoutStarterDataInput;
-  create: ProjectCreateWithoutStarterInput;
-}
-
-export interface CompanyCreateWithoutWorksInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  location?: LocationCreateOneWithoutCompaniesInput;
-  BusinessScope?: String;
-  workGroup?: WorkGroupCreateOneWithoutCompanyInput;
-}
-
-export interface ProjectScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  content?: String;
-  content_not?: String;
-  content_in?: String[] | String;
-  content_not_in?: String[] | String;
-  content_lt?: String;
-  content_lte?: String;
-  content_gt?: String;
-  content_gte?: String;
-  content_contains?: String;
-  content_not_contains?: String;
-  content_starts_with?: String;
-  content_not_starts_with?: String;
-  content_ends_with?: String;
-  content_not_ends_with?: String;
-  AND?: ProjectScalarWhereInput[] | ProjectScalarWhereInput;
-  OR?: ProjectScalarWhereInput[] | ProjectScalarWhereInput;
-  NOT?: ProjectScalarWhereInput[] | ProjectScalarWhereInput;
-}
-
-export interface WorkGroupCreateWithoutCompanyInput {
-  colleagues?: ColleagueCreateManyWithoutGroupInput;
-}
-
-export interface ProjectUpdateManyWithWhereNestedInput {
-  where: ProjectScalarWhereInput;
-  data: ProjectUpdateManyDataInput;
-}
-
-export interface UserCreateWithoutColleaguesInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoCreateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutBornsInput;
-  residence?: LocationCreateOneWithoutLivesInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  sentMessages?: MessageCreateManyWithoutFromInput;
-  receiveMessages?: MessageCreateManyWithoutToInput;
-  groupMessages?: GroupMessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneInput;
-  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
-  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingCreateOneWithoutUserInput;
-  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
-  loveMan?: LoveMatchingCreateManyWithoutManInput;
-  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface ProjectUpdateManyDataInput {
-  name?: String;
-  content?: String;
-}
-
-export interface MessageCreateWithoutFromInput {
-  to: UserCreateOneWithoutReceiveMessagesInput;
-  text?: String;
-  image?: PhotoCreateOneInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutPartnerFoundInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutPartnerFoundDataInput;
-  create: UserCreateWithoutPartnerFoundInput;
-}
-
-export interface CompanyUpdateManyMutationInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  BusinessScope?: String;
-}
-
-export interface UserScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  username?: String;
-  username_not?: String;
-  username_in?: String[] | String;
-  username_not_in?: String[] | String;
-  username_lt?: String;
-  username_lte?: String;
-  username_gt?: String;
-  username_gte?: String;
-  username_contains?: String;
-  username_not_contains?: String;
-  username_starts_with?: String;
-  username_not_starts_with?: String;
-  username_ends_with?: String;
-  username_not_ends_with?: String;
-  password?: String;
-  password_not?: String;
-  password_in?: String[] | String;
-  password_not_in?: String[] | String;
-  password_lt?: String;
-  password_lte?: String;
-  password_gt?: String;
-  password_gte?: String;
-  password_contains?: String;
-  password_not_contains?: String;
-  password_starts_with?: String;
-  password_not_starts_with?: String;
-  password_ends_with?: String;
-  password_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  gender?: String;
-  gender_not?: String;
-  gender_in?: String[] | String;
-  gender_not_in?: String[] | String;
-  gender_lt?: String;
-  gender_lte?: String;
-  gender_gt?: String;
-  gender_gte?: String;
-  gender_contains?: String;
-  gender_not_contains?: String;
-  gender_starts_with?: String;
-  gender_not_starts_with?: String;
-  gender_ends_with?: String;
-  gender_not_ends_with?: String;
-  birthdaycalendar?: String;
-  birthdaycalendar_not?: String;
-  birthdaycalendar_in?: String[] | String;
-  birthdaycalendar_not_in?: String[] | String;
-  birthdaycalendar_lt?: String;
-  birthdaycalendar_lte?: String;
-  birthdaycalendar_gt?: String;
-  birthdaycalendar_gte?: String;
-  birthdaycalendar_contains?: String;
-  birthdaycalendar_not_contains?: String;
-  birthdaycalendar_starts_with?: String;
-  birthdaycalendar_not_starts_with?: String;
-  birthdaycalendar_ends_with?: String;
-  birthdaycalendar_not_ends_with?: String;
-  birthday?: DateTimeInput;
-  birthday_not?: DateTimeInput;
-  birthday_in?: DateTimeInput[] | DateTimeInput;
-  birthday_not_in?: DateTimeInput[] | DateTimeInput;
-  birthday_lt?: DateTimeInput;
-  birthday_lte?: DateTimeInput;
-  birthday_gt?: DateTimeInput;
-  birthday_gte?: DateTimeInput;
-  uid?: String;
-  uid_not?: String;
-  uid_in?: String[] | String;
-  uid_not_in?: String[] | String;
-  uid_lt?: String;
-  uid_lte?: String;
-  uid_gt?: String;
-  uid_gte?: String;
-  uid_contains?: String;
-  uid_not_contains?: String;
-  uid_starts_with?: String;
-  uid_not_starts_with?: String;
-  uid_ends_with?: String;
-  uid_not_ends_with?: String;
-  token?: String;
-  token_not?: String;
-  token_in?: String[] | String;
-  token_not_in?: String[] | String;
-  token_lt?: String;
-  token_lte?: String;
-  token_gt?: String;
-  token_gte?: String;
-  token_contains?: String;
-  token_not_contains?: String;
-  token_starts_with?: String;
-  token_not_starts_with?: String;
-  token_ends_with?: String;
-  token_not_ends_with?: String;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  regTimes?: Int;
-  regTimes_not?: Int;
-  regTimes_in?: Int[] | Int;
-  regTimes_not_in?: Int[] | Int;
-  regTimes_lt?: Int;
-  regTimes_lte?: Int;
-  regTimes_gt?: Int;
-  regTimes_gte?: Int;
-  maxRegTimes?: Int;
-  maxRegTimes_not?: Int;
-  maxRegTimes_in?: Int[] | Int;
-  maxRegTimes_not_in?: Int[] | Int;
-  maxRegTimes_lt?: Int;
-  maxRegTimes_lte?: Int;
-  maxRegTimes_gt?: Int;
-  maxRegTimes_gte?: Int;
-  AND?: UserScalarWhereInput[] | UserScalarWhereInput;
-  OR?: UserScalarWhereInput[] | UserScalarWhereInput;
-  NOT?: UserScalarWhereInput[] | UserScalarWhereInput;
-}
-
-export interface UserCreateWithoutAvatarInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutBornsInput;
-  residence?: LocationCreateOneWithoutLivesInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  sentMessages?: MessageCreateManyWithoutFromInput;
-  receiveMessages?: MessageCreateManyWithoutToInput;
-  groupMessages?: GroupMessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneInput;
-  colleagues?: ColleagueCreateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
-  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingCreateOneWithoutUserInput;
-  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
-  loveMan?: LoveMatchingCreateManyWithoutManInput;
-  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface UserUpdateManyWithWhereNestedInput {
-  where: UserScalarWhereInput;
-  data: UserUpdateManyDataInput;
-}
-
-export interface UserCreateWithoutSentMessagesInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoCreateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutBornsInput;
-  residence?: LocationCreateOneWithoutLivesInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  receiveMessages?: MessageCreateManyWithoutToInput;
-  groupMessages?: GroupMessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneInput;
-  colleagues?: ColleagueCreateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
-  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingCreateOneWithoutUserInput;
-  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
-  loveMan?: LoveMatchingCreateManyWithoutManInput;
-  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface UserUpdateManyDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  uid?: String;
-  token?: String;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-}
-
-export interface MessageCreateInput {
-  to: UserCreateOneWithoutReceiveMessagesInput;
-  from: UserCreateOneWithoutSentMessagesInput;
-  text?: String;
-  image?: PhotoCreateOneInput;
-}
-
-export interface ProjectUpdateOneWithoutConditionsInput {
-  create?: ProjectCreateWithoutConditionsInput;
-  update?: ProjectUpdateWithoutConditionsDataInput;
-  upsert?: ProjectUpsertWithoutConditionsInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: ProjectWhereUniqueInput;
-}
-
-export interface PersonCreateWithoutAsFatherInput {
-  name: String;
-  user?: UserCreateOneInput;
-  families?: FamilyCreateManyWithoutToInput;
-  asMother?: FamilyGroupCreateManyWithoutMotherInput;
-}
-
-export interface ProjectUpdateWithoutConditionsDataInput {
-  name?: String;
-  place?: CityUpdateOneInput;
-  content?: String;
-  starter?: UserUpdateOneWithoutProjectInput;
-}
-
-export interface UserCreateWithoutCreaterInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoCreateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutBornsInput;
-  residence?: LocationCreateOneWithoutLivesInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  sentMessages?: MessageCreateManyWithoutFromInput;
-  receiveMessages?: MessageCreateManyWithoutToInput;
-  groupMessages?: GroupMessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneInput;
-  colleagues?: ColleagueCreateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
-  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingCreateOneWithoutUserInput;
-  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
-  loveMan?: LoveMatchingCreateManyWithoutManInput;
-  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface UserUpdateOneWithoutProjectInput {
-  create?: UserCreateWithoutProjectInput;
-  update?: UserUpdateWithoutProjectDataInput;
-  upsert?: UserUpsertWithoutProjectInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface ClassGroupCreateWithoutMembersInput {
-  study?: SchoolEduCreateOneInput;
-  name?: String;
-}
-
-export interface UserUpdateWithoutProjectDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoUpdateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutBornsInput;
-  residence?: LocationUpdateOneWithoutLivesInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  sentMessages?: MessageUpdateManyWithoutFromInput;
-  receiveMessages?: MessageUpdateManyWithoutToInput;
-  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneInput;
-  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
-  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
-  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
-  loveMan?: LoveMatchingUpdateManyWithoutManInput;
-  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
-  skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-}
-
-export interface UserCreateWithoutStudiesInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoCreateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutBornsInput;
-  residence?: LocationCreateOneWithoutLivesInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  sentMessages?: MessageCreateManyWithoutFromInput;
-  receiveMessages?: MessageCreateManyWithoutToInput;
-  groupMessages?: GroupMessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneInput;
-  colleagues?: ColleagueCreateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
-  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingCreateOneWithoutUserInput;
-  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
-  loveMan?: LoveMatchingCreateManyWithoutManInput;
-  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface UserUpsertWithoutProjectInput {
-  update: UserUpdateWithoutProjectDataInput;
-  create: UserCreateWithoutProjectInput;
-}
-
-export interface FamilyCreateInput {
-  from: UserCreateOneWithoutFamiliesInput;
-  to: PersonCreateOneWithoutFamiliesInput;
-  relationship: String;
-  spouse?: FamilyCreateOneInput;
-  status: String;
-}
-
-export interface ProjectUpsertWithoutConditionsInput {
-  update: ProjectUpdateWithoutConditionsDataInput;
-  create: ProjectCreateWithoutConditionsInput;
-}
-
-export interface WorkGroupCreateOneInput {
-  create?: WorkGroupCreateInput;
-  connect?: WorkGroupWhereUniqueInput;
-}
-
-export interface PartnerConditionUpsertWithoutPassedPartnersInput {
-  update: PartnerConditionUpdateWithoutPassedPartnersDataInput;
-  create: PartnerConditionCreateWithoutPassedPartnersInput;
-}
-
-export interface ColleagueCreateManyWithoutWorkerInput {
-  create?:
-    | ColleagueCreateWithoutWorkerInput[]
-    | ColleagueCreateWithoutWorkerInput;
-  connect?: ColleagueWhereUniqueInput[] | ColleagueWhereUniqueInput;
-}
-
-export interface UserUpsertWithoutLoveWomanInput {
-  update: UserUpdateWithoutLoveWomanDataInput;
-  create: UserCreateWithoutLoveWomanInput;
-}
-
-export interface OldColleagueCreateManyWithoutFromInput {
-  create?:
-    | OldColleagueCreateWithoutFromInput[]
-    | OldColleagueCreateWithoutFromInput;
-  connect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
-}
-
-export interface LoveMatchingUpsertWithWhereUniqueWithoutManInput {
-  where: LoveMatchingWhereUniqueInput;
-  update: LoveMatchingUpdateWithoutManDataInput;
-  create: LoveMatchingCreateWithoutManInput;
-}
-
-export interface LocationGroupCreateManyWithoutUsersInput {
-  create?:
-    | LocationGroupCreateWithoutUsersInput[]
-    | LocationGroupCreateWithoutUsersInput;
-  connect?: LocationGroupWhereUniqueInput[] | LocationGroupWhereUniqueInput;
-}
-
-export interface LoveMatchingScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  period?: String;
-  period_not?: String;
-  period_in?: String[] | String;
-  period_not_in?: String[] | String;
-  period_lt?: String;
-  period_lte?: String;
-  period_gt?: String;
-  period_gte?: String;
-  period_contains?: String;
-  period_not_contains?: String;
-  period_starts_with?: String;
-  period_not_starts_with?: String;
-  period_ends_with?: String;
-  period_not_ends_with?: String;
-  AND?: LoveMatchingScalarWhereInput[] | LoveMatchingScalarWhereInput;
-  OR?: LoveMatchingScalarWhereInput[] | LoveMatchingScalarWhereInput;
-  NOT?: LoveMatchingScalarWhereInput[] | LoveMatchingScalarWhereInput;
-}
-
-export interface UserCreateManyWithoutRemmemberPasswordInput {
-  create?:
-    | UserCreateWithoutRemmemberPasswordInput[]
-    | UserCreateWithoutRemmemberPasswordInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface LoveMatchingUpdateManyWithWhereNestedInput {
-  where: LoveMatchingScalarWhereInput;
-  data: LoveMatchingUpdateManyDataInput;
-}
-
-export interface UserCreateOneWithoutFromOldColleaguesInput {
-  create?: UserCreateWithoutFromOldColleaguesInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface LoveMatchingUpdateManyDataInput {
-  period?: String;
-}
-
-export interface UserCreateOneWithoutForgetPasswordInput {
-  create?: UserCreateWithoutForgetPasswordInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutPartnerPastedInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutPartnerPastedDataInput;
-  create: UserCreateWithoutPartnerPastedInput;
-}
-
-export interface LoveMatchingCreateManyWithoutWomanInput {
-  create?:
-    | LoveMatchingCreateWithoutWomanInput[]
-    | LoveMatchingCreateWithoutWomanInput;
-  connect?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
-}
-
-export interface PartnerConditionUpsertWithoutPartnersInput {
-  update: PartnerConditionUpdateWithoutPartnersDataInput;
-  create: PartnerConditionCreateWithoutPartnersInput;
-}
-
-export interface LoveSignUpCreateOneWithoutPersonInput {
-  create?: LoveSignUpCreateWithoutPersonInput;
-  connect?: LoveSignUpWhereUniqueInput;
-}
-
-export interface UserUpsertWithoutLoveManInput {
-  update: UserUpdateWithoutLoveManDataInput;
-  create: UserCreateWithoutLoveManInput;
-}
-
-export interface PartnerConditionCreateOneWithoutPartnersInput {
-  create?: PartnerConditionCreateWithoutPartnersInput;
-  connect?: PartnerConditionWhereUniqueInput;
-}
-
-export interface LoveMatchingUpsertWithWhereUniqueWithoutWomanInput {
-  where: LoveMatchingWhereUniqueInput;
-  update: LoveMatchingUpdateWithoutWomanDataInput;
-  create: LoveMatchingCreateWithoutWomanInput;
-}
-
-export interface LoveMatchingCreateManyWithoutManInput {
-  create?:
-    | LoveMatchingCreateWithoutManInput[]
-    | LoveMatchingCreateWithoutManInput;
-  connect?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
-}
-
-export interface UserUpsertWithoutForgetPasswordInput {
-  update: UserUpdateWithoutForgetPasswordDataInput;
-  create: UserCreateWithoutForgetPasswordInput;
-}
-
-export interface PartnerConditionCreateOneWithoutPassedPartnersInput {
-  create?: PartnerConditionCreateWithoutPassedPartnersInput;
-  connect?: PartnerConditionWhereUniqueInput;
-}
-
-export interface FindPassWordUpsertWithoutRemmemberInput {
-  update: FindPassWordUpdateWithoutRemmemberDataInput;
-  create: FindPassWordCreateWithoutRemmemberInput;
-}
-
-export interface ProjectCreateManyWithoutStarterInput {
-  create?:
-    | ProjectCreateWithoutStarterInput[]
-    | ProjectCreateWithoutStarterInput;
-  connect?: ProjectWhereUniqueInput[] | ProjectWhereUniqueInput;
-}
-
-export interface UserUpsertWithoutFromOldColleaguesInput {
-  update: UserUpdateWithoutFromOldColleaguesDataInput;
-  create: UserCreateWithoutFromOldColleaguesInput;
-}
-
-export interface ProjectCreateOneWithoutConditionsInput {
-  create?: ProjectCreateWithoutConditionsInput;
-  connect?: ProjectWhereUniqueInput;
-}
-
-export interface CompanyUpdateOneInput {
-  create?: CompanyCreateInput;
-  update?: CompanyUpdateDataInput;
-  upsert?: CompanyUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: CompanyWhereUniqueInput;
-}
-
-export interface TradeSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: TradeWhereInput;
-  AND?: TradeSubscriptionWhereInput[] | TradeSubscriptionWhereInput;
-  OR?: TradeSubscriptionWhereInput[] | TradeSubscriptionWhereInput;
-  NOT?: TradeSubscriptionWhereInput[] | TradeSubscriptionWhereInput;
-}
-
-export interface CompanyUpdateDataInput {
-  name?: String;
-  code?: String;
-  establishmentDate?: DateTimeInput;
-  representative?: String;
-  location?: LocationUpdateOneWithoutCompaniesInput;
-  BusinessScope?: String;
-  works?: WorkUpdateManyWithoutCompanyInput;
-  workGroup?: WorkGroupUpdateOneWithoutCompanyInput;
-}
-
-export interface SchoolSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: SchoolWhereInput;
-  AND?: SchoolSubscriptionWhereInput[] | SchoolSubscriptionWhereInput;
-  OR?: SchoolSubscriptionWhereInput[] | SchoolSubscriptionWhereInput;
-  NOT?: SchoolSubscriptionWhereInput[] | SchoolSubscriptionWhereInput;
-}
-
-export interface CompanyUpsertNestedInput {
-  update: CompanyUpdateDataInput;
-  create: CompanyCreateInput;
-}
-
-export interface ProductSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: ProductWhereInput;
-  AND?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput;
-  OR?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput;
-  NOT?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput;
-}
-
-export interface OldColleagueUpsertWithWhereUniqueWithoutToInput {
-  where: OldColleagueWhereUniqueInput;
-  update: OldColleagueUpdateWithoutToDataInput;
-  create: OldColleagueCreateWithoutToInput;
-}
-
-export interface OldColleagueSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: OldColleagueWhereInput;
-  AND?:
-    | OldColleagueSubscriptionWhereInput[]
-    | OldColleagueSubscriptionWhereInput;
-  OR?:
-    | OldColleagueSubscriptionWhereInput[]
-    | OldColleagueSubscriptionWhereInput;
-  NOT?:
-    | OldColleagueSubscriptionWhereInput[]
-    | OldColleagueSubscriptionWhereInput;
-}
-
-export interface OldColleagueScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  status?: String;
-  status_not?: String;
-  status_in?: String[] | String;
-  status_not_in?: String[] | String;
-  status_lt?: String;
-  status_lte?: String;
-  status_gt?: String;
-  status_gte?: String;
-  status_contains?: String;
-  status_not_contains?: String;
-  status_starts_with?: String;
-  status_not_starts_with?: String;
-  status_ends_with?: String;
-  status_not_ends_with?: String;
-  AND?: OldColleagueScalarWhereInput[] | OldColleagueScalarWhereInput;
-  OR?: OldColleagueScalarWhereInput[] | OldColleagueScalarWhereInput;
-  NOT?: OldColleagueScalarWhereInput[] | OldColleagueScalarWhereInput;
-}
-
-export interface WorkWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  startTime?: DateTimeInput;
-  startTime_not?: DateTimeInput;
-  startTime_in?: DateTimeInput[] | DateTimeInput;
-  startTime_not_in?: DateTimeInput[] | DateTimeInput;
-  startTime_lt?: DateTimeInput;
-  startTime_lte?: DateTimeInput;
-  startTime_gt?: DateTimeInput;
-  startTime_gte?: DateTimeInput;
-  endTime?: DateTimeInput;
-  endTime_not?: DateTimeInput;
-  endTime_in?: DateTimeInput[] | DateTimeInput;
-  endTime_not_in?: DateTimeInput[] | DateTimeInput;
-  endTime_lt?: DateTimeInput;
-  endTime_lte?: DateTimeInput;
-  endTime_gt?: DateTimeInput;
-  endTime_gte?: DateTimeInput;
-  company?: CompanyWhereInput;
-  department?: String;
-  department_not?: String;
-  department_in?: String[] | String;
-  department_not_in?: String[] | String;
-  department_lt?: String;
-  department_lte?: String;
-  department_gt?: String;
-  department_gte?: String;
-  department_contains?: String;
-  department_not_contains?: String;
-  department_starts_with?: String;
-  department_not_starts_with?: String;
-  department_ends_with?: String;
-  department_not_ends_with?: String;
-  post?: StationWhereInput;
-  jobContent?: String;
-  jobContent_not?: String;
-  jobContent_in?: String[] | String;
-  jobContent_not_in?: String[] | String;
-  jobContent_lt?: String;
-  jobContent_lte?: String;
-  jobContent_gt?: String;
-  jobContent_gte?: String;
-  jobContent_contains?: String;
-  jobContent_not_contains?: String;
-  jobContent_starts_with?: String;
-  jobContent_not_starts_with?: String;
-  jobContent_ends_with?: String;
-  jobContent_not_ends_with?: String;
-  worker?: UserWhereInput;
-  AND?: WorkWhereInput[] | WorkWhereInput;
-  OR?: WorkWhereInput[] | WorkWhereInput;
-  NOT?: WorkWhereInput[] | WorkWhereInput;
-}
-
-export interface OldColleagueUpdateManyWithWhereNestedInput {
-  where: OldColleagueScalarWhereInput;
-  data: OldColleagueUpdateManyDataInput;
-}
-
-export interface GroupSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: GroupWhereInput;
-  AND?: GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput;
-  OR?: GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput;
-  NOT?: GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput;
-}
-
-export interface OldColleagueUpdateManyDataInput {
-  status?: String;
-}
-
-export interface CollegeEntranceExamSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: CollegeEntranceExamWhereInput;
-  AND?:
-    | CollegeEntranceExamSubscriptionWhereInput[]
-    | CollegeEntranceExamSubscriptionWhereInput;
-  OR?:
-    | CollegeEntranceExamSubscriptionWhereInput[]
-    | CollegeEntranceExamSubscriptionWhereInput;
-  NOT?:
-    | CollegeEntranceExamSubscriptionWhereInput[]
-    | CollegeEntranceExamSubscriptionWhereInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutRemmemberPasswordInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutRemmemberPasswordDataInput;
-  create: UserCreateWithoutRemmemberPasswordInput;
-}
-
-export interface BootCountSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: BootCountWhereInput;
-  AND?: BootCountSubscriptionWhereInput[] | BootCountSubscriptionWhereInput;
-  OR?: BootCountSubscriptionWhereInput[] | BootCountSubscriptionWhereInput;
-  NOT?: BootCountSubscriptionWhereInput[] | BootCountSubscriptionWhereInput;
-}
-
-export interface FindPassWordUpsertWithoutForgetterInput {
-  update: FindPassWordUpdateWithoutForgetterDataInput;
-  create: FindPassWordCreateWithoutForgetterInput;
-}
-
-export interface WorkUpdateInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  company?: CompanyUpdateOneWithoutWorksInput;
-  department?: String;
-  post?: StationUpdateOneInput;
-  jobContent?: String;
-  worker?: UserUpdateOneWithoutWorksInput;
-}
-
-export interface UserUpsertWithoutToOldColleaguesInput {
-  update: UserUpdateWithoutToOldColleaguesDataInput;
-  create: UserCreateWithoutToOldColleaguesInput;
-}
-
-export interface UniversityUpdateManyMutationInput {
-  name?: String;
-  education?: Educationkind;
-  department?: String;
-  location?: String;
-  desc?: String;
-}
-
-export interface OldColleagueUpsertWithWhereUniqueWithoutFromInput {
-  where: OldColleagueWhereUniqueInput;
-  update: OldColleagueUpdateWithoutFromDataInput;
-  create: OldColleagueCreateWithoutFromInput;
-}
-
-export interface ProductUpdateOneInput {
-  create?: ProductCreateInput;
-  update?: ProductUpdateDataInput;
-  upsert?: ProductUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: ProductWhereUniqueInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutFamilyGroupInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutFamilyGroupDataInput;
-  create: UserCreateWithoutFamilyGroupInput;
-}
-
-export interface StationUpdateManyMutationInput {
-  code?: String;
-  name?: String;
-}
-
-export interface FamilyGroupUpsertWithoutCreaterInput {
-  update: FamilyGroupUpdateWithoutCreaterDataInput;
-  create: FamilyGroupCreateWithoutCreaterInput;
-}
-
-export type GroupWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface UserUpsertWithWhereUniqueWithoutStudiesInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutStudiesDataInput;
-  create: UserCreateWithoutStudiesInput;
-}
-
-export type LocationWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  name?: String;
-}>;
-
-export interface SchoolEduUpsertNestedInput {
-  update: SchoolEduUpdateDataInput;
-  create: SchoolEduCreateInput;
-}
-
-export interface RegisterCountCreateInput {
-  addUser?: UserCreateOneInput;
-  deviceId?: String;
-}
-
-export interface ClassGroupUpsertWithoutMembersInput {
-  update: ClassGroupUpdateWithoutMembersDataInput;
-  create: ClassGroupCreateWithoutMembersInput;
-}
-
-export interface RegStatusUpdateInput {
-  education?: Educationkind;
-  university?: UniversityUpdateOneInput;
-  major?: MajorUpdateOneRequiredInput;
-  applicants?: UserUpdateManyWithoutRegStatusInput;
-}
-
-export interface ClassMateUpsertWithWhereUniqueWithoutStudentInput {
-  where: ClassMateWhereUniqueInput;
-  update: ClassMateUpdateWithoutStudentDataInput;
-  create: ClassMateCreateWithoutStudentInput;
-}
-
-export type LoveSignUpWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface ClassMateScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  status?: String;
-  status_not?: String;
-  status_in?: String[] | String;
-  status_not_in?: String[] | String;
-  status_lt?: String;
-  status_lte?: String;
-  status_gt?: String;
-  status_gte?: String;
-  status_contains?: String;
-  status_not_contains?: String;
-  status_starts_with?: String;
-  status_not_starts_with?: String;
-  status_ends_with?: String;
-  status_not_ends_with?: String;
-  AND?: ClassMateScalarWhereInput[] | ClassMateScalarWhereInput;
-  OR?: ClassMateScalarWhereInput[] | ClassMateScalarWhereInput;
-  NOT?: ClassMateScalarWhereInput[] | ClassMateScalarWhereInput;
-}
-
-export interface PostUpdateManyMutationInput {
-  isPublished?: Boolean;
-  title?: String;
-  content?: String;
-}
-
-export interface ClassMateUpdateManyWithWhereNestedInput {
-  where: ClassMateScalarWhereInput;
-  data: ClassMateUpdateManyDataInput;
-}
-
-export interface UserCreateOneWithoutPostsInput {
-  create?: UserCreateWithoutPostsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface ClassMateUpdateManyDataInput {
-  status?: String;
-}
-
-export interface PersonCreateInput {
-  name: String;
-  user?: UserCreateOneInput;
-  families?: FamilyCreateManyWithoutToInput;
-  asFather?: FamilyGroupCreateManyWithoutFatherInput;
-  asMother?: FamilyGroupCreateManyWithoutMotherInput;
-}
-
-export interface UserUpsertWithoutCreaterInput {
-  update: UserUpdateWithoutCreaterDataInput;
-  create: UserCreateWithoutCreaterInput;
-}
-
-export type PostWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface FamilyGroupUpsertWithWhereUniqueWithoutMotherInput {
-  where: FamilyGroupWhereUniqueInput;
-  update: FamilyGroupUpdateWithoutMotherDataInput;
-  create: FamilyGroupCreateWithoutMotherInput;
-}
-
-export interface UserUpsertWithoutSignUpLoveInput {
-  update: UserUpdateWithoutSignUpLoveDataInput;
-  create: UserCreateWithoutSignUpLoveInput;
-}
-
-export interface FamilyGroupScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  AND?: FamilyGroupScalarWhereInput[] | FamilyGroupScalarWhereInput;
-  OR?: FamilyGroupScalarWhereInput[] | FamilyGroupScalarWhereInput;
-  NOT?: FamilyGroupScalarWhereInput[] | FamilyGroupScalarWhereInput;
-}
-
-export interface LoveSignUpCreateInput {
-  period?: String;
-  city?: CityCreateOneInput;
-  person?: UserCreateOneWithoutSignUpLoveInput;
-}
-
-export interface FamilyGroupUpdateManyWithWhereNestedInput {
-  where: FamilyGroupScalarWhereInput;
-  data: FamilyGroupUpdateManyDataInput;
-}
-
-export interface UserCreateOneWithoutLoveSettingInput {
-  create?: UserCreateWithoutLoveSettingInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface FamilyGroupUpdateManyDataInput {
-  name?: String;
-}
-
-export type SchoolWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface PersonUpsertWithoutAsFatherInput {
-  update: PersonUpdateWithoutAsFatherDataInput;
-  create: PersonCreateWithoutAsFatherInput;
-}
-
-export type SkillWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  name?: String;
-}>;
-
-export interface FamilyGroupUpsertWithoutUsersInput {
-  update: FamilyGroupUpdateWithoutUsersDataInput;
-  create: FamilyGroupCreateWithoutUsersInput;
-}
-
-export interface LocationUpdateInput {
-  name?: String;
-  province?: ProvinceUpdateOneInput;
-  city?: CityUpdateOneInput;
-  area?: AreaUpdateOneInput;
-  street?: StreetUpdateOneInput;
-  village?: VillageUpdateOneInput;
-  schools?: SchoolUpdateManyWithoutLocationInput;
-  companies?: CompanyUpdateManyWithoutLocationInput;
-  universities?: UniversityUpdateManyInput;
-  borns?: UserUpdateManyWithoutBirthplaceInput;
-  lives?: UserUpdateManyWithoutResidenceInput;
-}
-
-export interface UserUpsertWithoutSentMessagesInput {
-  update: UserUpdateWithoutSentMessagesDataInput;
-  create: UserCreateWithoutSentMessagesInput;
-}
-
-export interface UserUpdateOneRequiredWithoutGroupMessagesInput {
-  create?: UserCreateWithoutGroupMessagesInput;
-  update?: UserUpdateWithoutGroupMessagesDataInput;
-  upsert?: UserUpsertWithoutGroupMessagesInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface MessageUpsertWithWhereUniqueWithoutToInput {
-  where: MessageWhereUniqueInput;
-  update: MessageUpdateWithoutToDataInput;
-  create: MessageCreateWithoutToInput;
-}
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  username?: String;
-  uid?: String;
-  token?: String;
-}>;
-
-export interface UserUpsertWithoutAvatarInput {
-  update: UserUpdateWithoutAvatarDataInput;
-  create: UserCreateWithoutAvatarInput;
-}
-
-export type WorkWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface PhotoUpsertNestedInput {
-  update: PhotoUpdateDataInput;
-  create: PhotoCreateInput;
-}
-
-export interface FamilyGroupCreateInput {
-  father?: PersonCreateOneWithoutAsFatherInput;
-  mother?: PersonCreateOneWithoutAsMotherInput;
-  creater?: UserCreateOneWithoutCreaterInput;
-  name?: String;
-  families?: FamilyCreateManyInput;
-  users?: UserCreateManyWithoutFamilyGroupInput;
-}
-
-export interface GroupMessageUpsertWithWhereUniqueWithoutFromInput {
-  where: GroupMessageWhereUniqueInput;
-  update: GroupMessageUpdateWithoutFromDataInput;
-  create: GroupMessageCreateWithoutFromInput;
-}
-
-export interface CityCreateOneWithoutAreasInput {
-  create?: CityCreateWithoutAreasInput;
-  connect?: CityWhereUniqueInput;
-}
-
-export interface GroupMessageScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  type?: GroupKind;
-  type_not?: GroupKind;
-  type_in?: GroupKind[] | GroupKind;
-  type_not_in?: GroupKind[] | GroupKind;
-  to?: String;
-  to_not?: String;
-  to_in?: String[] | String;
-  to_not_in?: String[] | String;
-  to_lt?: String;
-  to_lte?: String;
-  to_gt?: String;
-  to_gte?: String;
-  to_contains?: String;
-  to_not_contains?: String;
-  to_starts_with?: String;
-  to_not_starts_with?: String;
-  to_ends_with?: String;
-  to_not_ends_with?: String;
-  text?: String;
-  text_not?: String;
-  text_in?: String[] | String;
-  text_not_in?: String[] | String;
-  text_lt?: String;
-  text_lte?: String;
-  text_gt?: String;
-  text_gte?: String;
-  text_contains?: String;
-  text_not_contains?: String;
-  text_starts_with?: String;
-  text_not_starts_with?: String;
-  text_ends_with?: String;
-  text_not_ends_with?: String;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  AND?: GroupMessageScalarWhereInput[] | GroupMessageScalarWhereInput;
-  OR?: GroupMessageScalarWhereInput[] | GroupMessageScalarWhereInput;
-  NOT?: GroupMessageScalarWhereInput[] | GroupMessageScalarWhereInput;
-}
-
-export interface UserCreateManyInput {
-  create?: UserCreateInput[] | UserCreateInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface GroupMessageUpdateManyWithWhereNestedInput {
-  where: GroupMessageScalarWhereInput;
-  data: GroupMessageUpdateManyDataInput;
-}
-
-export interface CityCreateManyWithoutProvinceInput {
-  create?: CityCreateWithoutProvinceInput[] | CityCreateWithoutProvinceInput;
-  connect?: CityWhereUniqueInput[] | CityWhereUniqueInput;
-}
-
-export interface GroupMessageUpdateManyDataInput {
-  type?: GroupKind;
-  to?: String;
-  text?: String;
-}
-
-export interface StreetCreateInput {
-  code: String;
-  name: String;
-  Area: AreaCreateOneWithoutTownsInput;
-  villages?: VillageCreateManyWithoutStreetInput;
-}
-
-export interface UserUpsertWithoutReceiveMessagesInput {
-  update: UserUpdateWithoutReceiveMessagesDataInput;
-  create: UserCreateWithoutReceiveMessagesInput;
-}
-
-export interface SchoolCreateWithoutLocationInput {
-  name?: String;
-  kind?: Educationkind;
-}
-
-export interface MessageUpsertWithWhereUniqueWithoutFromInput {
-  where: MessageWhereUniqueInput;
-  update: MessageUpdateWithoutFromDataInput;
-  create: MessageCreateWithoutFromInput;
-}
-
-export interface UserCreateWithoutWorksInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoCreateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutBornsInput;
-  residence?: LocationCreateOneWithoutLivesInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  sentMessages?: MessageCreateManyWithoutFromInput;
-  receiveMessages?: MessageCreateManyWithoutToInput;
-  groupMessages?: GroupMessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneInput;
-  colleagues?: ColleagueCreateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
-  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingCreateOneWithoutUserInput;
-  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
-  loveMan?: LoveMatchingCreateManyWithoutManInput;
-  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
-}
-
-export interface UserUpsertWithoutColleaguesInput {
-  update: UserUpdateWithoutColleaguesDataInput;
-  create: UserCreateWithoutColleaguesInput;
-}
-
-export interface PostCreateWithoutAuthorInput {
-  isPublished?: Boolean;
-  title: String;
-  content: String;
-}
-
-export interface ColleagueUpsertWithWhereUniqueWithoutGroupInput {
-  where: ColleagueWhereUniqueInput;
-  update: ColleagueUpdateWithoutGroupDataInput;
-  create: ColleagueCreateWithoutGroupInput;
-}
-
-export interface PersonCreateOneWithoutFamiliesInput {
-  create?: PersonCreateWithoutFamiliesInput;
-  connect?: PersonWhereUniqueInput;
-}
-
-export interface WorkGroupUpsertWithoutCompanyInput {
-  update: WorkGroupUpdateWithoutCompanyDataInput;
-  create: WorkGroupCreateWithoutCompanyInput;
-}
-
-export interface FamilyCreateWithoutToInput {
-  from: UserCreateOneWithoutFamiliesInput;
-  relationship: String;
-  spouse?: FamilyCreateOneInput;
-  status: String;
-}
-
-export interface CompanyUpsertWithoutWorksInput {
-  update: CompanyUpdateWithoutWorksDataInput;
-  create: CompanyCreateWithoutWorksInput;
-}
-
-export interface LocationCreateWithoutSchoolsInput {
-  name?: String;
-  province?: ProvinceCreateOneInput;
-  city?: CityCreateOneInput;
-  area?: AreaCreateOneInput;
-  street?: StreetCreateOneInput;
-  village?: VillageCreateOneInput;
-  companies?: CompanyCreateManyWithoutLocationInput;
-  universities?: UniversityCreateManyInput;
-  borns?: UserCreateManyWithoutBirthplaceInput;
-  lives?: UserCreateManyWithoutResidenceInput;
-}
-
-export interface WorkUpsertWithWhereUniqueWithoutWorkerInput {
-  where: WorkWhereUniqueInput;
-  update: WorkUpdateWithoutWorkerDataInput;
-  create: WorkCreateWithoutWorkerInput;
-}
-
-export interface LocationCreateWithoutCompaniesInput {
-  name?: String;
-  province?: ProvinceCreateOneInput;
-  city?: CityCreateOneInput;
-  area?: AreaCreateOneInput;
-  street?: StreetCreateOneInput;
-  village?: VillageCreateOneInput;
-  schools?: SchoolCreateManyWithoutLocationInput;
-  universities?: UniversityCreateManyInput;
-  borns?: UserCreateManyWithoutBirthplaceInput;
-  lives?: UserCreateManyWithoutResidenceInput;
-}
-
-export interface WorkScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  startTime?: DateTimeInput;
-  startTime_not?: DateTimeInput;
-  startTime_in?: DateTimeInput[] | DateTimeInput;
-  startTime_not_in?: DateTimeInput[] | DateTimeInput;
-  startTime_lt?: DateTimeInput;
-  startTime_lte?: DateTimeInput;
-  startTime_gt?: DateTimeInput;
-  startTime_gte?: DateTimeInput;
-  endTime?: DateTimeInput;
-  endTime_not?: DateTimeInput;
-  endTime_in?: DateTimeInput[] | DateTimeInput;
-  endTime_not_in?: DateTimeInput[] | DateTimeInput;
-  endTime_lt?: DateTimeInput;
-  endTime_lte?: DateTimeInput;
-  endTime_gt?: DateTimeInput;
-  endTime_gte?: DateTimeInput;
-  department?: String;
-  department_not?: String;
-  department_in?: String[] | String;
-  department_not_in?: String[] | String;
-  department_lt?: String;
-  department_lte?: String;
-  department_gt?: String;
-  department_gte?: String;
-  department_contains?: String;
-  department_not_contains?: String;
-  department_starts_with?: String;
-  department_not_starts_with?: String;
-  department_ends_with?: String;
-  department_not_ends_with?: String;
-  jobContent?: String;
-  jobContent_not?: String;
-  jobContent_in?: String[] | String;
-  jobContent_not_in?: String[] | String;
-  jobContent_lt?: String;
-  jobContent_lte?: String;
-  jobContent_gt?: String;
-  jobContent_gte?: String;
-  jobContent_contains?: String;
-  jobContent_not_contains?: String;
-  jobContent_starts_with?: String;
-  jobContent_not_starts_with?: String;
-  jobContent_ends_with?: String;
-  jobContent_not_ends_with?: String;
-  AND?: WorkScalarWhereInput[] | WorkScalarWhereInput;
-  OR?: WorkScalarWhereInput[] | WorkScalarWhereInput;
-  NOT?: WorkScalarWhereInput[] | WorkScalarWhereInput;
-}
-
-export interface CollegeEntranceExamCreateWithoutStudentInput {
-  province: ProvinceCreateOneInput;
-  subject: String;
-  culscore: Float;
-  proscore?: Float;
-  candidatenum: String;
-  times?: Int;
-}
-
-export interface WorkUpdateManyWithWhereNestedInput {
-  where: WorkScalarWhereInput;
-  data: WorkUpdateManyDataInput;
-}
-
-export interface PhotoCreateInput {
-  name?: String;
-  url?: String;
-  user?: UserCreateOneWithoutAvatarInput;
-}
-
-export interface WorkUpdateManyDataInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  department?: String;
-  jobContent?: String;
-}
-
-export interface GroupCreateWithoutUsersInput {
-  type?: GroupKind;
-  name?: String;
-  messages?: MessageCreateManyInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutResidenceInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutResidenceDataInput;
-  create: UserCreateWithoutResidenceInput;
-}
-
-export interface FamilyGroupCreateWithoutMotherInput {
-  father?: PersonCreateOneWithoutAsFatherInput;
-  creater?: UserCreateOneWithoutCreaterInput;
-  name?: String;
-  families?: FamilyCreateManyInput;
-  users?: UserCreateManyWithoutFamilyGroupInput;
-}
-
-export interface LocationUpsertWithoutSchoolsInput {
-  update: LocationUpdateWithoutSchoolsDataInput;
-  create: LocationCreateWithoutSchoolsInput;
-}
-
-export interface SchoolEduCreateInput {
-  school?: SchoolCreateOneInput;
-  startTime?: DateTimeInput;
-  major?: MajorCreateOneInput;
-  grade?: Int;
-  className?: String;
-  students?: UserCreateManyWithoutStudiesInput;
-}
-
-export interface SchoolUpsertNestedInput {
-  update: SchoolUpdateDataInput;
-  create: SchoolCreateInput;
-}
-
-export interface UserCreateManyWithoutFamilyGroupInput {
-  create?:
-    | UserCreateWithoutFamilyGroupInput[]
-    | UserCreateWithoutFamilyGroupInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface SchoolEduUpsertWithWhereUniqueWithoutStudentsInput {
-  where: SchoolEduWhereUniqueInput;
-  update: SchoolEduUpdateWithoutStudentsDataInput;
-  create: SchoolEduCreateWithoutStudentsInput;
-}
-
-export interface WorkGroupCreateOneWithoutColleaguesInput {
-  create?: WorkGroupCreateWithoutColleaguesInput;
-  connect?: WorkGroupWhereUniqueInput;
-}
-
-export interface SchoolEduScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  startTime?: DateTimeInput;
-  startTime_not?: DateTimeInput;
-  startTime_in?: DateTimeInput[] | DateTimeInput;
-  startTime_not_in?: DateTimeInput[] | DateTimeInput;
-  startTime_lt?: DateTimeInput;
-  startTime_lte?: DateTimeInput;
-  startTime_gt?: DateTimeInput;
-  startTime_gte?: DateTimeInput;
-  grade?: Int;
-  grade_not?: Int;
-  grade_in?: Int[] | Int;
-  grade_not_in?: Int[] | Int;
-  grade_lt?: Int;
-  grade_lte?: Int;
-  grade_gt?: Int;
-  grade_gte?: Int;
-  className?: String;
-  className_not?: String;
-  className_in?: String[] | String;
-  className_not_in?: String[] | String;
-  className_lt?: String;
-  className_lte?: String;
-  className_gt?: String;
-  className_gte?: String;
-  className_contains?: String;
-  className_not_contains?: String;
-  className_starts_with?: String;
-  className_not_starts_with?: String;
-  className_ends_with?: String;
-  className_not_ends_with?: String;
-  AND?: SchoolEduScalarWhereInput[] | SchoolEduScalarWhereInput;
-  OR?: SchoolEduScalarWhereInput[] | SchoolEduScalarWhereInput;
-  NOT?: SchoolEduScalarWhereInput[] | SchoolEduScalarWhereInput;
-}
-
-export interface FindPassWordCreateOneWithoutForgetterInput {
-  create?: FindPassWordCreateWithoutForgetterInput;
-  connect?: FindPassWordWhereUniqueInput;
-}
-
-export interface SchoolEduUpdateManyWithWhereNestedInput {
-  where: SchoolEduScalarWhereInput;
-  data: SchoolEduUpdateManyDataInput;
-}
-
-export interface FindPassWordCreateOneWithoutRemmemberInput {
-  create?: FindPassWordCreateWithoutRemmemberInput;
-  connect?: FindPassWordWhereUniqueInput;
-}
-
-export interface SchoolEduUpdateManyDataInput {
-  startTime?: DateTimeInput;
-  grade?: Int;
-  className?: String;
-}
-
-export interface UserCreateOneWithoutLoveManInput {
-  create?: UserCreateWithoutLoveManInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface UserUpsertWithoutFamiliesInput {
-  update: UserUpdateWithoutFamiliesDataInput;
-  create: UserCreateWithoutFamiliesInput;
-}
-
-export interface UserCreateManyWithoutPartnerPastedInput {
-  create?:
-    | UserCreateWithoutPartnerPastedInput[]
-    | UserCreateWithoutPartnerPastedInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface FamilyUpsertWithWhereUniqueWithoutToInput {
-  where: FamilyWhereUniqueInput;
-  update: FamilyUpdateWithoutToDataInput;
-  create: FamilyCreateWithoutToInput;
-}
-
-export interface UserCreateManyWithoutPartnerFoundInput {
-  create?:
-    | UserCreateWithoutPartnerFoundInput[]
-    | UserCreateWithoutPartnerFoundInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface PersonUpsertWithoutAsMotherInput {
-  update: PersonUpdateWithoutAsMotherDataInput;
-  create: PersonCreateWithoutAsMotherInput;
-}
-
-export interface WorkSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: WorkWhereInput;
-  AND?: WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput;
-  OR?: WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput;
-  NOT?: WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput;
-}
-
-export interface FamilyGroupUpsertWithWhereUniqueWithoutFatherInput {
-  where: FamilyGroupWhereUniqueInput;
-  update: FamilyGroupUpdateWithoutFatherDataInput;
-  create: FamilyGroupCreateWithoutFatherInput;
-}
-
-export interface RegStatusSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: RegStatusWhereInput;
-  AND?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
-  OR?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
-  NOT?: RegStatusSubscriptionWhereInput[] | RegStatusSubscriptionWhereInput;
-}
-
-export interface PersonUpsertWithoutFamiliesInput {
-  update: PersonUpdateWithoutFamiliesDataInput;
-  create: PersonCreateWithoutFamiliesInput;
-}
-
-export interface MajorSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: MajorWhereInput;
-  AND?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
-  OR?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
-  NOT?: MajorSubscriptionWhereInput[] | MajorSubscriptionWhereInput;
-}
-
-export interface FamilyUpsertWithWhereUniqueWithoutFromInput {
-  where: FamilyWhereUniqueInput;
-  update: FamilyUpdateWithoutFromDataInput;
-  create: FamilyCreateWithoutFromInput;
-}
-
-export interface FamilySubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: FamilyWhereInput;
-  AND?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
-  OR?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
-  NOT?: FamilySubscriptionWhereInput[] | FamilySubscriptionWhereInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutBirthplaceInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutBirthplaceDataInput;
-  create: UserCreateWithoutBirthplaceInput;
-}
-
-export interface WorkGroupUpdateInput {
-  company?: CompanyUpdateOneWithoutWorkGroupInput;
-  colleagues?: ColleagueUpdateManyWithoutGroupInput;
-}
-
-export interface LocationUpsertWithoutLivesInput {
-  update: LocationUpdateWithoutLivesDataInput;
-  create: LocationCreateWithoutLivesInput;
-}
-
-export interface TradeUpdateManyMutationInput {
-  number?: Int;
-  amount?: Float;
-  status?: String;
-}
-
-export interface UserUpsertWithoutWorksInput {
-  update: UserUpdateWithoutWorksDataInput;
-  create: UserCreateWithoutWorksInput;
-}
-
-export interface ProvinceWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  code?: String;
-  code_not?: String;
-  code_in?: String[] | String;
-  code_not_in?: String[] | String;
-  code_lt?: String;
-  code_lte?: String;
-  code_gt?: String;
-  code_gte?: String;
-  code_contains?: String;
-  code_not_contains?: String;
-  code_starts_with?: String;
-  code_not_starts_with?: String;
-  code_ends_with?: String;
-  code_not_ends_with?: String;
-  name?: String;
-  name_not?: String;
-  name_in?: String[] | String;
-  name_not_in?: String[] | String;
-  name_lt?: String;
-  name_lte?: String;
-  name_gt?: String;
-  name_gte?: String;
-  name_contains?: String;
-  name_not_contains?: String;
-  name_starts_with?: String;
-  name_not_starts_with?: String;
-  name_ends_with?: String;
-  name_not_ends_with?: String;
-  cities_every?: CityWhereInput;
-  cities_some?: CityWhereInput;
-  cities_none?: CityWhereInput;
-  AND?: ProvinceWhereInput[] | ProvinceWhereInput;
-  OR?: ProvinceWhereInput[] | ProvinceWhereInput;
-  NOT?: ProvinceWhereInput[] | ProvinceWhereInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
 export interface WorkUpsertWithWhereUniqueWithoutCompanyInput {
@@ -13496,10 +13450,8 @@ export interface WorkUpsertWithWhereUniqueWithoutCompanyInput {
   create: WorkCreateWithoutCompanyInput;
 }
 
-export interface SchoolUpdateInput {
-  name?: String;
-  kind?: Educationkind;
-  location?: LocationUpdateOneWithoutSchoolsInput;
+export interface RegisterCountUpdateManyMutationInput {
+  deviceId?: String;
 }
 
 export interface CompanyUpsertWithWhereUniqueWithoutLocationInput {
@@ -13508,11 +13460,10 @@ export interface CompanyUpsertWithWhereUniqueWithoutLocationInput {
   create: CompanyCreateWithoutLocationInput;
 }
 
-export interface RegStatusCreateInput {
-  education: Educationkind;
-  university?: UniversityCreateOneInput;
-  major: MajorCreateOneInput;
-  applicants?: UserCreateManyWithoutRegStatusInput;
+export interface ProvinceUpdateInput {
+  code?: String;
+  name?: String;
+  cities?: CityUpdateManyWithoutProvinceInput;
 }
 
 export interface CompanyScalarWhereInput {
@@ -13599,24 +13550,20 @@ export interface CompanyScalarWhereInput {
   NOT?: CompanyScalarWhereInput[] | CompanyScalarWhereInput;
 }
 
-export interface UserUpdateOneRequiredWithoutPostsInput {
-  create?: UserCreateWithoutPostsInput;
-  update?: UserUpdateWithoutPostsDataInput;
-  upsert?: UserUpsertWithoutPostsInput;
-  connect?: UserWhereUniqueInput;
-}
+export type OldColleagueWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface CompanyUpdateManyWithWhereNestedInput {
   where: CompanyScalarWhereInput;
   data: CompanyUpdateManyDataInput;
 }
 
-export interface PartnerConditionCreateInput {
-  skillName?: String;
-  place?: String;
-  partners?: UserCreateManyWithoutPartnerFoundInput;
-  passedPartners?: UserCreateManyWithoutPartnerPastedInput;
-  project?: ProjectCreateOneWithoutConditionsInput;
+export interface OldColleagueUpdateInput {
+  from?: UserUpdateOneWithoutFromOldColleaguesInput;
+  to?: UserUpdateOneWithoutToOldColleaguesInput;
+  company?: CompanyUpdateOneInput;
+  status?: String;
 }
 
 export interface CompanyUpdateManyDataInput {
@@ -13627,10 +13574,9 @@ export interface CompanyUpdateManyDataInput {
   BusinessScope?: String;
 }
 
-export interface LoveSignUpUpdateInput {
-  period?: String;
-  city?: CityUpdateOneInput;
-  person?: UserUpdateOneWithoutSignUpLoveInput;
+export interface UserCreateOneWithoutSignUpLoveInput {
+  create?: UserCreateWithoutSignUpLoveInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface LocationUpsertWithoutBornsInput {
@@ -13638,8 +13584,11 @@ export interface LocationUpsertWithoutBornsInput {
   create: LocationCreateWithoutBornsInput;
 }
 
-export interface LoveMatchingUpdateManyMutationInput {
+export interface LoveMatchingCreateInput {
   period?: String;
+  city?: CityCreateOneInput;
+  woman?: UserCreateOneWithoutLoveWomanInput;
+  man?: UserCreateOneWithoutLoveManInput;
 }
 
 export interface UserUpsertWithWhereUniqueNestedInput {
@@ -13648,11 +13597,12 @@ export interface UserUpsertWithWhereUniqueNestedInput {
   create: UserCreateInput;
 }
 
-export type StationWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
+export interface LocationGroupCreateInput {
+  kind?: LocationGroupKind;
   code?: String;
   name?: String;
-}>;
+  users?: UserCreateManyWithoutLocationGroupsInput;
+}
 
 export interface VillageUpsertWithWhereUniqueWithoutStreetInput {
   where: VillageWhereUniqueInput;
@@ -13660,10 +13610,10 @@ export interface VillageUpsertWithWhereUniqueWithoutStreetInput {
   create: VillageCreateWithoutStreetInput;
 }
 
-export type UniversityWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
+export interface GroupUpdateManyMutationInput {
+  type?: GroupKind;
   name?: String;
-}>;
+}
 
 export interface VillageScalarWhereInput {
   id?: ID_Input;
@@ -13713,18 +13663,18 @@ export interface VillageScalarWhereInput {
   NOT?: VillageScalarWhereInput[] | VillageScalarWhereInput;
 }
 
-export type WorkGroupWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface FamilyGroupUpdateManyMutationInput {
+  name?: String;
+}
 
 export interface VillageUpdateManyWithWhereNestedInput {
   where: VillageScalarWhereInput;
   data: VillageUpdateManyDataInput;
 }
 
-export interface StreetCreateManyWithoutAreaInput {
-  create?: StreetCreateWithoutAreaInput[] | StreetCreateWithoutAreaInput;
-  connect?: StreetWhereUniqueInput[] | StreetWhereUniqueInput;
+export interface VillageCreateManyWithoutStreetInput {
+  create?: VillageCreateWithoutStreetInput[] | VillageCreateWithoutStreetInput;
+  connect?: VillageWhereUniqueInput[] | VillageWhereUniqueInput;
 }
 
 export interface VillageUpdateManyDataInput {
@@ -13732,9 +13682,9 @@ export interface VillageUpdateManyDataInput {
   name?: String;
 }
 
-export interface CityCreateOneInput {
-  create?: CityCreateInput;
-  connect?: CityWhereUniqueInput;
+export interface AreaCreateOneInput {
+  create?: AreaCreateInput;
+  connect?: AreaWhereUniqueInput;
 }
 
 export interface StreetUpsertWithWhereUniqueWithoutAreaInput {
@@ -13743,13 +13693,9 @@ export interface StreetUpsertWithWhereUniqueWithoutAreaInput {
   create: StreetCreateWithoutAreaInput;
 }
 
-export interface WorkCreateWithoutCompanyInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  department?: String;
-  post?: StationCreateOneInput;
-  jobContent?: String;
-  worker?: UserCreateOneWithoutWorksInput;
+export interface StationCreateInput {
+  code?: String;
+  name?: String;
 }
 
 export interface StreetScalarWhereInput {
@@ -13800,9 +13746,9 @@ export interface StreetScalarWhereInput {
   NOT?: StreetScalarWhereInput[] | StreetScalarWhereInput;
 }
 
-export interface MajorCreateOneInput {
-  create?: MajorCreateInput;
-  connect?: MajorWhereUniqueInput;
+export interface FamilyCreateManyWithoutFromInput {
+  create?: FamilyCreateWithoutFromInput[] | FamilyCreateWithoutFromInput;
+  connect?: FamilyWhereUniqueInput[] | FamilyWhereUniqueInput;
 }
 
 export interface StreetUpdateManyWithWhereNestedInput {
@@ -13810,12 +13756,10 @@ export interface StreetUpdateManyWithWhereNestedInput {
   data: StreetUpdateManyDataInput;
 }
 
-export interface SchoolEduCreateWithoutStudentsInput {
-  school?: SchoolCreateOneInput;
-  startTime?: DateTimeInput;
-  major?: MajorCreateOneInput;
-  grade?: Int;
-  className?: String;
+export interface SchoolCreateInput {
+  name?: String;
+  kind?: Educationkind;
+  location?: LocationCreateOneWithoutSchoolsInput;
 }
 
 export interface StreetUpdateManyDataInput {
@@ -13823,9 +13767,48 @@ export interface StreetUpdateManyDataInput {
   name?: String;
 }
 
-export interface ColleagueCreateWithoutGroupInput {
-  worker?: UserCreateOneWithoutColleaguesInput;
-  status: String;
+export interface UserCreateWithoutColleaguesInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoCreateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutBornsInput;
+  residence?: LocationCreateOneWithoutLivesInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  sentMessages?: MessageCreateManyWithoutFromInput;
+  receiveMessages?: MessageCreateManyWithoutToInput;
+  groupMessages?: GroupMessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingCreateOneWithoutUserInput;
+  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
+  loveMan?: LoveMatchingCreateManyWithoutManInput;
+  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
+  skills?: SkillCreateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
 export interface AreaUpdateManyMutationInput {
@@ -13833,28 +13816,68 @@ export interface AreaUpdateManyMutationInput {
   name?: String;
 }
 
-export interface MessageCreateWithoutToInput {
-  from: UserCreateOneWithoutSentMessagesInput;
-  text?: String;
-  image?: PhotoCreateOneInput;
+export interface UserCreateWithoutSentMessagesInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoCreateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutBornsInput;
+  residence?: LocationCreateOneWithoutLivesInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  receiveMessages?: MessageCreateManyWithoutToInput;
+  groupMessages?: GroupMessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingCreateOneWithoutUserInput;
+  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
+  loveMan?: LoveMatchingCreateManyWithoutManInput;
+  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
+  skills?: SkillCreateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
 export interface BootCountCreateInput {
   bootUser?: UserCreateOneInput;
 }
 
-export interface ClassMateCreateWithoutStudentInput {
-  status: String;
-  group: ClassGroupCreateOneWithoutMembersInput;
+export interface ClassGroupCreateWithoutMembersInput {
+  study?: SchoolEduCreateOneInput;
+  name?: String;
 }
 
 export interface BootCountUpdateInput {
   bootUser?: UserUpdateOneInput;
 }
 
-export interface CompanyCreateOneWithoutWorkGroupInput {
-  create?: CompanyCreateWithoutWorkGroupInput;
-  connect?: CompanyWhereUniqueInput;
+export interface ColleagueCreateManyWithoutWorkerInput {
+  create?:
+    | ColleagueCreateWithoutWorkerInput[]
+    | ColleagueCreateWithoutWorkerInput;
+  connect?: ColleagueWhereUniqueInput[] | ColleagueWhereUniqueInput;
 }
 
 export interface CityUpdateInput {
@@ -13864,11 +13887,9 @@ export interface CityUpdateInput {
   areas?: AreaUpdateManyWithoutCityInput;
 }
 
-export interface OldColleagueCreateManyWithoutToInput {
-  create?:
-    | OldColleagueCreateWithoutToInput[]
-    | OldColleagueCreateWithoutToInput;
-  connect?: OldColleagueWhereUniqueInput[] | OldColleagueWhereUniqueInput;
+export interface UserCreateOneWithoutFromOldColleaguesInput {
+  create?: UserCreateWithoutFromOldColleaguesInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface CityUpdateManyMutationInput {
@@ -13876,9 +13897,13 @@ export interface CityUpdateManyMutationInput {
   name?: String;
 }
 
-export interface SkillCreateManyWithoutPersonsInput {
-  create?: SkillCreateWithoutPersonsInput[] | SkillCreateWithoutPersonsInput;
-  connect?: SkillWhereUniqueInput[] | SkillWhereUniqueInput;
+export interface PartnerConditionCreateManyWithoutPartnersInput {
+  create?:
+    | PartnerConditionCreateWithoutPartnersInput[]
+    | PartnerConditionCreateWithoutPartnersInput;
+  connect?:
+    | PartnerConditionWhereUniqueInput[]
+    | PartnerConditionWhereUniqueInput;
 }
 
 export interface ClassGroupCreateInput {
@@ -13887,13 +13912,9 @@ export interface ClassGroupCreateInput {
   members?: ClassMateCreateManyWithoutGroupInput;
 }
 
-export interface PartnerConditionCreateManyWithoutProjectInput {
-  create?:
-    | PartnerConditionCreateWithoutProjectInput[]
-    | PartnerConditionCreateWithoutProjectInput;
-  connect?:
-    | PartnerConditionWhereUniqueInput[]
-    | PartnerConditionWhereUniqueInput;
+export interface ProjectCreateOneWithoutConditionsInput {
+  create?: ProjectCreateWithoutConditionsInput;
+  connect?: ProjectWhereUniqueInput;
 }
 
 export interface ClassMateCreateManyWithoutGroupInput {
@@ -13903,71 +13924,21 @@ export interface ClassMateCreateManyWithoutGroupInput {
   connect?: ClassMateWhereUniqueInput[] | ClassMateWhereUniqueInput;
 }
 
-export interface PostWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  isPublished?: Boolean;
-  isPublished_not?: Boolean;
-  title?: String;
-  title_not?: String;
-  title_in?: String[] | String;
-  title_not_in?: String[] | String;
-  title_lt?: String;
-  title_lte?: String;
-  title_gt?: String;
-  title_gte?: String;
-  title_contains?: String;
-  title_not_contains?: String;
-  title_starts_with?: String;
-  title_not_starts_with?: String;
-  title_ends_with?: String;
-  title_not_ends_with?: String;
-  content?: String;
-  content_not?: String;
-  content_in?: String[] | String;
-  content_not_in?: String[] | String;
-  content_lt?: String;
-  content_lte?: String;
-  content_gt?: String;
-  content_gte?: String;
-  content_contains?: String;
-  content_not_contains?: String;
-  content_starts_with?: String;
-  content_not_starts_with?: String;
-  content_ends_with?: String;
-  content_not_ends_with?: String;
-  author?: UserWhereInput;
-  AND?: PostWhereInput[] | PostWhereInput;
-  OR?: PostWhereInput[] | PostWhereInput;
-  NOT?: PostWhereInput[] | PostWhereInput;
+export interface PartnerConditionSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: PartnerConditionWhereInput;
+  AND?:
+    | PartnerConditionSubscriptionWhereInput[]
+    | PartnerConditionSubscriptionWhereInput;
+  OR?:
+    | PartnerConditionSubscriptionWhereInput[]
+    | PartnerConditionSubscriptionWhereInput;
+  NOT?:
+    | PartnerConditionSubscriptionWhereInput[]
+    | PartnerConditionSubscriptionWhereInput;
 }
 
 export interface ClassMateCreateWithoutGroupInput {
@@ -13975,33 +13946,15 @@ export interface ClassMateCreateWithoutGroupInput {
   status: String;
 }
 
-export interface BootCountWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  bootUser?: UserWhereInput;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  AND?: BootCountWhereInput[] | BootCountWhereInput;
-  OR?: BootCountWhereInput[] | BootCountWhereInput;
-  NOT?: BootCountWhereInput[] | BootCountWhereInput;
+export interface ClassGroupSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ClassGroupWhereInput;
+  AND?: ClassGroupSubscriptionWhereInput[] | ClassGroupSubscriptionWhereInput;
+  OR?: ClassGroupSubscriptionWhereInput[] | ClassGroupSubscriptionWhereInput;
+  NOT?: ClassGroupSubscriptionWhereInput[] | ClassGroupSubscriptionWhereInput;
 }
 
 export interface UserCreateOneWithoutClassMateInput {
@@ -14009,12 +13962,11 @@ export interface UserCreateOneWithoutClassMateInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface TradeCreateInput {
-  product?: ProductCreateOneInput;
-  number?: Int;
-  amount?: Float;
-  user?: UserCreateOneInput;
-  status?: String;
+export interface StreetUpdateInput {
+  code?: String;
+  name?: String;
+  Area?: AreaUpdateOneRequiredWithoutTownsInput;
+  villages?: VillageUpdateManyWithoutStreetInput;
 }
 
 export interface UserCreateWithoutClassMateInput {
@@ -14056,53 +14008,26 @@ export interface UserCreateWithoutClassMateInput {
   loveMan?: LoveMatchingCreateManyWithoutManInput;
   signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
   skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
-export interface UserUpdateWithoutRegStatusDataInput {
-  username?: String;
-  password?: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoUpdateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationUpdateOneWithoutBornsInput;
-  residence?: LocationUpdateOneWithoutLivesInput;
-  uid?: String;
-  token?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyUpdateManyWithoutFromInput;
-  studies?: SchoolEduUpdateManyWithoutStudentsInput;
-  works?: WorkUpdateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
-  sentMessages?: MessageUpdateManyWithoutFromInput;
-  receiveMessages?: MessageUpdateManyWithoutToInput;
-  groupMessages?: GroupMessageUpdateManyWithoutFromInput;
-  groups?: GroupUpdateManyWithoutUsersInput;
-  friends?: UserUpdateManyInput;
-  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
-  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
-  classMate?: ClassMateUpdateManyWithoutStudentInput;
-  workGroup?: WorkGroupUpdateOneInput;
-  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
-  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
-  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
-  loveMan?: LoveMatchingUpdateManyWithoutManInput;
-  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
-  skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+export interface UserUpdateManyWithoutRegStatusInput {
+  create?: UserCreateWithoutRegStatusInput[] | UserCreateWithoutRegStatusInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutRegStatusInput[]
+    | UserUpdateWithWhereUniqueWithoutRegStatusInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutRegStatusInput[]
+    | UserUpsertWithWhereUniqueWithoutRegStatusInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
 }
 
 export interface ClassGroupUpdateInput {
@@ -14111,11 +14036,9 @@ export interface ClassGroupUpdateInput {
   members?: ClassMateUpdateManyWithoutGroupInput;
 }
 
-export interface PhotoUpdateInput {
-  name?: String;
-  url?: String;
-  user?: UserUpdateOneWithoutAvatarInput;
-}
+export type PersonWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface ClassMateUpdateManyWithoutGroupInput {
   create?:
@@ -14136,18 +14059,69 @@ export interface ClassMateUpdateManyWithoutGroupInput {
     | ClassMateUpdateManyWithWhereNestedInput;
 }
 
-export type RegStatusWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface LoveSettingUpdateInput {
+  myHeight?: Int;
+  myWeight?: Int;
+  otherHeightMin?: Int;
+  otherHeightMax?: Int;
+  otherWeightMin?: Int;
+  otherWeightMax?: Int;
+  otherAgeMin?: Int;
+  otherAgeMax?: Int;
+  dateTime?: String;
+  datePlace?: String;
+  memeberGrade?: Int;
+  memeberGradeEndTime?: DateTimeInput;
+  user?: UserUpdateOneRequiredWithoutLoveSettingInput;
+}
 
 export interface ClassMateUpdateWithWhereUniqueWithoutGroupInput {
   where: ClassMateWhereUniqueInput;
   data: ClassMateUpdateWithoutGroupDataInput;
 }
 
-export interface UserUpsertWithoutGroupMessagesInput {
-  update: UserUpdateWithoutGroupMessagesDataInput;
-  create: UserCreateWithoutGroupMessagesInput;
+export interface UserUpdateWithoutGroupMessagesDataInput {
+  username?: String;
+  password?: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoUpdateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationUpdateOneWithoutBornsInput;
+  residence?: LocationUpdateOneWithoutLivesInput;
+  uid?: String;
+  token?: String;
+  posts?: PostUpdateManyWithoutAuthorInput;
+  regStatus?: RegStatusUpdateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyUpdateManyWithoutFromInput;
+  studies?: SchoolEduUpdateManyWithoutStudentsInput;
+  works?: WorkUpdateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamUpdateOneWithoutStudentInput;
+  sentMessages?: MessageUpdateManyWithoutFromInput;
+  receiveMessages?: MessageUpdateManyWithoutToInput;
+  groups?: GroupUpdateManyWithoutUsersInput;
+  friends?: UserUpdateManyInput;
+  familyGroup?: FamilyGroupUpdateOneWithoutUsersInput;
+  creater?: FamilyGroupUpdateOneWithoutCreaterInput;
+  classMate?: ClassMateUpdateManyWithoutStudentInput;
+  workGroup?: WorkGroupUpdateOneInput;
+  colleagues?: ColleagueUpdateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueUpdateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueUpdateManyWithoutToInput;
+  locationGroups?: LocationGroupUpdateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordUpdateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordUpdateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingUpdateOneWithoutUserInput;
+  loveWoman?: LoveMatchingUpdateManyWithoutWomanInput;
+  loveMan?: LoveMatchingUpdateManyWithoutManInput;
+  signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
+  skills?: SkillUpdateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
 export interface ClassMateUpdateWithoutGroupDataInput {
@@ -14155,14 +14129,12 @@ export interface ClassMateUpdateWithoutGroupDataInput {
   status?: String;
 }
 
-export interface AdvertisementUpdateManyMutationInput {
-  image1?: String;
-  image2?: String;
-  image3?: String;
-  image4?: String;
-  image5?: String;
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
+export interface FamilyUpdateInput {
+  from?: UserUpdateOneRequiredWithoutFamiliesInput;
+  to?: PersonUpdateOneRequiredWithoutFamiliesInput;
+  relationship?: String;
+  spouse?: FamilyUpdateOneInput;
+  status?: String;
 }
 
 export interface UserUpdateOneWithoutClassMateInput {
@@ -14174,11 +14146,10 @@ export interface UserUpdateOneWithoutClassMateInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface VillageCreateInput {
+export interface StreetCreateWithoutVillagesInput {
   code: String;
   name: String;
-  street: StreetCreateOneWithoutVillagesInput;
-  people?: UserCreateManyInput;
+  Area: AreaCreateOneWithoutTownsInput;
 }
 
 export interface UserUpdateWithoutClassMateDataInput {
@@ -14220,17 +14191,16 @@ export interface UserUpdateWithoutClassMateDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
-export interface FamilyGroupCreateWithoutFatherInput {
-  mother?: PersonCreateOneWithoutAsMotherInput;
-  creater?: UserCreateOneWithoutCreaterInput;
-  name?: String;
-  families?: FamilyCreateManyInput;
-  users?: UserCreateManyWithoutFamilyGroupInput;
+export interface PersonCreateWithoutAsMotherInput {
+  name: String;
+  user?: UserCreateOneInput;
+  families?: FamilyCreateManyWithoutToInput;
+  asFather?: FamilyGroupCreateManyWithoutFatherInput;
 }
 
 export interface UserUpsertWithoutClassMateInput {
@@ -14238,48 +14208,11 @@ export interface UserUpsertWithoutClassMateInput {
   create: UserCreateWithoutClassMateInput;
 }
 
-export interface UserCreateWithoutReceiveMessagesInput {
-  username: String;
-  password: String;
-  name?: String;
-  gender?: String;
-  avatar?: PhotoCreateOneWithoutUserInput;
-  birthdaycalendar?: String;
-  birthday?: DateTimeInput;
-  birthplace?: LocationCreateOneWithoutBornsInput;
-  residence?: LocationCreateOneWithoutLivesInput;
-  uid: String;
-  token: String;
-  posts?: PostCreateManyWithoutAuthorInput;
-  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
-  regTimes?: Int;
-  maxRegTimes?: Int;
-  families?: FamilyCreateManyWithoutFromInput;
-  studies?: SchoolEduCreateManyWithoutStudentsInput;
-  works?: WorkCreateManyWithoutWorkerInput;
-  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
-  sentMessages?: MessageCreateManyWithoutFromInput;
-  groupMessages?: GroupMessageCreateManyWithoutFromInput;
-  groups?: GroupCreateManyWithoutUsersInput;
-  friends?: UserCreateManyInput;
-  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
-  creater?: FamilyGroupCreateOneWithoutCreaterInput;
-  classMate?: ClassMateCreateManyWithoutStudentInput;
-  workGroup?: WorkGroupCreateOneInput;
-  colleagues?: ColleagueCreateManyWithoutWorkerInput;
-  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
-  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
-  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
-  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
-  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
-  loveSetting?: LoveSettingCreateOneWithoutUserInput;
-  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
-  loveMan?: LoveMatchingCreateManyWithoutManInput;
-  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
-  skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
+export interface GroupMessageCreateWithoutFromInput {
+  type?: GroupKind;
+  to: String;
+  text?: String;
+  image?: PhotoCreateOneInput;
 }
 
 export interface ClassMateUpsertWithWhereUniqueWithoutGroupInput {
@@ -14288,21 +14221,23 @@ export interface ClassMateUpsertWithWhereUniqueWithoutGroupInput {
   create: ClassMateCreateWithoutGroupInput;
 }
 
-export interface FamilyGroupCreateWithoutCreaterInput {
-  father?: PersonCreateOneWithoutAsFatherInput;
-  mother?: PersonCreateOneWithoutAsMotherInput;
-  name?: String;
-  families?: FamilyCreateManyInput;
-  users?: UserCreateManyWithoutFamilyGroupInput;
+export interface FamilyCreateInput {
+  from: UserCreateOneWithoutFamiliesInput;
+  to: PersonCreateOneWithoutFamiliesInput;
+  relationship: String;
+  spouse?: FamilyCreateOneInput;
+  status: String;
 }
 
 export interface ClassGroupUpdateManyMutationInput {
   name?: String;
 }
 
-export interface LoveSettingCreateOneWithoutUserInput {
-  create?: LoveSettingCreateWithoutUserInput;
-  connect?: LoveSettingWhereUniqueInput;
+export interface LoveMatchingCreateManyWithoutWomanInput {
+  create?:
+    | LoveMatchingCreateWithoutWomanInput[]
+    | LoveMatchingCreateWithoutWomanInput;
+  connect?: LoveMatchingWhereUniqueInput[] | LoveMatchingWhereUniqueInput;
 }
 
 export interface ClassMateCreateInput {
@@ -14311,15 +14246,15 @@ export interface ClassMateCreateInput {
   group: ClassGroupCreateOneWithoutMembersInput;
 }
 
-export interface StationSubscriptionWhereInput {
+export interface SchoolEduSubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: StationWhereInput;
-  AND?: StationSubscriptionWhereInput[] | StationSubscriptionWhereInput;
-  OR?: StationSubscriptionWhereInput[] | StationSubscriptionWhereInput;
-  NOT?: StationSubscriptionWhereInput[] | StationSubscriptionWhereInput;
+  node?: SchoolEduWhereInput;
+  AND?: SchoolEduSubscriptionWhereInput[] | SchoolEduSubscriptionWhereInput;
+  OR?: SchoolEduSubscriptionWhereInput[] | SchoolEduSubscriptionWhereInput;
+  NOT?: SchoolEduSubscriptionWhereInput[] | SchoolEduSubscriptionWhereInput;
 }
 
 export interface ClassMateUpdateInput {
@@ -14328,22 +14263,18 @@ export interface ClassMateUpdateInput {
   group?: ClassGroupUpdateOneRequiredWithoutMembersInput;
 }
 
-export interface VillageUpdateInput {
-  code?: String;
-  name?: String;
-  street?: StreetUpdateOneRequiredWithoutVillagesInput;
-  people?: UserUpdateManyInput;
-}
+export type ColleagueWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface ClassMateUpdateManyMutationInput {
   status?: String;
 }
 
-export interface ProductUpdateInput {
-  subject?: String;
-  info?: String;
-  price?: Float;
-}
+export type AreaWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  code?: String;
+}>;
 
 export interface ColleagueCreateInput {
   worker?: UserCreateOneWithoutColleaguesInput;
@@ -14351,9 +14282,10 @@ export interface ColleagueCreateInput {
   group?: WorkGroupCreateOneWithoutColleaguesInput;
 }
 
-export type SchoolEduWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface UserUpdateWithWhereUniqueWithoutLocationGroupsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutLocationGroupsDataInput;
+}
 
 export interface ColleagueUpdateInput {
   worker?: UserUpdateOneWithoutColleaguesInput;
@@ -14361,22 +14293,23 @@ export interface ColleagueUpdateInput {
   group?: WorkGroupUpdateOneWithoutColleaguesInput;
 }
 
-export interface LocationCreateOneWithoutBornsInput {
-  create?: LocationCreateWithoutBornsInput;
-  connect?: LocationWhereUniqueInput;
+export interface ProvinceCreateOneInput {
+  create?: ProvinceCreateInput;
+  connect?: ProvinceWhereUniqueInput;
 }
 
 export interface ColleagueUpdateManyMutationInput {
   status?: String;
 }
 
-export interface WorkCreateWithoutWorkerInput {
-  startTime?: DateTimeInput;
-  endTime?: DateTimeInput;
-  company?: CompanyCreateOneWithoutWorksInput;
-  department?: String;
-  post?: StationCreateOneInput;
-  jobContent?: String;
+export interface CompanyCreateWithoutWorksInput {
+  name?: String;
+  code?: String;
+  establishmentDate?: DateTimeInput;
+  representative?: String;
+  location?: LocationCreateOneWithoutCompaniesInput;
+  BusinessScope?: String;
+  workGroup?: WorkGroupCreateOneWithoutCompanyInput;
 }
 
 export interface CollegeEntranceExamCreateInput {
@@ -14389,9 +14322,11 @@ export interface CollegeEntranceExamCreateInput {
   student: UserCreateOneWithoutExamInput;
 }
 
-export interface UserCreateOneWithoutToOldColleaguesInput {
-  create?: UserCreateWithoutToOldColleaguesInput;
-  connect?: UserWhereUniqueInput;
+export interface LocationGroupCreateManyWithoutUsersInput {
+  create?:
+    | LocationGroupCreateWithoutUsersInput[]
+    | LocationGroupCreateWithoutUsersInput;
+  connect?: LocationGroupWhereUniqueInput[] | LocationGroupWhereUniqueInput;
 }
 
 export interface UserCreateOneWithoutExamInput {
@@ -14399,21 +14334,43 @@ export interface UserCreateOneWithoutExamInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface LocationGroupSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: LocationGroupWhereInput;
-  AND?:
-    | LocationGroupSubscriptionWhereInput[]
-    | LocationGroupSubscriptionWhereInput;
-  OR?:
-    | LocationGroupSubscriptionWhereInput[]
-    | LocationGroupSubscriptionWhereInput;
-  NOT?:
-    | LocationGroupSubscriptionWhereInput[]
-    | LocationGroupSubscriptionWhereInput;
+export interface SchoolWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  kind?: Educationkind;
+  kind_not?: Educationkind;
+  kind_in?: Educationkind[] | Educationkind;
+  kind_not_in?: Educationkind[] | Educationkind;
+  location?: LocationWhereInput;
+  AND?: SchoolWhereInput[] | SchoolWhereInput;
+  OR?: SchoolWhereInput[] | SchoolWhereInput;
+  NOT?: SchoolWhereInput[] | SchoolWhereInput;
 }
 
 export interface UserCreateWithoutExamInput {
@@ -14455,14 +14412,66 @@ export interface UserCreateWithoutExamInput {
   loveMan?: LoveMatchingCreateManyWithoutManInput;
   signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
   skills?: SkillCreateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionCreateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionCreateOneWithoutPassedPartnersInput;
-  project?: ProjectCreateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
-export type ProductWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface ProductWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  subject?: String;
+  subject_not?: String;
+  subject_in?: String[] | String;
+  subject_not_in?: String[] | String;
+  subject_lt?: String;
+  subject_lte?: String;
+  subject_gt?: String;
+  subject_gte?: String;
+  subject_contains?: String;
+  subject_not_contains?: String;
+  subject_starts_with?: String;
+  subject_not_starts_with?: String;
+  subject_ends_with?: String;
+  subject_not_ends_with?: String;
+  info?: String;
+  info_not?: String;
+  info_in?: String[] | String;
+  info_not_in?: String[] | String;
+  info_lt?: String;
+  info_lte?: String;
+  info_gt?: String;
+  info_gte?: String;
+  info_contains?: String;
+  info_not_contains?: String;
+  info_starts_with?: String;
+  info_not_starts_with?: String;
+  info_ends_with?: String;
+  info_not_ends_with?: String;
+  price?: Float;
+  price_not?: Float;
+  price_in?: Float[] | Float;
+  price_not_in?: Float[] | Float;
+  price_lt?: Float;
+  price_lte?: Float;
+  price_gt?: Float;
+  price_gte?: Float;
+  AND?: ProductWhereInput[] | ProductWhereInput;
+  OR?: ProductWhereInput[] | ProductWhereInput;
+  NOT?: ProductWhereInput[] | ProductWhereInput;
+}
 
 export interface CollegeEntranceExamUpdateInput {
   province?: ProvinceUpdateOneRequiredInput;
@@ -14474,12 +14483,48 @@ export interface CollegeEntranceExamUpdateInput {
   student?: UserUpdateOneRequiredWithoutExamInput;
 }
 
-export interface UniversityCreateInput {
-  name: String;
-  education: Educationkind;
-  department?: String;
-  location?: String;
-  desc?: String;
+export interface UserCreateWithoutBirthplaceInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoCreateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  residence?: LocationCreateOneWithoutLivesInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  sentMessages?: MessageCreateManyWithoutFromInput;
+  receiveMessages?: MessageCreateManyWithoutToInput;
+  groupMessages?: GroupMessageCreateManyWithoutFromInput;
+  groups?: GroupCreateManyWithoutUsersInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingCreateOneWithoutUserInput;
+  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
+  loveMan?: LoveMatchingCreateManyWithoutManInput;
+  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
+  skills?: SkillCreateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
 }
 
 export interface CollegeEntranceExamUpdateManyMutationInput {
@@ -14534,9 +14579,9 @@ export interface UserUpdateWithoutExamDataInput {
   loveMan?: LoveMatchingUpdateManyWithoutManInput;
   signUpLove?: LoveSignUpUpdateOneWithoutPersonInput;
   skills?: SkillUpdateManyWithoutPersonsInput;
-  partnerFound?: PartnerConditionUpdateOneWithoutPartnersInput;
-  partnerPasted?: PartnerConditionUpdateOneWithoutPassedPartnersInput;
-  project?: ProjectUpdateManyWithoutStarterInput;
+  fitConditions?: PartnerConditionUpdateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionUpdateManyWithoutPassedPartnersInput;
+  projects?: ProjectUpdateManyWithoutStarterInput;
 }
 
 export interface UserUpdateOneRequiredWithoutExamInput {
@@ -14546,26 +14591,69 @@ export interface UserUpdateOneRequiredWithoutExamInput {
   connect?: UserWhereUniqueInput;
 }
 
-export interface FamilyGroupCreateWithoutUsersInput {
-  father?: PersonCreateOneWithoutAsFatherInput;
-  mother?: PersonCreateOneWithoutAsMotherInput;
-  creater?: UserCreateOneWithoutCreaterInput;
-  name?: String;
-  families?: FamilyCreateManyInput;
+export interface PersonCreateWithoutAsFatherInput {
+  name: String;
+  user?: UserCreateOneInput;
+  families?: FamilyCreateManyWithoutToInput;
+  asMother?: FamilyGroupCreateManyWithoutMotherInput;
 }
 
-export type VillageWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  code?: String;
-}>;
+export interface UserCreateWithoutGroupsInput {
+  username: String;
+  password: String;
+  name?: String;
+  gender?: String;
+  avatar?: PhotoCreateOneWithoutUserInput;
+  birthdaycalendar?: String;
+  birthday?: DateTimeInput;
+  birthplace?: LocationCreateOneWithoutBornsInput;
+  residence?: LocationCreateOneWithoutLivesInput;
+  uid: String;
+  token: String;
+  posts?: PostCreateManyWithoutAuthorInput;
+  regStatus?: RegStatusCreateOneWithoutApplicantsInput;
+  regTimes?: Int;
+  maxRegTimes?: Int;
+  families?: FamilyCreateManyWithoutFromInput;
+  studies?: SchoolEduCreateManyWithoutStudentsInput;
+  works?: WorkCreateManyWithoutWorkerInput;
+  exam?: CollegeEntranceExamCreateOneWithoutStudentInput;
+  sentMessages?: MessageCreateManyWithoutFromInput;
+  receiveMessages?: MessageCreateManyWithoutToInput;
+  groupMessages?: GroupMessageCreateManyWithoutFromInput;
+  friends?: UserCreateManyInput;
+  familyGroup?: FamilyGroupCreateOneWithoutUsersInput;
+  creater?: FamilyGroupCreateOneWithoutCreaterInput;
+  classMate?: ClassMateCreateManyWithoutStudentInput;
+  workGroup?: WorkGroupCreateOneInput;
+  colleagues?: ColleagueCreateManyWithoutWorkerInput;
+  fromOldColleagues?: OldColleagueCreateManyWithoutFromInput;
+  toOldColleagues?: OldColleagueCreateManyWithoutToInput;
+  locationGroups?: LocationGroupCreateManyWithoutUsersInput;
+  forgetPassword?: FindPassWordCreateOneWithoutForgetterInput;
+  remmemberPassword?: FindPassWordCreateOneWithoutRemmemberInput;
+  loveSetting?: LoveSettingCreateOneWithoutUserInput;
+  loveWoman?: LoveMatchingCreateManyWithoutWomanInput;
+  loveMan?: LoveMatchingCreateManyWithoutManInput;
+  signUpLove?: LoveSignUpCreateOneWithoutPersonInput;
+  skills?: SkillCreateManyWithoutPersonsInput;
+  fitConditions?: PartnerConditionCreateManyWithoutPartnersInput;
+  nofitConditions?: PartnerConditionCreateManyWithoutPassedPartnersInput;
+  projects?: ProjectCreateManyWithoutStarterInput;
+}
 
-export type GroupMessageWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface SkillCreateInput {
+  name?: String;
+  persons?: UserCreateManyWithoutSkillsInput;
+}
 
-export interface UserCreateOneWithoutLoveWomanInput {
-  create?: UserCreateWithoutLoveWomanInput;
-  connect?: UserWhereUniqueInput;
+export interface PartnerConditionCreateManyWithoutPassedPartnersInput {
+  create?:
+    | PartnerConditionCreateWithoutPassedPartnersInput[]
+    | PartnerConditionCreateWithoutPassedPartnersInput;
+  connect?:
+    | PartnerConditionWhereUniqueInput[]
+    | PartnerConditionWhereUniqueInput;
 }
 
 export interface NodeNode {
@@ -16178,6 +16266,7 @@ export interface PartnerCondition {
   id: ID_Output;
   skillName?: String;
   place?: String;
+  number?: Int;
 }
 
 export interface PartnerConditionPromise
@@ -16186,6 +16275,7 @@ export interface PartnerConditionPromise
   id: () => Promise<ID_Output>;
   skillName: () => Promise<String>;
   place: () => Promise<String>;
+  number: () => Promise<Int>;
   partners: <T = FragmentableArray<User>>(
     args?: {
       where?: UserWhereInput;
@@ -16217,6 +16307,7 @@ export interface PartnerConditionSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   skillName: () => Promise<AsyncIterator<String>>;
   place: () => Promise<AsyncIterator<String>>;
+  number: () => Promise<AsyncIterator<Int>>;
   partners: <T = Promise<AsyncIterator<UserSubscription>>>(
     args?: {
       where?: UserWhereInput;
@@ -18116,6 +18207,7 @@ export interface PartnerConditionPreviousValues {
   id: ID_Output;
   skillName?: String;
   place?: String;
+  number?: Int;
 }
 
 export interface PartnerConditionPreviousValuesPromise
@@ -18124,6 +18216,7 @@ export interface PartnerConditionPreviousValuesPromise
   id: () => Promise<ID_Output>;
   skillName: () => Promise<String>;
   place: () => Promise<String>;
+  number: () => Promise<Int>;
 }
 
 export interface PartnerConditionPreviousValuesSubscription
@@ -18132,6 +18225,7 @@ export interface PartnerConditionPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   skillName: () => Promise<AsyncIterator<String>>;
   place: () => Promise<AsyncIterator<String>>;
+  number: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface AggregateProject {
@@ -20449,9 +20543,29 @@ export interface UserPromise extends Promise<User>, Fragmentable {
       last?: Int;
     }
   ) => T;
-  partnerFound: <T = PartnerConditionPromise>() => T;
-  partnerPasted: <T = PartnerConditionPromise>() => T;
-  project: <T = FragmentableArray<Project>>(
+  fitConditions: <T = FragmentableArray<PartnerCondition>>(
+    args?: {
+      where?: PartnerConditionWhereInput;
+      orderBy?: PartnerConditionOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  nofitConditions: <T = FragmentableArray<PartnerCondition>>(
+    args?: {
+      where?: PartnerConditionWhereInput;
+      orderBy?: PartnerConditionOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  projects: <T = FragmentableArray<Project>>(
     args?: {
       where?: ProjectWhereInput;
       orderBy?: ProjectOrderByInput;
@@ -20679,9 +20793,29 @@ export interface UserSubscription
       last?: Int;
     }
   ) => T;
-  partnerFound: <T = PartnerConditionSubscription>() => T;
-  partnerPasted: <T = PartnerConditionSubscription>() => T;
-  project: <T = Promise<AsyncIterator<ProjectSubscription>>>(
+  fitConditions: <T = Promise<AsyncIterator<PartnerConditionSubscription>>>(
+    args?: {
+      where?: PartnerConditionWhereInput;
+      orderBy?: PartnerConditionOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  nofitConditions: <T = Promise<AsyncIterator<PartnerConditionSubscription>>>(
+    args?: {
+      where?: PartnerConditionWhereInput;
+      orderBy?: PartnerConditionOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  projects: <T = Promise<AsyncIterator<ProjectSubscription>>>(
     args?: {
       where?: ProjectWhereInput;
       orderBy?: ProjectOrderByInput;

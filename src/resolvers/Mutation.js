@@ -2813,17 +2813,13 @@ export const Mutation = {
     let skill
 
     if(skills.length>0){
-      skill = await ctx.db.createSkill({
-        skill:{
-          connect:{id:skills[0].id}
-        },
-        persons:{connect:{uid:userId}}
+      skill = await ctx.db.updateSkill({
+        where:{id:skills[0].id},
+        data:{persons:{connect:{uid:userId}}}
       })
     }else{
       skill = await ctx.db.createSkill({
-        skill:{
-          create:{name}
-        },
+        name,
         persons:{connect:{uid:userId}}
       })
     }
@@ -2887,17 +2883,29 @@ export const Mutation = {
     if(place==="0"){
       const city = await ctx.db.user({ uid: userId }).residence().city()
       persons = await ctx.db.skill({name:skillName}).persons({
-        where:{residence:{city:{code:city.code}}},
+        where:{
+          AND:[
+            {residence:{city:{code:city.code}}},
+            {id_not:user.id}
+          ]
+          
+        },
         first:parseInt(number,10)
       })
     }else if(place==="1"){
       const province = await ctx.db.user({ uid: userId }).residence().province()
       persons = await ctx.db.skill({name:skillName}).persons({
-        where:{residence:{province:{code:province.code}}},
+        where:{
+          AND:[
+            {residence:{province:{code:province.code}}},
+            {id_not:user.id}
+          ]
+        },
         first:parseInt(number,10)
       })
     }else if(place === "2"){
       persons = await ctx.db.skill({name:skillName}).persons({
+        where:{id_not:user.id},
         first:parseInt(number,10)
       })
     }
@@ -2907,10 +2915,210 @@ export const Mutation = {
     const partnerCondition = await ctx.db.createPartnerCondition({
       skillName,
       place,
+      number,
       partners:{connect:personsIds},
       project:{connect:{id:projectId}}
     })
     
     return partnerCondition
+  },
+  deletePartnerCondition:async (parent, { id }, ctx) => {
+
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    // -------------------------
+    checkId(id)
+    // -------------------------
+    
+    const deletePartnerCondition = await ctx.db.deletePartnerCondition({
+      id,
+    })
+    return deletePartnerCondition
+  },
+  changePartner:async (parent, { conditionId,uid }, ctx) => {
+
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    // -------------------------
+    checkId(conditionId)
+    checkId(uid)
+    // -------------------------
+    const partnerCondition = await ctx.db.partnerCondition({id:conditionId})
+    const partners = await ctx.db.partnerCondition({id:conditionId}).partners()
+    const partnersId = partners.map(partner=>partner.id)
+    const passedPartners = await ctx.db.partnerCondition({id:conditionId}).passedPartners()
+    const passedPartnersId = passedPartners.map(passedPartner=>passedPartner.id)
+    const ids = [...partnersId,...passedPartnersId,user.id]
+    let persons
+    if(partnerCondition.place==="0"){
+      const city = await ctx.db.user({ uid: userId }).residence().city()
+      persons = await ctx.db.skill({name:partnerCondition.skillName}).persons({
+        where:{
+          AND:[
+            {residence:{city:{code:city.code}}},
+            {id_not_in:ids}
+          ]
+          
+        },
+        first:1
+      })
+    }else if(partnerCondition.place==="1"){
+      const province = await ctx.db.user({ uid: userId }).residence().province()
+      persons = await ctx.db.skill({name:partnerCondition.skillName}).persons({
+        where:{
+          AND:[
+            {residence:{province:{code:province.code}}},
+            {id_not_in:ids}
+          ]
+        },
+        first:1
+      })
+    }else if(partnerCondition.place === "2"){
+      persons = await ctx.db.skill({name:partnerCondition.skillName}).persons({
+        where:{id_not_in:ids},
+        first:1
+      })
+    }
+    
+    let changePartner
+    if(persons.length>0){
+      changePartner = await ctx.db.updatePartnerCondition({
+        where:{id:conditionId},
+        data:{
+          partners:{
+            disconnect:{id:uid},
+            connect:{id:persons[0].id}
+          },
+          passedPartners:{
+            connect:{id:uid}
+          }
+        }
+      })
+    }else{
+      changePartner = await ctx.db.updatePartnerCondition({
+        where:{id:conditionId},
+        data:{
+          partners:{
+            disconnect:{id:uid},
+          },
+          passedPartners:{
+            connect:{id:uid}
+          }
+        }
+      })
+    }
+    
+    return changePartner
+  },
+  refreshPartner:async (parent, { conditionId }, ctx) => {
+
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    // -------------------------
+    checkId(conditionId)
+    // -------------------------
+    const partnerCondition = await ctx.db.partnerCondition({id:conditionId})
+    const partners = await ctx.db.partnerCondition({id:conditionId}).partners()
+    const partnersId = partners.map(partner=>partner.id)
+    const passedPartners = await ctx.db.partnerCondition({id:conditionId}).passedPartners()
+    const passedPartnersId = passedPartners.map(passedPartner=>passedPartner.id)
+    const ids = [...partnersId,...passedPartnersId,user.id]
+    let persons
+    if(partnerCondition.place==="0"){
+      const city = await ctx.db.user({ uid: userId }).residence().city()
+      persons = await ctx.db.skill({name:partnerCondition.skillName}).persons({
+        where:{
+          AND:[
+            {residence:{city:{code:city.code}}},
+
+            {id_not_in:ids}
+          ]
+          
+        },
+        first:partnerCondition.number
+      })
+    }else if(partnerCondition.place==="1"){
+      const province = await ctx.db.user({ uid: userId }).residence().province()
+      persons = await ctx.db.skill({name:partnerCondition.skillName}).persons({
+        where:{
+          AND:[
+            {residence:{province:{code:province.code}}},
+            {id_not_in:ids}
+          ]
+        },
+        first:partnerCondition.number
+      })
+    }else if(partnerCondition.place === "2"){
+      persons = await ctx.db.skill({name:partnerCondition.skillName}).persons({
+        where:{id_not_in:ids},
+        first:partnerCondition.number
+      })
+    }
+    
+    const personsIds = persons.map(person=>({id:person.id}))
+    let refreshPartner 
+    if(persons.length>0){
+      refreshPartner = await ctx.db.updatePartnerCondition({
+        where:{id:conditionId},
+        data:{
+          partners:{
+            connect:personsIds
+          },
+        }
+      })
+    }else{
+      refreshPartner = partnerCondition
+    }
+    
+    return refreshPartner
+  },
+  refusePartner:async (parent, { conditionId }, ctx) => {
+
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    // -------------------------
+    checkId(conditionId)
+    // -------------------------
+    const refusePartner = await ctx.db.updatePartnerCondition({
+      where:{id:conditionId},
+      data:{
+        partners:{
+          disconnect:{id:user.id},
+        },
+        passedPartners:{
+          connect:{id:user.id}
+        }
+      }
+    })
+   
+    return refusePartner
   },
 }

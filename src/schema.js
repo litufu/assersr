@@ -63,6 +63,7 @@ export const typeDefs = gql`
     skills(name:String):[Skill]
     projects:[Project]
     partnerConditions(projectId:String):[PartnerCondition]
+    mypartnerConditions:[PartnerCondition]
   }
 
   type Mutation {
@@ -108,6 +109,10 @@ export const typeDefs = gql`
     addSkill(name:String):Skill
     createProject(name:String,content:String):Project
     addPartnerCondition(skillName:String,number:Int,place:String,projectId:String):PartnerCondition
+    deletePartnerCondition(id:String):PartnerCondition
+    changePartner(conditionId:String,uid:String):PartnerCondition
+    refreshPartner(conditionId:String):PartnerCondition
+    refusePartner(conditionId:String):PartnerCondition
   }
 
   type Subscription {
@@ -189,7 +194,9 @@ export const typeDefs = gql`
     loveSetting:LoveSetting
     signUpLove:LoveSignUp
     skills:[Skill]
-    project:[Project]
+    projects:[Project]
+    fitConditions:[PartnerCondition]
+    nofitConditions:[PartnerCondition]
   }
 
   type Photo {
@@ -606,6 +613,7 @@ type PartnerCondition{
   id:ID!
   skillName:String
   place:String
+  number:Int
   partners:[User]
   passedPartners:[User] 
   project:Project

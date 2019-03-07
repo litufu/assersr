@@ -165,4 +165,7 @@ export const User = {
   loveMan:(parent, args, ctx) => ctx.db.user({ id: parent.id }).loveMan(),
   signUpLove:(parent, args, ctx) => ctx.db.user({ id: parent.id }).signUpLove(),
   skills:(parent, args, ctx) => ctx.db.user({ id: parent.id }).skills(),
+  fitConditions:(parent, args, ctx) => ctx.db.user({ id: parent.id }).fitConditions(),
+  nofitConditions:(parent, args, ctx) => ctx.db.user({ id: parent.id }).nofitConditions(),
+  projects:(parent, args, ctx) => ctx.db.user({ id: parent.id }).projects(),
 }
