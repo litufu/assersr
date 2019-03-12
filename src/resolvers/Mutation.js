@@ -2745,9 +2745,6 @@ export const Mutation = {
     if (!user) {
       throw new Error("用户不存在")
     }
-    if(birthdayToAge(user.birthday)<18){
-      throw new Error('用户不满18周岁')
-    }
 
     const residence = await ctx.db.user({ uid: userId }).residence()
     let city

@@ -10,7 +10,7 @@ import  {raw} from './services/helper'
 import { prisma } from './generated/prisma-client'
 import { resolvers } from './resolvers'
 import { typeDefs } from './schema'
-import {HOST,PORT} from './services/settings'
+import {HOST,PORT,DEVELOP} from './services/settings'
 
 
 const server = new ApolloServer({
@@ -95,9 +95,17 @@ app.post('/alipay/notify_url',  async (req, res)=> {
   }
 })
 
-// server.listen({ port: PORT ,host:"192.168.43.75"   }).then(({ url }) => console.log(`🚀 Server ready at ${url}`));
-app.listen({ port: PORT ,host:HOST}, () =>
+// server.listen({ port: PORT ,host:"192.168.56.1"   }).then(({ url }) => console.log(`🚀 Server ready at ${url}`));
+
+
+if(DEVELOP){
+  app.listen({ port: PORT,host:HOST  }, () =>
   console.log(`🚀 Server ready at http://${HOST}:${PORT}${server.graphqlPath}`)
 );
+}else{
+  app.listen({ port: PORT }, () =>
+  console.log(`🚀 Server ready at http://${HOST}:${PORT}${server.graphqlPath}`)
+);
+}
 // ,host:"192.168.0.102" 
 
