@@ -1,5 +1,6 @@
 // import 'babel-polyfill';
 import express from 'express'
+import http from 'http'
 import bodyParser from 'body-parser'
 import { ApolloServer } from 'apollo-server-express'
 import {verify} from 'jsonwebtoken'
@@ -95,17 +96,19 @@ app.post('/alipay/notify_url',  async (req, res)=> {
   }
 })
 
-// server.listen({ port: PORT ,host:"192.168.56.1"   }).then(({ url }) => console.log(`🚀 Server ready at ${url}`));
+const httpServer = http.createServer(app);
+server.installSubscriptionHandlers(httpServer);
 
 
 if(DEVELOP){
-  app.listen({ port: PORT,host:HOST  }, () =>
-  console.log(`🚀 Server ready at http://${HOST}:${PORT}${server.graphqlPath}`)
-);
+  httpServer.listen({ port: PORT,host:HOST  }, () => {
+    console.log(`🚀 Server ready at http://${HOST}:${PORT}${server.graphqlPath}`)
+    console.log(`🚀 Server ready at ws://${HOST}:${PORT}${server.subscriptionsPath}`)
+  })
 }else{
-  app.listen({ port: PORT }, () =>
-  console.log(`🚀 Server ready at http://${HOST}:${PORT}${server.graphqlPath}`)
-);
+  httpServer.listen({ port: PORT }, () => {
+    console.log(`🚀 Server ready at http://${HOST}:${PORT}${server.graphqlPath}`)
+    console.log(`🚀 Server ready at ws://${HOST}:${PORT}${server.subscriptionsPath}`)
+  })
 }
-// ,host:"192.168.0.102" 
 

@@ -14,7 +14,6 @@ import {
   checkExistFatherAndMother,
   getFileName,
   getFileExt,
-  birthdayToAge
 } from '../services/utils'
 
 import {
@@ -2381,6 +2380,7 @@ export const Mutation = {
       image: null,
       createdAt: message.createdAt
     }
+    console.log('推送消息')
     pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: pubMessage })
     return returnMessage
   },

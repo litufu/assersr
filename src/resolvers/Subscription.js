@@ -98,6 +98,7 @@ export const Subscription = {
     subscribe: withFilter(
       () => pubsub.asyncIterator(MESSAGE_ADDED_TOPIC),
       (payload, args) => {
+        console.log(`payload.messageAdded`,payload.messageAdded)
         return Boolean(args.userId === payload.messageAdded.to.id)
      }
   )
