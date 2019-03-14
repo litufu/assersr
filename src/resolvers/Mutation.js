@@ -1528,10 +1528,12 @@ export const Mutation = {
       if(fee){
         const trades = await ctx.db.user({uid:userId}).trades({
           where:{
-            AND:[
-              {product:{kind:FEESETTINGTYPES.regstatus}},
-              {subject_contains:`${year}`}
-            ]
+              product:{
+                AND:[
+                  {kind:FEESETTINGTYPES.regstatus},
+                  {subject_contains:`${year}`}
+                ]
+              }
           }
         })
         if(trades.length>0 ){
@@ -1539,6 +1541,7 @@ export const Mutation = {
             throw new Error("报名前需要在设置-购买页面中购买本年度高考报名会员")
            }
         }
+        throw new Error("报名前需要在设置-购买页面中购买本年度高考报名会员")
       }
     }
     // -----------------------------------------------
