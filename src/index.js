@@ -84,10 +84,40 @@ app.post('/alipay/notify_url',  async (req, res)=> {
         ){
           res.send('failure') 
         }else{
-          await prisma.updateTrade({
+          const newTrade = await prisma.updateTrade({
             where:{id:obj.out_trade_no},
             data:{status:"1"}
           })
+
+          const user = await prisma.trade({id:newTrade.id}).user()
+          const product = await prisma.trade({id:newTrade.id}).product()
+          const now = new Date()
+          const year = now.getFullYear() + 1
+          const month = now.getMonth()
+          const date = now.getDate()
+          const memeberGradeEndTime =new Date(year,month,date)
+
+          if(product.kind==="LOVE"){
+            const loveSettings = await prisma.loveSettings({
+              where:{user:{id:user.id}}
+            })
+            if(loveSettings.length>0){
+              await prisma.updateLoveSetting({
+                where:{id:loveSettings[0].id},
+                data:{
+                  memeberGrade:newTrade.number,
+                  memeberGradeEndTime
+                }
+              })
+            }else{
+              await prisma.createLoveSetting({
+                  memeberGrade:newTrade.number,
+                  memeberGradeEndTime,
+                  user:{connect:{id:user.id}}
+              })
+            }
+          }
+
           res.send('success')
         }
       }

@@ -49,7 +49,11 @@ import {
   GMESSAGE_ADDED_TOPIC,
 } from './Subscription'
 import { pubsub } from '../subscriptions';
-import { fee, ossClient,DateStartTime } from '../services/settings'
+import { 
+  ossClient,
+  DateStartTime,
+  FEESETTINGTYPES,
+ } from '../services/settings'
 
 export const Mutation = {
   signup: async (parent, { username, password, deviceId }, ctx) => {
@@ -1514,6 +1518,30 @@ export const Mutation = {
       throw new Error("用户不存在")
     }
     // -----------------------------------------------
+    // 判断是否为付费会员
+    const regStatusfeeSettings = await ctx.db.feeSettings({
+      where:{name:FEESETTINGTYPES.regstatus}
+    })
+    if(regStatusfeeSettings.length>0){
+      const fee = regStatusfeeSettings[0].fee
+      const year = new Date().getFullYear()
+      if(fee){
+        const trades = await ctx.db.user({uid:userId}).trades({
+          where:{
+            AND:[
+              {product:{kind:FEESETTINGTYPES.regstatus}},
+              {subject_contains:`${year}`}
+            ]
+          }
+        })
+        if(trades.length>0 ){
+           if(trades[0].status!=="1"){
+            throw new Error("报名前需要在设置-购买页面中购买本年度高考报名会员")
+           }
+        }
+      }
+    }
+    // -----------------------------------------------
     // 输入数据验证
     if (!~(['Undergraduate', 'JuniorCollege'].indexOf(education))) {
       throw new Error('请选择本科或者专科')
@@ -1555,16 +1583,6 @@ export const Mutation = {
         university: { connect: { id: universityId } },
         major: { connect: { id: majorId } },
         applicants: { connect: { uid: userId } }
-      })
-    }
-
-    if (fee) {
-      if (user.regTimes >= user.maxRegTimes) {
-        throw new Error('你的报名次数已用完,请充值后再继续报名')
-      }
-      await ctx.db.updateUser({
-        where: { uid: userId },
-        data: { regTimes: user.regTimes + 1 }
       })
     }
 
@@ -2735,7 +2753,7 @@ export const Mutation = {
 
     // -------------------------
    
-    // -------------------------
+    
     
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2745,6 +2763,10 @@ export const Mutation = {
     if (!user) {
       throw new Error("用户不存在")
     }
+    // -------------------------
+    // 判断是否为付费会员
+
+     // -------------------------
 
     const residence = await ctx.db.user({ uid: userId }).residence()
     let city

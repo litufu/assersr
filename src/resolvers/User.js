@@ -160,6 +160,7 @@ export const User = {
   colleagues:(parent, args, ctx) => ctx.db.user({ id: parent.id }).colleagues(),
   groupMessages:(parent, args, ctx) => ctx.db.user({ id: parent.id }).groupMessages(),
   locationGroups:(parent, args, ctx) => ctx.db.user({ id: parent.id }).locationGroups(),
+  trades:(parent, args, ctx) => ctx.db.user({ id: parent.id }).trades(),
   loveSetting:(parent, args, ctx) => ctx.db.user({ id: parent.id }).loveSetting(),
   loveWoman:(parent, args, ctx) => ctx.db.user({ id: parent.id }).loveWoman(),
   loveMan:(parent, args, ctx) => ctx.db.user({ id: parent.id }).loveMan(),

@@ -64,6 +64,7 @@ export const typeDefs = gql`
     projects:[Project]
     partnerConditions(projectId:String):[PartnerCondition]
     mypartnerConditions:[PartnerCondition]
+    feeSettings:[FeeSetting]
   }
 
   type Mutation {
@@ -188,6 +189,7 @@ export const typeDefs = gql`
     classMate:[ClassMate]
     workGroups:[WorkGroup]
     colleagues:[Colleague]
+    trades:[Trade]
     loveWoman:LoveMatching
     loveMan:LoveMatching
     locationGroups:[LocationGroup]
@@ -197,6 +199,7 @@ export const typeDefs = gql`
     projects:[Project]
     fitConditions:[PartnerCondition]
     nofitConditions:[PartnerCondition]
+
   }
 
   type Photo {
@@ -542,11 +545,18 @@ type Advertisement{
 
 }
 
+type FeeSetting{
+  id:ID!
+  name:String
+  fee:Boolean
+}
+
 type Product{
   id:ID! 
   subject:String
   info:String
   price:Float
+  kind:String
 }
 
 type Trade{

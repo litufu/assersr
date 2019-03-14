@@ -85,6 +85,7 @@ type User {
   fitConditions:[PartnerCondition!]! @relation(name: "NowPartner") 
   nofitConditions:[PartnerCondition!]! @relation(name: "PassedPartner") 
   projects:[Project!]!
+  trades:[Trade!]!
 }
 
 # 地理位置
@@ -399,7 +400,15 @@ type Product{
   subject:String
   info:String
   price:Float
+  kind:String
 }
+
+type FeeSetting{
+  id:ID! @unique
+  name:String
+  fee:Boolean
+}
+
 
 type Trade{
   id:ID! @unique
@@ -423,7 +432,7 @@ type LoveSetting{
   dateTime:String
   datePlace:String
   memeberGrade:Int
-  memeberGradeEndTime:DateTime
+  memeberGradeEndTime:String
   user:User! @unique
 }
 

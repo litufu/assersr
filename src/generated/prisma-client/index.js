@@ -53,6 +53,10 @@ var models = [
     embedded: false
   },
   {
+    name: "FeeSetting",
+    embedded: false
+  },
+  {
     name: "FindPassWord",
     embedded: false
   },

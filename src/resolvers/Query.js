@@ -748,4 +748,5 @@ export const Query = {
       where:{partners_some:{id:user.id}}
     })
   },
+  feeSettings:(parent, args, ctx) => ctx.db.feeSettings(),
 }
