@@ -1,4 +1,5 @@
 // import 'babel-polyfill';
+
 import express from 'express'
 import http from 'http'
 import bodyParser from 'body-parser'
@@ -13,7 +14,7 @@ import { resolvers } from './resolvers'
 import { typeDefs } from './schema'
 import {HOST,PORT,DEVELOP} from './services/settings'
 
-
+process.on('warning', e => console.warn(e.stack));
 const server = new ApolloServer({
   typeDefs,
   resolvers,

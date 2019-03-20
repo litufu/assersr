@@ -76,7 +76,7 @@ type User {
   toOldColleagues:[OldColleague!]! @relation(name: "ToOldColleagues")
   locationGroups:[LocationGroup!]!
   forgetPassword:FindPassWord  @relation(name: "Forget")
-  remmemberPassword:FindPassWord @relation(name: "Remmember")
+  remmemberPassword:[FindPassWord!]! @relation(name: "Remmember")
   loveSetting:LoveSetting
   loveWoman:[LoveMatching!]! @relation(name: "Woman")
   loveMan:[LoveMatching!]! @relation(name: "Man")

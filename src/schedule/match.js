@@ -8,7 +8,7 @@
  * 5、将第一个用户所在城市从数据库中删除。挑选第二个用户所在城市，按照第一个城市算法计算。
  * 6、数据库长度为0时停止计算。
  * */
-
+// import 'babel-polyfill';
 import { prisma } from '../generated/prisma-client'
 import { DateStartTime } from '../services/settings'
 import { birthdayToAge } from '../services/utils'

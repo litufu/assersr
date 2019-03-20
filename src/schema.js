@@ -508,7 +508,7 @@ type Station {
 }
 
 type FindPassWord{
-  id:ID
+  id:ID!
   times:Int
   forgetter:User
   remmember:[User]
