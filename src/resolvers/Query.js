@@ -464,8 +464,7 @@ export const Query = {
       works = await ctx.db.works({
         where: {
           AND: [
-            { startTime_gte: (new Date(startTime)) },
-            { endTime_lt: (new Date(endTime)) },
+            { endTime_gte: (new Date(startTime)) },
             { company: { id: companyId } },
           ]
         }
@@ -475,9 +474,9 @@ export const Query = {
         where: {
           AND: [
             {
-              OR: [
-                { startTime_gte: (new Date(startTime)) },
-                { endTime_lte: (new Date(endTime)) },
+              NOT: [
+                { startTime_gte: (new Date(endTime)) },
+                { endTime_lte: (new Date(startTime)) },
               ]
             },
             { company: { id: companyId } },
@@ -486,10 +485,11 @@ export const Query = {
       })
     }
 
-
     for (const work of works) {
       const worker = await ctx.db.work({ id: work.id }).worker()
-      workers.push(worker)
+      if(workers.filter(w=>w.id===worker.id).length===0){
+        workers.push(worker)
+      }
     }
 
     return workers

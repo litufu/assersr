@@ -30,8 +30,6 @@ export const Subscription = {
     subscribe: withFilter(
         () => pubsub.asyncIterator(FAMILY_CHANGED),
         (payload, variables,ctx) => {
-          console.log('ctx.user.id',ctx.user.id)
-          console.log('payload.familyChanged.text',payload.familyChanged.text)
           return Boolean(ctx.user.id === payload.familyChanged.text)
         }
     )
@@ -98,7 +96,6 @@ export const Subscription = {
     subscribe: withFilter(
       () => pubsub.asyncIterator(MESSAGE_ADDED_TOPIC),
       (payload, args) => {
-        console.log(`payload.messageAdded`,payload.messageAdded)
         return Boolean(args.userId === payload.messageAdded.to.id)
      }
   )
