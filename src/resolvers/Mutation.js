@@ -2401,7 +2401,6 @@ export const Mutation = {
       image: null,
       createdAt: message.createdAt
     }
-    console.log('推送消息')
     pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: pubMessage })
     return returnMessage
   },
@@ -2431,6 +2430,8 @@ export const Mutation = {
     if (!~types.indexOf(type)) {
       throw new Error('没有该组类型')
     }
+    // 检查用户是否在该组内，不在该组内不能发信息
+
     // ----------------------
 
 
@@ -2448,8 +2449,16 @@ export const Mutation = {
       toGroup = await ctx.db.workGroup({ id: toId })
     } else if (type === "FellowTownsman") {
       toGroup = await ctx.db.locationGroup({ id: toId })
+      const FollowTownsmanUsers = await ctx.db.locationGroup({ id: toId }).users()
+      if(FollowTownsmanUsers.filter(u=>u.id===user.id).length===0){
+        throw new Error('你不在该组，无法发送消息')
+      }
     } else if (type === "RegStatus") {
       toGroup = await ctx.db.regStatus({ id: toId })
+      const regstatusUsers = await ctx.db.regStatus({ id: toId }).applicants()
+      if(regstatusUsers.filter(u=>u.id===user.id).length===0){
+        throw new Error('你不在该组，无法发送消息')
+      }
     }
     if (!toGroup) {
       throw new Error('没有找到对应的组')
