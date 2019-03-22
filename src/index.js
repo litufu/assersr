@@ -1,4 +1,4 @@
-import 'babel-polyfill';
+// import 'babel-polyfill';
 
 import express from 'express'
 import http from 'http'
@@ -18,6 +18,9 @@ process.on('warning', e => console.warn(e.stack));
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  debug:DEVELOP,
+  playground:DEVELOP,
+  introspection:DEVELOP,
   context: async ({req,connection}) => {
     if (connection) {
       // check connection for metadata

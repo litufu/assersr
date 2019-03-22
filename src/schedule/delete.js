@@ -1,4 +1,4 @@
-import 'babel-polyfill';
+// import 'babel-polyfill';
 import { prisma } from '../generated/prisma-client'
 
 // 每天执行

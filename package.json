@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "pm2 start lib/index.js",
+    "start": "pm2 start process.json --env production",
     "delete": "node lib/schedule/delete.js",
     "delete_dev":"cross-env NODE_ENV=dev nodemon --exec babel-node src/schedule/delete.js",
     "match":"node lib/schedule/match.js",
