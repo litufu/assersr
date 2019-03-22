@@ -1,4 +1,4 @@
-// import 'babel-polyfill';
+import 'babel-polyfill';
 
 import express from 'express'
 import http from 'http'
@@ -7,7 +7,7 @@ import { ApolloServer } from 'apollo-server-express'
 import {verify} from 'jsonwebtoken'
 import depthLimit from 'graphql-depth-limit'
 
-import { APP_SECRET,verified } from './services/utils'
+import { APP_SECRET,verified,getTimeByTimeZone } from './services/utils'
 import  {raw} from './services/helper'
 import { prisma } from './generated/prisma-client'
 import { resolvers } from './resolvers'
@@ -92,7 +92,7 @@ app.post('/alipay/notify_url',  async (req, res)=> {
 
           const user = await prisma.trade({id:newTrade.id}).user()
           const product = await prisma.trade({id:newTrade.id}).product()
-          const now = new Date()
+          const now = getTimeByTimeZone(8)
           const year = now.getFullYear() + 1
           const month = now.getMonth()
           const date = now.getDate()

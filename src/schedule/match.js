@@ -8,12 +8,12 @@
  * 5、将第一个用户所在城市从数据库中删除。挑选第二个用户所在城市，按照第一个城市算法计算。
  * 6、数据库长度为0时停止计算。
  * */
-// import 'babel-polyfill';
+import 'babel-polyfill';
 import { prisma } from '../generated/prisma-client'
 import { DateStartTime } from '../services/settings'
-import { birthdayToAge } from '../services/utils'
+import { birthdayToAge,getTimeByTimeZone } from '../services/utils'
 
-const now = new Date()
+const now = getTimeByTimeZone(8)
 const phase = parseInt(`${(now.getTime() - DateStartTime.getTime()) / 1000 / 60 / 60 / 24 / 7}`, 10) + 1
 const match = async () => {
     const cities = await prisma.cities()
@@ -101,7 +101,6 @@ const match = async () => {
                     matcher.myWeight >= person.otherWeightMin &&
                     matcher.myWeight <= person.otherWeightMax
                 ) {
-                    console.log('匹配成功 ')
                     // 检查以前是否匹配成功过，匹配成功过的不再重复匹配
                     const pastLoveMatchings = await prisma.loveMatchings({
                         where:{
@@ -111,9 +110,7 @@ const match = async () => {
                             ]
                         }
                     })
-                    console.log('pastLoveMatchings',pastLoveMatchings)
                     if(pastLoveMatchings.length===0){
-                        console.log('创建匹配')
                         matchedPersons.push(person.id)
                         matchedPersons.push(matcher.id)
                         await prisma.createLoveMatching({
@@ -126,7 +123,6 @@ const match = async () => {
                     }
                 }
             }
-            console.log('没有匹配成功')
             // 没有匹配成功,对象为null
             const personId = person.id
             if (!~matchedPersons.indexOf(person.id)) {

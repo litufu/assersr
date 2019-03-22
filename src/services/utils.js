@@ -783,6 +783,19 @@ const birthdayToAge = (day)=>{
   return age
 }
 
+
+const getTimeByTimeZone = (timeZone)=>{
+      const d=new Date();
+      const localTime = d.getTime()
+      const localOffset=d.getTimezoneOffset()*60000
+      const utc = localTime + localOffset
+      const offset = timeZone
+      const localSecondTime = utc + (3600000*offset) 
+      const date = new Date(localSecondTime)
+      return date
+}
+
+
 module.exports = {
   getUserId,
   checkeCtxUserExist,
@@ -801,5 +814,6 @@ module.exports = {
   getFileExt,
   signed,
   verified,
-  birthdayToAge
+  birthdayToAge,
+  getTimeByTimeZone
 }

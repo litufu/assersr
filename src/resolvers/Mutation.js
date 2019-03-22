@@ -14,6 +14,7 @@ import {
   checkExistFatherAndMother,
   getFileName,
   getFileExt,
+  getTimeByTimeZone
 } from '../services/utils'
 
 import {
@@ -2430,8 +2431,6 @@ export const Mutation = {
     if (!~types.indexOf(type)) {
       throw new Error('没有该组类型')
     }
-    // 检查用户是否在该组内，不在该组内不能发信息
-
     // ----------------------
 
 
@@ -2776,10 +2775,6 @@ export const Mutation = {
       throw new Error("用户不存在")
     }
     // -------------------------
-    // 判断是否为付费会员
-
-     // -------------------------
-
     const residence = await ctx.db.user({ uid: userId }).residence()
     let city
     if(residence){
@@ -2789,11 +2784,12 @@ export const Mutation = {
     }
 
 
-    const now = new Date()
+    const now = getTimeByTimeZone(8)
     const week = now.getDay()
     if (week === 0 || week === 5 || week === 6) {
-        throw new Error('报名已截止')
+        throw new Error('本期报名已截止,报名时间为周一到周四')
     }
+  
     
     const phase = parseInt(`${(now.getTime() - DateStartTime.getTime()) / 1000 / 60 / 60 / 24 / 7}`,10) + 1
     
