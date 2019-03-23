@@ -13,14 +13,15 @@ import { prisma } from './generated/prisma-client'
 import { resolvers } from './resolvers'
 import { typeDefs } from './schema'
 import {HOST,PORT,DEVELOP} from './services/settings'
+import EnhancedRedis from './enhancedRedis'
 
 process.on('warning', e => console.warn(e.stack));
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  debug:DEVELOP,
-  playground:DEVELOP,
-  introspection:DEVELOP,
+  persistedQueries: {
+    cache: new EnhancedRedis()
+  },
   context: async ({req,connection}) => {
     if (connection) {
       // check connection for metadata

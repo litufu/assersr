@@ -17,7 +17,7 @@ export const ossClient = new OSS({
     bucket: aliyunOssConfig.bucket
   });
 
-export const DEVELOP = false
+export const DEVELOP = true
 export const HOST = DEVELOP ? '192.168.56.1' : "118.31.21.228"
 export const PORT = 4000
 export const AlipayTest = false
