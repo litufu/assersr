@@ -4,8 +4,8 @@ export const LocationGroup = {
       .usersConnection({where:{locationGroups_some:{id:parent.id}}})
       .aggregate()
       .count()
-      if (usersCount>500){
-        // 人数大于500不在返回具体人员信息
+      if (usersCount>300){
+        // 人数大于300不在返回具体人员信息
         return []
       }
       return ctx.db.locationGroup({ id: parent.id }).users()
