@@ -7,7 +7,7 @@ import {
   checkPlaceCode,
   checkPhotoName
 } from '../validate'
-import {DateStartTime} from '../services/settings'
+import {DateStartTime,FEESETTINGTYPES} from '../services/settings'
 
 export const Query = {
   me: (parent, args, ctx) => {
@@ -158,6 +158,34 @@ export const Query = {
     if(!validator.isAlpha(education)){
       throw new Error('学历类型错误')
     }
+    // 判断是否为付费会员
+    const regStatusfeeSettings = await ctx.db.feeSettings({
+      where:{name:FEESETTINGTYPES.regstatus}
+    })
+    if(regStatusfeeSettings.length>0){
+      const fee = regStatusfeeSettings[0].fee
+      const year = new Date().getFullYear()
+      if(fee){
+        const trades = await ctx.db.user({uid:userId}).trades({
+          where:{
+              product:{
+                AND:[
+                  {kind:FEESETTINGTYPES.regstatus},
+                  {subject_contains:`${year}`}
+                ]
+              }
+          }
+        })
+        if(trades.length>0 ){
+           if(trades[0].status!=="1"){
+            throw new Error("报名前需要在设置-购买页面中购买本年度高考报名会员")
+           }
+        }else{
+          throw new Error("报名前需要在设置-购买页面中购买本年度高考报名会员")
+        }
+        
+      }
+    }
 
     const userId = getUserId(ctx)
     if (!userId) {
@@ -209,6 +237,33 @@ export const Query = {
   getRegStatusApplicantsById: async (parent, { regStatusId }, ctx) => {
 
     checkId(regStatusId)
+    // 判断是否为付费会员
+    const regStatusfeeSettings = await ctx.db.feeSettings({
+      where:{name:FEESETTINGTYPES.regstatus}
+    })
+    if(regStatusfeeSettings.length>0){
+      const fee = regStatusfeeSettings[0].fee
+      const year = new Date().getFullYear()
+      if(fee){
+        const trades = await ctx.db.user({uid:userId}).trades({
+          where:{
+              product:{
+                AND:[
+                  {kind:FEESETTINGTYPES.regstatus},
+                  {subject_contains:`${year}`}
+                ]
+              }
+          }
+        })
+        if(trades.length>0 ){
+            if(trades[0].status!=="1"){
+            throw new Error("报名前需要在设置-购买页面中购买本年度高考报名会员")
+            }
+        }else{
+          throw new Error("报名前需要在设置-购买页面中购买本年度高考报名会员")
+        }
+      }
+    }
 
     const userId = getUserId(ctx)
     if (!userId) {
