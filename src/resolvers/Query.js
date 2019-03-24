@@ -695,6 +695,7 @@ export const Query = {
     }
 
     const messages = await ctx.db.messages({
+      first:30,
       where: {
         OR: [
           { from: { id: user.id } },
