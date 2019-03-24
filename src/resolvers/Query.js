@@ -117,6 +117,7 @@ export const Query = {
     checkCnEnNum(args.majorName)
 
     return ctx.db.majors({
+      first:10,
       where: {
         name_contains: args.majorName
       }
@@ -131,6 +132,7 @@ export const Query = {
     checkCnEnNum(args.universityName)
 
     return ctx.db.universities({
+      first:10,
       where: {
         name_contains: args.universityName
       }
@@ -472,6 +474,7 @@ export const Query = {
       throw new Error("用户不存在")
     }
     const stations = await ctx.db.stations({
+      first:10,
       where: { name_contains: text }
     })
     if (stations.length === 0) {
