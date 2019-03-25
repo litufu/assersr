@@ -12,15 +12,22 @@ import  {raw} from './services/helper'
 import { prisma } from './generated/prisma-client'
 import { resolvers } from './resolvers'
 import { typeDefs } from './schema'
-import {HOST,PORT,DEVELOP} from './services/settings'
+import {HOST,PORT,DEVELOP,REDISHOST,REDISPWD} from './services/settings'
 import EnhancedRedis from './enhancedRedis'
 
-process.on('warning', e => console.warn(e.stack));
+if(DEVELOP){
+  process.on('warning', e => console.warn(e.stack));
+}
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   persistedQueries: {
-    cache: new EnhancedRedis()
+    cache: new EnhancedRedis({
+      host: REDISHOST,
+      port: '6379',
+      password:REDISPWD,
+    })
   },
   context: async ({req,connection}) => {
     if (connection) {

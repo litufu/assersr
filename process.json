@@ -2,6 +2,7 @@
     "apps" : [{
       "name"        : "app",
       "script"      : "./src/index.js",
+      "instances"   : "max",
       "watch"       : false,
       "env": {
         "NODE_ENV": "development"

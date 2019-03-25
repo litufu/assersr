@@ -1,5 +1,6 @@
 import Redis from 'ioredis'
 
+
 class EnhancedRedis extends Redis {
     set(key, value, options = {}) {
         if (options.ttl)
