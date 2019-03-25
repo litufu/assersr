@@ -21,7 +21,7 @@ export const DEVELOP = true
 export const HOST = DEVELOP ? '192.168.56.1' : "118.31.21.228"
 export const PORT = 4000
 export const AlipayTest = false
-export const DateStartTime = new Date(2019,1,28)
+export const DateStartTime = new Date(2019,3,25)
 export const FEESETTINGTYPES = {
   regstatus:"REGSTATUS",
   love:"LOVE",
