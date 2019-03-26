@@ -808,4 +808,5 @@ export const Query = {
     })
   },
   feeSettings:(parent, args, ctx) => ctx.db.feeSettings(),
+  kefu:(parent, args, ctx) => ctx.db.user({username:"kefu"}),
 }

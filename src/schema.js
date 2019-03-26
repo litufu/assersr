@@ -65,6 +65,7 @@ export const typeDefs = gql`
     partnerConditions(projectId:String):[PartnerCondition]
     mypartnerConditions:[PartnerCondition]
     feeSettings:[FeeSetting]
+    kefu:User
   }
 
   type Mutation {

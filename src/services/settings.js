@@ -19,7 +19,7 @@ export const ossClient = new OSS({
 
 export const DEVELOP = true
 export const HOST = DEVELOP ? '192.168.56.1' : "118.31.21.228"
-export const REDISHOST = DEVELOP ? '127.0.0.1' : "192.168.14.104"
+export const REDISHOST = DEVELOP ? 'localhost' : "192.168.14.104"
 export const REDISPWD = DEVELOP ? '' : "asdkfue9823wnh#$3djs"
 export const PORT = 4000
 export const AlipayTest = false
