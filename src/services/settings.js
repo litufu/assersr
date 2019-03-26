@@ -17,10 +17,12 @@ export const ossClient = new OSS({
     bucket: aliyunOssConfig.bucket
   });
 
-export const DEVELOP = true
+export const DEVELOP = false
 export const HOST = DEVELOP ? '192.168.56.1' : "118.31.21.228"
-export const REDISHOST = DEVELOP ? 'localhost' : "192.168.14.104"
-export const REDISPWD = DEVELOP ? '' : "asdkfue9823wnh#$3djs"
+export const REDISHOST = DEVELOP ? 'localhost' : "localhost"
+export const REDISPWD = DEVELOP ? '' : ''
+// export const REDISHOST = DEVELOP ? 'localhost' : "192.168.14.104"
+// export const REDISPWD = DEVELOP ? '' : "asdkfue9823wnh#$3djs"
 export const PORT = 4000
 export const AlipayTest = false
 export const DateStartTime = new Date(2019,3,25)
