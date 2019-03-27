@@ -17,10 +17,13 @@ export const ossClient = new OSS({
     bucket: aliyunOssConfig.bucket
   });
 
-export const DEVELOP = false
+export const DEVELOP = true
+// aliyun
 export const HOST = DEVELOP ? '192.168.56.1' : "118.31.21.228"
 export const REDISHOST = DEVELOP ? 'localhost' : "localhost"
 export const REDISPWD = DEVELOP ? '' : ''
+// huaweiyun
+// export const HOST = DEVELOP ? '192.168.56.1' : "118.31.21.228"
 // export const REDISHOST = DEVELOP ? 'localhost' : "192.168.14.104"
 // export const REDISPWD = DEVELOP ? '' : "asdkfue9823wnh#$3djs"
 export const PORT = 4000

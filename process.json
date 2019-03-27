@@ -1,7 +1,7 @@
 {
     "apps" : [{
       "name"        : "app",
-      "script"      : "./src/index.js",
+      "script"      : "./lib/index.js",
       "instances"   : "max",
       "watch"       : false,
       "env": {

@@ -6,6 +6,7 @@
   "scripts": {
     "start": "pm2 start process.json --env production",
     "build": "babel src --out-dir lib --presets=@babel/env --source-maps",
+    "production":"cross-env NODE_ENV=production node lib/index.js",
     "dev": "cross-env NODE_ENV=dev nodemon --exec babel-node --max-old-space-size=4096 src/index.js",
     "prettier": "prettier --single-quote --print-width 80 --trailing-comma all --write \"src/**/*.js\"",
     "test": "jest"
