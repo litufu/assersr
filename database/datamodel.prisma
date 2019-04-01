@@ -86,6 +86,8 @@ type User {
   nofitConditions:[PartnerCondition!]! @relation(name: "PassedPartner") 
   projects:[Project!]!
   trades:[Trade!]!
+  createActivities:[Activity!]!  @relation(name: "ActivityCreater") 
+  partakeActivities:[Activity!]!   @relation(name: "ActivityParticipant") 
 }
 
 # 地理位置
@@ -233,6 +235,7 @@ enum GroupKind {
   ClassMate,#同学
   Colleague, #同事
   FellowTownsman, #同乡
+  Activity,#活动
   SameCity, #同城
   SameOccupation, #同行
   SameDisease,#同病
@@ -477,6 +480,28 @@ type PartnerCondition{
   partners:[User!]! @relation(name: "NowPartner") 
   passedPartners:[User!]! @relation(name: "PassedPartner") 
   project:Project
+}
+
+type ActivityType{
+  id:ID! @unique
+  first:String
+  second:String
+}
+
+
+type Activity{
+  id:ID! @unique
+  startTime:DateTime
+  endTime:DateTime
+  city:City
+  location:String
+  title:String
+  content:String
+  image:Photo
+  number:Int
+  type:ActivityType
+  creater:User @relation(name: "ActivityCreater") 
+  users:[User!]!  @relation(name: "ActivityParticipant") 
 }
 
 

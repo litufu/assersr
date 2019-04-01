@@ -169,4 +169,18 @@ export const User = {
   fitConditions:(parent, args, ctx) => ctx.db.user({ id: parent.id }).fitConditions(),
   nofitConditions:(parent, args, ctx) => ctx.db.user({ id: parent.id }).nofitConditions(),
   projects:(parent, args, ctx) => ctx.db.user({ id: parent.id }).projects(),
+  activities : (parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (userId !== parent.uid) {
+      return []
+    }
+    return  ctx.db.activities({
+      where:{
+        OR:[
+        {creater:{uid:userId}},
+        {users_some:{uid:userId}}
+      ]}
+    })
+  }
+  
 }

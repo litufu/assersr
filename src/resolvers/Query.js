@@ -1,5 +1,5 @@
 import validator from 'validator'
-import { getUserId, } from '../services/utils'
+import { getUserId,getTimeByTimeZone } from '../services/utils'
 import {
   checkUsername,
   checkId,
@@ -809,4 +809,97 @@ export const Query = {
   },
   feeSettings:(parent, args, ctx) => ctx.db.feeSettings(),
   kefu:(parent, args, ctx) => ctx.db.user({username:"kefu"}),
+  activityTypes:(parent, args, ctx) => ctx.db.activityTypes(),
+  pastedPartakeActivities:async (parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    const now = getTimeByTimeZone(8)
+    return ctx.db.activities({
+      first:10,
+      orderBy:"startTime_DESC",
+      where:{AND:[
+        {startTime_lte:now},
+        {users_some:{id:user.id}}
+      ]}
+    })
+  },
+  pastedCreateActivities:async (parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    const now = getTimeByTimeZone(8)
+    return ctx.db.activities({
+      first:10,
+      orderBy:"startTime_DESC",
+      where:{AND:[
+        {startTime_lte:now},
+        {creater:{id:user.id}}
+      ]}
+    })
+  },
+  nowPartakeActivities:async (parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    const now = getTimeByTimeZone(8)
+    return ctx.db.activities({
+      where:{AND:[
+        {startTime_gt:now},
+        {users_some:{id:user.id}}
+      ]}
+    })
+  },
+  nowCreateActivities:async (parent, args, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    const now = getTimeByTimeZone(8)
+    return ctx.db.activities({
+      where:{AND:[
+        {startTime_gt:now},
+        {creater:{id:user.id}}
+      ]}
+    })
+  },
+  activities:async (parent, {typeId}, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    const city = await ctx.db.user({ uid: userId }).residence().city()
+    
+    const now = getTimeByTimeZone(8)
+    return ctx.db.activities({
+      where:{AND:[
+        {city:{id:city.id}},
+        {startTime_gt:now},
+        {type:{id:typeId}}
+      ]}
+    })
+  },
 }

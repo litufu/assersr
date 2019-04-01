@@ -32,6 +32,7 @@ import {LoveSignUp} from './LoveSignUp'
 import {Skill} from  './Skill'
 import {Project} from './Project'
 import {PartnerCondition} from './PartnerCondition'
+import {Activity} from './Activity'
 
 export const resolvers = {
   Query,
@@ -67,5 +68,6 @@ export const resolvers = {
   LoveSignUp,
   Skill,
   Project,
-  PartnerCondition
+  PartnerCondition,
+  Activity
 }

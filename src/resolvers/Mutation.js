@@ -50,18 +50,18 @@ import {
   GMESSAGE_ADDED_TOPIC,
 } from './Subscription'
 import { pubsub } from '../subscriptions';
-import { 
+import {
   ossClient,
   DateStartTime,
   FEESETTINGTYPES,
- } from '../services/settings'
+} from '../services/settings'
 
 export const Mutation = {
   signup: async (parent, { username, password, deviceId }, ctx) => {
     // 输入数据验证
     checkUsername(username)
     checkPassword(password)
-    if(!validator.isAlphanumeric(deviceId)){
+    if (!validator.isAlphanumeric(deviceId)) {
       throw new Error('设备号索取错误')
     }
     //------------------------------------
@@ -602,10 +602,10 @@ export const Mutation = {
     // 输入数据验证
     checkName(name)
     checkRelationship(relationship)
-    if(spouseId){
+    if (spouseId) {
       checkId(spouseId)
     }
-    
+
     // -----------------------------------------------
     // 创建家人
     let family
@@ -626,7 +626,7 @@ export const Mutation = {
         to: { create: { name } },
       })
     }
- 
+
     return family
   },
 
@@ -650,10 +650,10 @@ export const Mutation = {
     checkName(name)
     checkRelationship(relationship)
     checkStatus(status)
-    if(spouseId){
+    if (spouseId) {
       checkId(spouseId)
     }
-    
+
     // -----------------------------------------------
     let updateFamily
     if (spouseId) {
@@ -1125,7 +1125,7 @@ export const Mutation = {
     // 输入数据校验
     // -----------------------------------------------
     checkCnEnNum(name)
-    if(!validator.isAlpha(kind)){
+    if (!validator.isAlpha(kind)) {
       throw new Error('学校种类输入错误')
     }
     checkCnEnNum(locationName)
@@ -1265,7 +1265,7 @@ export const Mutation = {
     checkCompanyName(companyName)
     checkName(department)
     checkId(stationId)
-    if(updateId){
+    if (updateId) {
       checkId(updateId)
     }
     // -----------------------------------------------
@@ -1521,30 +1521,30 @@ export const Mutation = {
     // -----------------------------------------------
     // 判断是否为付费会员
     const regStatusfeeSettings = await ctx.db.feeSettings({
-      where:{name:FEESETTINGTYPES.regstatus}
+      where: { name: FEESETTINGTYPES.regstatus }
     })
-    if(regStatusfeeSettings.length>0){
+    if (regStatusfeeSettings.length > 0) {
       const fee = regStatusfeeSettings[0].fee
       const year = new Date().getFullYear()
-      if(fee){
-        const trades = await ctx.db.user({uid:userId}).trades({
-          where:{
-              product:{
-                AND:[
-                  {kind:FEESETTINGTYPES.regstatus},
-                  {subject_contains:`${year}`}
-                ]
-              }
+      if (fee) {
+        const trades = await ctx.db.user({ uid: userId }).trades({
+          where: {
+            product: {
+              AND: [
+                { kind: FEESETTINGTYPES.regstatus },
+                { subject_contains: `${year}` }
+              ]
+            }
           }
         })
-        if(trades.length>0 ){
-           if(trades[0].status!=="1"){
+        if (trades.length > 0) {
+          if (trades[0].status !== "1") {
             throw new Error("报名前需要在设置-购买页面中购买本年度高考报名会员")
-           }
-        }else{
+          }
+        } else {
           throw new Error("报名前需要在设置-购买页面中购买本年度高考报名会员")
         }
-        
+
       }
     }
     // -----------------------------------------------
@@ -1615,7 +1615,7 @@ export const Mutation = {
     })
   },
 
-  
+
   addClassGroup: async (parent, { name, schoolEduId, studentId }, ctx) => {
     // 权限验证
     const userId = getUserId(ctx)
@@ -1951,7 +1951,7 @@ export const Mutation = {
     return created
   },
   confirmWorkGroup: async (parent, { companyId, workerId }, ctx) => {
-        // -----------------------------------------------
+    // -----------------------------------------------
     // 输入数据验证
     checkId(companyId)
     checkId(workerId)
@@ -2132,7 +2132,7 @@ export const Mutation = {
   },
 
   addOldColleague: async (parent, { companyId, workerId }, ctx) => {
-        // -----------------------------------------------
+    // -----------------------------------------------
     // 输入数据验证
     checkId(companyId)
     checkId(workerId)
@@ -2170,7 +2170,7 @@ export const Mutation = {
   },
 
   confirmOldColleague: async (parent, { companyId, workerId }, ctx) => {
-        // -----------------------------------------------
+    // -----------------------------------------------
     // 输入数据验证
     checkId(companyId)
     checkId(workerId)
@@ -2224,11 +2224,10 @@ export const Mutation = {
     throw new Error('无法更改同事信息')
   },
   postPhoto: async (parent, { uri }, ctx) => {
-            // -----------------------------------------------
+    // -----------------------------------------------
     // 输入数据验证
     // uri并不用于数据库
     // -----------------------------------------------
-    // 添加头像
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -2262,8 +2261,35 @@ export const Mutation = {
     return { id: newPhoto.id, name, url }
   },
 
+  postActivityPhoto: async (parent, { uri }, ctx) => {
+    // -----------------------------------------------
+    // 输入数据验证
+    // uri并不用于数据库
+    // -----------------------------------------------
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    const ext = getFileExt(uri)
+    const name = getFileName(ext)
+    const typesMap = { 'jpg': 'jpeg', 'png': 'png', 'gif': 'gif', 'jpeg': 'jpeg', 'bmp': 'bmp' }
+    const options = { expires: 1800, method: 'PUT', 'Content-Type': `image/${typesMap[ext]}` }
+    const url = ossClient.signatureUrl(`activity/${name}`, options);
+    
+    const newPhoto = await ctx.db.createPhoto({
+      name,
+      url: `https://gewu-avatar.oss-cn-hangzhou.aliyuncs.com/activity/${name}`,
+    })
+  
+    return { id: newPhoto.id, name, url }
+  },
+
   sendMessage: async (parent, { toId, text = "", image = "" }, ctx) => {
-                // -----------------------------------------------
+    // -----------------------------------------------
     // 输入数据验证
     checkId(toId)
     // -----------------------------------------------
@@ -2413,7 +2439,7 @@ export const Mutation = {
     // 输入数据检查
     // ----------------------
     checkId(toId)
-    if(!validator.isAlpha(type)){
+    if (!validator.isAlpha(type)) {
       throw new Error('组类型错误')
     }
 
@@ -2429,7 +2455,7 @@ export const Mutation = {
 
     // ----------------------
     checkId(toId)
-    const types = ["Family", "ClassMate", "Colleague", "FellowTownsman", "RegStatus"]
+    const types = ["Family", "ClassMate", "Colleague", "FellowTownsman", "RegStatus","Activity"]
     if (!~types.indexOf(type)) {
       throw new Error('没有该组类型')
     }
@@ -2446,18 +2472,20 @@ export const Mutation = {
       toGroup = await ctx.db.familyGroup({ id: toId })
     } else if (type === "ClassMate") {
       toGroup = await ctx.db.classGroup({ id: toId })
+    } else if (type === "Activity") {
+      toGroup = await ctx.db.activity({ id: toId })
     } else if (type === "Colleague") {
       toGroup = await ctx.db.workGroup({ id: toId })
     } else if (type === "FellowTownsman") {
       toGroup = await ctx.db.locationGroup({ id: toId })
       const FollowTownsmanUsers = await ctx.db.locationGroup({ id: toId }).users()
-      if(FollowTownsmanUsers.filter(u=>u.id===user.id).length===0){
+      if (FollowTownsmanUsers.filter(u => u.id === user.id).length === 0) {
         throw new Error('你不在该组，无法发送消息')
       }
     } else if (type === "RegStatus") {
       toGroup = await ctx.db.regStatus({ id: toId })
       const regstatusUsers = await ctx.db.regStatus({ id: toId }).applicants()
-      if(regstatusUsers.filter(u=>u.id===user.id).length===0){
+      if (regstatusUsers.filter(u => u.id === user.id).length === 0) {
         throw new Error('你不在该组，无法发送消息')
       }
     }
@@ -2577,12 +2605,12 @@ export const Mutation = {
   addAdvertisement: async (parent, { url, startTime }, ctx) => {
 
     // -------------------------
-    if(!validator.isURL(url)){
+    if (!validator.isURL(url)) {
       throw new Error('url格式错误')
     }
 
     // -------------------------
-    
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -2596,7 +2624,7 @@ export const Mutation = {
 
     const advertisements = await ctx.db.advertisements({
       where: {
-        startTime:sTime,
+        startTime: sTime,
       }
     })
 
@@ -2630,29 +2658,29 @@ export const Mutation = {
       } else {
         throw new Error('没有剩余广告位')
       }
-    }else{
+    } else {
       newAdvertisement = await ctx.db.createAdvertisement({
-        image1:url,
-        startTime:sTime,
-        endTime:new Date(sTime.getTime() + 30*60*1000)
+        image1: url,
+        startTime: sTime,
+        endTime: new Date(sTime.getTime() + 30 * 60 * 1000)
       })
     }
 
     return newAdvertisement
   },
 
-  newTrade:async (parent, { productId, number,amount }, ctx) => {
+  newTrade: async (parent, { productId, number, amount }, ctx) => {
 
     // -------------------------
-    if(!validator.isFloat(`${amount}`)){
+    if (!validator.isFloat(`${amount}`)) {
       throw new Error('amount格式错误')
     }
-    if(!validator.isInt((`${number}`))){
+    if (!validator.isInt((`${number}`))) {
       throw new Error('amount格式错误')
     }
     checkId(productId)
     // -------------------------
-    
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -2662,9 +2690,9 @@ export const Mutation = {
       throw new Error("用户不存在")
     }
 
-    const product = await ctx.db.product({id:productId})
+    const product = await ctx.db.product({ id: productId })
     const totalAmount = product.price * number
-    if(totalAmount!==amount){
+    if (totalAmount !== amount) {
       throw new Error("金额计算错误")
     }
 
@@ -2673,13 +2701,13 @@ export const Mutation = {
       user: { connect: { uid: userId } },
       number,
       amount,
-      status:'0'
+      status: '0'
     })
   },
 
-  addOrUpdateLoveSetting:async (parent, { myHeight,myWeight,otherHeightMin,otherHeightMax,
-    otherWeightMin,otherWeightMax,otherAgeMin,otherAgeMax,dateTime,datePlace
-   }, ctx) => {
+  addOrUpdateLoveSetting: async (parent, { myHeight, myWeight, otherHeightMin, otherHeightMax,
+    otherWeightMin, otherWeightMax, otherAgeMin, otherAgeMax, dateTime, datePlace
+  }, ctx) => {
 
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2692,47 +2720,47 @@ export const Mutation = {
     const userGender = await ctx.db.user({ uid: userId }).gender()
 
     // -------------------------
-    if(!validator.isInt(`${myHeight}`)){
+    if (!validator.isInt(`${myHeight}`)) {
       throw new Error('身高格式错误')
     }
-    if(!validator.isInt((`${myWeight}`))){
+    if (!validator.isInt((`${myWeight}`))) {
       throw new Error('体重格式错误')
     }
-    if(!validator.isInt((`${otherHeightMin}`))){
+    if (!validator.isInt((`${otherHeightMin}`))) {
       throw new Error('对方最低身高格式错误')
     }
-    if(!validator.isInt((`${otherHeightMax}`))){
+    if (!validator.isInt((`${otherHeightMax}`))) {
       throw new Error('对方最高身高格式错误')
     }
-    if(!validator.isInt((`${otherWeightMin}`))){
+    if (!validator.isInt((`${otherWeightMin}`))) {
       throw new Error('对方最小体重格式错误')
     }
-    if(!validator.isInt((`${otherWeightMax}`))){
+    if (!validator.isInt((`${otherWeightMax}`))) {
       throw new Error('对方最大体重格式错误')
     }
-    if(!validator.isInt((`${otherAgeMin}`))){
+    if (!validator.isInt((`${otherAgeMin}`))) {
       throw new Error('对方最小年龄格式错误')
     }
-    if(!validator.isInt((`${otherAgeMax}`))){
+    if (!validator.isInt((`${otherAgeMax}`))) {
       throw new Error('对方最大年龄格式错误')
     }
-    if(userGender==='female'){
-      if (!/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(dateTime)){
+    if (userGender === 'female') {
+      if (!/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(dateTime)) {
         throw new Error('见面时间格式错误')
       }
-      if (!/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(datePlace)){
+      if (!/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(datePlace)) {
         throw new Error('见面地点格式错误')
       }
     }
     // -------------------------
     const loveSettings = await ctx.db.loveSettings({
-      where:{user:{uid:userId}}
+      where: { user: { uid: userId } }
     })
     let loveSetting
-    if(loveSettings.length>0){
-      loveSetting =  await ctx.db.updateLoveSetting({
-        where:{id:loveSettings[0].id},
-        data:{
+    if (loveSettings.length > 0) {
+      loveSetting = await ctx.db.updateLoveSetting({
+        where: { id: loveSettings[0].id },
+        data: {
           myHeight,
           myWeight,
           otherHeightMin,
@@ -2745,29 +2773,29 @@ export const Mutation = {
           datePlace,
         }
       })
-    }else{
-      loveSetting =  await ctx.db.createLoveSetting({
-          myHeight,
-          myWeight,
-          otherHeightMin,
-          otherHeightMax,
-          otherWeightMin,
-          otherWeightMax,
-          otherAgeMax,
-          otherAgeMin,
-          dateTime,
-          datePlace,
-          user:{connect:{uid:userId}}
+    } else {
+      loveSetting = await ctx.db.createLoveSetting({
+        myHeight,
+        myWeight,
+        otherHeightMin,
+        otherHeightMax,
+        otherWeightMin,
+        otherWeightMax,
+        otherAgeMax,
+        otherAgeMin,
+        dateTime,
+        datePlace,
+        user: { connect: { uid: userId } }
       })
     }
     return loveSetting
   },
-  addOrUpdateLoveSignUp:async (parent, args, ctx) => {
+  addOrUpdateLoveSignUp: async (parent, args, ctx) => {
 
     // -------------------------
-   
-    
-    
+
+
+
     const userId = getUserId(ctx)
     if (!userId) {
       throw new Error("用户不存在")
@@ -2779,9 +2807,9 @@ export const Mutation = {
     // -------------------------
     const residence = await ctx.db.user({ uid: userId }).residence()
     let city
-    if(residence){
+    if (residence) {
       city = await ctx.db.user({ uid: userId }).residence().city()
-    }else{
+    } else {
       throw new Error('尚未填写居住地')
     }
 
@@ -2789,36 +2817,36 @@ export const Mutation = {
     const now = getTimeByTimeZone(8)
     const week = now.getDay()
     if (week === 0 || week === 5 || week === 6) {
-        throw new Error('本期报名已截止,报名时间为周一到周四')
+      throw new Error('本期报名已截止,报名时间为周一到周四')
     }
-  
-    
-    const phase = parseInt(`${(now.getTime() - DateStartTime.getTime()) / 1000 / 60 / 60 / 24 / 7}`,10) + 1
-    
+
+
+    const phase = parseInt(`${(now.getTime() - DateStartTime.getTime()) / 1000 / 60 / 60 / 24 / 7}`, 10) + 1
+
     const loveSignUps = await ctx.db.loveSignUps({
-      where:{person:{uid:userId}}
+      where: { person: { uid: userId } }
     })
-    
+
     let loveSignUp
-    if(loveSignUps.length>0){
+    if (loveSignUps.length > 0) {
       loveSignUp = await ctx.db.updateLoveSignUp({
-        where:{id:loveSignUps[0].id},
-        data:{
-          period:`${phase}`,
-          city:{connect:{id:city.id}},
-          person:{connect:{id:user.id}}
+        where: { id: loveSignUps[0].id },
+        data: {
+          period: `${phase}`,
+          city: { connect: { id: city.id } },
+          person: { connect: { id: user.id } }
         }
       })
-    }else{
+    } else {
       loveSignUp = await ctx.db.createLoveSignUp({
-        period:`${phase}`,
-        city:{connect:{id:city.id}},
-        person:{connect:{id:user.id}}
+        period: `${phase}`,
+        city: { connect: { id: city.id } },
+        person: { connect: { id: user.id } }
       })
     }
     return loveSignUp
   },
-  addSkill:async (parent, { name }, ctx) => {
+  addSkill: async (parent, { name }, ctx) => {
 
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2830,32 +2858,32 @@ export const Mutation = {
     }
 
     // -------------------------
-    if (!/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(name)){
+    if (!/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(name)) {
       throw new Error('技能名称错误')
     }
     // -------------------------
 
     const skills = await ctx.db.skills({
-      where:{name}
+      where: { name }
     })
 
     let skill
 
-    if(skills.length>0){
+    if (skills.length > 0) {
       skill = await ctx.db.updateSkill({
-        where:{id:skills[0].id},
-        data:{persons:{connect:{uid:userId}}}
+        where: { id: skills[0].id },
+        data: { persons: { connect: { uid: userId } } }
       })
-    }else{
+    } else {
       skill = await ctx.db.createSkill({
         name,
-        persons:{connect:{uid:userId}}
+        persons: { connect: { uid: userId } }
       })
     }
-    
+
     return skill
   },
-  createProject:async (parent, { name, content }, ctx) => {
+  createProject: async (parent, { name, content }, ctx) => {
 
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2869,22 +2897,22 @@ export const Mutation = {
     const city = await ctx.db.user({ uid: userId }).residence().city()
 
     // -------------------------
-    if (!/^[_,.，。！!;；：:A-Za-z0-9\u4e00-\u9fa5]+/.test(name)){
+    if (!/^[_,.，。！!;；：:A-Za-z0-9\u4e00-\u9fa5]+/.test(name)) {
       throw new Error('项目名称格式错误')
     }
-    if (!/^[_,.，。！!;；：:A-Za-z0-9\u4e00-\u9fa5]+/.test(content)){
+    if (!/^[_,.，。！!;；：:A-Za-z0-9\u4e00-\u9fa5]+/.test(content)) {
       throw new Error('项目内容格式错误')
     }
     // -------------------------
     return ctx.db.createProject({
       name,
       content,
-      place:{connect:{id:city.id}},
-      starter:{connect:{id:user.id}}
+      place: { connect: { id: city.id } },
+      starter: { connect: { id: user.id } }
     })
 
   },
-  addPartnerCondition:async (parent, { skillName, number,place,projectId }, ctx) => {
+  addPartnerCondition: async (parent, { skillName, number, place, projectId }, ctx) => {
 
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2897,61 +2925,61 @@ export const Mutation = {
 
 
     // -------------------------
-     if (!/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(skillName)){
+    if (!/^[A-Za-z0-9\u4e00-\u9fa5]+/.test(skillName)) {
       throw new Error('技能名称错误')
     }
-    if(!validator.isInt(`${number}`)){
+    if (!validator.isInt(`${number}`)) {
       throw new Error('数字格式错误')
     }
-    if(!~["0","1","2"].indexOf(place)){
+    if (!~["0", "1", "2"].indexOf(place)) {
       throw new Error('未选择地址')
     }
     checkId(projectId)
     // -------------------------
     let persons
-    if(place==="0"){
+    if (place === "0") {
       const city = await ctx.db.user({ uid: userId }).residence().city()
-      persons = await ctx.db.skill({name:skillName}).persons({
-        where:{
-          AND:[
-            {residence:{city:{code:city.code}}},
-            {id_not:user.id}
+      persons = await ctx.db.skill({ name: skillName }).persons({
+        where: {
+          AND: [
+            { residence: { city: { code: city.code } } },
+            { id_not: user.id }
           ]
-          
+
         },
-        first:parseInt(number,10)
+        first: parseInt(number, 10)
       })
-    }else if(place==="1"){
+    } else if (place === "1") {
       const province = await ctx.db.user({ uid: userId }).residence().province()
-      persons = await ctx.db.skill({name:skillName}).persons({
-        where:{
-          AND:[
-            {residence:{province:{code:province.code}}},
-            {id_not:user.id}
+      persons = await ctx.db.skill({ name: skillName }).persons({
+        where: {
+          AND: [
+            { residence: { province: { code: province.code } } },
+            { id_not: user.id }
           ]
         },
-        first:parseInt(number,10)
+        first: parseInt(number, 10)
       })
-    }else if(place === "2"){
-      persons = await ctx.db.skill({name:skillName}).persons({
-        where:{id_not:user.id},
-        first:parseInt(number,10)
+    } else if (place === "2") {
+      persons = await ctx.db.skill({ name: skillName }).persons({
+        where: { id_not: user.id },
+        first: parseInt(number, 10)
       })
     }
 
-    const personsIds = persons.map(person=>({id:person.id}))
-   
+    const personsIds = persons.map(person => ({ id: person.id }))
+
     const partnerCondition = await ctx.db.createPartnerCondition({
       skillName,
       place,
       number,
-      partners:{connect:personsIds},
-      project:{connect:{id:projectId}}
+      partners: { connect: personsIds },
+      project: { connect: { id: projectId } }
     })
-    
+
     return partnerCondition
   },
-  deletePartnerCondition:async (parent, { id }, ctx) => {
+  deletePartnerCondition: async (parent, { id }, ctx) => {
 
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2965,13 +2993,13 @@ export const Mutation = {
     // -------------------------
     checkId(id)
     // -------------------------
-    
+
     const deletePartnerCondition = await ctx.db.deletePartnerCondition({
       id,
     })
     return deletePartnerCondition
   },
-  changePartner:async (parent, { conditionId,uid }, ctx) => {
+  changePartner: async (parent, { conditionId, uid }, ctx) => {
 
     const userId = getUserId(ctx)
     if (!userId) {
@@ -2986,74 +3014,74 @@ export const Mutation = {
     checkId(conditionId)
     checkId(uid)
     // -------------------------
-    const partnerCondition = await ctx.db.partnerCondition({id:conditionId})
-    const partners = await ctx.db.partnerCondition({id:conditionId}).partners()
-    const partnersId = partners.map(partner=>partner.id)
-    const passedPartners = await ctx.db.partnerCondition({id:conditionId}).passedPartners()
-    const passedPartnersId = passedPartners.map(passedPartner=>passedPartner.id)
-    const ids = [...partnersId,...passedPartnersId,user.id]
+    const partnerCondition = await ctx.db.partnerCondition({ id: conditionId })
+    const partners = await ctx.db.partnerCondition({ id: conditionId }).partners()
+    const partnersId = partners.map(partner => partner.id)
+    const passedPartners = await ctx.db.partnerCondition({ id: conditionId }).passedPartners()
+    const passedPartnersId = passedPartners.map(passedPartner => passedPartner.id)
+    const ids = [...partnersId, ...passedPartnersId, user.id]
     let persons
-    if(partnerCondition.place==="0"){
+    if (partnerCondition.place === "0") {
       const city = await ctx.db.user({ uid: userId }).residence().city()
-      persons = await ctx.db.skill({name:partnerCondition.skillName}).persons({
-        where:{
-          AND:[
-            {residence:{city:{code:city.code}}},
-            {id_not_in:ids}
+      persons = await ctx.db.skill({ name: partnerCondition.skillName }).persons({
+        where: {
+          AND: [
+            { residence: { city: { code: city.code } } },
+            { id_not_in: ids }
           ]
-          
+
         },
-        first:1
+        first: 1
       })
-    }else if(partnerCondition.place==="1"){
+    } else if (partnerCondition.place === "1") {
       const province = await ctx.db.user({ uid: userId }).residence().province()
-      persons = await ctx.db.skill({name:partnerCondition.skillName}).persons({
-        where:{
-          AND:[
-            {residence:{province:{code:province.code}}},
-            {id_not_in:ids}
+      persons = await ctx.db.skill({ name: partnerCondition.skillName }).persons({
+        where: {
+          AND: [
+            { residence: { province: { code: province.code } } },
+            { id_not_in: ids }
           ]
         },
-        first:1
+        first: 1
       })
-    }else if(partnerCondition.place === "2"){
-      persons = await ctx.db.skill({name:partnerCondition.skillName}).persons({
-        where:{id_not_in:ids},
-        first:1
+    } else if (partnerCondition.place === "2") {
+      persons = await ctx.db.skill({ name: partnerCondition.skillName }).persons({
+        where: { id_not_in: ids },
+        first: 1
       })
     }
-    
+
     let changePartner
-    if(persons.length>0){
+    if (persons.length > 0) {
       changePartner = await ctx.db.updatePartnerCondition({
-        where:{id:conditionId},
-        data:{
-          partners:{
-            disconnect:{id:uid},
-            connect:{id:persons[0].id}
+        where: { id: conditionId },
+        data: {
+          partners: {
+            disconnect: { id: uid },
+            connect: { id: persons[0].id }
           },
-          passedPartners:{
-            connect:{id:uid}
+          passedPartners: {
+            connect: { id: uid }
           }
         }
       })
-    }else{
+    } else {
       changePartner = await ctx.db.updatePartnerCondition({
-        where:{id:conditionId},
-        data:{
-          partners:{
-            disconnect:{id:uid},
+        where: { id: conditionId },
+        data: {
+          partners: {
+            disconnect: { id: uid },
           },
-          passedPartners:{
-            connect:{id:uid}
+          passedPartners: {
+            connect: { id: uid }
           }
         }
       })
     }
-    
+
     return changePartner
   },
-  refreshPartner:async (parent, { conditionId }, ctx) => {
+  refreshPartner: async (parent, { conditionId }, ctx) => {
 
     const userId = getUserId(ctx)
     if (!userId) {
@@ -3067,62 +3095,62 @@ export const Mutation = {
     // -------------------------
     checkId(conditionId)
     // -------------------------
-    const partnerCondition = await ctx.db.partnerCondition({id:conditionId})
-    const partners = await ctx.db.partnerCondition({id:conditionId}).partners()
-    const partnersId = partners.map(partner=>partner.id)
-    const passedPartners = await ctx.db.partnerCondition({id:conditionId}).passedPartners()
-    const passedPartnersId = passedPartners.map(passedPartner=>passedPartner.id)
-    const ids = [...partnersId,...passedPartnersId,user.id]
+    const partnerCondition = await ctx.db.partnerCondition({ id: conditionId })
+    const partners = await ctx.db.partnerCondition({ id: conditionId }).partners()
+    const partnersId = partners.map(partner => partner.id)
+    const passedPartners = await ctx.db.partnerCondition({ id: conditionId }).passedPartners()
+    const passedPartnersId = passedPartners.map(passedPartner => passedPartner.id)
+    const ids = [...partnersId, ...passedPartnersId, user.id]
     let persons
-    if(partnerCondition.place==="0"){
+    if (partnerCondition.place === "0") {
       const city = await ctx.db.user({ uid: userId }).residence().city()
-      persons = await ctx.db.skill({name:partnerCondition.skillName}).persons({
-        where:{
-          AND:[
-            {residence:{city:{code:city.code}}},
+      persons = await ctx.db.skill({ name: partnerCondition.skillName }).persons({
+        where: {
+          AND: [
+            { residence: { city: { code: city.code } } },
 
-            {id_not_in:ids}
+            { id_not_in: ids }
           ]
-          
+
         },
-        first:partnerCondition.number
+        first: partnerCondition.number
       })
-    }else if(partnerCondition.place==="1"){
+    } else if (partnerCondition.place === "1") {
       const province = await ctx.db.user({ uid: userId }).residence().province()
-      persons = await ctx.db.skill({name:partnerCondition.skillName}).persons({
-        where:{
-          AND:[
-            {residence:{province:{code:province.code}}},
-            {id_not_in:ids}
+      persons = await ctx.db.skill({ name: partnerCondition.skillName }).persons({
+        where: {
+          AND: [
+            { residence: { province: { code: province.code } } },
+            { id_not_in: ids }
           ]
         },
-        first:partnerCondition.number
+        first: partnerCondition.number
       })
-    }else if(partnerCondition.place === "2"){
-      persons = await ctx.db.skill({name:partnerCondition.skillName}).persons({
-        where:{id_not_in:ids},
-        first:partnerCondition.number
+    } else if (partnerCondition.place === "2") {
+      persons = await ctx.db.skill({ name: partnerCondition.skillName }).persons({
+        where: { id_not_in: ids },
+        first: partnerCondition.number
       })
     }
-    
-    const personsIds = persons.map(person=>({id:person.id}))
-    let refreshPartner 
-    if(persons.length>0){
+
+    const personsIds = persons.map(person => ({ id: person.id }))
+    let refreshPartner
+    if (persons.length > 0) {
       refreshPartner = await ctx.db.updatePartnerCondition({
-        where:{id:conditionId},
-        data:{
-          partners:{
-            connect:personsIds
+        where: { id: conditionId },
+        data: {
+          partners: {
+            connect: personsIds
           },
         }
       })
-    }else{
+    } else {
       refreshPartner = partnerCondition
     }
-    
+
     return refreshPartner
   },
-  refusePartner:async (parent, { conditionId }, ctx) => {
+  refusePartner: async (parent, { conditionId }, ctx) => {
 
     const userId = getUserId(ctx)
     if (!userId) {
@@ -3137,17 +3165,109 @@ export const Mutation = {
     checkId(conditionId)
     // -------------------------
     const refusePartner = await ctx.db.updatePartnerCondition({
-      where:{id:conditionId},
-      data:{
-        partners:{
-          disconnect:{id:user.id},
+      where: { id: conditionId },
+      data: {
+        partners: {
+          disconnect: { id: user.id },
         },
-        passedPartners:{
-          connect:{id:user.id}
+        passedPartners: {
+          connect: { id: user.id }
         }
       }
     })
-   
+
     return refusePartner
+  },
+  addActivity: async (parent, { startTime, endTime, title, content, imageId, number, typeId, location }, ctx) => {
+
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    const now = getTimeByTimeZone(8)
+    // 检查用户是否已经发表3个活动
+    const activities = await ctx.db.activities({
+      where: {
+        AND: [
+          { startTime_gt: now },
+          { creater: { id: user.id } }
+        ]
+      }
+    })
+    if (activities.length > 3) {
+      throw new Error('每人最多只可以创建3个活动')
+    }
+    // 用户居住的城市
+    const city = await ctx.db.user({ uid: userId }).residence().city()
+
+    // -------------------------
+    const startT = validator.toDate(`${startTime}`)
+    if (!startT) {
+      throw new Error('开始时间格式错误')
+    }
+    const endT = validator.toDate(`${endTime}`)
+    if (!endT) {
+      throw new Error('结束时间格式错误')
+    }
+    if (!validator.isLength(title, { min: 5, max: 20 })) {
+      throw new Error('标题长度必须为5到20')
+    }
+    if (!validator.isLength(content, { min: 5, max: 500 })) {
+      throw new Error('内容长度必须为5到500')
+    }
+    checkCnEnNum(title)
+    checkId(imageId)
+
+    if (!validator.isInt(`${number}`)) {
+      throw new Error('人数必须为整数')
+    }
+    checkId(typeId)
+    // checkCnEnNum(location)
+    // -------------------------
+    return ctx.db.createActivity({
+      startTime: startT,
+      endTime: endT,
+      location:`${location}`,
+      title,
+      content: `${content}`,
+      number,
+      image: { connect: { id: imageId } },
+      city: { connect: { id: city.id } },
+      creater: { connect: { id: user.id } },
+      type: { connect: { id: typeId } }
+    })
+  },
+  partakeActivity: async (parent, { activityId }, ctx) => {
+
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+
+    checkId(activityId)
+
+    const activity = await ctx.db.activity({ id: activityId })
+    const users = await ctx.db.activity({ id: activityId }).users()
+    if (users.length >= activity.number) {
+      throw new Error('报名人数已满')
+    }
+
+    const isPartake = users.filter(u=>u.id===user.id).length>0
+    if(isPartake){
+      throw new Error('已经报名，无法重复报名')
+    }
+
+    return ctx.db.updateActivity({
+      where: { id: activityId },
+      data: { users: { connect: { id: user.id } } }
+    })
   },
 }

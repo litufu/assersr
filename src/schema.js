@@ -66,6 +66,12 @@ export const typeDefs = gql`
     mypartnerConditions:[PartnerCondition]
     feeSettings:[FeeSetting]
     kefu:User
+    activityTypes:[ActivityType]
+    pastedPartakeActivities:[Activity]
+    pastedCreateActivities:[Activity]
+    nowPartakeActivities:[Activity]
+    nowCreateActivities:[Activity]
+    activities(typeId:String):[Activity]
   }
 
   type Mutation {
@@ -99,7 +105,7 @@ export const typeDefs = gql`
     addOldColleague(companyId:String,workerId:String):OldColleague
     confirmOldColleague(companyId:String,workerId:String):OldColleague
     postPhoto(uri:String):Photo
-    addAvatar(uri:String):Photo
+    postActivityPhoto(uri:String):Photo
     sendMessage(toId:String,text:String,image:String):Message
     sendGroupMessage(type:String,toId:String,text:String,image:String):GroupMessage
     addAdvertisement(url:String,startTime:String):Advertisement
@@ -115,6 +121,8 @@ export const typeDefs = gql`
     changePartner(conditionId:String,uid:String):PartnerCondition
     refreshPartner(conditionId:String):PartnerCondition
     refusePartner(conditionId:String):PartnerCondition
+    addActivity(startTime:String,endTime:String,title:String,content:String,imageId:String,number:Int,typeId:String,location:String):Activity
+    partakeActivity(activityId:String):Activity
   }
 
   type Subscription {
@@ -200,7 +208,7 @@ export const typeDefs = gql`
     projects:[Project]
     fitConditions:[PartnerCondition]
     nofitConditions:[PartnerCondition]
-
+    activities:[Activity!]!
   }
 
   type Photo {
@@ -486,6 +494,7 @@ enum GroupKind {
   ClassMate,#同学
   Colleague, #同事
   FellowTownsman, #同乡
+  Activity,#活动
   SameCity, #同城
   SameOccupation, #同行
   SameDisease,#同病
@@ -628,6 +637,29 @@ type PartnerCondition{
   partners:[User]
   passedPartners:[User] 
   project:Project
+}
+
+type ActivityType{
+  id:ID!
+  first:String
+  second:String
+}
+
+
+type Activity{
+  id:ID!
+  startTime:DateTime
+  endTime:DateTime
+  city:City
+  location:String
+  title:String
+  content:String
+  image:Photo
+  number:Int
+  type:ActivityType
+  creater:User
+  users:[User!]!
+  messages:[GroupMessage]
 }
 
 

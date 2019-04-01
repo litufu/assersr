@@ -1,5 +1,565 @@
 module.exports = {
-        typeDefs: /* GraphQL */ `type Advertisement {
+        typeDefs: /* GraphQL */ `type Activity {
+  id: ID!
+  startTime: DateTime
+  endTime: DateTime
+  city: City
+  location: String
+  title: String
+  content: String
+  image: Photo
+  number: Int
+  type: ActivityType
+  creater: User
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+}
+
+type ActivityConnection {
+  pageInfo: PageInfo!
+  edges: [ActivityEdge]!
+  aggregate: AggregateActivity!
+}
+
+input ActivityCreateInput {
+  startTime: DateTime
+  endTime: DateTime
+  city: CityCreateOneInput
+  location: String
+  title: String
+  content: String
+  image: PhotoCreateOneInput
+  number: Int
+  type: ActivityTypeCreateOneInput
+  creater: UserCreateOneWithoutCreateActivitiesInput
+  users: UserCreateManyWithoutPartakeActivitiesInput
+}
+
+input ActivityCreateManyWithoutCreaterInput {
+  create: [ActivityCreateWithoutCreaterInput!]
+  connect: [ActivityWhereUniqueInput!]
+}
+
+input ActivityCreateManyWithoutUsersInput {
+  create: [ActivityCreateWithoutUsersInput!]
+  connect: [ActivityWhereUniqueInput!]
+}
+
+input ActivityCreateWithoutCreaterInput {
+  startTime: DateTime
+  endTime: DateTime
+  city: CityCreateOneInput
+  location: String
+  title: String
+  content: String
+  image: PhotoCreateOneInput
+  number: Int
+  type: ActivityTypeCreateOneInput
+  users: UserCreateManyWithoutPartakeActivitiesInput
+}
+
+input ActivityCreateWithoutUsersInput {
+  startTime: DateTime
+  endTime: DateTime
+  city: CityCreateOneInput
+  location: String
+  title: String
+  content: String
+  image: PhotoCreateOneInput
+  number: Int
+  type: ActivityTypeCreateOneInput
+  creater: UserCreateOneWithoutCreateActivitiesInput
+}
+
+type ActivityEdge {
+  node: Activity!
+  cursor: String!
+}
+
+enum ActivityOrderByInput {
+  id_ASC
+  id_DESC
+  startTime_ASC
+  startTime_DESC
+  endTime_ASC
+  endTime_DESC
+  location_ASC
+  location_DESC
+  title_ASC
+  title_DESC
+  content_ASC
+  content_DESC
+  number_ASC
+  number_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ActivityPreviousValues {
+  id: ID!
+  startTime: DateTime
+  endTime: DateTime
+  location: String
+  title: String
+  content: String
+  number: Int
+}
+
+input ActivityScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  startTime: DateTime
+  startTime_not: DateTime
+  startTime_in: [DateTime!]
+  startTime_not_in: [DateTime!]
+  startTime_lt: DateTime
+  startTime_lte: DateTime
+  startTime_gt: DateTime
+  startTime_gte: DateTime
+  endTime: DateTime
+  endTime_not: DateTime
+  endTime_in: [DateTime!]
+  endTime_not_in: [DateTime!]
+  endTime_lt: DateTime
+  endTime_lte: DateTime
+  endTime_gt: DateTime
+  endTime_gte: DateTime
+  location: String
+  location_not: String
+  location_in: [String!]
+  location_not_in: [String!]
+  location_lt: String
+  location_lte: String
+  location_gt: String
+  location_gte: String
+  location_contains: String
+  location_not_contains: String
+  location_starts_with: String
+  location_not_starts_with: String
+  location_ends_with: String
+  location_not_ends_with: String
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  number: Int
+  number_not: Int
+  number_in: [Int!]
+  number_not_in: [Int!]
+  number_lt: Int
+  number_lte: Int
+  number_gt: Int
+  number_gte: Int
+  AND: [ActivityScalarWhereInput!]
+  OR: [ActivityScalarWhereInput!]
+  NOT: [ActivityScalarWhereInput!]
+}
+
+type ActivitySubscriptionPayload {
+  mutation: MutationType!
+  node: Activity
+  updatedFields: [String!]
+  previousValues: ActivityPreviousValues
+}
+
+input ActivitySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ActivityWhereInput
+  AND: [ActivitySubscriptionWhereInput!]
+  OR: [ActivitySubscriptionWhereInput!]
+  NOT: [ActivitySubscriptionWhereInput!]
+}
+
+type ActivityType {
+  id: ID!
+  first: String
+  second: String
+}
+
+type ActivityTypeConnection {
+  pageInfo: PageInfo!
+  edges: [ActivityTypeEdge]!
+  aggregate: AggregateActivityType!
+}
+
+input ActivityTypeCreateInput {
+  first: String
+  second: String
+}
+
+input ActivityTypeCreateOneInput {
+  create: ActivityTypeCreateInput
+  connect: ActivityTypeWhereUniqueInput
+}
+
+type ActivityTypeEdge {
+  node: ActivityType!
+  cursor: String!
+}
+
+enum ActivityTypeOrderByInput {
+  id_ASC
+  id_DESC
+  first_ASC
+  first_DESC
+  second_ASC
+  second_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ActivityTypePreviousValues {
+  id: ID!
+  first: String
+  second: String
+}
+
+type ActivityTypeSubscriptionPayload {
+  mutation: MutationType!
+  node: ActivityType
+  updatedFields: [String!]
+  previousValues: ActivityTypePreviousValues
+}
+
+input ActivityTypeSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ActivityTypeWhereInput
+  AND: [ActivityTypeSubscriptionWhereInput!]
+  OR: [ActivityTypeSubscriptionWhereInput!]
+  NOT: [ActivityTypeSubscriptionWhereInput!]
+}
+
+input ActivityTypeUpdateDataInput {
+  first: String
+  second: String
+}
+
+input ActivityTypeUpdateInput {
+  first: String
+  second: String
+}
+
+input ActivityTypeUpdateManyMutationInput {
+  first: String
+  second: String
+}
+
+input ActivityTypeUpdateOneInput {
+  create: ActivityTypeCreateInput
+  update: ActivityTypeUpdateDataInput
+  upsert: ActivityTypeUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: ActivityTypeWhereUniqueInput
+}
+
+input ActivityTypeUpsertNestedInput {
+  update: ActivityTypeUpdateDataInput!
+  create: ActivityTypeCreateInput!
+}
+
+input ActivityTypeWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  first: String
+  first_not: String
+  first_in: [String!]
+  first_not_in: [String!]
+  first_lt: String
+  first_lte: String
+  first_gt: String
+  first_gte: String
+  first_contains: String
+  first_not_contains: String
+  first_starts_with: String
+  first_not_starts_with: String
+  first_ends_with: String
+  first_not_ends_with: String
+  second: String
+  second_not: String
+  second_in: [String!]
+  second_not_in: [String!]
+  second_lt: String
+  second_lte: String
+  second_gt: String
+  second_gte: String
+  second_contains: String
+  second_not_contains: String
+  second_starts_with: String
+  second_not_starts_with: String
+  second_ends_with: String
+  second_not_ends_with: String
+  AND: [ActivityTypeWhereInput!]
+  OR: [ActivityTypeWhereInput!]
+  NOT: [ActivityTypeWhereInput!]
+}
+
+input ActivityTypeWhereUniqueInput {
+  id: ID
+}
+
+input ActivityUpdateInput {
+  startTime: DateTime
+  endTime: DateTime
+  city: CityUpdateOneInput
+  location: String
+  title: String
+  content: String
+  image: PhotoUpdateOneInput
+  number: Int
+  type: ActivityTypeUpdateOneInput
+  creater: UserUpdateOneWithoutCreateActivitiesInput
+  users: UserUpdateManyWithoutPartakeActivitiesInput
+}
+
+input ActivityUpdateManyDataInput {
+  startTime: DateTime
+  endTime: DateTime
+  location: String
+  title: String
+  content: String
+  number: Int
+}
+
+input ActivityUpdateManyMutationInput {
+  startTime: DateTime
+  endTime: DateTime
+  location: String
+  title: String
+  content: String
+  number: Int
+}
+
+input ActivityUpdateManyWithoutCreaterInput {
+  create: [ActivityCreateWithoutCreaterInput!]
+  delete: [ActivityWhereUniqueInput!]
+  connect: [ActivityWhereUniqueInput!]
+  disconnect: [ActivityWhereUniqueInput!]
+  update: [ActivityUpdateWithWhereUniqueWithoutCreaterInput!]
+  upsert: [ActivityUpsertWithWhereUniqueWithoutCreaterInput!]
+  deleteMany: [ActivityScalarWhereInput!]
+  updateMany: [ActivityUpdateManyWithWhereNestedInput!]
+}
+
+input ActivityUpdateManyWithoutUsersInput {
+  create: [ActivityCreateWithoutUsersInput!]
+  delete: [ActivityWhereUniqueInput!]
+  connect: [ActivityWhereUniqueInput!]
+  disconnect: [ActivityWhereUniqueInput!]
+  update: [ActivityUpdateWithWhereUniqueWithoutUsersInput!]
+  upsert: [ActivityUpsertWithWhereUniqueWithoutUsersInput!]
+  deleteMany: [ActivityScalarWhereInput!]
+  updateMany: [ActivityUpdateManyWithWhereNestedInput!]
+}
+
+input ActivityUpdateManyWithWhereNestedInput {
+  where: ActivityScalarWhereInput!
+  data: ActivityUpdateManyDataInput!
+}
+
+input ActivityUpdateWithoutCreaterDataInput {
+  startTime: DateTime
+  endTime: DateTime
+  city: CityUpdateOneInput
+  location: String
+  title: String
+  content: String
+  image: PhotoUpdateOneInput
+  number: Int
+  type: ActivityTypeUpdateOneInput
+  users: UserUpdateManyWithoutPartakeActivitiesInput
+}
+
+input ActivityUpdateWithoutUsersDataInput {
+  startTime: DateTime
+  endTime: DateTime
+  city: CityUpdateOneInput
+  location: String
+  title: String
+  content: String
+  image: PhotoUpdateOneInput
+  number: Int
+  type: ActivityTypeUpdateOneInput
+  creater: UserUpdateOneWithoutCreateActivitiesInput
+}
+
+input ActivityUpdateWithWhereUniqueWithoutCreaterInput {
+  where: ActivityWhereUniqueInput!
+  data: ActivityUpdateWithoutCreaterDataInput!
+}
+
+input ActivityUpdateWithWhereUniqueWithoutUsersInput {
+  where: ActivityWhereUniqueInput!
+  data: ActivityUpdateWithoutUsersDataInput!
+}
+
+input ActivityUpsertWithWhereUniqueWithoutCreaterInput {
+  where: ActivityWhereUniqueInput!
+  update: ActivityUpdateWithoutCreaterDataInput!
+  create: ActivityCreateWithoutCreaterInput!
+}
+
+input ActivityUpsertWithWhereUniqueWithoutUsersInput {
+  where: ActivityWhereUniqueInput!
+  update: ActivityUpdateWithoutUsersDataInput!
+  create: ActivityCreateWithoutUsersInput!
+}
+
+input ActivityWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  startTime: DateTime
+  startTime_not: DateTime
+  startTime_in: [DateTime!]
+  startTime_not_in: [DateTime!]
+  startTime_lt: DateTime
+  startTime_lte: DateTime
+  startTime_gt: DateTime
+  startTime_gte: DateTime
+  endTime: DateTime
+  endTime_not: DateTime
+  endTime_in: [DateTime!]
+  endTime_not_in: [DateTime!]
+  endTime_lt: DateTime
+  endTime_lte: DateTime
+  endTime_gt: DateTime
+  endTime_gte: DateTime
+  city: CityWhereInput
+  location: String
+  location_not: String
+  location_in: [String!]
+  location_not_in: [String!]
+  location_lt: String
+  location_lte: String
+  location_gt: String
+  location_gte: String
+  location_contains: String
+  location_not_contains: String
+  location_starts_with: String
+  location_not_starts_with: String
+  location_ends_with: String
+  location_not_ends_with: String
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  image: PhotoWhereInput
+  number: Int
+  number_not: Int
+  number_in: [Int!]
+  number_not_in: [Int!]
+  number_lt: Int
+  number_lte: Int
+  number_gt: Int
+  number_gte: Int
+  type: ActivityTypeWhereInput
+  creater: UserWhereInput
+  users_every: UserWhereInput
+  users_some: UserWhereInput
+  users_none: UserWhereInput
+  AND: [ActivityWhereInput!]
+  OR: [ActivityWhereInput!]
+  NOT: [ActivityWhereInput!]
+}
+
+input ActivityWhereUniqueInput {
+  id: ID
+}
+
+type Advertisement {
   id: ID!
   image1: String
   image2: String
@@ -211,6 +771,14 @@ input AdvertisementWhereInput {
 
 input AdvertisementWhereUniqueInput {
   id: ID
+}
+
+type AggregateActivity {
+  count: Int!
+}
+
+type AggregateActivityType {
+  count: Int!
 }
 
 type AggregateAdvertisement {
@@ -3321,6 +3889,7 @@ enum GroupKind {
   ClassMate
   Colleague
   FellowTownsman
+  Activity
   SameCity
   SameOccupation
   SameDisease
@@ -5584,6 +6153,18 @@ input MessageWhereUniqueInput {
 }
 
 type Mutation {
+  createActivity(data: ActivityCreateInput!): Activity!
+  updateActivity(data: ActivityUpdateInput!, where: ActivityWhereUniqueInput!): Activity
+  updateManyActivities(data: ActivityUpdateManyMutationInput!, where: ActivityWhereInput): BatchPayload!
+  upsertActivity(where: ActivityWhereUniqueInput!, create: ActivityCreateInput!, update: ActivityUpdateInput!): Activity!
+  deleteActivity(where: ActivityWhereUniqueInput!): Activity
+  deleteManyActivities(where: ActivityWhereInput): BatchPayload!
+  createActivityType(data: ActivityTypeCreateInput!): ActivityType!
+  updateActivityType(data: ActivityTypeUpdateInput!, where: ActivityTypeWhereUniqueInput!): ActivityType
+  updateManyActivityTypes(data: ActivityTypeUpdateManyMutationInput!, where: ActivityTypeWhereInput): BatchPayload!
+  upsertActivityType(where: ActivityTypeWhereUniqueInput!, create: ActivityTypeCreateInput!, update: ActivityTypeUpdateInput!): ActivityType!
+  deleteActivityType(where: ActivityTypeWhereUniqueInput!): ActivityType
+  deleteManyActivityTypes(where: ActivityTypeWhereInput): BatchPayload!
   createAdvertisement(data: AdvertisementCreateInput!): Advertisement!
   updateAdvertisement(data: AdvertisementUpdateInput!, where: AdvertisementWhereUniqueInput!): Advertisement
   updateManyAdvertisements(data: AdvertisementUpdateManyMutationInput!, where: AdvertisementWhereInput): BatchPayload!
@@ -7751,6 +8332,12 @@ input ProvinceWhereUniqueInput {
 }
 
 type Query {
+  activity(where: ActivityWhereUniqueInput!): Activity
+  activities(where: ActivityWhereInput, orderBy: ActivityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Activity]!
+  activitiesConnection(where: ActivityWhereInput, orderBy: ActivityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ActivityConnection!
+  activityType(where: ActivityTypeWhereUniqueInput!): ActivityType
+  activityTypes(where: ActivityTypeWhereInput, orderBy: ActivityTypeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ActivityType]!
+  activityTypesConnection(where: ActivityTypeWhereInput, orderBy: ActivityTypeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ActivityTypeConnection!
   advertisement(where: AdvertisementWhereUniqueInput!): Advertisement
   advertisements(where: AdvertisementWhereInput, orderBy: AdvertisementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Advertisement]!
   advertisementsConnection(where: AdvertisementWhereInput, orderBy: AdvertisementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AdvertisementConnection!
@@ -9252,6 +9839,8 @@ input StreetWhereUniqueInput {
 }
 
 type Subscription {
+  activity(where: ActivitySubscriptionWhereInput): ActivitySubscriptionPayload
+  activityType(where: ActivityTypeSubscriptionWhereInput): ActivityTypeSubscriptionPayload
   advertisement(where: AdvertisementSubscriptionWhereInput): AdvertisementSubscriptionPayload
   area(where: AreaSubscriptionWhereInput): AreaSubscriptionPayload
   bootCount(where: BootCountSubscriptionWhereInput): BootCountSubscriptionPayload
@@ -9907,6 +10496,8 @@ type User {
   nofitConditions(where: PartnerConditionWhereInput, orderBy: PartnerConditionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PartnerCondition!]
   projects(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Project!]
   trades(where: TradeWhereInput, orderBy: TradeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Trade!]
+  createActivities(where: ActivityWhereInput, orderBy: ActivityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Activity!]
+  partakeActivities(where: ActivityWhereInput, orderBy: ActivityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Activity!]
 }
 
 type UserConnection {
@@ -9959,6 +10550,8 @@ input UserCreateInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateManyInput {
@@ -9993,6 +10586,11 @@ input UserCreateManyWithoutLocationGroupsInput {
 
 input UserCreateManyWithoutNofitConditionsInput {
   create: [UserCreateWithoutNofitConditionsInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutPartakeActivitiesInput {
+  create: [UserCreateWithoutPartakeActivitiesInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -10038,6 +10636,11 @@ input UserCreateOneWithoutClassMateInput {
 
 input UserCreateOneWithoutColleaguesInput {
   create: UserCreateWithoutColleaguesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutCreateActivitiesInput {
+  create: UserCreateWithoutCreateActivitiesInput
   connect: UserWhereUniqueInput
 }
 
@@ -10169,6 +10772,8 @@ input UserCreateWithoutAvatarInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutBirthplaceInput {
@@ -10214,6 +10819,8 @@ input UserCreateWithoutBirthplaceInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutClassMateInput {
@@ -10259,6 +10866,8 @@ input UserCreateWithoutClassMateInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutColleaguesInput {
@@ -10304,6 +10913,55 @@ input UserCreateWithoutColleaguesInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
+}
+
+input UserCreateWithoutCreateActivitiesInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: PhotoCreateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneWithoutBornsInput
+  residence: LocationCreateOneWithoutLivesInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  sentMessages: MessageCreateManyWithoutFromInput
+  receiveMessages: MessageCreateManyWithoutToInput
+  groupMessages: GroupMessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+  locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateManyWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  fitConditions: PartnerConditionCreateManyWithoutPartnersInput
+  nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
+  projects: ProjectCreateManyWithoutStarterInput
+  trades: TradeCreateManyWithoutUserInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutCreaterInput {
@@ -10349,6 +11007,8 @@ input UserCreateWithoutCreaterInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutExamInput {
@@ -10394,6 +11054,8 @@ input UserCreateWithoutExamInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutFamiliesInput {
@@ -10439,6 +11101,8 @@ input UserCreateWithoutFamiliesInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutFamilyGroupInput {
@@ -10484,6 +11148,8 @@ input UserCreateWithoutFamilyGroupInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutFitConditionsInput {
@@ -10529,6 +11195,8 @@ input UserCreateWithoutFitConditionsInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutForgetPasswordInput {
@@ -10574,6 +11242,8 @@ input UserCreateWithoutForgetPasswordInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutFromOldColleaguesInput {
@@ -10619,6 +11289,8 @@ input UserCreateWithoutFromOldColleaguesInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutGroupMessagesInput {
@@ -10664,6 +11336,8 @@ input UserCreateWithoutGroupMessagesInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutGroupsInput {
@@ -10709,6 +11383,8 @@ input UserCreateWithoutGroupsInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutLocationGroupsInput {
@@ -10754,6 +11430,8 @@ input UserCreateWithoutLocationGroupsInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutLoveManInput {
@@ -10799,6 +11477,8 @@ input UserCreateWithoutLoveManInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutLoveSettingInput {
@@ -10844,6 +11524,8 @@ input UserCreateWithoutLoveSettingInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutLoveWomanInput {
@@ -10889,6 +11571,8 @@ input UserCreateWithoutLoveWomanInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutNofitConditionsInput {
@@ -10934,6 +11618,55 @@ input UserCreateWithoutNofitConditionsInput {
   fitConditions: PartnerConditionCreateManyWithoutPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
+}
+
+input UserCreateWithoutPartakeActivitiesInput {
+  username: String!
+  password: String!
+  name: String
+  gender: String
+  avatar: PhotoCreateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationCreateOneWithoutBornsInput
+  residence: LocationCreateOneWithoutLivesInput
+  uid: String!
+  token: String!
+  posts: PostCreateManyWithoutAuthorInput
+  regStatus: RegStatusCreateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyCreateManyWithoutFromInput
+  studies: SchoolEduCreateManyWithoutStudentsInput
+  works: WorkCreateManyWithoutWorkerInput
+  exam: CollegeEntranceExamCreateOneWithoutStudentInput
+  sentMessages: MessageCreateManyWithoutFromInput
+  receiveMessages: MessageCreateManyWithoutToInput
+  groupMessages: GroupMessageCreateManyWithoutFromInput
+  groups: GroupCreateManyWithoutUsersInput
+  friends: UserCreateManyInput
+  familyGroup: FamilyGroupCreateOneWithoutUsersInput
+  creater: FamilyGroupCreateOneWithoutCreaterInput
+  classMate: ClassMateCreateManyWithoutStudentInput
+  workGroup: WorkGroupCreateOneInput
+  colleagues: ColleagueCreateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueCreateManyWithoutFromInput
+  toOldColleagues: OldColleagueCreateManyWithoutToInput
+  locationGroups: LocationGroupCreateManyWithoutUsersInput
+  forgetPassword: FindPassWordCreateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordCreateManyWithoutRemmemberInput
+  loveSetting: LoveSettingCreateOneWithoutUserInput
+  loveWoman: LoveMatchingCreateManyWithoutWomanInput
+  loveMan: LoveMatchingCreateManyWithoutManInput
+  signUpLove: LoveSignUpCreateOneWithoutPersonInput
+  skills: SkillCreateManyWithoutPersonsInput
+  fitConditions: PartnerConditionCreateManyWithoutPartnersInput
+  nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
+  projects: ProjectCreateManyWithoutStarterInput
+  trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
 }
 
 input UserCreateWithoutPostsInput {
@@ -10979,6 +11712,8 @@ input UserCreateWithoutPostsInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutProjectsInput {
@@ -11024,6 +11759,8 @@ input UserCreateWithoutProjectsInput {
   fitConditions: PartnerConditionCreateManyWithoutPartnersInput
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutReceiveMessagesInput {
@@ -11069,6 +11806,8 @@ input UserCreateWithoutReceiveMessagesInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutRegStatusInput {
@@ -11114,6 +11853,8 @@ input UserCreateWithoutRegStatusInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutRemmemberPasswordInput {
@@ -11159,6 +11900,8 @@ input UserCreateWithoutRemmemberPasswordInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutResidenceInput {
@@ -11204,6 +11947,8 @@ input UserCreateWithoutResidenceInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutSentMessagesInput {
@@ -11249,6 +11994,8 @@ input UserCreateWithoutSentMessagesInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutSignUpLoveInput {
@@ -11294,6 +12041,8 @@ input UserCreateWithoutSignUpLoveInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutSkillsInput {
@@ -11339,6 +12088,8 @@ input UserCreateWithoutSkillsInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutStudiesInput {
@@ -11384,6 +12135,8 @@ input UserCreateWithoutStudiesInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutToOldColleaguesInput {
@@ -11429,6 +12182,8 @@ input UserCreateWithoutToOldColleaguesInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutTradesInput {
@@ -11474,6 +12229,8 @@ input UserCreateWithoutTradesInput {
   fitConditions: PartnerConditionCreateManyWithoutPartnersInput
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 input UserCreateWithoutWorksInput {
@@ -11519,6 +12276,8 @@ input UserCreateWithoutWorksInput {
   nofitConditions: PartnerConditionCreateManyWithoutPassedPartnersInput
   projects: ProjectCreateManyWithoutStarterInput
   trades: TradeCreateManyWithoutUserInput
+  createActivities: ActivityCreateManyWithoutCreaterInput
+  partakeActivities: ActivityCreateManyWithoutUsersInput
 }
 
 type UserEdge {
@@ -11791,6 +12550,8 @@ input UserUpdateDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateInput {
@@ -11837,6 +12598,8 @@ input UserUpdateInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateManyDataInput {
@@ -11938,6 +12701,17 @@ input UserUpdateManyWithoutNofitConditionsInput {
   disconnect: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutNofitConditionsInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutNofitConditionsInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
+input UserUpdateManyWithoutPartakeActivitiesInput {
+  create: [UserCreateWithoutPartakeActivitiesInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutPartakeActivitiesInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutPartakeActivitiesInput!]
   deleteMany: [UserScalarWhereInput!]
   updateMany: [UserUpdateManyWithWhereNestedInput!]
 }
@@ -12087,6 +12861,15 @@ input UserUpdateOneWithoutColleaguesInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneWithoutCreateActivitiesInput {
+  create: UserCreateWithoutCreateActivitiesInput
+  update: UserUpdateWithoutCreateActivitiesDataInput
+  upsert: UserUpsertWithoutCreateActivitiesInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneWithoutCreaterInput {
   create: UserCreateWithoutCreaterInput
   update: UserUpdateWithoutCreaterDataInput
@@ -12220,6 +13003,8 @@ input UserUpdateWithoutAvatarDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutBirthplaceDataInput {
@@ -12265,6 +13050,8 @@ input UserUpdateWithoutBirthplaceDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutClassMateDataInput {
@@ -12310,6 +13097,8 @@ input UserUpdateWithoutClassMateDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutColleaguesDataInput {
@@ -12355,6 +13144,55 @@ input UserUpdateWithoutColleaguesDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
+}
+
+input UserUpdateWithoutCreateActivitiesDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: PhotoUpdateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneWithoutBornsInput
+  residence: LocationUpdateOneWithoutLivesInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  sentMessages: MessageUpdateManyWithoutFromInput
+  receiveMessages: MessageUpdateManyWithoutToInput
+  groupMessages: GroupMessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+  locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateManyWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  fitConditions: PartnerConditionUpdateManyWithoutPartnersInput
+  nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
+  projects: ProjectUpdateManyWithoutStarterInput
+  trades: TradeUpdateManyWithoutUserInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutCreaterDataInput {
@@ -12400,6 +13238,8 @@ input UserUpdateWithoutCreaterDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutExamDataInput {
@@ -12445,6 +13285,8 @@ input UserUpdateWithoutExamDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutFamiliesDataInput {
@@ -12490,6 +13332,8 @@ input UserUpdateWithoutFamiliesDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutFamilyGroupDataInput {
@@ -12535,6 +13379,8 @@ input UserUpdateWithoutFamilyGroupDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutFitConditionsDataInput {
@@ -12580,6 +13426,8 @@ input UserUpdateWithoutFitConditionsDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutForgetPasswordDataInput {
@@ -12625,6 +13473,8 @@ input UserUpdateWithoutForgetPasswordDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutFromOldColleaguesDataInput {
@@ -12670,6 +13520,8 @@ input UserUpdateWithoutFromOldColleaguesDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutGroupMessagesDataInput {
@@ -12715,6 +13567,8 @@ input UserUpdateWithoutGroupMessagesDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutGroupsDataInput {
@@ -12760,6 +13614,8 @@ input UserUpdateWithoutGroupsDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutLocationGroupsDataInput {
@@ -12805,6 +13661,8 @@ input UserUpdateWithoutLocationGroupsDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutLoveManDataInput {
@@ -12850,6 +13708,8 @@ input UserUpdateWithoutLoveManDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutLoveSettingDataInput {
@@ -12895,6 +13755,8 @@ input UserUpdateWithoutLoveSettingDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutLoveWomanDataInput {
@@ -12940,6 +13802,8 @@ input UserUpdateWithoutLoveWomanDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutNofitConditionsDataInput {
@@ -12985,6 +13849,55 @@ input UserUpdateWithoutNofitConditionsDataInput {
   fitConditions: PartnerConditionUpdateManyWithoutPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
+}
+
+input UserUpdateWithoutPartakeActivitiesDataInput {
+  username: String
+  password: String
+  name: String
+  gender: String
+  avatar: PhotoUpdateOneWithoutUserInput
+  birthdaycalendar: String
+  birthday: DateTime
+  birthplace: LocationUpdateOneWithoutBornsInput
+  residence: LocationUpdateOneWithoutLivesInput
+  uid: String
+  token: String
+  posts: PostUpdateManyWithoutAuthorInput
+  regStatus: RegStatusUpdateOneWithoutApplicantsInput
+  regTimes: Int
+  maxRegTimes: Int
+  families: FamilyUpdateManyWithoutFromInput
+  studies: SchoolEduUpdateManyWithoutStudentsInput
+  works: WorkUpdateManyWithoutWorkerInput
+  exam: CollegeEntranceExamUpdateOneWithoutStudentInput
+  sentMessages: MessageUpdateManyWithoutFromInput
+  receiveMessages: MessageUpdateManyWithoutToInput
+  groupMessages: GroupMessageUpdateManyWithoutFromInput
+  groups: GroupUpdateManyWithoutUsersInput
+  friends: UserUpdateManyInput
+  familyGroup: FamilyGroupUpdateOneWithoutUsersInput
+  creater: FamilyGroupUpdateOneWithoutCreaterInput
+  classMate: ClassMateUpdateManyWithoutStudentInput
+  workGroup: WorkGroupUpdateOneInput
+  colleagues: ColleagueUpdateManyWithoutWorkerInput
+  fromOldColleagues: OldColleagueUpdateManyWithoutFromInput
+  toOldColleagues: OldColleagueUpdateManyWithoutToInput
+  locationGroups: LocationGroupUpdateManyWithoutUsersInput
+  forgetPassword: FindPassWordUpdateOneWithoutForgetterInput
+  remmemberPassword: FindPassWordUpdateManyWithoutRemmemberInput
+  loveSetting: LoveSettingUpdateOneWithoutUserInput
+  loveWoman: LoveMatchingUpdateManyWithoutWomanInput
+  loveMan: LoveMatchingUpdateManyWithoutManInput
+  signUpLove: LoveSignUpUpdateOneWithoutPersonInput
+  skills: SkillUpdateManyWithoutPersonsInput
+  fitConditions: PartnerConditionUpdateManyWithoutPartnersInput
+  nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
+  projects: ProjectUpdateManyWithoutStarterInput
+  trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -13030,6 +13943,8 @@ input UserUpdateWithoutPostsDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutProjectsDataInput {
@@ -13075,6 +13990,8 @@ input UserUpdateWithoutProjectsDataInput {
   fitConditions: PartnerConditionUpdateManyWithoutPartnersInput
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutReceiveMessagesDataInput {
@@ -13120,6 +14037,8 @@ input UserUpdateWithoutReceiveMessagesDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutRegStatusDataInput {
@@ -13165,6 +14084,8 @@ input UserUpdateWithoutRegStatusDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutRemmemberPasswordDataInput {
@@ -13210,6 +14131,8 @@ input UserUpdateWithoutRemmemberPasswordDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutResidenceDataInput {
@@ -13255,6 +14178,8 @@ input UserUpdateWithoutResidenceDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutSentMessagesDataInput {
@@ -13300,6 +14225,8 @@ input UserUpdateWithoutSentMessagesDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutSignUpLoveDataInput {
@@ -13345,6 +14272,8 @@ input UserUpdateWithoutSignUpLoveDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutSkillsDataInput {
@@ -13390,6 +14319,8 @@ input UserUpdateWithoutSkillsDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutStudiesDataInput {
@@ -13435,6 +14366,8 @@ input UserUpdateWithoutStudiesDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutToOldColleaguesDataInput {
@@ -13480,6 +14413,8 @@ input UserUpdateWithoutToOldColleaguesDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutTradesDataInput {
@@ -13525,6 +14460,8 @@ input UserUpdateWithoutTradesDataInput {
   fitConditions: PartnerConditionUpdateManyWithoutPartnersInput
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithoutWorksDataInput {
@@ -13570,6 +14507,8 @@ input UserUpdateWithoutWorksDataInput {
   nofitConditions: PartnerConditionUpdateManyWithoutPassedPartnersInput
   projects: ProjectUpdateManyWithoutStarterInput
   trades: TradeUpdateManyWithoutUserInput
+  createActivities: ActivityUpdateManyWithoutCreaterInput
+  partakeActivities: ActivityUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithWhereUniqueNestedInput {
@@ -13605,6 +14544,11 @@ input UserUpdateWithWhereUniqueWithoutLocationGroupsInput {
 input UserUpdateWithWhereUniqueWithoutNofitConditionsInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutNofitConditionsDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutPartakeActivitiesInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutPartakeActivitiesDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutRegStatusInput {
@@ -13650,6 +14594,11 @@ input UserUpsertWithoutClassMateInput {
 input UserUpsertWithoutColleaguesInput {
   update: UserUpdateWithoutColleaguesDataInput!
   create: UserCreateWithoutColleaguesInput!
+}
+
+input UserUpsertWithoutCreateActivitiesInput {
+  update: UserUpdateWithoutCreateActivitiesDataInput!
+  create: UserCreateWithoutCreateActivitiesInput!
 }
 
 input UserUpsertWithoutCreaterInput {
@@ -13777,6 +14726,12 @@ input UserUpsertWithWhereUniqueWithoutNofitConditionsInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutNofitConditionsDataInput!
   create: UserCreateWithoutNofitConditionsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutPartakeActivitiesInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutPartakeActivitiesDataInput!
+  create: UserCreateWithoutPartakeActivitiesInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutRegStatusInput {
@@ -14039,6 +14994,12 @@ input UserWhereInput {
   trades_every: TradeWhereInput
   trades_some: TradeWhereInput
   trades_none: TradeWhereInput
+  createActivities_every: ActivityWhereInput
+  createActivities_some: ActivityWhereInput
+  createActivities_none: ActivityWhereInput
+  partakeActivities_every: ActivityWhereInput
+  partakeActivities_some: ActivityWhereInput
+  partakeActivities_none: ActivityWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
