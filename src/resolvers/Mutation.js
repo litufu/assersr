@@ -679,7 +679,7 @@ export const Mutation = {
     }
     const hasFatherAndMother = await checkExistFatherAndMother(user.id, ctx)
     if (hasFatherAndMother) {
-      await refreshMyFamilyGroups(parent, {}, ctx)
+      await refreshMyFamilyGroups(parent, {id:user.id}, ctx)
     }
     return updateFamily
   },
@@ -708,7 +708,7 @@ export const Mutation = {
     }
     const hasFatherAndMother = await checkExistFatherAndMother(user.id, ctx)
     if (hasFatherAndMother) {
-      await refreshMyFamilyGroups(parent, {}, ctx)
+      await refreshMyFamilyGroups(parent, {id:user.id}, ctx)
     }
     return deleteFamily
   },
@@ -1050,8 +1050,11 @@ export const Mutation = {
       pubsub.publish(FAMILY_CHANGED, { [FAMILY_CHANGED]: { "text": relative.id } })
     }
     const hasFatherAndMother = await checkExistFatherAndMother(user.id, ctx)
+    const relativeHasFatherAndMother  = await checkExistFatherAndMother(relative.id, ctx)
     if (hasFatherAndMother) {
-      await refreshMyFamilyGroups(parent, {}, ctx)
+      await refreshMyFamilyGroups(parent, {id:user.id}, ctx)
+    }else if(relativeHasFatherAndMother){
+      await refreshMyFamilyGroups(parent, {id:relative.id}, ctx)
     }
     return myUpdateFamily
   },

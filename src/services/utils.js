@@ -509,7 +509,7 @@ const refreshMyFamilyGroups = async (parent, args, ctx) => {
   if (!userId) {
     throw new Error("用户不存在")
   }
-  const user = await ctx.db.user({ uid: userId })
+  const user = await ctx.db.user({ id: args.id })
   if (!user) {
     throw new Error("用户不存在")
   }
