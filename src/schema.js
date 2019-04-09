@@ -80,6 +80,7 @@ export const typeDefs = gql`
     publish(id: ID!): Post
     signup(username: String!, password: String!,deviceId:String!): AuthPayload!
     login(username: String!, password: String!): AuthPayload!
+    logout:User
     changePassword(currentPassword:String!,newPassword: String!):User!
     findPassword(forgetterId:String!): FindPassWord
     addBasicInfo(name:String!,gender:String!,birthday:BirthdayInput!,birthplace:PlaceInput!,residence:PlaceInput!):User!
@@ -174,6 +175,7 @@ export const typeDefs = gql`
 
   type User {
     id: ID!
+    isOnline:Boolean
     username: String!
     name:String
     gender:String

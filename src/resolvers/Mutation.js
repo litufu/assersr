@@ -108,17 +108,42 @@ export const Mutation = {
       throw new Error(`用户不存在: ${username}`)
     }
 
+    if(user.isOnline){
+      throw new Error('已经登录，无法重复登录')
+    }
+
     const valid = await compare(password, user.password)
     if (!valid) {
       throw new Error('密码错误')
     }
     // -----------------------------------
-
+    const updateUser = await ctx.db.updateUser({
+      where:{id:user.id},
+      data:{isOnline:true},
+    })
 
     return {
       token: user.token,
-      user
+      user:updateUser
     }
+  },
+  logout: async (parent, args, ctx) => {
+    // 输入数据验证
+    //------------------------------------
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    // -----------------------------------
+
+    return ctx.db.updateUser({
+      where:{id:user.id},
+      data:{isOnline:false},
+    })
   },
   changePassword: async (parent, { currentPassword, newPassword }, ctx) => {
     // 权限验证

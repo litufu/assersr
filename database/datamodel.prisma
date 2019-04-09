@@ -41,6 +41,7 @@ type University {
 # 用户
 type User {
   id: ID! @unique
+  isOnline:Boolean
   username: String! @unique
   password: String!
   name: String

@@ -10451,6 +10451,7 @@ input UniversityWhereUniqueInput {
 
 type User {
   id: ID!
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -10507,6 +10508,7 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -10730,6 +10732,7 @@ input UserCreateOneWithoutWorksInput {
 }
 
 input UserCreateWithoutAvatarInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -10777,6 +10780,7 @@ input UserCreateWithoutAvatarInput {
 }
 
 input UserCreateWithoutBirthplaceInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -10824,6 +10828,7 @@ input UserCreateWithoutBirthplaceInput {
 }
 
 input UserCreateWithoutClassMateInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -10871,6 +10876,7 @@ input UserCreateWithoutClassMateInput {
 }
 
 input UserCreateWithoutColleaguesInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -10918,6 +10924,7 @@ input UserCreateWithoutColleaguesInput {
 }
 
 input UserCreateWithoutCreateActivitiesInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -10965,6 +10972,7 @@ input UserCreateWithoutCreateActivitiesInput {
 }
 
 input UserCreateWithoutCreaterInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11012,6 +11020,7 @@ input UserCreateWithoutCreaterInput {
 }
 
 input UserCreateWithoutExamInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11059,6 +11068,7 @@ input UserCreateWithoutExamInput {
 }
 
 input UserCreateWithoutFamiliesInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11106,6 +11116,7 @@ input UserCreateWithoutFamiliesInput {
 }
 
 input UserCreateWithoutFamilyGroupInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11153,6 +11164,7 @@ input UserCreateWithoutFamilyGroupInput {
 }
 
 input UserCreateWithoutFitConditionsInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11200,6 +11212,7 @@ input UserCreateWithoutFitConditionsInput {
 }
 
 input UserCreateWithoutForgetPasswordInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11247,6 +11260,7 @@ input UserCreateWithoutForgetPasswordInput {
 }
 
 input UserCreateWithoutFromOldColleaguesInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11294,6 +11308,7 @@ input UserCreateWithoutFromOldColleaguesInput {
 }
 
 input UserCreateWithoutGroupMessagesInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11341,6 +11356,7 @@ input UserCreateWithoutGroupMessagesInput {
 }
 
 input UserCreateWithoutGroupsInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11388,6 +11404,7 @@ input UserCreateWithoutGroupsInput {
 }
 
 input UserCreateWithoutLocationGroupsInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11435,6 +11452,7 @@ input UserCreateWithoutLocationGroupsInput {
 }
 
 input UserCreateWithoutLoveManInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11482,6 +11500,7 @@ input UserCreateWithoutLoveManInput {
 }
 
 input UserCreateWithoutLoveSettingInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11529,6 +11548,7 @@ input UserCreateWithoutLoveSettingInput {
 }
 
 input UserCreateWithoutLoveWomanInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11576,6 +11596,7 @@ input UserCreateWithoutLoveWomanInput {
 }
 
 input UserCreateWithoutNofitConditionsInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11623,6 +11644,7 @@ input UserCreateWithoutNofitConditionsInput {
 }
 
 input UserCreateWithoutPartakeActivitiesInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11670,6 +11692,7 @@ input UserCreateWithoutPartakeActivitiesInput {
 }
 
 input UserCreateWithoutPostsInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11717,6 +11740,7 @@ input UserCreateWithoutPostsInput {
 }
 
 input UserCreateWithoutProjectsInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11764,6 +11788,7 @@ input UserCreateWithoutProjectsInput {
 }
 
 input UserCreateWithoutReceiveMessagesInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11811,6 +11836,7 @@ input UserCreateWithoutReceiveMessagesInput {
 }
 
 input UserCreateWithoutRegStatusInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11858,6 +11884,7 @@ input UserCreateWithoutRegStatusInput {
 }
 
 input UserCreateWithoutRemmemberPasswordInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11905,6 +11932,7 @@ input UserCreateWithoutRemmemberPasswordInput {
 }
 
 input UserCreateWithoutResidenceInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11952,6 +11980,7 @@ input UserCreateWithoutResidenceInput {
 }
 
 input UserCreateWithoutSentMessagesInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -11999,6 +12028,7 @@ input UserCreateWithoutSentMessagesInput {
 }
 
 input UserCreateWithoutSignUpLoveInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -12046,6 +12076,7 @@ input UserCreateWithoutSignUpLoveInput {
 }
 
 input UserCreateWithoutSkillsInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -12093,6 +12124,7 @@ input UserCreateWithoutSkillsInput {
 }
 
 input UserCreateWithoutStudiesInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -12140,6 +12172,7 @@ input UserCreateWithoutStudiesInput {
 }
 
 input UserCreateWithoutToOldColleaguesInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -12187,6 +12220,7 @@ input UserCreateWithoutToOldColleaguesInput {
 }
 
 input UserCreateWithoutTradesInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -12234,6 +12268,7 @@ input UserCreateWithoutTradesInput {
 }
 
 input UserCreateWithoutWorksInput {
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -12288,6 +12323,8 @@ type UserEdge {
 enum UserOrderByInput {
   id_ASC
   id_DESC
+  isOnline_ASC
+  isOnline_DESC
   username_ASC
   username_DESC
   password_ASC
@@ -12316,6 +12353,7 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   id: ID!
+  isOnline: Boolean
   username: String!
   password: String!
   name: String
@@ -12345,6 +12383,8 @@ input UserScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  isOnline: Boolean
+  isOnline_not: Boolean
   username: String
   username_not: String
   username_in: [String!]
@@ -12507,6 +12547,7 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -12555,6 +12596,7 @@ input UserUpdateDataInput {
 }
 
 input UserUpdateInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -12603,6 +12645,7 @@ input UserUpdateInput {
 }
 
 input UserUpdateManyDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -12627,6 +12670,7 @@ input UserUpdateManyInput {
 }
 
 input UserUpdateManyMutationInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -12961,6 +13005,7 @@ input UserUpdateOneWithoutWorksInput {
 }
 
 input UserUpdateWithoutAvatarDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13008,6 +13053,7 @@ input UserUpdateWithoutAvatarDataInput {
 }
 
 input UserUpdateWithoutBirthplaceDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13055,6 +13101,7 @@ input UserUpdateWithoutBirthplaceDataInput {
 }
 
 input UserUpdateWithoutClassMateDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13102,6 +13149,7 @@ input UserUpdateWithoutClassMateDataInput {
 }
 
 input UserUpdateWithoutColleaguesDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13149,6 +13197,7 @@ input UserUpdateWithoutColleaguesDataInput {
 }
 
 input UserUpdateWithoutCreateActivitiesDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13196,6 +13245,7 @@ input UserUpdateWithoutCreateActivitiesDataInput {
 }
 
 input UserUpdateWithoutCreaterDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13243,6 +13293,7 @@ input UserUpdateWithoutCreaterDataInput {
 }
 
 input UserUpdateWithoutExamDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13290,6 +13341,7 @@ input UserUpdateWithoutExamDataInput {
 }
 
 input UserUpdateWithoutFamiliesDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13337,6 +13389,7 @@ input UserUpdateWithoutFamiliesDataInput {
 }
 
 input UserUpdateWithoutFamilyGroupDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13384,6 +13437,7 @@ input UserUpdateWithoutFamilyGroupDataInput {
 }
 
 input UserUpdateWithoutFitConditionsDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13431,6 +13485,7 @@ input UserUpdateWithoutFitConditionsDataInput {
 }
 
 input UserUpdateWithoutForgetPasswordDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13478,6 +13533,7 @@ input UserUpdateWithoutForgetPasswordDataInput {
 }
 
 input UserUpdateWithoutFromOldColleaguesDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13525,6 +13581,7 @@ input UserUpdateWithoutFromOldColleaguesDataInput {
 }
 
 input UserUpdateWithoutGroupMessagesDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13572,6 +13629,7 @@ input UserUpdateWithoutGroupMessagesDataInput {
 }
 
 input UserUpdateWithoutGroupsDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13619,6 +13677,7 @@ input UserUpdateWithoutGroupsDataInput {
 }
 
 input UserUpdateWithoutLocationGroupsDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13666,6 +13725,7 @@ input UserUpdateWithoutLocationGroupsDataInput {
 }
 
 input UserUpdateWithoutLoveManDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13713,6 +13773,7 @@ input UserUpdateWithoutLoveManDataInput {
 }
 
 input UserUpdateWithoutLoveSettingDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13760,6 +13821,7 @@ input UserUpdateWithoutLoveSettingDataInput {
 }
 
 input UserUpdateWithoutLoveWomanDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13807,6 +13869,7 @@ input UserUpdateWithoutLoveWomanDataInput {
 }
 
 input UserUpdateWithoutNofitConditionsDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13854,6 +13917,7 @@ input UserUpdateWithoutNofitConditionsDataInput {
 }
 
 input UserUpdateWithoutPartakeActivitiesDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13901,6 +13965,7 @@ input UserUpdateWithoutPartakeActivitiesDataInput {
 }
 
 input UserUpdateWithoutPostsDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13948,6 +14013,7 @@ input UserUpdateWithoutPostsDataInput {
 }
 
 input UserUpdateWithoutProjectsDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -13995,6 +14061,7 @@ input UserUpdateWithoutProjectsDataInput {
 }
 
 input UserUpdateWithoutReceiveMessagesDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -14042,6 +14109,7 @@ input UserUpdateWithoutReceiveMessagesDataInput {
 }
 
 input UserUpdateWithoutRegStatusDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -14089,6 +14157,7 @@ input UserUpdateWithoutRegStatusDataInput {
 }
 
 input UserUpdateWithoutRemmemberPasswordDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -14136,6 +14205,7 @@ input UserUpdateWithoutRemmemberPasswordDataInput {
 }
 
 input UserUpdateWithoutResidenceDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -14183,6 +14253,7 @@ input UserUpdateWithoutResidenceDataInput {
 }
 
 input UserUpdateWithoutSentMessagesDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -14230,6 +14301,7 @@ input UserUpdateWithoutSentMessagesDataInput {
 }
 
 input UserUpdateWithoutSignUpLoveDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -14277,6 +14349,7 @@ input UserUpdateWithoutSignUpLoveDataInput {
 }
 
 input UserUpdateWithoutSkillsDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -14324,6 +14397,7 @@ input UserUpdateWithoutSkillsDataInput {
 }
 
 input UserUpdateWithoutStudiesDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -14371,6 +14445,7 @@ input UserUpdateWithoutStudiesDataInput {
 }
 
 input UserUpdateWithoutToOldColleaguesDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -14418,6 +14493,7 @@ input UserUpdateWithoutToOldColleaguesDataInput {
 }
 
 input UserUpdateWithoutTradesDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -14465,6 +14541,7 @@ input UserUpdateWithoutTradesDataInput {
 }
 
 input UserUpdateWithoutWorksDataInput {
+  isOnline: Boolean
   username: String
   password: String
   name: String
@@ -14779,6 +14856,8 @@ input UserWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  isOnline: Boolean
+  isOnline_not: Boolean
   username: String
   username_not: String
   username_in: [String!]
