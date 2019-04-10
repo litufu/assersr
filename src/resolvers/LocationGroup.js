@@ -19,7 +19,7 @@ export const LocationGroup = {
             {to:parent.id},
           ]
         },
-        first:10
+        last:10
       })
 
       return groupMessages

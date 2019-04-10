@@ -11,7 +11,7 @@ export const RegStatus = {
             {to:parent.id},
           ]
         },
-        first:10
+        last:10
       })
 
       return groupMessages
