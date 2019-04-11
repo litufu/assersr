@@ -40,7 +40,7 @@ export const User = {
         {from:{id:parent.id}},
         {to:{id:parent.id}}
       ]},
-      first:10
+      last:10
     })
     return messages
   },
