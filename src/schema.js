@@ -414,7 +414,7 @@ type ClassMate{
   id: ID!
   student:User
   status:String!
-  group:ClassGroup!
+  group:ClassGroup
 }
 
 type ClassGroup{
