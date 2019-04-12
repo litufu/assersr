@@ -604,7 +604,7 @@ export const Query = {
     if (!user) {
       throw new Error("用户不存在")
     }
-    return ctx.db.locationGroup({ id: locationGroupId }).users()
+    return ctx.db.locationGroup({ id: locationGroupId }).users({first:100})
   },
   photo: async (parent, { id, name }, ctx) => {
     const userId = getUserId(ctx)
