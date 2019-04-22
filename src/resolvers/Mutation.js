@@ -3081,30 +3081,46 @@ export const Mutation = {
 
     let changePartner
     if (persons.length > 0) {
-      changePartner = await ctx.db.updatePartnerCondition({
-        where: { id: conditionId },
-        data: {
-          partners: {
-            disconnect: { id: uid },
-            connect: { id: persons[0].id }
-          },
-          passedPartners: {
-            connect: { id: uid }
+      if(~passedPartnersId.indexOf(uid)){
+        changePartner = await ctx.db.updatePartnerCondition({
+          where: { id: conditionId },
+          data: {
+            partners: {
+              connect: { id: persons[0].id }
+            },
           }
-        }
-      })
-    } else {
-      changePartner = await ctx.db.updatePartnerCondition({
-        where: { id: conditionId },
-        data: {
-          partners: {
-            disconnect: { id: uid },
-          },
-          passedPartners: {
-            connect: { id: uid }
+        })
+      }else{
+        changePartner = await ctx.db.updatePartnerCondition({
+          where: { id: conditionId },
+          data: {
+            partners: {
+              disconnect: { id: uid },
+              connect: { id: persons[0].id }
+            },
+            passedPartners: {
+              connect: { id: uid }
+            }
           }
-        }
-      })
+        })
+      }
+      
+    } else if(persons.length === 0) {
+      if(~passedPartnersId.indexOf(uid)){
+        changePartner = await ctx.db.partnerCondition({id:conditionId})
+      }else{
+        changePartner = await ctx.db.updatePartnerCondition({
+          where: { id: conditionId },
+          data: {
+            partners: {
+              disconnect: { id: uid },
+            },
+            passedPartners: {
+              connect: { id: uid }
+            }
+          }
+        })
+      }
     }
 
     return changePartner

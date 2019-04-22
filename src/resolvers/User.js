@@ -156,7 +156,6 @@ export const User = {
       ]}
     })
   },
-  
   colleagues:(parent, args, ctx) => ctx.db.user({ id: parent.id }).colleagues(),
   groupMessages:(parent, args, ctx) => ctx.db.user({ id: parent.id }).groupMessages(),
   locationGroups:(parent, args, ctx) => ctx.db.user({ id: parent.id }).locationGroups(),
