@@ -2626,7 +2626,6 @@ export const Mutation = {
     }
 
     pubsub.publish(GMESSAGE_ADDED_TOPIC, { [GMESSAGE_ADDED_TOPIC]: pubMessage })
-    pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: pubMessage })
     return returnMessage
   },
 
