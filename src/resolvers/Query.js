@@ -168,24 +168,20 @@ export const Query = {
       const fee = regStatusfeeSettings[0].fee
       const year = new Date().getFullYear()
       if(fee){
-        const trades = await ctx.db.user({uid:userId}).trades({
-          where:{
-              product:{
-                AND:[
-                  {kind:FEESETTINGTYPES.regstatus},
-                  {subject_contains:`${year}`}
-                ]
-              }
-          }
-        })
-        if(trades.length>0 ){
-           if(trades[0].status!=="1"){
+        const trades = await ctx.db.user({uid:userId}).trades()
+        const regstatusTrades = trades.filter(trade=>
+         (trade.kind === FEESETTINGTYPES.regstatus) && (
+            !!~trade.subject.indexOf(`${year}`)
+          )
+        )
+        
+        if(regstatusTrades.length>0 ){
+           if(regstatusTrades[0].status!=="1"){
             throw new Error("报名前需要在设置-购买页面中购买本年度高考报名会员")
            }
         }else{
           throw new Error("报名前需要在设置-购买页面中购买本年度高考报名会员")
         }
-        
       }
     }
 
