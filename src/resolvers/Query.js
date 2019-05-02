@@ -154,6 +154,10 @@ export const Query = {
     return results[0]
   },
   getRegStatusApplicants: async (parent, { education, universityId, majorId }, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
     // 输入数据校验
     checkId(universityId)
     checkId(majorId)
@@ -184,11 +188,7 @@ export const Query = {
         }
       }
     }
-
-    const userId = getUserId(ctx)
-    if (!userId) {
-      throw new Error("用户不存在")
-    }
+    
     const userExams = await ctx.db.collegeEntranceExams(
       {
         where: { student: { uid: userId } }
