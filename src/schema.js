@@ -72,6 +72,7 @@ export const typeDefs = gql`
     nowPartakeActivities:[Activity]
     nowCreateActivities:[Activity]
     activities(typeId:String):[Activity]
+    majorPays(first:Int,skip:Int):[MajorPay]
   }
 
   type Mutation {
@@ -662,6 +663,14 @@ type Activity{
   creater:User
   users:[User!]!
   messages:[GroupMessage]
+}
+
+type MajorPay{
+  id:ID!
+  majorCn:String
+  majorEn:String
+  early:Float
+  median:Float
 }
 
 

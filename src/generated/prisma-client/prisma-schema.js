@@ -869,6 +869,10 @@ type AggregateMajor {
   count: Int!
 }
 
+type AggregateMajorPay {
+  count: Int!
+}
+
 type AggregateMessage {
   count: Int!
 }
@@ -5747,6 +5751,157 @@ enum MajorOrderByInput {
   updatedAt_DESC
 }
 
+type MajorPay {
+  id: ID!
+  majorCn: String
+  majorEn: String
+  early: Float
+  median: Float
+}
+
+type MajorPayConnection {
+  pageInfo: PageInfo!
+  edges: [MajorPayEdge]!
+  aggregate: AggregateMajorPay!
+}
+
+input MajorPayCreateInput {
+  majorCn: String
+  majorEn: String
+  early: Float
+  median: Float
+}
+
+type MajorPayEdge {
+  node: MajorPay!
+  cursor: String!
+}
+
+enum MajorPayOrderByInput {
+  id_ASC
+  id_DESC
+  majorCn_ASC
+  majorCn_DESC
+  majorEn_ASC
+  majorEn_DESC
+  early_ASC
+  early_DESC
+  median_ASC
+  median_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type MajorPayPreviousValues {
+  id: ID!
+  majorCn: String
+  majorEn: String
+  early: Float
+  median: Float
+}
+
+type MajorPaySubscriptionPayload {
+  mutation: MutationType!
+  node: MajorPay
+  updatedFields: [String!]
+  previousValues: MajorPayPreviousValues
+}
+
+input MajorPaySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: MajorPayWhereInput
+  AND: [MajorPaySubscriptionWhereInput!]
+  OR: [MajorPaySubscriptionWhereInput!]
+  NOT: [MajorPaySubscriptionWhereInput!]
+}
+
+input MajorPayUpdateInput {
+  majorCn: String
+  majorEn: String
+  early: Float
+  median: Float
+}
+
+input MajorPayUpdateManyMutationInput {
+  majorCn: String
+  majorEn: String
+  early: Float
+  median: Float
+}
+
+input MajorPayWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  majorCn: String
+  majorCn_not: String
+  majorCn_in: [String!]
+  majorCn_not_in: [String!]
+  majorCn_lt: String
+  majorCn_lte: String
+  majorCn_gt: String
+  majorCn_gte: String
+  majorCn_contains: String
+  majorCn_not_contains: String
+  majorCn_starts_with: String
+  majorCn_not_starts_with: String
+  majorCn_ends_with: String
+  majorCn_not_ends_with: String
+  majorEn: String
+  majorEn_not: String
+  majorEn_in: [String!]
+  majorEn_not_in: [String!]
+  majorEn_lt: String
+  majorEn_lte: String
+  majorEn_gt: String
+  majorEn_gte: String
+  majorEn_contains: String
+  majorEn_not_contains: String
+  majorEn_starts_with: String
+  majorEn_not_starts_with: String
+  majorEn_ends_with: String
+  majorEn_not_ends_with: String
+  early: Float
+  early_not: Float
+  early_in: [Float!]
+  early_not_in: [Float!]
+  early_lt: Float
+  early_lte: Float
+  early_gt: Float
+  early_gte: Float
+  median: Float
+  median_not: Float
+  median_in: [Float!]
+  median_not_in: [Float!]
+  median_lt: Float
+  median_lte: Float
+  median_gt: Float
+  median_gte: Float
+  AND: [MajorPayWhereInput!]
+  OR: [MajorPayWhereInput!]
+  NOT: [MajorPayWhereInput!]
+}
+
+input MajorPayWhereUniqueInput {
+  id: ID
+}
+
 type MajorPreviousValues {
   id: ID!
   name: String!
@@ -6293,6 +6448,12 @@ type Mutation {
   upsertMajor(where: MajorWhereUniqueInput!, create: MajorCreateInput!, update: MajorUpdateInput!): Major!
   deleteMajor(where: MajorWhereUniqueInput!): Major
   deleteManyMajors(where: MajorWhereInput): BatchPayload!
+  createMajorPay(data: MajorPayCreateInput!): MajorPay!
+  updateMajorPay(data: MajorPayUpdateInput!, where: MajorPayWhereUniqueInput!): MajorPay
+  updateManyMajorPays(data: MajorPayUpdateManyMutationInput!, where: MajorPayWhereInput): BatchPayload!
+  upsertMajorPay(where: MajorPayWhereUniqueInput!, create: MajorPayCreateInput!, update: MajorPayUpdateInput!): MajorPay!
+  deleteMajorPay(where: MajorPayWhereUniqueInput!): MajorPay
+  deleteManyMajorPays(where: MajorPayWhereInput): BatchPayload!
   createMessage(data: MessageCreateInput!): Message!
   updateMessage(data: MessageUpdateInput!, where: MessageWhereUniqueInput!): Message
   updateManyMessages(data: MessageUpdateManyMutationInput!, where: MessageWhereInput): BatchPayload!
@@ -8403,6 +8564,9 @@ type Query {
   major(where: MajorWhereUniqueInput!): Major
   majors(where: MajorWhereInput, orderBy: MajorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Major]!
   majorsConnection(where: MajorWhereInput, orderBy: MajorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MajorConnection!
+  majorPay(where: MajorPayWhereUniqueInput!): MajorPay
+  majorPays(where: MajorPayWhereInput, orderBy: MajorPayOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MajorPay]!
+  majorPaysConnection(where: MajorPayWhereInput, orderBy: MajorPayOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MajorPayConnection!
   message(where: MessageWhereUniqueInput!): Message
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message]!
   messagesConnection(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MessageConnection!
@@ -9863,6 +10027,7 @@ type Subscription {
   loveSetting(where: LoveSettingSubscriptionWhereInput): LoveSettingSubscriptionPayload
   loveSignUp(where: LoveSignUpSubscriptionWhereInput): LoveSignUpSubscriptionPayload
   major(where: MajorSubscriptionWhereInput): MajorSubscriptionPayload
+  majorPay(where: MajorPaySubscriptionWhereInput): MajorPaySubscriptionPayload
   message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
   oldColleague(where: OldColleagueSubscriptionWhereInput): OldColleagueSubscriptionPayload
   partnerCondition(where: PartnerConditionSubscriptionWhereInput): PartnerConditionSubscriptionPayload

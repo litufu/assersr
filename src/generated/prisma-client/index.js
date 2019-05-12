@@ -113,6 +113,10 @@ var models = [
     embedded: false
   },
   {
+    name: "MajorPay",
+    embedded: false
+  },
+  {
     name: "Message",
     embedded: false
   },

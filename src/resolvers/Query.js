@@ -898,4 +898,20 @@ export const Query = {
       ]}
     })
   },
+  majorPays:async (parent, {first,skip}, ctx) => {
+    const userId = getUserId(ctx)
+    if (!userId) {
+      throw new Error("用户不存在")
+    }
+    const user = await ctx.db.user({ uid: userId })
+    if (!user) {
+      throw new Error("用户不存在")
+    }
+    return ctx.db.majorPays({
+      first,
+      skip
+    })
+  },
 }
+
+

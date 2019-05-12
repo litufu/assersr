@@ -505,4 +505,12 @@ type Activity{
   users:[User!]!  @relation(name: "ActivityParticipant") 
 }
 
+type MajorPay{
+  id:ID! @unique
+  majorCn:String
+  majorEn:String
+  early:Float
+  median:Float
+}
+
 
