@@ -28,7 +28,7 @@ export const REDISPWD = DEVELOP ? '' : ''
 // export const REDISPWD = DEVELOP ? '' : "asdkfue9823wnh#$3djs"
 export const PORT = 4000
 export const AlipayTest = false
-export const DateStartTime = new Date(2019,3,15)
+export const DateStartTime = new Date(2019,4,13)
 export const FEESETTINGTYPES = {
   regstatus:"REGSTATUS",
   love:"LOVE",
